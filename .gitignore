@@ -1,0 +1,42 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python-generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Frontend-generated files
+node_modules/
+dist/
+build/
+.next/
+
+# Raw data: keep only the explanation file in Git
+data/*
+!data/README.md
+
+# Trained models: keep only the explanation file in Git
+models/*
+!models/README.md
+
+# Data and model formats
+*.xlsx
+*.xls
+*.csv
+*.parquet
+*.pkl
+*.joblib
+*.cbm
+*.onnx
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
