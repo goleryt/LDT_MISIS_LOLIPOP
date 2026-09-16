@@ -5,9 +5,10 @@ from pathlib import Path
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.db.models import ChannelCatalogue
+from app.db.models import ChannelCatalogue, ObjectCatalogue
 from app.db.session import SessionLocal
 from app.ingestion.validators import validate_required_columns
+
 
 
 CHANNEL_REQUIRED_COLUMNS = {
@@ -16,6 +17,14 @@ CHANNEL_REQUIRED_COLUMNS = {
     "тип_датчика",
     "тег_инженерной_системы",
     "название_датчика",
+}
+
+OBJECT_REQUIRED_COLUMNS = {
+    "ид_объект",
+    "иерархия_уровень",
+    "родитель",
+    "вид_объекта",
+    "диспетчерское_название_объекта",
 }
 
 CHANNEL_BATCH_SIZE = 1000
@@ -28,6 +37,26 @@ def empty_to_none(value: str | None) -> str | None:
     value = value.strip()
 
     return value if value else None
+
+
+def optional_int(
+    value: str | None,
+    *,
+    field_name: str,
+    row_number: int,
+) -> int | None:
+    normalized = empty_to_none(value)
+
+    if normalized is None:
+        return None
+
+    try:
+        return int(normalized)
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid {field_name} at row "
+            f"{row_number}: {normalized!r}"
+        ) from exc
 
 
 def extract_site(tag: str | None) -> str | None:
@@ -79,6 +108,32 @@ def _upsert_channel_batch(
                 statement.excluded.d_site,
             "d_pk":
                 statement.excluded.d_pk,
+        },
+    )
+
+    session.execute(statement)
+
+
+def _upsert_object_batch(
+    session: Session,
+    rows: list[dict],
+) -> None:
+    if not rows:
+        return
+
+    statement = insert(ObjectCatalogue).values(rows)
+
+    statement = statement.on_conflict_do_update(
+        index_elements=[ObjectCatalogue.ид_объект],
+        set_={
+            "иерархия_уровень":
+                statement.excluded.иерархия_уровень,
+            "родитель":
+                statement.excluded.родитель,
+            "вид_объекта":
+                statement.excluded.вид_объекта,
+            "диспетчерское_название_объекта":
+                statement.excluded.диспетчерское_название_объекта,
         },
     )
 
@@ -197,3 +252,99 @@ def load_channel_catalogue(
             raise
 
     return processed_rows
+
+
+def load_object_catalogue(
+    file_path: str | Path,
+) -> int:
+    path = Path(file_path)
+
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"CSV file not found: {path}"
+        )
+
+    rows: list[dict] = []
+
+    with path.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as file:
+        reader = csv.DictReader(file)
+
+        if reader.fieldnames is None:
+            raise ValueError(
+                "CSV file does not contain a header"
+            )
+
+        validate_required_columns(
+            reader.fieldnames,
+            OBJECT_REQUIRED_COLUMNS,
+        )
+
+        for row_number, row in enumerate(
+            reader,
+            start=2,
+        ):
+            raw_object_id = row["ид_объект"].strip()
+
+            if not raw_object_id:
+                raise ValueError(
+                    f"Empty ид_объект at row {row_number}"
+                )
+
+            try:
+                object_id = int(raw_object_id)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Invalid ид_объект at row "
+                    f"{row_number}: {raw_object_id!r}"
+                ) from exc
+
+            rows.append(
+                {
+                    "ид_объект":
+                        object_id,
+                    "иерархия_уровень":
+                        optional_int(
+                            row["иерархия_уровень"],
+                            field_name="иерархия_уровень",
+                            row_number=row_number,
+                        ),
+                    "родитель":
+                        optional_int(
+                            row["родитель"],
+                            field_name="родитель",
+                            row_number=row_number,
+                        ),
+                    "вид_объекта":
+                        empty_to_none(
+                            row["вид_объекта"]
+                        ),
+                    "диспетчерское_название_объекта":
+                        empty_to_none(
+                            row[
+                                "диспетчерское_название_объекта"
+                            ]
+                        ),
+                }
+            )
+
+    if not rows:
+        return 0
+
+    with SessionLocal() as session:
+        try:
+            _upsert_object_batch(
+                session,
+                rows,
+            )
+
+            session.commit()
+
+        except Exception:
+            session.rollback()
+            raise
+
+    return len(rows)
