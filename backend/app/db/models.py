@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, time
 
-from sqlalchemy import BigInteger, Boolean, Date, ForeignKey, Integer, String, Time
+from sqlalchemy import BigInteger, Boolean, Date, Integer, String, Time
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -31,7 +31,8 @@ class ObjectCatalogue(Base):
     ид_объект: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     иерархия_уровень: Mapped[int | None] = mapped_column(Integer, nullable=True)
     родитель: Mapped[int | None] = mapped_column(
-        BigInteger, ForeignKey("object_catalogue.ид_объект"), nullable=True
+        BigInteger,
+        nullable=True,
     )
     вид_объекта: Mapped[str | None] = mapped_column(String, nullable=True)
     диспетчерское_название_объекта: Mapped[str | None] = mapped_column(String, nullable=True)
