@@ -1,11 +1,17 @@
 import csv
 import re
+from datetime import date, time
 from pathlib import Path
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.db.models import ChannelCatalogue, ObjectCatalogue
+from app.db.models import (
+    ChannelCatalogue,
+    EventsJournal,
+    ObjectCatalogue,
+)
+
 from app.db.session import SessionLocal
 from app.ingestion.validators import validate_required_columns
 
@@ -26,6 +32,19 @@ OBJECT_REQUIRED_COLUMNS = {
     "вид_объекта",
     "диспетчерское_название_объекта",
 }
+
+EVENT_COLUMNS = (
+    "ид_события",
+    "ид_канала_данных",
+    "дата",
+    "время",
+    "тревожное",
+    "значение_датчика",
+)
+
+EVENT_REQUIRED_COLUMNS = set(EVENT_COLUMNS)
+
+EVENT_BATCH_SIZE = 2000
 
 CHANNEL_BATCH_SIZE = 1000
 
@@ -57,6 +76,30 @@ def optional_int(
             f"Invalid {field_name} at row "
             f"{row_number}: {normalized!r}"
         ) from exc
+
+
+def parse_alarm(
+    value: str | None,
+    *,
+    row_number: int,
+) -> bool:
+    if value is None:
+        raise ValueError(
+            f"Missing тревожное at row {row_number}"
+        )
+
+    normalized = value.strip().lower()
+
+    if normalized in {"true", "t"}:
+        return True
+
+    if normalized in {"false", "f"}:
+        return False
+
+    raise ValueError(
+        f"Invalid тревожное at row "
+        f"{row_number}: {value!r}"
+    )
 
 
 def extract_site(tag: str | None) -> str | None:
@@ -348,3 +391,296 @@ def load_object_catalogue(
             raise
 
     return len(rows)
+
+def parse_event_date(
+    value: str | None,
+    *,
+    row_number: int,
+) -> date:
+    if value is None:
+        raise ValueError(
+            f"Missing дата at row {row_number}"
+        )
+
+    normalized = value.strip()
+
+    try:
+        return date.fromisoformat(normalized)
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid дата at row "
+            f"{row_number}: {value!r}"
+        ) from exc
+
+
+def parse_event_time(
+    value: str | None,
+    *,
+    row_number: int,
+) -> time:
+    if value is None:
+        raise ValueError(
+            f"Missing время at row {row_number}"
+        )
+
+    normalized = value.strip()
+
+    try:
+        return time.fromisoformat(normalized)
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid время at row "
+            f"{row_number}: {value!r}"
+        ) from exc
+
+def parse_required_int(
+    value: str | None,
+    *,
+    field_name: str,
+    row_number: int,
+) -> int:
+    if value is None:
+        raise ValueError(
+            f"Missing {field_name} at row {row_number}"
+        )
+
+    normalized = value.strip()
+
+    if not normalized:
+        raise ValueError(
+            f"Empty {field_name} at row {row_number}"
+        )
+
+    try:
+        return int(normalized)
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid {field_name} at row "
+            f"{row_number}: {value!r}"
+        ) from exc
+
+
+def is_repeated_event_header(row: dict[str, str | None]) -> bool:
+    return (
+        row.get("ид_события") == "ид_события"
+        or row.get("дата") == "дата"
+    )
+
+
+def parse_event_row(
+    row: dict[str, str | None],
+    *,
+    row_number: int,
+) -> dict:
+    return {
+        "ид_события": parse_required_int(
+            row["ид_события"],
+            field_name="ид_события",
+            row_number=row_number,
+        ),
+        "ид_канала_данных": parse_required_int(
+            row["ид_канала_данных"],
+            field_name="ид_канала_данных",
+            row_number=row_number,
+        ),
+        "дата": parse_event_date(
+            row["дата"],
+            row_number=row_number,
+        ),
+        "время": parse_event_time(
+            row["время"],
+            row_number=row_number,
+        ),
+        "тревожное": parse_alarm(
+            row["тревожное"],
+            row_number=row_number,
+        ),
+        "значение_датчика": empty_to_none(
+            row["значение_датчика"]
+        ),
+    }
+
+
+def audit_events_csv(
+    file_path: str | Path,
+) -> dict[str, int]:
+    path = Path(file_path)
+
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"CSV file not found: {path}"
+        )
+
+    total_rows = 0
+    valid_rows = 0
+    alarm_rows = 0
+    repeated_headers = 0
+    exact_duplicates = 0
+
+    seen_rows: set[tuple[str | None, ...]] = set()
+
+    with path.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as file:
+        reader = csv.DictReader(file)
+
+        if reader.fieldnames is None:
+            raise ValueError(
+                "CSV file does not contain a header"
+            )
+
+        validate_required_columns(
+            reader.fieldnames,
+            EVENT_REQUIRED_COLUMNS,
+        )
+
+        for row_number, row in enumerate(
+            reader,
+            start=2,
+        ):
+            total_rows += 1
+
+            if is_repeated_event_header(row):
+                repeated_headers += 1
+                continue
+
+            raw_key = tuple(
+                row.get(column)
+                for column in EVENT_COLUMNS
+            )
+
+            if raw_key in seen_rows:
+                exact_duplicates += 1
+            else:
+                seen_rows.add(raw_key)
+
+            parsed = parse_event_row(
+                row,
+                row_number=row_number,
+            )
+
+            valid_rows += 1
+
+            if parsed["тревожное"]:
+                alarm_rows += 1
+
+    return {
+        "total_rows": total_rows,
+        "valid_rows": valid_rows,
+        "alarm_rows": alarm_rows,
+        "repeated_headers": repeated_headers,
+        "exact_duplicates": exact_duplicates,
+    }
+
+
+def _insert_event_batch(
+    session: Session,
+    rows: list[dict],
+) -> None:
+    if not rows:
+        return
+
+    session.execute(
+        insert(EventsJournal),
+        rows,
+    )
+
+
+def load_events_journal(
+    file_path: str | Path,
+) -> dict[str, int]:
+    path = Path(file_path)
+
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"CSV file not found: {path}"
+        )
+
+    processed_rows = 0
+    inserted_rows = 0
+    repeated_headers = 0
+    exact_duplicates = 0
+
+    batch: list[dict] = []
+
+    # для демо
+    seen_rows: set[tuple[str | None, ...]] = set()
+
+    with SessionLocal() as session:
+        try:
+            with path.open(
+                "r",
+                encoding="utf-8-sig",
+                newline="",
+            ) as file:
+                reader = csv.DictReader(file)
+
+                if reader.fieldnames is None:
+                    raise ValueError(
+                        "CSV file does not contain a header"
+                    )
+
+                validate_required_columns(
+                    reader.fieldnames,
+                    EVENT_REQUIRED_COLUMNS,
+                )
+
+                for row_number, row in enumerate(
+                    reader,
+                    start=2,
+                ):
+                    processed_rows += 1
+
+                    if is_repeated_event_header(row):
+                        repeated_headers += 1
+                        continue
+
+                    raw_key = tuple(
+                        row.get(column)
+                        for column in EVENT_COLUMNS
+                    )
+
+                    if raw_key in seen_rows:
+                        exact_duplicates += 1
+                        continue
+
+                    seen_rows.add(raw_key)
+
+                    batch.append(
+                        parse_event_row(
+                            row,
+                            row_number=row_number,
+                        )
+                    )
+
+                    if len(batch) >= EVENT_BATCH_SIZE:
+                        _insert_event_batch(
+                            session,
+                            batch,
+                        )
+
+                        inserted_rows += len(batch)
+                        batch.clear()
+
+                if batch:
+                    _insert_event_batch(
+                        session,
+                        batch,
+                    )
+
+                    inserted_rows += len(batch)
+
+            session.commit()
+
+        except Exception:
+            session.rollback()
+            raise
+
+    return {
+        "processed_rows": processed_rows,
+        "inserted_rows": inserted_rows,
+        "repeated_headers": repeated_headers,
+        "exact_duplicates": exact_duplicates,
+    }
