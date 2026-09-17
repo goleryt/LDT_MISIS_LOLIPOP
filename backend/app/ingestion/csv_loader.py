@@ -1,7 +1,9 @@
 import csv
+import hashlib
 import re
-from datetime import date, time
+from datetime import date, datetime, time
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
@@ -15,6 +17,8 @@ from app.db.models import (
 from app.db.session import SessionLocal
 from app.ingestion.validators import validate_required_columns
 
+
+MOSCOW_TZ = ZoneInfo("Europe/Moscow")
 
 
 CHANNEL_REQUIRED_COLUMNS = {
@@ -392,6 +396,7 @@ def load_object_catalogue(
 
     return len(rows)
 
+
 def parse_event_date(
     value: str | None,
     *,
@@ -433,6 +438,7 @@ def parse_event_time(
             f"{row_number}: {value!r}"
         ) from exc
 
+
 def parse_required_int(
     value: str | None,
     *,
@@ -467,11 +473,52 @@ def is_repeated_event_header(row: dict[str, str | None]) -> bool:
     )
 
 
+def compute_row_hash(row: dict[str, str | None]) -> str:
+    """Хэш исходных (сырых) значений строки — основа идемпотентной вставки."""
+    raw_values = "|".join(
+        "" if row.get(column) is None else row[column]
+        for column in EVENT_COLUMNS
+    )
+
+    return hashlib.sha256(raw_values.encode("utf-8")).hexdigest()
+
+
+def parse_sensor_value(
+    value: str | None,
+) -> tuple[float | None, str | None]:
+    """значение_датчика полиморфно: число (ppm, °C) либо метка состояния."""
+    normalized = empty_to_none(value)
+
+    if normalized is None:
+        return None, None
+
+    try:
+        return float(normalized.replace(",", ".")), None
+    except ValueError:
+        return None, normalized
+
+
 def parse_event_row(
     row: dict[str, str | None],
     *,
     row_number: int,
 ) -> dict:
+    event_date = parse_event_date(
+        row["дата"],
+        row_number=row_number,
+    )
+    event_time = parse_event_time(
+        row["время"],
+        row_number=row_number,
+    )
+    alarm = parse_alarm(
+        row["тревожное"],
+        row_number=row_number,
+    )
+    value_numeric, value_state = parse_sensor_value(
+        row["значение_датчика"]
+    )
+
     return {
         "ид_события": parse_required_int(
             row["ид_события"],
@@ -483,21 +530,21 @@ def parse_event_row(
             field_name="ид_канала_данных",
             row_number=row_number,
         ),
-        "дата": parse_event_date(
-            row["дата"],
-            row_number=row_number,
-        ),
-        "время": parse_event_time(
-            row["время"],
-            row_number=row_number,
-        ),
-        "тревожное": parse_alarm(
-            row["тревожное"],
-            row_number=row_number,
-        ),
+        "дата": row["дата"].strip(),
+        "время": row["время"].strip(),
+        "тревожное": row["тревожное"].strip(),
         "значение_датчика": empty_to_none(
             row["значение_датчика"]
         ),
+        "d_event_time": datetime.combine(
+            event_date,
+            event_time,
+            tzinfo=MOSCOW_TZ,
+        ),
+        "d_alarm": alarm,
+        "d_value_numeric": value_numeric,
+        "d_value_state": value_state,
+        "d_row_hash": compute_row_hash(row),
     }
 
 
@@ -563,7 +610,7 @@ def audit_events_csv(
 
             valid_rows += 1
 
-            if parsed["тревожное"]:
+            if parsed["d_alarm"]:
                 alarm_rows += 1
 
     return {
@@ -578,14 +625,20 @@ def audit_events_csv(
 def _insert_event_batch(
     session: Session,
     rows: list[dict],
-) -> None:
+) -> int:
+    """Вставляет батч, пропуская дубли по d_row_hash. Возвращает число реально вставленных строк."""
     if not rows:
-        return
+        return 0
 
-    session.execute(
-        insert(EventsJournal),
-        rows,
-    )
+    statement = insert(EventsJournal).values(rows)
+
+    statement = statement.on_conflict_do_nothing(
+        index_elements=[EventsJournal.d_row_hash],
+    ).returning(EventsJournal.id)
+
+    result = session.execute(statement)
+
+    return len(result.fetchall())
 
 
 def load_events_journal(
@@ -601,12 +654,8 @@ def load_events_journal(
     processed_rows = 0
     inserted_rows = 0
     repeated_headers = 0
-    exact_duplicates = 0
 
     batch: list[dict] = []
-
-    # для демо
-    seen_rows: set[tuple[str | None, ...]] = set()
 
     with SessionLocal() as session:
         try:
@@ -637,17 +686,6 @@ def load_events_journal(
                         repeated_headers += 1
                         continue
 
-                    raw_key = tuple(
-                        row.get(column)
-                        for column in EVENT_COLUMNS
-                    )
-
-                    if raw_key in seen_rows:
-                        exact_duplicates += 1
-                        continue
-
-                    seen_rows.add(raw_key)
-
                     batch.append(
                         parse_event_row(
                             row,
@@ -656,21 +694,18 @@ def load_events_journal(
                     )
 
                     if len(batch) >= EVENT_BATCH_SIZE:
-                        _insert_event_batch(
+                        inserted_rows += _insert_event_batch(
                             session,
                             batch,
                         )
 
-                        inserted_rows += len(batch)
                         batch.clear()
 
                 if batch:
-                    _insert_event_batch(
+                    inserted_rows += _insert_event_batch(
                         session,
                         batch,
                     )
-
-                    inserted_rows += len(batch)
 
             session.commit()
 
@@ -678,9 +713,13 @@ def load_events_journal(
             session.rollback()
             raise
 
+    skipped_duplicates = (
+        processed_rows - repeated_headers - inserted_rows
+    )
+
     return {
         "processed_rows": processed_rows,
         "inserted_rows": inserted_rows,
         "repeated_headers": repeated_headers,
-        "exact_duplicates": exact_duplicates,
+        "skipped_duplicates": skipped_duplicates,
     }
