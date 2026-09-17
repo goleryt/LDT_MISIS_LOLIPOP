@@ -1,8 +1,15 @@
 from __future__ import annotations
 
-from datetime import date, time
+from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, Date, Integer, String, Time
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    DateTime,
+    Float,
+    Integer,
+    String,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -39,14 +46,58 @@ class ObjectCatalogue(Base):
 
 
 class EventsJournal(Base):
-    """журнал_событий / ext-journal-*.csv — оперативные (не исторические) события"""
+    """Журнал событий.
+
+    Исходные значения CSV хранятся отдельно от
+    производных типизированных полей.
+    """
 
     __tablename__ = "events_journal"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    ид_события: Mapped[int] = mapped_column(BigInteger, index=True)
-    ид_канала_данных: Mapped[int] = mapped_column(BigInteger, index=True)
-    дата: Mapped[date] = mapped_column(Date)
-    время: Mapped[time] = mapped_column(Time)
-    тревожное: Mapped[bool] = mapped_column(Boolean)
-    значение_датчика: Mapped[str | None] = mapped_column(String, nullable=True)
+    id: Mapped[int] = mapped_column(
+        BigInteger,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    # Исходные поля.
+    ид_события: Mapped[int] = mapped_column(
+        BigInteger,
+        index=True,
+    )
+    ид_канала_данных: Mapped[int] = mapped_column(
+        BigInteger,
+        index=True,
+    )
+    дата: Mapped[str] = mapped_column(String)
+    время: Mapped[str] = mapped_column(String)
+    тревожное: Mapped[str] = mapped_column(String)
+    значение_датчика: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True,
+    )
+
+    # Производные поля.
+    d_event_time: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=False),
+        nullable=True,
+    )
+    d_alarm: Mapped[bool | None] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    d_value_numeric: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True,
+    )
+    d_value_state: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True,
+    )
+
+    # Технический ключ идемпотентности.
+    d_row_hash: Mapped[str] = mapped_column(
+        String(64),
+        nullable=False,
+        unique=True,
+    )
