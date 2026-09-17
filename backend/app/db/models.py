@@ -9,6 +9,8 @@ from sqlalchemy import (
     Float,
     Integer,
     String,
+    Text,
+    func,
 )
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -101,4 +103,77 @@ class EventsJournal(Base):
         String(64),
         nullable=False,
         unique=True,
+    )
+
+
+class DataImport(Base):
+    """Реестр загрузок исходных файлов."""
+
+    __tablename__ = "data_imports"
+
+    id: Mapped[int] = mapped_column(
+        BigInteger,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    file_name: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+    )
+
+    file_sha256: Mapped[str] = mapped_column(
+        String(64),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+
+    import_type: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    processed_rows: Mapped[int] = mapped_column(
+        BigInteger,
+        nullable=False,
+        default=0,
+    )
+
+    inserted_rows: Mapped[int] = mapped_column(
+        BigInteger,
+        nullable=False,
+        default=0,
+    )
+
+    skipped_rows: Mapped[int] = mapped_column(
+        BigInteger,
+        nullable=False,
+        default=0,
+    )
+
+    file_size_bytes: Mapped[int | None] = mapped_column(
+        BigInteger,
+        nullable=True,
+    )
+
+    error_message: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+    )
+
+    completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )
