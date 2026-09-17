@@ -27,6 +27,7 @@ CHANNEL_REQUIRED_COLUMNS = {
     "тип_датчика",
     "тег_инженерной_системы",
     "название_датчика",
+    "ид_объект",
 }
 
 OBJECT_REQUIRED_COLUMNS = {
@@ -168,6 +169,8 @@ def _upsert_channel_batch(
                 statement.excluded.тег_инженерной_системы,
             "название_датчика":
                 statement.excluded.название_датчика,
+            "ид_объект":
+                statement.excluded.ид_объект,
             "d_site":
                 statement.excluded.d_site,
             "d_pk":
@@ -288,6 +291,12 @@ def load_channel_catalogue(
                             "d_pk":
                                 extract_picket(
                                     sensor_name
+                                ),
+                            "ид_объект":
+                                parse_required_int(
+                                    row["ид_объект"],
+                                    field_name="ид_объект",
+                                    row_number=row_number,
                                 ),
                         }
                     )

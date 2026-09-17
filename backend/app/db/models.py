@@ -25,6 +25,11 @@ class ChannelCatalogue(Base):
     тип_датчика: Mapped[str | None] = mapped_column(String, nullable=True)
     тег_инженерной_системы: Mapped[str | None] = mapped_column(String, nullable=True)
     название_датчика: Mapped[str | None] = mapped_column(String, nullable=True)
+    ид_объект: Mapped[int | None] = mapped_column(
+        BigInteger,
+        nullable=True,
+        index=True,
+    )
 
     d_site: Mapped[str | None] = mapped_column(String, nullable=True)
     d_pk: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -46,11 +51,7 @@ class ObjectCatalogue(Base):
 
 
 class EventsJournal(Base):
-    """Журнал событий.
-
-    Исходные значения CSV хранятся отдельно от
-    производных типизированных полей.
-    """
+    """Журнал событий."""
 
     __tablename__ = "events_journal"
 
