@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.imports import router as imports_router
 from app.api.v1.map import router as map_router
 from app.core.config import get_settings
+from app.api.v1.objects import router as objects_router
+from app.api.v1.sensors import router as sensors_router
+from app.api.v1.alarms import router as alarms_router
 
 
 settings = get_settings()
@@ -21,6 +24,21 @@ app.include_router(
 
 app.include_router(
     imports_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    objects_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    sensors_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    alarms_router,
     prefix="/api/v1",
 )
 

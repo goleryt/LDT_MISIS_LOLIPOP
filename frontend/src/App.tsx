@@ -6,10 +6,10 @@ import {
 
 import AppLayout from "./layouts/AppLayout";
 import ImportsPage from "./pages/ImportsPage";
-import OverviewPage from "./pages/OverviewPage";
 
 import "./App.css";
-
+import MapPage from "./pages/MapPage";
+import AlarmsPage from "./pages/AlarmsPage";
 
 function PlaceholderPage({
     title,
@@ -33,7 +33,7 @@ function App() {
             <Route element={<AppLayout />}>
                 <Route
                     path="/"
-                    element={<OverviewPage />}
+                    element={<MapPage />}
                 />
 
                 <Route
@@ -45,9 +45,7 @@ function App() {
 
                 <Route
                     path="/events"
-                    element={
-                        <PlaceholderPage title="Журнал событий" />
-                    }
+                    element={<AlarmsPage />}
                 />
 
                 <Route
