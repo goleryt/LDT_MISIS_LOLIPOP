@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     BigInteger,
     Boolean,
+    Date,
     DateTime,
     Float,
     Integer,
     String,
     Text,
+    UniqueConstraint,
     func,
 )
 from sqlalchemy.orm import Mapped, mapped_column
@@ -176,4 +178,59 @@ class DataImport(Base):
     completed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
+    )
+
+
+class ChannelDailyFeatures(Base):
+    """Причинная дневная панель признаков по каналам.
+
+    Строится батчем из events_journal и channel_catalogue; служит входом для
+    failure_state_presence proxy-модели (BACKEND_API_INTERFACE_RU.md, раздел 6).
+    (ид_канала_данных, as_of_date) уникальны.
+    """
+
+    __tablename__ = "channel_daily_features"
+
+    id: Mapped[int] = mapped_column(
+        BigInteger,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    ид_канала_данных: Mapped[int] = mapped_column(BigInteger, index=True)
+    as_of_date: Mapped[date] = mapped_column(Date, index=True)
+
+    d_observed_days_so_far: Mapped[int] = mapped_column(Integer)
+    d_current_failure_state: Mapped[bool] = mapped_column(Boolean)
+
+    d_event_count_24h: Mapped[int] = mapped_column(Integer)
+    d_alarm_count_24h: Mapped[int] = mapped_column(Integer)
+    d_alarm_share_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_failure_state_event_count_24h: Mapped[int] = mapped_column(Integer)
+    d_value_numeric_mean_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_value_numeric_min_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_value_numeric_max_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_value_numeric_std_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_value_numeric_last: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_state_n_unique_24h: Mapped[int] = mapped_column(Integer)
+
+    d_gap_days_since_previous: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    d_event_count_previous_24h: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    d_alarm_count_previous_24h: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    d_alarm_share_previous_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_value_numeric_previous: Mapped[float | None] = mapped_column(Float, nullable=True)
+    d_days_since_failure_state_event: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
+    d_weekday: Mapped[int] = mapped_column(Integer)
+    d_month: Mapped[int] = mapped_column(Integer)
+    d_catalogue_match: Mapped[bool] = mapped_column(Boolean)
+    тип_инж_системы: Mapped[str | None] = mapped_column(String, nullable=True)
+    тип_датчика: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "ид_канала_данных",
+            "as_of_date",
+            name="uq_channel_daily_features_channel_date",
+        ),
     )
