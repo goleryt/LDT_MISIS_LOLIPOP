@@ -1,17 +1,22 @@
 from fastapi import FastAPI
-
-from app.core.config import get_settings
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.imports import router as imports_router
-
-from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.map import router as map_router
+from app.core.config import get_settings
 
 
 settings = get_settings()
 
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
+)
+
+app.include_router(
+    map_router,
+    prefix="/api/v1",
 )
 
 app.include_router(
