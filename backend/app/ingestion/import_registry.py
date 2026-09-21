@@ -57,6 +57,7 @@ def begin_file_import(
     file_path: str | Path,
     *,
     import_type: str,
+    original_file_name: str | None = None,
 ) -> ImportRegistration:
     path = Path(file_path)
 
@@ -67,6 +68,7 @@ def begin_file_import(
 
     file_sha256 = calculate_file_sha256(path)
     file_size_bytes = path.stat().st_size
+    file_name = original_file_name or file_name
 
     with SessionLocal() as session:
         existing = session.scalar(
@@ -86,7 +88,7 @@ def begin_file_import(
                     previous_status=previous_status,
                 )
 
-            existing.file_name = path.name
+            existing.file_name = file_name
             existing.import_type = import_type
             existing.status = IMPORT_STATUS_PROCESSING
             existing.processed_rows = 0
@@ -188,10 +190,13 @@ def fail_file_import(
 
 def import_events_file(
     file_path: str | Path,
+    *,
+    original_file_name: str | None = None,
 ) -> dict[str, object]:
     registration = begin_file_import(
         file_path,
         import_type=IMPORT_TYPE_EVENTS_JOURNAL,
+        original_file_name=original_file_name,
     )
 
     if not registration.should_import:
