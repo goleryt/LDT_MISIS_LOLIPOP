@@ -1,9 +1,7 @@
 import csv
-import hashlib
 import re
 from datetime import date, datetime, time
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
@@ -17,8 +15,10 @@ from app.db.models import (
 from app.db.session import SessionLocal
 from app.ingestion.validators import validate_required_columns
 
+import hashlib
+import json
 
-MOSCOW_TZ = ZoneInfo("Europe/Moscow")
+
 
 
 CHANNEL_REQUIRED_COLUMNS = {
@@ -27,6 +27,7 @@ CHANNEL_REQUIRED_COLUMNS = {
     "тип_датчика",
     "тег_инженерной_системы",
     "название_датчика",
+    "ид_объект",
 }
 
 OBJECT_REQUIRED_COLUMNS = {
@@ -106,6 +107,23 @@ def parse_alarm(
     )
 
 
+def parse_sensor_value(
+    value: str | None,
+) -> tuple[float | None, str | None]:
+    normalized = empty_to_none(value)
+
+    if normalized is None:
+        return None, None
+
+    try:
+        return (
+            float(normalized.replace(",", ".")),
+            None,
+        )
+    except ValueError:
+        return None, normalized
+
+
 def extract_site(tag: str | None) -> str | None:
     if not tag:
         return None
@@ -151,6 +169,8 @@ def _upsert_channel_batch(
                 statement.excluded.тег_инженерной_системы,
             "название_датчика":
                 statement.excluded.название_датчика,
+            "ид_объект":
+                statement.excluded.ид_объект,
             "d_site":
                 statement.excluded.d_site,
             "d_pk":
@@ -271,6 +291,12 @@ def load_channel_catalogue(
                             "d_pk":
                                 extract_picket(
                                     sensor_name
+                                ),
+                            "ид_объект":
+                                parse_required_int(
+                                    row["ид_объект"],
+                                    field_name="ид_объект",
+                                    row_number=row_number,
                                 ),
                         }
                     )
@@ -396,7 +422,6 @@ def load_object_catalogue(
 
     return len(rows)
 
-
 def parse_event_date(
     value: str | None,
     *,
@@ -438,7 +463,6 @@ def parse_event_time(
             f"{row_number}: {value!r}"
         ) from exc
 
-
 def parse_required_int(
     value: str | None,
     *,
@@ -473,80 +497,97 @@ def is_repeated_event_header(row: dict[str, str | None]) -> bool:
     )
 
 
-def compute_row_hash(row: dict[str, str | None]) -> str:
-    """Хэш исходных (сырых) значений строки — основа идемпотентной вставки."""
-    raw_values = "|".join(
-        "" if row.get(column) is None else row[column]
-        for column in EVENT_COLUMNS
-    )
-
-    return hashlib.sha256(raw_values.encode("utf-8")).hexdigest()
-
-
-def parse_sensor_value(
-    value: str | None,
-) -> tuple[float | None, str | None]:
-    """значение_датчика полиморфно: число (ppm, °C) либо метка состояния."""
-    normalized = empty_to_none(value)
-
-    if normalized is None:
-        return None, None
-
-    try:
-        return float(normalized.replace(",", ".")), None
-    except ValueError:
-        return None, normalized
-
-
 def parse_event_row(
     row: dict[str, str | None],
     *,
     row_number: int,
 ) -> dict:
+    event_id = parse_required_int(
+        row["ид_события"],
+        field_name="ид_события",
+        row_number=row_number,
+    )
+
+    channel_id = parse_required_int(
+        row["ид_канала_данных"],
+        field_name="ид_канала_данных",
+        row_number=row_number,
+    )
+
+    raw_date = row["дата"]
+
+    if raw_date is None:
+        raise ValueError(
+            f"Missing дата at row {row_number}"
+        )
+
+    raw_time = row["время"]
+
+    if raw_time is None:
+        raise ValueError(
+            f"Missing время at row {row_number}"
+        )
+
+    raw_alarm = row["тревожное"]
+
+    if raw_alarm is None:
+        raise ValueError(
+            f"Missing тревожное at row {row_number}"
+        )
+
+    raw_date = raw_date.strip()
+    raw_time = raw_time.strip()
+    raw_alarm = raw_alarm.strip()
+
     event_date = parse_event_date(
-        row["дата"],
+        raw_date,
         row_number=row_number,
     )
+
     event_time = parse_event_time(
-        row["время"],
+        raw_time,
         row_number=row_number,
     )
+
     alarm = parse_alarm(
-        row["тревожное"],
+        raw_alarm,
         row_number=row_number,
     )
-    value_numeric, value_state = parse_sensor_value(
+
+    raw_sensor_value = empty_to_none(
         row["значение_датчика"]
     )
 
+    value_numeric, value_state = (
+        parse_sensor_value(raw_sensor_value)
+    )
+
     return {
-        "ид_события": parse_required_int(
-            row["ид_события"],
-            field_name="ид_события",
-            row_number=row_number,
-        ),
-        "ид_канала_данных": parse_required_int(
-            row["ид_канала_данных"],
-            field_name="ид_канала_данных",
-            row_number=row_number,
-        ),
-        "дата": row["дата"].strip(),
-        "время": row["время"].strip(),
-        "тревожное": row["тревожное"].strip(),
-        "значение_датчика": empty_to_none(
-            row["значение_датчика"]
-        ),
+        "ид_события": event_id,
+        "ид_канала_данных": channel_id,
+
+        "дата": raw_date,
+        "время": raw_time,
+        "тревожное": raw_alarm,
+        "значение_датчика": raw_sensor_value,
+
         "d_event_time": datetime.combine(
             event_date,
             event_time,
-            tzinfo=MOSCOW_TZ,
         ),
         "d_alarm": alarm,
         "d_value_numeric": value_numeric,
         "d_value_state": value_state,
-        "d_row_hash": compute_row_hash(row),
-    }
 
+        "d_row_hash": compute_row_hash(
+            event_id=event_id,
+            channel_id=channel_id,
+            event_date=raw_date,
+            event_time=raw_time,
+            alarm=raw_alarm,
+            sensor_value=raw_sensor_value,
+        ),
+    }
 
 def audit_events_csv(
     file_path: str | Path,
@@ -593,15 +634,6 @@ def audit_events_csv(
                 repeated_headers += 1
                 continue
 
-            raw_key = tuple(
-                row.get(column)
-                for column in EVENT_COLUMNS
-            )
-
-            if raw_key in seen_rows:
-                exact_duplicates += 1
-            else:
-                seen_rows.add(raw_key)
 
             parsed = parse_event_row(
                 row,
@@ -626,15 +658,20 @@ def _insert_event_batch(
     session: Session,
     rows: list[dict],
 ) -> int:
-    """Вставляет батч, пропуская дубли по d_row_hash. Возвращает число реально вставленных строк."""
     if not rows:
         return 0
 
-    statement = insert(EventsJournal).values(rows)
+    statement = insert(
+        EventsJournal
+    ).values(rows)
 
     statement = statement.on_conflict_do_nothing(
-        index_elements=[EventsJournal.d_row_hash],
-    ).returning(EventsJournal.id)
+        index_elements=[
+            EventsJournal.d_row_hash,
+        ],
+    ).returning(
+        EventsJournal.id
+    )
 
     result = session.execute(statement)
 
@@ -654,6 +691,7 @@ def load_events_journal(
     processed_rows = 0
     inserted_rows = 0
     repeated_headers = 0
+    skipped_duplicates = 0
 
     batch: list[dict] = []
 
@@ -694,28 +732,36 @@ def load_events_journal(
                     )
 
                     if len(batch) >= EVENT_BATCH_SIZE:
-                        inserted_rows += _insert_event_batch(
+                        inserted = _insert_event_batch(
                             session,
                             batch,
+                        )
+
+                        session.commit()
+
+                        inserted_rows += inserted
+                        skipped_duplicates += (
+                            len(batch) - inserted
                         )
 
                         batch.clear()
 
                 if batch:
-                    inserted_rows += _insert_event_batch(
+                    inserted = _insert_event_batch(
                         session,
                         batch,
                     )
 
-            session.commit()
+                    session.commit()
+
+                    inserted_rows += inserted
+                    skipped_duplicates += (
+                        len(batch) - inserted
+                    )
 
         except Exception:
             session.rollback()
             raise
-
-    skipped_duplicates = (
-        processed_rows - repeated_headers - inserted_rows
-    )
 
     return {
         "processed_rows": processed_rows,
@@ -723,3 +769,40 @@ def load_events_journal(
         "repeated_headers": repeated_headers,
         "skipped_duplicates": skipped_duplicates,
     }
+
+
+def compute_row_hash(
+    *,
+    event_id: int,
+    channel_id: int,
+    event_date: str,
+    event_time: str,
+    alarm: str,
+    sensor_value: str | None,
+) -> str:
+    normalized_sensor_value = None
+
+    if sensor_value is not None:
+        stripped_value = sensor_value.strip()
+
+        if stripped_value:
+            normalized_sensor_value = stripped_value
+
+    values = [
+        str(event_id),
+        str(channel_id),
+        event_date.strip(),
+        event_time.strip(),
+        alarm.strip(),
+        normalized_sensor_value,
+    ]
+
+    payload = json.dumps(
+        values,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
+    return hashlib.sha256(
+        payload.encode("utf-8")
+    ).hexdigest()
