@@ -27,6 +27,7 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
+import OpenStreetMap from "../components/OpenStreetMap";
 
 import {
     getObjectSensors,
@@ -135,6 +136,8 @@ function sortSensorsForDisplay(
 
 
 function MapPage() {
+    const [mapMode, setMapMode] =
+        useState<"street" | "scheme">("street");
     const [searchParams] =
         useSearchParams();
 
@@ -469,6 +472,10 @@ function MapPage() {
         };
     }, [objects]);
 
+    const hasSyntheticGeometry = objects.some(
+        (item) => item.geometry_is_synthetic,
+    );
+
     const summaryObjects = useMemo(() => {
         if (!activeSummaryFilter) {
             return [];
@@ -579,14 +586,21 @@ function MapPage() {
     }, [sensorHistory]);
 
     return (
-        <div className="map-page">
-            <SchematicMap
-                objects={objects}
-                selectedObject={selectedObject}
-                onSelectObject={(object) => {
-                    selectMapObject(object);
-                }}
-            />
+        <div className={selectedObject ? "map-page has-object-drawer" : "map-page"}>
+            {mapMode === "street" ? (
+                <OpenStreetMap
+                    objects={objects}
+                    selectedObject={selectedObject}
+                    onSelectObject={selectMapObject}
+                    onShowScheme={() => setMapMode("scheme")}
+                />
+            ) : (
+                <SchematicMap
+                    objects={objects}
+                    selectedObject={selectedObject}
+                    onSelectObject={selectMapObject}
+                />
+            )}
 
             <div className="map-summary">
                 <button
@@ -699,6 +713,32 @@ function MapPage() {
                     </div>
                 </button>
             </div>
+
+            <div className="map-view-switch" role="group" aria-label="Вид карты">
+                <button
+                    type="button"
+                    className={mapMode === "street" ? "active" : ""}
+                    aria-pressed={mapMode === "street"}
+                    onClick={() => setMapMode("street")}
+                >
+                    Карта
+                </button>
+                <button
+                    type="button"
+                    className={mapMode === "scheme" ? "active" : ""}
+                    aria-pressed={mapMode === "scheme"}
+                    onClick={() => setMapMode("scheme")}
+                >
+                    Схема
+                </button>
+            </div>
+
+            {hasSyntheticGeometry && (
+                <div className="map-data-badge" title="Координаты созданы backend для демонстрации интерфейса">
+                    <MapPin size={13} />
+                    Демонстрационное размещение объектов
+                </div>
+            )}
             {activeSummaryFilter && (
                 <div className="summary-list-panel">
                     <div className="summary-list-header">
@@ -830,9 +870,11 @@ function MapPage() {
                     Нет событий
                 </div>
 
-                <div className="legend-note">
-                    Геометрия объектов демонстрационная
-                </div>
+                {hasSyntheticGeometry && (
+                    <div className="legend-note">
+                        Положение объектов демонстрационное, не фактическое
+                    </div>
+                )}
             </div>
 
             {error && (
