@@ -1,22 +1,29 @@
-import shutil
 import tempfile
 from pathlib import Path
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
-
-from app.ingestion.import_registry import import_events_file
-
-
+from fastapi import (
+    APIRouter,
+    File,
+    HTTPException,
+    UploadFile,
+)
 from sqlalchemy import select
 
+from app.core.config import get_settings
 from app.db.models import DataImport
 from app.db.session import SessionLocal
+from app.ingestion.import_registry import (
+    import_events_file,
+)
+
 
 router = APIRouter(
     prefix="/imports",
     tags=["imports"],
 )
 
+settings = get_settings()
+COPY_CHUNK_SIZE = 1024 * 1024
 
 
 def serialize_import(
@@ -50,9 +57,7 @@ def upload_events_file(
             detail="File name is required",
         )
 
-    suffix = Path(file_name).suffix.lower()
-
-    if suffix != ".csv":
+    if Path(file_name).suffix.lower() != ".csv":
         raise HTTPException(
             status_code=400,
             detail="Only CSV files are supported",
@@ -66,20 +71,43 @@ def upload_events_file(
             suffix=".csv",
             delete=False,
         ) as temp_file:
-            temp_path = Path(temp_file.name)
-
-            shutil.copyfileobj(
-                file.file,
-                temp_file,
-                length=1024 * 1024,
+            temp_path = Path(
+                temp_file.name
             )
 
-        result = import_events_file(
+            written_bytes = 0
+
+            while True:
+                chunk = file.file.read(
+                    COPY_CHUNK_SIZE
+                )
+
+                if not chunk:
+                    break
+
+                written_bytes += len(chunk)
+
+                if (
+                    written_bytes >
+                    settings.max_upload_bytes
+                ):
+                    raise HTTPException(
+                        status_code=413,
+                        detail=(
+                            "Uploaded file exceeds "
+                            "the configured size limit"
+                        ),
+                    )
+
+                temp_file.write(chunk)
+
+        return import_events_file(
             temp_path,
             original_file_name=file_name,
         )
 
-        return result
+    except HTTPException:
+        raise
 
     except ValueError as exc:
         raise HTTPException(
@@ -97,13 +125,14 @@ def upload_events_file(
             temp_path.unlink()
 
 
-
 @router.get("")
 def get_imports() -> list[dict[str, object]]:
     with SessionLocal() as session:
         imports = session.scalars(
             select(DataImport)
-            .order_by(DataImport.id.desc())
+            .order_by(
+                DataImport.id.desc()
+            )
             .limit(100)
         ).all()
 
@@ -129,4 +158,6 @@ def get_import(
                 detail="Import not found",
             )
 
-        return serialize_import(data_import)
+        return serialize_import(
+            data_import
+        )

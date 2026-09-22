@@ -4,27 +4,15 @@ import {
     Routes,
 } from "react-router-dom";
 
-import AppLayout from "./layouts/AppLayout";
-import ImportsPage from "./pages/ImportsPage";
-
 import "./App.css";
-import MapPage from "./pages/MapPage";
-import AlarmsPage from "./pages/AlarmsPage";
 
-function PlaceholderPage({
-    title,
-}: {
-    title: string;
-}) {
-    return (
-        <div style={{ padding: "32px" }}>
-            <h1>{title}</h1>
-            <p>
-                Раздел находится в разработке.
-            </p>
-        </div>
-    );
-}
+import AppLayout from "./layouts/AppLayout";
+import AlarmsPage from "./pages/AlarmsPage";
+import EventJournalPage from "./pages/EventJournalPage";
+import ImportsPage from "./pages/ImportsPage";
+import MapPage from "./pages/MapPage";
+import ObjectsPage from "./pages/ObjectsPage";
+import RequestsPage from "./pages/RequestsPage";
 
 
 function App() {
@@ -38,14 +26,17 @@ function App() {
 
                 <Route
                     path="/objects"
-                    element={
-                        <PlaceholderPage title="Объекты" />
-                    }
+                    element={<ObjectsPage />}
+                />
+
+                <Route
+                    path="/alarms"
+                    element={<AlarmsPage />}
                 />
 
                 <Route
                     path="/events"
-                    element={<AlarmsPage />}
+                    element={<EventJournalPage />}
                 />
 
                 <Route
@@ -55,18 +46,22 @@ function App() {
 
                 <Route
                     path="/requests"
-                    element={
-                        <PlaceholderPage title="Заявки" />
-                    }
+                    element={<RequestsPage />}
                 />
 
                 <Route
                     path="*"
-                    element={<Navigate to="/" replace />}
+                    element={
+                        <Navigate
+                            to="/"
+                            replace
+                        />
+                    }
                 />
             </Route>
         </Routes>
     );
 }
+
 
 export default App;

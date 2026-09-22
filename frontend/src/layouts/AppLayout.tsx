@@ -1,15 +1,23 @@
-import { useState } from "react";
 import {
+    useState,
+} from "react";
+
+import {
+    AlertTriangle,
     Bell,
     ChevronLeft,
     ChevronRight,
     Database,
+    List,
     Map,
-    Radio,
     Settings,
     Upload,
 } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+
+import {
+    NavLink,
+    Outlet,
+} from "react-router-dom";
 
 
 function AppLayout() {
@@ -32,8 +40,12 @@ function AppLayout() {
 
                     {!collapsed && (
                         <div className="brand-text">
-                            <strong>Москоллектор</strong>
-                            <span>Мониторинг</span>
+                            <strong>
+                                Москоллектор
+                            </strong>
+                            <span>
+                                Мониторинг
+                            </span>
                         </div>
                     )}
                 </div>
@@ -50,7 +62,9 @@ function AppLayout() {
                         }
                     >
                         <Map size={21} />
-                        {!collapsed && <span>Карта</span>}
+                        {!collapsed && (
+                            <span>Карта</span>
+                        )}
                     </NavLink>
 
                     <NavLink
@@ -63,7 +77,24 @@ function AppLayout() {
                         }
                     >
                         <Database size={21} />
-                        {!collapsed && <span>Объекты</span>}
+                        {!collapsed && (
+                            <span>Объекты</span>
+                        )}
+                    </NavLink>
+
+                    <NavLink
+                        to="/alarms"
+                        title="Тревоги"
+                        className={({ isActive }) =>
+                            isActive
+                                ? "nav-item active"
+                                : "nav-item"
+                        }
+                    >
+                        <AlertTriangle size={21} />
+                        {!collapsed && (
+                            <span>Тревоги</span>
+                        )}
                     </NavLink>
 
                     <NavLink
@@ -75,9 +106,11 @@ function AppLayout() {
                                 : "nav-item"
                         }
                     >
-                        <Radio size={21} />
+                        <List size={21} />
                         {!collapsed && (
-                            <span>Журнал событий</span>
+                            <span>
+                                Журнал событий
+                            </span>
                         )}
                     </NavLink>
 
@@ -92,7 +125,9 @@ function AppLayout() {
                     >
                         <Upload size={21} />
                         {!collapsed && (
-                            <span>Импорт данных</span>
+                            <span>
+                                Импорт данных
+                            </span>
                         )}
                     </NavLink>
 
@@ -106,7 +141,9 @@ function AppLayout() {
                         }
                     >
                         <Bell size={21} />
-                        {!collapsed && <span>Заявки</span>}
+                        {!collapsed && (
+                            <span>Заявки</span>
+                        )}
                     </NavLink>
                 </nav>
 
@@ -115,7 +152,9 @@ function AppLayout() {
                         type="button"
                         className="nav-item sidebar-toggle"
                         onClick={() =>
-                            setCollapsed((value) => !value)
+                            setCollapsed(
+                                (value) => !value,
+                            )
                         }
                         title={
                             collapsed
@@ -130,13 +169,22 @@ function AppLayout() {
                         )}
 
                         {!collapsed && (
-                            <span>Свернуть меню</span>
+                            <span>
+                                Свернуть меню
+                            </span>
                         )}
                     </button>
 
-                    <div className="nav-item settings-item">
+                    <div
+                        className="nav-item settings-item"
+                        title="Настройки будут подключены после авторизации"
+                    >
                         <Settings size={21} />
-                        {!collapsed && <span>Настройки</span>}
+                        {!collapsed && (
+                            <span>
+                                Настройки
+                            </span>
+                        )}
                     </div>
                 </div>
             </aside>
@@ -147,5 +195,6 @@ function AppLayout() {
         </div>
     );
 }
+
 
 export default AppLayout;

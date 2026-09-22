@@ -634,6 +634,15 @@ def audit_events_csv(
                 repeated_headers += 1
                 continue
 
+            row_key = tuple(
+                row.get(column)
+                for column in EVENT_COLUMNS
+            )
+
+            if row_key in seen_rows:
+                exact_duplicates += 1
+            else:
+                seen_rows.add(row_key)
 
             parsed = parse_event_row(
                 row,
