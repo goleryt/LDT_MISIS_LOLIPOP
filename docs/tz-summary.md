@@ -157,6 +157,12 @@ and the pitch.
 The living organizer-question register is the authoritative place for question status and answers:
 <https://docs.google.com/document/d/1Gj6WUhaqzryn1ydpDr2pRR-iFTzQswHVmNn-4EK0paA>.
 
+**Project constraint confirmed, 2026-09-22:** no real location data will be supplied.
+The prototype therefore uses deterministic synthetic points in Moscow, keyed by object ID.
+This constraint does not change the specification's location requirement or establish that
+synthetic points satisfy it; the map must label them as conditional and must not present them as
+addresses or physical risk zones.
+
 ## 9. Implementation defaults until answers arrive
 
 - Keep raw inputs immutable and use a read-only audit before transformations.

@@ -185,7 +185,7 @@ function OpenStreetMap({
                                     {object.status === "alarm" && ` · ${object.alarm_sensor_count} тревожных датчиков`}
                                 </span>
                                 {object.geometry_is_synthetic && (
-                                    <span className="osm-tooltip-note">Положение демонстрационное</span>
+                                    <span className="osm-tooltip-note">Условная точка, не адрес объекта</span>
                                 )}
                             </Tooltip>
                         </CircleMarker>

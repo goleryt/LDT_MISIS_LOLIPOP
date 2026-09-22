@@ -734,9 +734,9 @@ function MapPage() {
             </div>
 
             {hasSyntheticGeometry && (
-                <div className="map-data-badge" title="Координаты созданы backend для демонстрации интерфейса">
+                <div className="map-data-badge" title="Точки устойчиво вычислены из ID объектов; их положение не соответствует реальному адресу">
                     <MapPin size={13} />
-                    Демонстрационное размещение объектов
+                    Условное размещение · не адреса объектов
                 </div>
             )}
             {activeSummaryFilter && (
@@ -872,7 +872,7 @@ function MapPage() {
 
                 {hasSyntheticGeometry && (
                     <div className="legend-note">
-                        Положение объектов демонстрационное, не фактическое
+                        Точки вычислены из ID объектов. Их положение не показывает реальные адреса или зоны риска.
                     </div>
                 )}
             </div>
@@ -908,6 +908,12 @@ function MapPage() {
                             <X size={20} />
                         </button>
                     </div>
+
+                    {selectedObject.geometry_is_synthetic && (
+                        <p className="drawer-location-note">
+                            Точка на карте условная: она вычислена из ID объекта и не показывает его реальное местоположение.
+                        </p>
+                    )}
 
                     <div
                         className={
