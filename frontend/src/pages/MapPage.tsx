@@ -9,14 +9,6 @@ import {
     useSearchParams,
 } from "react-router-dom";
 
-import {
-    CircleMarker,
-    MapContainer,
-    TileLayer,
-    Tooltip,
-    useMap,
-    ZoomControl,
-} from "react-leaflet";
 
 import {
     AlertTriangle,
@@ -34,7 +26,7 @@ import type {
     MapObjectStatus,
 } from "../types/map";
 
-import "leaflet/dist/leaflet.css";
+import SchematicMap from "../components/SchematicMap";
 
 import {
     getObjectSensors,
@@ -63,15 +55,6 @@ import type {
     SensorHistoryResponse,
 } from "../types/sensors";
 
-
-const STATUS_COLORS: Record<
-    MapObjectStatus,
-    string
-> = {
-    normal: "#22c55e",
-    alarm: "#ef4444",
-    unknown: "#94a3b8",
-};
 
 
 const STATUS_LABELS: Record<
@@ -148,37 +131,7 @@ function sortSensorsForDisplay(
         },
     );
 }
-function MapFocusController({
-    object,
-}: {
-    object: MapObject | null;
-}) {
-    const map = useMap();
 
-    useEffect(() => {
-        if (!object) {
-            return;
-        }
-
-        const [
-            longitude,
-            latitude,
-        ] = object.geometry.coordinates;
-
-        map.flyTo(
-            [latitude, longitude],
-            Math.max(
-                map.getZoom(),
-                14,
-            ),
-            {
-                duration: 0.8,
-            },
-        );
-    }, [map, object]);
-
-    return null;
-}
 
 
 function MapPage() {
@@ -627,79 +580,13 @@ function MapPage() {
 
     return (
         <div className="map-page">
-            <MapContainer
-                center={[55.7558, 37.6176]}
-                zoom={9}
-                minZoom={8}
-                maxZoom={18}
-                maxBounds={[
-                    [54.2, 35.1],
-                    [56.95, 40.3],
-                ]}
-                maxBoundsViscosity={1.0}
-                className="main-map"
-                zoomControl={false}
-            >
-                <MapFocusController
-                    object={selectedObject}
-                />
-                <ZoomControl position="bottomright" />
-                <TileLayer
-                    attribution="&copy; OpenStreetMap contributors"
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                
-                {objects.map((item) => {
-                    const [
-                        longitude,
-                        latitude,
-                    ] = item.geometry.coordinates;
-
-                    const color =
-                        STATUS_COLORS[item.status];
-
-                    return (
-                        <CircleMarker
-                            key={item.object_id}
-                            center={[
-                                latitude,
-                                longitude,
-                            ]}
-                            radius={
-                                item.status === "alarm"
-                                    ? 10
-                                    : 8
-                            }
-                            pathOptions={{
-                                color,
-                                fillColor: color,
-                                fillOpacity: 0.9,
-                                weight: 3,
-                            }}
-                            eventHandlers={{
-                                click: () => {
-                                    selectMapObject(item);
-                                },
-                            }}
-                        >
-                            <Tooltip>
-                                <strong>
-                                    {item.name ??
-                                        `Объект ${item.object_id}`}
-                                </strong>
-
-                                <br />
-
-                                {
-                                    STATUS_LABELS[
-                                    item.status
-                                    ]
-                                }
-                            </Tooltip>
-                        </CircleMarker>
-                    );
-                })}
-            </MapContainer>
+            <SchematicMap
+                objects={objects}
+                selectedObject={selectedObject}
+                onSelectObject={(object) => {
+                    selectMapObject(object);
+                }}
+            />
 
             <div className="map-summary">
                 <button

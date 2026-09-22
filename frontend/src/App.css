@@ -1892,3 +1892,554 @@
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
 }
+
+.schematic-map {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: linear-gradient( 145deg, #182129 0%, #151d24 100% );
+}
+
+
+.schematic-map-svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  transition:
+    all 650ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+.schematic-map-background {
+    fill: #182129;
+}
+
+
+
+.schematic-ring.inner {
+  stroke-width: 2;
+
+  opacity: 0.52;
+}
+
+
+.schematic-object {
+  cursor: pointer;
+
+  outline: none;
+}
+
+
+.schematic-object-point {
+    stroke: #f8fafc;
+    stroke-width: 2.5;
+    transition: r 150ms ease, stroke-width 150ms ease, opacity 150ms ease;
+    vector-effect: non-scaling-stroke;
+}
+
+.schematic-object-point.normal {
+  fill: #22c55e;
+
+  stroke: #dcfce7;
+}
+
+
+.schematic-object-point.alarm {
+  fill: #ef4444;
+
+  stroke: #fee2e2;
+}
+
+
+.schematic-object-point.unknown {
+  fill: #8191a3;
+
+  stroke: #cbd5e1;
+}
+
+.schematic-object:hover
+.schematic-object-point {
+    r: 8.5;
+    stroke-width: 3;
+}
+
+
+.schematic-object.selected
+.schematic-object-point {
+    stroke: #ffffff;
+    stroke-width: 4;
+}
+
+
+.schematic-object-pulse {
+    fill: none;
+    stroke: #60a5fa;
+    stroke-width: 3;
+    opacity: 0.75;
+    vector-effect: non-scaling-stroke;
+    animation: schematic-pulse 1.5s ease-out infinite;
+}
+
+
+@keyframes schematic-pulse {
+  0% {
+    r: 11;
+    opacity: 0.65;
+  }
+
+  100% {
+    r: 25;
+    opacity: 0;
+  }
+}
+
+
+.schematic-map-controls {
+  position: absolute;
+
+  right: 18px;
+  bottom: 24px;
+
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid #d5dee7;
+  border-radius: 10px;
+
+  background:
+    rgb(255 255 255 / 94%);
+
+  box-shadow:
+    0 8px 28px
+    rgb(15 23 42 / 12%);
+}
+
+
+.schematic-map-controls button {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+
+  background: transparent;
+  color: #334155;
+
+  cursor: pointer;
+}
+
+
+.schematic-map-controls
+button + button {
+  border-top:
+    1px solid #e2e8f0;
+}
+
+
+.schematic-map-controls
+button:hover {
+  background: #f1f5f9;
+}
+
+
+.schematic-reset-button {
+  position: absolute;
+
+  right: 70px;
+  bottom: 24px;
+
+  z-index: 20;
+
+  min-height: 38px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d5dee7;
+  border-radius: 10px;
+
+  background:
+    rgb(255 255 255 / 94%);
+
+  color: #475569;
+
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+
+  box-shadow:
+    0 8px 28px
+    rgb(15 23 42 / 10%);
+
+  cursor: pointer;
+}
+
+
+.schematic-reset-button:hover {
+  background: #f8fafc;
+}
+
+/*
+ * Мелкая квартальная сеть.
+ *
+ * На обычном масштабе она должна
+ * восприниматься как текстура.
+ */
+.moscow-street-texture path {
+    fill: none;
+    stroke: #94a3ad;
+    stroke-width: 0.42;
+    stroke-linecap: round;
+    opacity: 0.075;
+    vector-effect: non-scaling-stroke;
+}
+
+/*
+ * Второстепенные городские дороги.
+ */
+.moscow-secondary-v3 path {
+    fill: none;
+    stroke: #9ca8b1;
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.25;
+    vector-effect: non-scaling-stroke;
+}
+
+
+/*
+ * Основные магистрали.
+ */
+.moscow-primary-v3 path {
+    fill: none;
+    stroke: #bbc4cb;
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.42;
+    vector-effect: non-scaling-stroke;
+}
+
+
+/*
+ * Кольца специально не должны
+ * доминировать над городом.
+ */
+.moscow-ring-v3 {
+    fill: none;
+    stroke: #b7c0c7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+
+    .moscow-ring-v3.ttk {
+        stroke-width: 1.05;
+        opacity: 0.23;
+    }
+
+    .moscow-ring-v3.garden {
+        stroke-width: 0.9;
+        opacity: 0.2;
+    }
+
+/*
+ * Тонкая Москва-река.
+ */
+.moscow-river-bank-v3 {
+    fill: none;
+    stroke: #172129;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.82;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-river-v3 {
+    fill: none;
+    stroke: #4f8098;
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.72;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-bridges-v3 line {
+    stroke: #bdc7ce;
+    stroke-width: 0.9;
+    opacity: 0.32;
+    vector-effect: non-scaling-stroke;
+}
+
+.schematic-object-point {
+    stroke-width: 1.7;
+    transition: r 150ms ease, stroke-width 150ms ease, opacity 150ms ease;
+    vector-effect: non-scaling-stroke;
+}
+
+.schematic-object:hover
+.schematic-object-point {
+    r: 7.5;
+    stroke-width: 2.3;
+}
+
+.moscow-secondary-v3 path {
+    fill: none;
+    stroke: #9ca8b1;
+    stroke-width: 0.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.16;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-primary-v3 path {
+    fill: none;
+    stroke: #bac4cb;
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.3;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-map-field {
+    stroke: rgb(148 163 184 / 10%);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-ring-v3.ttk {
+    stroke-width: 0.85;
+    opacity: 0.15;
+}
+
+.moscow-ring-v3.garden {
+    stroke-width: 0.7;
+    opacity: 0.12;
+}
+
+.moscow-primary-v3 path {
+    fill: none;
+    stroke: #aebbc4;
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.26;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-secondary-v3 path {
+    fill: none;
+    stroke: #8897a2;
+    stroke-width: 0.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.11;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-river-v3 {
+    fill: none;
+    stroke: #47758d;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.67;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-river-bank-v3 {
+    fill: none;
+    stroke: #162129;
+    stroke-width: 5.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.8;
+    vector-effect: non-scaling-stroke;
+}
+
+.moscow-v4-background {
+    fill: #18232b;
+}
+
+
+.moscow-urban-texture path {
+    fill: none;
+    stroke: #9aa7b0;
+    stroke-width: 0.46;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.085;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-secondary-v4 path {
+    fill: none;
+    stroke: #8e9ba5;
+    stroke-width: 0.72;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.13;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-primary-v4 path {
+    fill: none;
+    stroke: #aebac3;
+    stroke-width: 1.05;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.24;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-ring-fragments-v4 path {
+    fill: none;
+    stroke: #a8b5be;
+    stroke-width: 0.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.11;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-river-bank-v4 {
+    fill: none;
+    stroke: #142029;
+    stroke-width: 5.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.84;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-river-v4 {
+    fill: none;
+    stroke: #47758d;
+    stroke-width: 2.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.62;
+    vector-effect: non-scaling-stroke;
+}
+
+
+.moscow-bridges-v4 line {
+    stroke: #afbbc4;
+    stroke-width: 0.8;
+    opacity: 0.25;
+    vector-effect: non-scaling-stroke;
+}
+
+.schematic-map {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #18232b;
+}
+
+
+.schematic-map-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #18232b;
+    user-select: none;
+}
+
+.map-legend {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    z-index: 30;
+    min-width: 220px;
+    padding: 13px 14px;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 11px;
+    background: rgb(20 29 36 / 88%);
+    box-shadow: 0 12px 35px rgb(0 0 0 / 22%);
+    backdrop-filter: blur(12px);
+    color: #cbd5e1;
+}
+
+
+    .map-legend .legend-title {
+        margin-bottom: 9px;
+        color: #e2e8f0;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+
+    .map-legend .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 6px;
+        color: #aebbc5;
+        font-size: 9px;
+    }
+
+
+    .map-legend .legend-note {
+        margin-top: 11px;
+        padding-top: 9px;
+        border-top: 1px solid rgb(255 255 255 / 8%);
+        color: #71818f;
+        font-size: 8px;
+    }
+
+
+    .map-legend .legend-dot {
+        width: 7px;
+        height: 7px;
+        flex: 0 0 7px;
+        border-radius: 50%;
+    }
+
+
+        .map-legend
+        .legend-dot.normal {
+            background: #22c55e;
+        }
+
+
+        .map-legend
+        .legend-dot.alarm {
+            background: #ef4444;
+        }
+
+
+        .map-legend
+        .legend-dot.unknown {
+            background: #8191a3;
+        }
+
+.schematic-object.alarm
+.schematic-object-point {
+    filter: drop-shadow( 0 0 5px rgb(239 68 68 / 32%) );
+}
