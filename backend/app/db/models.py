@@ -8,6 +8,7 @@ from sqlalchemy import (
     DateTime,
     Float,
     Integer,
+    Index,
     String,
     Text,
     func,
@@ -56,6 +57,14 @@ class EventsJournal(Base):
     """Журнал событий."""
 
     __tablename__ = "events_journal"
+    __table_args__ = (
+        Index(
+            "ix_events_journal_channel_time_id",
+            "ид_канала_данных",
+            "d_event_time",
+            "id",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(
         BigInteger,
@@ -84,6 +93,7 @@ class EventsJournal(Base):
     d_event_time: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=False),
         nullable=True,
+        index=True,
     )
     d_alarm: Mapped[bool | None] = mapped_column(
         Boolean,
@@ -168,6 +178,67 @@ class DataImport(Base):
     )
 
     started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+    )
+
+    completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+class PreventiveRequest(Base):
+    """Профилактическая заявка диспетчера."""
+
+    __tablename__ = "preventive_requests"
+
+    id: Mapped[int] = mapped_column(
+        BigInteger,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    object_id: Mapped[int] = mapped_column(
+        BigInteger,
+        nullable=False,
+        index=True,
+    )
+
+    channel_id: Mapped[int | None] = mapped_column(
+        BigInteger,
+        nullable=True,
+        index=True,
+    )
+
+    title: Mapped[str] = mapped_column(
+        String(200),
+        nullable=False,
+    )
+
+    description: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    priority: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="medium",
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="new",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         server_default=func.now(),

@@ -13,11 +13,25 @@ class Settings(BaseSettings):
     postgres_user: str = "ldt_user"
     postgres_password: str
 
+    cors_origins: str = (
+        "http://localhost:5173,"
+        "http://127.0.0.1:5173"
+    )
+    max_upload_bytes: int = 50 * 1024 * 1024
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.cors_origins.split(",")
+            if origin.strip()
+        ]
 
     @property
     def database_url(self) -> str:

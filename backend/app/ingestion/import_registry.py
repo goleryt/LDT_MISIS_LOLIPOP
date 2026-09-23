@@ -68,7 +68,7 @@ def begin_file_import(
 
     file_sha256 = calculate_file_sha256(path)
     file_size_bytes = path.stat().st_size
-    file_name = original_file_name or file_name
+    file_name = original_file_name or path.name
 
     with SessionLocal() as session:
         existing = session.scalar(
@@ -111,7 +111,7 @@ def begin_file_import(
             )
 
         data_import = DataImport(
-            file_name=path.name,
+            file_name=file_name,
             file_sha256=file_sha256,
             import_type=import_type,
             status=IMPORT_STATUS_PROCESSING,

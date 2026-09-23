@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import {
+    useNavigate,
     useSearchParams,
 } from "react-router-dom";
 
@@ -138,6 +139,7 @@ function sortSensorsForDisplay(
 function MapPage() {
     const [mapMode, setMapMode] =
         useState<"street" | "scheme">("street");
+    const navigate = useNavigate();
     const [searchParams] =
         useSearchParams();
 
@@ -399,7 +401,6 @@ function MapPage() {
 
         if (
             !objectIdRaw ||
-            !channelIdRaw ||
             objects.length === 0
         ) {
             return;
@@ -409,19 +410,29 @@ function MapPage() {
             Number(objectIdRaw);
 
         const channelId =
-            Number(channelIdRaw);
+            channelIdRaw
+                ? Number(channelIdRaw)
+                : null;
 
         if (
             !Number.isInteger(objectId) ||
-            !Number.isInteger(channelId) ||
-            objectId <= 0 ||
-            channelId <= 0
+            objectId <= 0
+        ) {
+            return;
+        }
+
+        if (
+            channelId !== null &&
+            (
+                !Number.isInteger(channelId) ||
+                channelId <= 0
+            )
         ) {
             return;
         }
 
         const navigationKey =
-            `${objectId}:${channelId}`;
+            `${objectId}:${channelId ?? "-"}`;
 
         if (
             handledMapNavigationRef.current ===
@@ -1207,6 +1218,20 @@ function MapPage() {
                             {selectedSensor.tag ?? "—"}
                         </strong>
                     </div>
+
+                    {selectedObject && (
+                        <button
+                            type="button"
+                            className="sensor-request-button"
+                            onClick={() =>
+                                navigate(
+                                    `/requests?objectId=${selectedObject.object_id}&channelId=${selectedSensor.channel_id}`,
+                                )
+                            }
+                        >
+                            Создать профилактическую заявку
+                        </button>
+                    )}
                     <div className="sensor-history-section">
                         <div className="sensor-history-heading">
                             <div>
