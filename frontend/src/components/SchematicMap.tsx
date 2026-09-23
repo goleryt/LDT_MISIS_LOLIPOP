@@ -37,6 +37,10 @@ interface ProjectedPoint {
     y: number;
 }
 
+interface ProjectedObject extends ProjectedPoint {
+    object: MapObject;
+}
+
 
 interface DragState {
     pointerId: number;
@@ -63,6 +67,7 @@ const CITY_RADIUS_Y = 315;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const FOCUS_ZOOM = 2.2;
+const CLUSTER_BREAK_ZOOM = 3.8;
 
 
 function clamp(
@@ -161,6 +166,73 @@ function projectCoordinates(
     };
 }
 
+function groupNearbyObjects(
+    points: ProjectedObject[],
+    zoom: number,
+    selectedObjectId: number | undefined,
+): ProjectedObject[][] {
+    if (zoom >= CLUSTER_BREAK_ZOOM) {
+        return points.map((point) => [point]);
+    }
+
+    // Marker symbols retain a roughly constant screen size while zooming.
+    // Group only symbols that would be difficult to distinguish at this zoom.
+    const separation = 30 / zoom;
+    const separationSquared = separation * separation;
+    const seen = new Set<number>();
+    const groups: ProjectedObject[][] = [];
+
+    for (let index = 0; index < points.length; index += 1) {
+        if (seen.has(index)) {
+            continue;
+        }
+
+        const group: ProjectedObject[] = [];
+        const pending = [index];
+        seen.add(index);
+
+        while (pending.length > 0) {
+            const currentIndex = pending.pop()!;
+            const current = points[currentIndex];
+            group.push(current);
+
+            if (current.object.object_id === selectedObjectId) {
+                continue;
+            }
+
+            for (let otherIndex = 0; otherIndex < points.length; otherIndex += 1) {
+                if (seen.has(otherIndex)) {
+                    continue;
+                }
+
+                const other = points[otherIndex];
+                if (other.object.object_id === selectedObjectId) {
+                    continue;
+                }
+
+                const deltaX = current.x - other.x;
+                const deltaY = current.y - other.y;
+                if (deltaX * deltaX + deltaY * deltaY <= separationSquared) {
+                    seen.add(otherIndex);
+                    pending.push(otherIndex);
+                }
+            }
+        }
+
+        groups.push(group);
+    }
+
+    return groups;
+}
+
+function clusterLabels(count: number) {
+    const form = new Intl.PluralRules("ru-RU").select(count);
+    return {
+        objects: `${count} ${form === "one" ? "объект" : form === "few" ? "объекта" : "объектов"}`,
+        points: `${count} ${form === "one" ? "условная точка" : form === "few" ? "условные точки" : "условных точек"}`,
+    };
+}
+
 
 function SchematicMap({
     objects,
@@ -218,6 +290,29 @@ function SchematicMap({
                 },
             );
         }, [objects]);
+
+    const objectGroups = useMemo(
+        () => groupNearbyObjects(
+            projectedObjects,
+            zoom,
+            selectedObject?.object_id,
+        ),
+        [projectedObjects, zoom, selectedObject?.object_id],
+    );
+
+    function openObjectGroup(group: ProjectedObject[]) {
+        const nextZoom = Math.min(
+            MAX_ZOOM,
+            Math.max(zoom + 0.7, zoom * 1.8),
+        );
+        const centerX = group.reduce((sum, point) => sum + point.x, 0) / group.length;
+        const centerY = group.reduce((sum, point) => sum + point.y, 0) / group.length;
+        const nextFocus = clampFocus(centerX, centerY, nextZoom);
+        setZoom(nextZoom);
+        setFocusX(nextFocus.x);
+        setFocusY(nextFocus.y);
+        setHoveredObject(null);
+    }
 
 
     useEffect(() => {
@@ -665,12 +760,40 @@ function SchematicMap({
 
                 <MoscowBaseMap />
 
-                {projectedObjects.map(
-                    ({
-                        object,
-                        x,
-                        y,
-                    }) => {
+                {objectGroups.map((group) => {
+                    if (group.length > 1) {
+                        const x = group.reduce((sum, point) => sum + point.x, 0) / group.length;
+                        const y = group.reduce((sum, point) => sum + point.y, 0) / group.length;
+                        const alarmCount = group.filter((point) => point.object.status === "alarm").length;
+                        return (
+                            <g
+                                key={`cluster-${group.map((point) => point.object.object_id).sort((a, b) => a - b).join("-")}`}
+                                className="schematic-object schematic-cluster"
+                                transform={`translate(${x} ${y})`}
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`${clusterLabels(group.length).objects} на условной схеме, приблизить`}
+                                onPointerDown={(event) => event.stopPropagation()}
+                                onPointerEnter={() => setHoveredObject(null)}
+                                onClick={() => openObjectGroup(group)}
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter" || event.key === " ") {
+                                        event.preventDefault();
+                                        openObjectGroup(group);
+                                    }
+                                }}
+                            >
+                                <title>{`${clusterLabels(group.length).points} · приблизить`}</title>
+                                <circle r={21 / zoom} className="schematic-cluster-point" strokeWidth={2 / zoom} />
+                                <text textAnchor="middle" dominantBaseline="central" fontSize={15 / zoom}>{group.length}</text>
+                                {alarmCount > 0 && (
+                                    <circle cx={15 / zoom} cy={-15 / zoom} r={5 / zoom} className="schematic-cluster-alarm" />
+                                )}
+                            </g>
+                        );
+                    }
+
+                    const { object, x, y } = group[0];
                         const isSelected =
                             selectedObject
                                 ?.object_id ===
@@ -745,17 +868,17 @@ function SchematicMap({
                             >
                                 {isSelected && (
                                     <circle
-                                        r="17"
+                                        r={17 / zoom}
                                         className="schematic-object-pulse"
                                     />
                                 )}
 
                                 <circle
                                     r={
-                                        object.status ===
+                                        (object.status ===
                                         "alarm"
                                             ? 10
-                                            : 8
+                                            : 8) / zoom
                                     }
                                     className={
                                         `schematic-object-point ${object.status}`
@@ -764,7 +887,7 @@ function SchematicMap({
                                 />
                             </g>
                         );
-                    },
+                    }
                 )}
             </svg>
 

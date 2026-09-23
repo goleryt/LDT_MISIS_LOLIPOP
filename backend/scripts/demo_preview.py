@@ -10,11 +10,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 
-OBJECT_IDS = range(101, 113)
+OBJECT_IDS = range(101, 101 + int(os.environ.get("MAP_DEMO_OBJECT_COUNT", "12")))
+CHANNEL_COUNT = int(os.environ.get("MAP_DEMO_CHANNEL_COUNT", "4"))
 ALARM_OBJECT_IDS = {101, 105, 110}
 NO_EVENT_OBJECT_IDS = {103, 108}
 SENSOR_KINDS = (
@@ -43,10 +45,11 @@ def make_demo_data() -> tuple[list[dict], dict[int, list[dict]], dict[int, list[
         object_name = f"Демо-объект {object_id}"
         sensors: list[dict] = []
 
-        for sensor_index, (label, sensor_type, _unit) in enumerate(SENSOR_KINDS):
-            channel_id = object_id * 10 + sensor_index + 1
+        for sensor_index in range(CHANNEL_COUNT):
+            label, sensor_type, _unit = SENSOR_KINDS[sensor_index % len(SENSOR_KINDS)]
+            channel_id = object_id * 1000 + sensor_index + 1
             sensor_name = f"{label} · канал {channel_id}"
-            has_events = object_id not in NO_EVENT_OBJECT_IDS and sensor_index != 3
+            has_events = object_id not in NO_EVENT_OBJECT_IDS and sensor_index % len(SENSOR_KINDS) != 3
             events: list[dict] = []
 
             if has_events:

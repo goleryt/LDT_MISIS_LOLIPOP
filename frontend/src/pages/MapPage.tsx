@@ -75,6 +75,8 @@ type SummaryFilter =
     | "alarm"
     | "unknown";
 
+const SENSOR_PAGE_SIZE = 100;
+
 function channelCountLabel(count: number): string {
     const form = new Intl.PluralRules("ru-RU").select(count);
     const noun = form === "one"
@@ -175,6 +177,9 @@ function MapPage() {
     const [sensorSearch, setSensorSearch] =
         useState("");
 
+    const [visibleSensorCount, setVisibleSensorCount] =
+        useState(SENSOR_PAGE_SIZE);
+
     const [selectedSensor, setSelectedSensor] =
         useState<ObjectSensor | null>(null);
 
@@ -225,6 +230,7 @@ function MapPage() {
 
         setSelectedSensor(null);
         setSensorSearch("");
+        setVisibleSensorCount(SENSOR_PAGE_SIZE);
         setSelectedObject(object);
     }
 
@@ -280,6 +286,7 @@ function MapPage() {
             setSensors([]);
             setSelectedSensor(null);
             setSensorSearch("");
+            setVisibleSensorCount(SENSOR_PAGE_SIZE);
             return;
         }
 
@@ -303,6 +310,7 @@ function MapPage() {
                     );
 
                 setSensors(sortedSensors);
+                setVisibleSensorCount(SENSOR_PAGE_SIZE);
 
                 const preferredChannelId =
                     preferredSensorChannelIdRef.current;
@@ -324,6 +332,12 @@ function MapPage() {
                     setSelectedSensor(
                         preferredSensor,
                     );
+                    if (preferredSensor) {
+                        setVisibleSensorCount(Math.max(
+                            SENSOR_PAGE_SIZE,
+                            sortedSensors.indexOf(preferredSensor) + 1,
+                        ));
+                    }
                 } else if (preferredStatus) {
                     const preferredSensor =
                         sortedSensors.find(
@@ -569,6 +583,8 @@ function MapPage() {
                 );
         });
     }, [sensors, sensorSearch]);
+
+    const visibleSensors = filteredSensors.slice(0, visibleSensorCount);
 
     const sensorStatistics = useMemo(() => {
         return {
@@ -1025,11 +1041,10 @@ function MapPage() {
                                 type="text"
                                 value={sensorSearch}
                                 placeholder="Поиск датчика, типа, ПК..."
-                                onChange={(event) =>
-                                    setSensorSearch(
-                                        event.target.value,
-                                    )
-                                }
+                                onChange={(event) => {
+                                    setSensorSearch(event.target.value);
+                                    setVisibleSensorCount(SENSOR_PAGE_SIZE);
+                                }}
                             />
                         </div>
 
@@ -1047,7 +1062,7 @@ function MapPage() {
                             </div>
                         ) : (
                             <div className="sensor-list">
-                                {filteredSensors.map((sensor) => (
+                                {visibleSensors.map((sensor) => (
                                     <button
                                         type="button"
                                         key={sensor.channel_id}
@@ -1092,6 +1107,15 @@ function MapPage() {
                                         </div>
                                     </button>
                                 ))}
+                                {visibleSensors.length < filteredSensors.length && (
+                                    <button
+                                        type="button"
+                                        className="sensor-list-more"
+                                        onClick={() => setVisibleSensorCount((current) => current + SENSOR_PAGE_SIZE)}
+                                    >
+                                        Показать ещё · {visibleSensors.length} из {filteredSensors.length}
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>
