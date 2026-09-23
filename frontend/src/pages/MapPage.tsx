@@ -28,7 +28,7 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
-import OpenStreetMap from "../components/OpenStreetMap";
+import "../styles/moscow-map.css";
 
 import {
     getObjectSensors,
@@ -137,8 +137,6 @@ function sortSensorsForDisplay(
 
 
 function MapPage() {
-    const [mapMode, setMapMode] =
-        useState<"street" | "scheme">("street");
     const navigate = useNavigate();
     const [searchParams] =
         useSearchParams();
@@ -598,20 +596,17 @@ function MapPage() {
 
     return (
         <div className={selectedObject ? "map-page has-object-drawer" : "map-page"}>
-            {mapMode === "street" ? (
-                <OpenStreetMap
-                    objects={objects}
-                    selectedObject={selectedObject}
-                    onSelectObject={selectMapObject}
-                    onShowScheme={() => setMapMode("scheme")}
-                />
-            ) : (
-                <SchematicMap
-                    objects={objects}
-                    selectedObject={selectedObject}
-                    onSelectObject={selectMapObject}
-                />
-            )}
+            <SchematicMap
+                objects={objects}
+                selectedObject={selectedObject}
+                onSelectObject={selectMapObject}
+            />
+
+            <div className="map-place-card" aria-label="Схема Москвы">
+                <span className="map-place-eyebrow">Обзор инфраструктуры</span>
+                <strong>Москва</strong>
+                <span>Авторская интерактивная схема города</span>
+            </div>
 
             <div className="map-summary">
                 <button
@@ -722,25 +717,6 @@ function MapPage() {
                             {statistics.unknown}
                         </strong>
                     </div>
-                </button>
-            </div>
-
-            <div className="map-view-switch" role="group" aria-label="Вид карты">
-                <button
-                    type="button"
-                    className={mapMode === "street" ? "active" : ""}
-                    aria-pressed={mapMode === "street"}
-                    onClick={() => setMapMode("street")}
-                >
-                    Карта
-                </button>
-                <button
-                    type="button"
-                    className={mapMode === "scheme" ? "active" : ""}
-                    aria-pressed={mapMode === "scheme"}
-                    onClick={() => setMapMode("scheme")}
-                >
-                    Схема
                 </button>
             </div>
 

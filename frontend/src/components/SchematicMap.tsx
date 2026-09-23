@@ -168,7 +168,7 @@ function SchematicMap({
     onSelectObject,
 }: SchematicMapProps) {
     const [zoom, setZoom] =
-        useState(MIN_ZOOM);
+        useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches ? 1.8 : MIN_ZOOM);
 
     const [focusX, setFocusX] =
         useState(SVG_WIDTH / 2);
@@ -754,8 +754,8 @@ function SchematicMap({
                                     r={
                                         object.status ===
                                         "alarm"
-                                            ? 7.5
-                                            : 5.5
+                                            ? 10
+                                            : 8
                                     }
                                     className={
                                         `schematic-object-point ${object.status}`

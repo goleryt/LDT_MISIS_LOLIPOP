@@ -1,0 +1,494 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../assets/fonts/Montserrat.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+:root {
+    --design-ground: #f7f7f5;
+    --design-surface: #ffffff;
+    --design-ink: #18181b;
+    --design-muted: #71717a;
+    --design-border: #e4e4e7;
+    --design-blue: #3157d5;
+}
+
+body {
+    font-family: "Montserrat", Inter, system-ui, sans-serif;
+    color: var(--design-ink);
+}
+
+.app-shell,
+.app-workspace {
+    background: var(--design-ground);
+}
+
+.sidebar {
+    background: var(--design-surface);
+    border-right: 1px solid var(--design-border);
+    color: var(--design-ink);
+}
+
+.brand-mark {
+    border-radius: 11px;
+    background: var(--design-blue);
+}
+
+.brand-text span {
+    color: var(--design-muted);
+}
+
+.nav-item {
+    color: #555760;
+}
+
+.nav-item:hover {
+    background: #f2f3f8;
+    color: var(--design-ink);
+}
+
+.nav-item.active {
+    background: #edf0ff;
+    color: var(--design-blue);
+    font-weight: 650;
+}
+
+.nav-item svg {
+    stroke-width: 1.8;
+}
+
+.map-page,
+.schematic-map,
+.schematic-map-svg {
+    background: var(--design-ground);
+}
+
+.schematic-map-svg {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition: none;
+}
+
+.schematic-map-svg.dragging {
+    cursor: grabbing;
+}
+
+.schematic-map-background,
+.city-ground {
+    fill: var(--design-ground);
+}
+
+.city-grid-line {
+    fill: none;
+    stroke: #e7e7e5;
+    stroke-width: 0.9;
+    opacity: .62;
+}
+
+.city-neighborhood {
+    fill: #f3f3f1;
+    stroke: #ebebe9;
+    stroke-width: 1.4;
+}
+
+.city-neighborhood.city-core {
+    fill: #fafaf9;
+}
+
+.city-parks path {
+    fill: #e8f1e8;
+    stroke: #d5e7d6;
+    stroke-width: 2;
+}
+
+.city-parks text {
+    fill: #8ba58d;
+    font-size: 11px;
+    font-weight: 550;
+    letter-spacing: .025em;
+}
+
+.city-streets path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 8;
+    stroke-linecap: round;
+    opacity: .93;
+}
+
+.city-avenue-casing path,
+.city-ring-casing {
+    fill: none;
+    stroke: #e1e1dd;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.city-avenues path,
+.city-ring {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.city-ring.inner {
+    stroke-width: 7;
+}
+
+.city-river-bank,
+.city-river {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.city-river-bank {
+    stroke: #fff;
+    stroke-width: 34;
+}
+
+.city-river {
+    stroke: #bfdef0;
+    stroke-width: 27;
+}
+
+.city-river-label {
+    fill: #4e9ac1;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: .16em;
+}
+
+.city-area-labels text {
+    fill: #93939b;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .16em;
+}
+
+.city-landmarks circle {
+    fill: var(--design-blue);
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+.city-landmarks text {
+    fill: #53586a;
+    font-size: 12px;
+    font-weight: 650;
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 4;
+    stroke-linejoin: round;
+}
+
+.map-place-card,
+.map-page .summary-card,
+.map-data-badge,
+.map-page .map-legend,
+.schematic-map-controls,
+.schematic-reset-button,
+.map-object-tooltip {
+    border: 1px solid var(--design-border);
+    background: var(--design-surface);
+    box-shadow: 0 8px 30px rgb(24 24 27 / 7%);
+    color: var(--design-ink);
+}
+
+.map-place-card {
+    position: absolute;
+    z-index: 590;
+    top: 16px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 260px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.map-place-eyebrow {
+    color: var(--design-blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.map-place-card strong {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.map-place-card > span:last-child {
+    color: var(--design-muted);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.map-page .map-summary {
+    top: 16px;
+    max-width: calc(100% - 310px);
+}
+
+.map-page .summary-card {
+    min-height: 60px;
+    border-radius: 12px;
+}
+
+.map-page .summary-card:hover,
+.map-page .summary-card.active {
+    border-color: #bdc8f0;
+    box-shadow: 0 10px 30px rgb(49 87 213 / 12%);
+}
+
+.summary-card svg {
+    stroke-width: 1.8;
+}
+
+.summary-card span {
+    color: var(--design-muted);
+}
+
+.summary-card strong {
+    color: var(--design-ink);
+}
+
+.map-data-badge {
+    top: 90px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    color: #595d69;
+    font-size: 10px;
+}
+
+.map-data-badge svg {
+    color: var(--design-blue);
+}
+
+.schematic-object {
+    outline: none;
+}
+
+.schematic-object-point {
+    stroke: #fff;
+    stroke-width: 3.5;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 2px 4px rgb(24 24 27 / 22%));
+}
+
+.schematic-object-point.normal {
+    fill: #1eba79;
+    stroke: #fff;
+}
+
+.schematic-object-point.alarm {
+    fill: #e05a60;
+    stroke: #fff;
+}
+
+.schematic-object-point.unknown {
+    fill: #8c939f;
+    stroke: #fff;
+}
+
+.schematic-object.selected .schematic-object-point,
+.schematic-object:focus-visible .schematic-object-point {
+    stroke: var(--design-blue);
+    stroke-width: 4;
+}
+
+.schematic-object-pulse {
+    stroke: var(--design-blue);
+}
+
+.map-page .map-legend {
+    width: 272px;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.map-page .legend-title {
+    color: var(--design-ink);
+    font-size: 12px;
+}
+
+.map-page .legend-item {
+    color: #52525b;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.map-page .legend-dot.normal { background: #1eba79; }
+.map-page .legend-dot.alarm { background: #e05a60; }
+.map-page .legend-dot.unknown { background: #8c939f; }
+
+.map-page .legend-note {
+    border-color: var(--design-border);
+    color: var(--design-muted);
+}
+
+.schematic-map-controls {
+    right: 18px;
+    bottom: 24px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.schematic-map-controls button {
+    width: 42px;
+    height: 42px;
+    color: var(--design-ink);
+}
+
+.schematic-map-controls button + button {
+    border-color: var(--design-border);
+}
+
+.schematic-map-controls button:hover:not(:disabled) {
+    background: #f1f3fb;
+}
+
+.schematic-reset-button {
+    right: 72px;
+    bottom: 24px;
+    min-height: 42px;
+    border-radius: 10px;
+    color: var(--design-blue);
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.schematic-reset-button:hover {
+    background: #f1f3fb;
+    color: var(--design-blue);
+}
+
+.map-object-tooltip {
+    width: 245px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    backdrop-filter: none;
+}
+
+.map-object-tooltip::after {
+    background: #fff;
+    border-color: var(--design-border);
+}
+
+.map-object-tooltip-header strong,
+.map-object-tooltip-meta strong {
+    color: var(--design-ink);
+}
+
+.map-object-tooltip-header strong {
+    font-size: 11px;
+}
+
+.map-object-tooltip-status,
+.map-object-tooltip small {
+    color: var(--design-muted);
+    font-size: 9px;
+}
+
+.map-object-tooltip.alarm .map-object-tooltip-status {
+    color: #d34d55;
+}
+
+.map-object-tooltip-meta span {
+    background: var(--design-ground);
+    color: var(--design-muted);
+}
+
+.map-object-tooltip.normal .map-object-tooltip-dot { background: #1eba79; }
+.map-object-tooltip.alarm .map-object-tooltip-dot { background: #e05a60; }
+.map-object-tooltip.unknown .map-object-tooltip-dot { background: #8c939f; }
+
+.has-object-drawer .map-place-card {
+    right: calc(var(--object-drawer-width) + 18px);
+}
+
+@media (max-width: 1400px) {
+    .has-object-drawer .map-summary,
+    .has-object-drawer .map-place-card,
+    .has-object-drawer .map-data-badge {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .map-page .map-summary {
+        max-width: calc(100% - 295px);
+        gap: 6px;
+    }
+
+    .map-page .summary-card {
+        min-width: 104px;
+        padding-inline: 10px;
+    }
+}
+
+@media (max-width: 900px) {
+    .map-place-card {
+        width: 220px;
+        right: 14px;
+    }
+
+    .map-page .map-summary {
+        top: 112px;
+        max-width: calc(100% - 28px);
+    }
+
+    .map-data-badge {
+        top: 70px;
+    }
+
+    .has-object-drawer .map-place-card {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .map-place-card {
+        top: 12px;
+        right: 12px;
+        width: 176px;
+        padding: 9px 11px;
+    }
+
+    .map-place-card strong {
+        font-size: 16px;
+    }
+
+    .map-page .map-summary {
+        top: 105px;
+    }
+
+    .map-data-badge {
+        top: 250px;
+        left: 12px;
+    }
+
+    .map-page .map-legend {
+        left: 12px;
+        width: calc(100% - 86px);
+    }
+
+    .schematic-map-controls {
+        right: 12px;
+        bottom: 18px;
+    }
+
+    .schematic-reset-button {
+        top: 294px;
+        right: 12px;
+        bottom: auto;
+    }
+}
