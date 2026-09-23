@@ -242,6 +242,7 @@ def get_map_objects() -> list[dict[str, object]]:
                     ],
                 },
                 "geometry_is_synthetic": True,
+                "data_is_synthetic": False,
             }
         )
 

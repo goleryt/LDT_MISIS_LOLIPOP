@@ -418,6 +418,11 @@ body {
 .map-object-tooltip.alarm .map-object-tooltip-dot { background: #e05a60; }
 .map-object-tooltip.unknown .map-object-tooltip-dot { background: #8c939f; }
 
+.sensor-request-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
 .has-object-drawer .map-place-card {
     right: calc(var(--object-drawer-width) + 18px);
 }

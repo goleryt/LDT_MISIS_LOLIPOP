@@ -841,7 +841,9 @@ function SchematicMap({
                         </div>
 
                         <small>
-                            {hoveredObject.geometry_is_synthetic
+                            {hoveredObject.data_is_synthetic
+                                ? "Демо-данные · точка условная"
+                                : hoveredObject.geometry_is_synthetic
                                 ? "Точка условная, не адрес · открыть объект"
                                 : "Нажмите, чтобы открыть объект"}
                         </small>

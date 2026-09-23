@@ -75,6 +75,16 @@ type SummaryFilter =
     | "alarm"
     | "unknown";
 
+function channelCountLabel(count: number): string {
+    const form = new Intl.PluralRules("ru-RU").select(count);
+    const noun = form === "one"
+        ? "канал"
+        : form === "few"
+            ? "канала"
+            : "каналов";
+    return `${count} ${noun}`;
+}
+
 
 function sensorEventTime(
     sensor: ObjectSensor,
@@ -484,6 +494,9 @@ function MapPage() {
     const hasSyntheticGeometry = objects.some(
         (item) => item.geometry_is_synthetic,
     );
+    const hasSyntheticRecords = objects.some(
+        (item) => item.data_is_synthetic,
+    );
 
     const summaryObjects = useMemo(() => {
         if (!activeSummaryFilter) {
@@ -721,9 +734,13 @@ function MapPage() {
             </div>
 
             {hasSyntheticGeometry && (
-                <div className="map-data-badge" title="Точки устойчиво вычислены из ID объектов; их положение не соответствует реальному адресу">
+                <div className="map-data-badge" title={hasSyntheticRecords
+                    ? "Демонстрационные объекты, каналы и события вымышлены; точки не являются адресами"
+                    : "Точки устойчиво вычислены из ID объектов; их положение не соответствует реальному адресу"}>
                     <MapPin size={13} />
-                    Условное размещение · не адреса объектов
+                    {hasSyntheticRecords
+                        ? "Демо-данные · условные точки и события"
+                        : "Условное размещение · не адреса объектов"}
                 </div>
             )}
             {activeSummaryFilter && (
@@ -818,7 +835,7 @@ function MapPage() {
                                                 item.sensors_with_data
                                             }{" "}
                                             из{" "}
-                                            {item.sensor_count} каналов
+                                            {channelCountLabel(item.sensor_count)}
                                         </span>
                                     </div>
 
@@ -898,7 +915,9 @@ function MapPage() {
 
                     {selectedObject.geometry_is_synthetic && (
                         <p className="drawer-location-note">
-                            Точка на карте условная: она вычислена из ID объекта и не показывает его реальное местоположение.
+                            {selectedObject.data_is_synthetic
+                                ? "Демо-данные: объект, каналы и события вымышлены. Точка на карте условная и не показывает реальное местоположение."
+                                : "Точка на карте условная: она вычислена из ID объекта и не показывает его реальное местоположение."}
                         </p>
                     )}
 
@@ -980,7 +999,7 @@ function MapPage() {
                                 <h3>Каналы объекта</h3>
 
                                 <span>
-                                    {sensors.length} каналов · связь по ID объекта
+                                    {channelCountLabel(sensors.length)} · связь по ID объекта
                                 </span>
                             </div>
 
@@ -1199,13 +1218,16 @@ function MapPage() {
                         <button
                             type="button"
                             className="sensor-request-button"
+                            disabled={selectedObject.data_is_synthetic}
                             onClick={() =>
                                 navigate(
                                     `/requests?objectId=${selectedObject.object_id}&channelId=${selectedSensor.channel_id}`,
                                 )
                             }
                         >
-                            Создать профилактическую заявку
+                            {selectedObject.data_is_synthetic
+                                ? "Заявки недоступны в демо"
+                                : "Создать профилактическую заявку"}
                         </button>
                     )}
                     <div className="sensor-history-section">
