@@ -163,6 +163,14 @@ This constraint does not change the specification's location requirement or esta
 synthetic points satisfy it; the map must label them as conditional and must not present them as
 addresses or physical risk zones.
 
+**Catalogue join verified structurally, 2026-09-23:** the delivered channel catalogue
+contains 11,485 rows, each with `ид_объект`; those IDs match the delivered object catalogue
+(see `data/README.md` in the source checkout). The implemented chain is
+`events_journal.ид_канала_данных` → `channel_catalogue.ид_канала_данных` →
+`channel_catalogue.ид_объект` → `object_catalogue.ид_объект`. This establishes record linkage,
+not the business meaning of an object, a one-channel-per-device rule, equipment identity, or
+physical location. Only the map coordinates are synthetic in the current application path.
+
 ## 9. Implementation defaults until answers arrive
 
 - Keep raw inputs immutable and use a read-only audit before transformations.

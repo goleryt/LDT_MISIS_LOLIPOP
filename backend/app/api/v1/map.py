@@ -113,6 +113,8 @@ def get_map_objects() -> list[dict[str, object]]:
         .subquery()
     )
 
+    # The catalogue key groups channels under an object record. It does not
+    # establish an address, equipment identity, or one channel per device.
     statement = (
         select(
             ObjectCatalogue.ид_объект.label(

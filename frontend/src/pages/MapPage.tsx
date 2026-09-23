@@ -818,7 +818,7 @@ function MapPage() {
                                                 item.sensors_with_data
                                             }{" "}
                                             из{" "}
-                                            {item.sensor_count} датчиков
+                                            {item.sensor_count} каналов
                                         </span>
                                     </div>
 
@@ -927,7 +927,7 @@ function MapPage() {
                         </div>
 
                         <div>
-                            <span>Всего датчиков</span>
+                            <span>Каналов датчиков</span>
 
                             <strong>
                                 {selectedObject.sensor_count}
@@ -977,10 +977,10 @@ function MapPage() {
                     <div className="drawer-section sensors-section">
                         <div className="sensors-heading">
                             <div>
-                                <h3>Датчики объекта</h3>
+                                <h3>Каналы объекта</h3>
 
                                 <span>
-                                    {sensors.length} каналов
+                                    {sensors.length} каналов · связь по ID объекта
                                 </span>
                             </div>
 

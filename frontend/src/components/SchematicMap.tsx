@@ -807,7 +807,7 @@ function SchematicMap({
 
                         <div className="map-object-tooltip-meta">
                             <span>
-                                Датчиков
+                                Каналов
                                 <strong>
                                     {
                                         hoveredObject.sensor_count
@@ -841,7 +841,9 @@ function SchematicMap({
                         </div>
 
                         <small>
-                            Нажмите, чтобы открыть объект
+                            {hoveredObject.geometry_is_synthetic
+                                ? "Точка условная, не адрес · открыть объект"
+                                : "Нажмите, чтобы открыть объект"}
                         </small>
                     </div>
                 )}
