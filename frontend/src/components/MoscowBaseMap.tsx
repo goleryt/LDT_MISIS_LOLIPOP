@@ -72,6 +72,9 @@ function MoscowBaseMap() {
                 ))}
             </g>
 
+            <g className="city-street-casing">
+                {STREETS.map((path, index) => <path key={index} d={path} />)}
+            </g>
             <g className="city-streets">
                 {STREETS.map((path, index) => <path key={index} d={path} />)}
             </g>

@@ -83,9 +83,9 @@ body {
 
 .city-grid-line {
     fill: none;
-    stroke: #e7e7e5;
-    stroke-width: 0.9;
-    opacity: .62;
+    stroke: #e0e2df;
+    stroke-width: 1;
+    opacity: .8;
 }
 
 .city-neighborhood {
@@ -111,10 +111,17 @@ body {
     letter-spacing: .025em;
 }
 
+.city-street-casing path {
+    fill: none;
+    stroke: #e7e8e5;
+    stroke-width: 7;
+    stroke-linecap: round;
+}
+
 .city-streets path {
     fill: none;
     stroke: #fff;
-    stroke-width: 8;
+    stroke-width: 4.5;
     stroke-linecap: round;
     opacity: .93;
 }
