@@ -34,4 +34,12 @@ export interface EventsQuery {
     alarm?: boolean | null;
     objectId?: number | null;
     channelId?: number | null;
+    timeFrom?: string;
+    timeTo?: string;
+    alarmState?: "all" | "alarm" | "normal" | "unknown";
+    objectQuery?: string;
+    sensorQuery?: string;
+    eventQuery?: string;
+    sortBy?: "time" | "object" | "sensor" | "event" | "status";
+    sortDesc?: boolean;
 }

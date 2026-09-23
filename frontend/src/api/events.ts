@@ -46,6 +46,15 @@ export async function getEvents(
         );
     }
 
+    if (query.timeFrom) params.set("time_from", query.timeFrom);
+    if (query.timeTo) params.set("time_to", query.timeTo);
+    if (query.alarmState) params.set("alarm_state", query.alarmState);
+    if (query.objectQuery) params.set("object_query", query.objectQuery);
+    if (query.sensorQuery) params.set("sensor_query", query.sensorQuery);
+    if (query.eventQuery) params.set("event_query", query.eventQuery);
+    if (query.sortBy) params.set("sort_by", query.sortBy);
+    if (query.sortDesc !== undefined) params.set("sort_desc", String(query.sortDesc));
+
     const response = await fetch(
         `${API_BASE_URL}/api/v1/events?${params.toString()}`,
     );
