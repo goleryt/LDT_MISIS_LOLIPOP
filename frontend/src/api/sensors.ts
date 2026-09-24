@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -11,7 +12,7 @@ export async function getSensorHistory(
     channelId: number,
     limit = 200,
 ): Promise<SensorHistoryResponse> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/sensors/${channelId}/history?limit=${limit}`,
     );
 

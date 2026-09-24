@@ -1,0 +1,92 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "provider_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Provider Id",
+      "type": "string"
+    },
+    "object_id": {
+      "minimum": 1,
+      "title": "Object Id",
+      "type": "integer"
+    },
+    "channel_id": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Channel Id"
+    },
+    "incident_type": {
+      "enum": [
+        "fire",
+        "intrusion",
+        "flood",
+        "sensor_failure",
+        "system_failure"
+      ],
+      "title": "Incident Type",
+      "type": "string"
+    },
+    "probability": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Probability",
+      "type": "number"
+    },
+    "horizon_hours": {
+      "minimum": 24,
+      "title": "Horizon Hours",
+      "type": "integer"
+    },
+    "calculated_at": {
+      "format": "date-time",
+      "title": "Calculated At",
+      "type": "string"
+    },
+    "predicted_for": {
+      "format": "date-time",
+      "title": "Predicted For",
+      "type": "string"
+    },
+    "model_version": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Model Version",
+      "type": "string"
+    },
+    "recommendation": {
+      "anyOf": [
+        {
+          "maxLength": 4000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recommendation"
+    }
+  },
+  "required": [
+    "provider_id",
+    "object_id",
+    "incident_type",
+    "probability",
+    "horizon_hours",
+    "calculated_at",
+    "predicted_for",
+    "model_version"
+  ],
+  "title": "PredictionResult",
+  "type": "object"
+}

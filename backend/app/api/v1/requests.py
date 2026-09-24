@@ -291,6 +291,7 @@ def update_request(
         request = session.get(
             PreventiveRequest,
             request_id,
+            with_for_update=True,
         )
 
         if request is None:
@@ -303,6 +304,11 @@ def update_request(
             exclude_unset=True
         )
 
+        for required in ("title", "priority", "status"):
+            if required in changes and changes[required] is None:
+                raise HTTPException(422, f"{required} cannot be null")
+        if request.status in {"completed", "cancelled"} and changes.get("status", request.status) != request.status:
+            raise HTTPException(409, "A closed request cannot be reopened")
         if "title" in changes:
             title = changes["title"].strip()
 
@@ -334,13 +340,13 @@ def update_request(
                 "status"
             ]
 
-            if request.status == "completed":
+            if request.status == "completed" and request.completed_at is None:
                 request.completed_at = (
                     datetime.now(
                         timezone.utc
                     )
                 )
-            else:
+            elif request.status != "completed":
                 request.completed_at = None
 
         request.updated_at = datetime.now(

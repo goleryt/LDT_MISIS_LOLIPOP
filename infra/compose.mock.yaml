@@ -1,0 +1,14 @@
+# Use only with ENVIRONMENT=development/test and ALLOW_MOCK_INGESTION=true.
+services:
+  mock-source:
+    build: ../backend
+    command: ["python", "-m", "scripts.mock_source"]
+    expose: ["8091"]
+  integrations:
+    environment:
+      ALLOW_MOCK_INGESTION: "true"
+    volumes:
+      - ./sources.mock.json:/config/sources.json:ro
+    depends_on:
+      mock-source:
+        condition: service_started

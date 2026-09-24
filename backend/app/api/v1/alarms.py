@@ -8,6 +8,7 @@ from app.db.models import (
     ObjectCatalogue,
 )
 from app.db.session import SessionLocal
+from app.core.read_cache import cached_snapshot
 
 
 router = APIRouter(
@@ -17,6 +18,7 @@ router = APIRouter(
 
 
 @router.get("")
+@cached_snapshot
 def get_active_alarms(
     limit: int = Query(
         default=100,

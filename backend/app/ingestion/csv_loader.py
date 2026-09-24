@@ -1,4 +1,5 @@
 import csv
+import math
 import re
 from datetime import date, datetime, time
 from pathlib import Path
@@ -116,10 +117,10 @@ def parse_sensor_value(
         return None, None
 
     try:
-        return (
-            float(normalized.replace(",", ".")),
-            None,
-        )
+        number = float(normalized.replace(",", "."))
+        if not math.isfinite(number):
+            return None, normalized
+        return number, None
     except ValueError:
         return None, normalized
 
@@ -746,7 +747,6 @@ def load_events_journal(
                             batch,
                         )
 
-                        session.commit()
 
                         inserted_rows += inserted
                         skipped_duplicates += (
@@ -761,12 +761,13 @@ def load_events_journal(
                         batch,
                     )
 
-                    session.commit()
 
                     inserted_rows += inserted
                     skipped_duplicates += (
                         len(batch) - inserted
                     )
+
+            session.commit()
 
         except Exception:
             session.rollback()

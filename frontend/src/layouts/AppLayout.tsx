@@ -1,3 +1,4 @@
+import Notifications from "../components/Notifications";
 import {
     useState,
 } from "react";
@@ -145,6 +146,8 @@ function AppLayout() {
                             <span>Заявки</span>
                         )}
                     </NavLink>
+                    <NavLink to="/predictions" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"} title="Прогнозы"><List size={21} />{!collapsed && <span>Прогнозы</span>}</NavLink>
+                    <NavLink to="/reports" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"} title="Отчёты"><List size={21} />{!collapsed && <span>Отчёты</span>}</NavLink>
                 </nav>
 
                 <div className="sidebar-footer">
@@ -177,20 +180,18 @@ function AppLayout() {
 
                     <div
                         className="nav-item settings-item"
-                        title="Настройки будут подключены после авторизации"
+                        title="Права и учётные записи управляются администратором"
                     >
                         <Settings size={21} />
                         {!collapsed && (
-                            <span>
-                                Настройки
-                            </span>
+                            <span>Управление доступом</span>
                         )}
                     </div>
                 </div>
             </aside>
 
             <main className="app-workspace">
-                <Outlet />
+                <Notifications /><Outlet />
             </main>
         </div>
     );

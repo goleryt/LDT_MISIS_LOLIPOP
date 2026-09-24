@@ -1,0 +1,267 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "external_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "External Id",
+      "type": "string"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "object_id": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Object Id"
+    },
+    "channel_id": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Channel Id"
+    },
+    "event_id": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Event Id"
+    },
+    "alarm": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Alarm"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    },
+    "name": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Name"
+    },
+    "sensor_type": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sensor Type"
+    },
+    "system_type": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "System Type"
+    },
+    "tag": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tag"
+    },
+    "longitude": {
+      "anyOf": [
+        {
+          "maximum": 180,
+          "minimum": -180,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Longitude"
+    },
+    "latitude": {
+      "anyOf": [
+        {
+          "maximum": 90,
+          "minimum": -90,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Latitude"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "maxLength": 4000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "request_id": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Request Id"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "enum": [
+            "new",
+            "in_progress",
+            "completed",
+            "cancelled"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status"
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temperature"
+    },
+    "humidity": {
+      "anyOf": [
+        {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Humidity"
+    },
+    "precipitation": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Precipitation"
+    },
+    "pressure": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pressure"
+    },
+    "mock": {
+      "default": false,
+      "title": "Mock",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "external_id",
+    "observed_at"
+  ],
+  "title": "Record",
+  "type": "object"
+}

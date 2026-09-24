@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -10,7 +11,7 @@ import type {
 
 
 export async function getRequests(): Promise<PreventiveRequest[]> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/requests`,
     );
 
@@ -27,7 +28,7 @@ export async function getRequests(): Promise<PreventiveRequest[]> {
 export async function createRequest(
     payload: PreventiveRequestCreate,
 ): Promise<PreventiveRequest> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/requests`,
         {
             method: "POST",
@@ -57,7 +58,7 @@ export async function updateRequest(
     requestId: number,
     payload: PreventiveRequestUpdate,
 ): Promise<PreventiveRequest> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/requests/${requestId}`,
         {
             method: "PATCH",

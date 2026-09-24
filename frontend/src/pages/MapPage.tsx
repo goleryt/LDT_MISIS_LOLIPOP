@@ -265,8 +265,12 @@ function MapPage() {
         };
     }, []);
 
+    const selectedObjectId = selectedObject?.object_id;
+    const selectedSensorId = selectedSensor?.channel_id;
+
     useEffect(() => {
-        if (!selectedObject) {
+        let cancelled = false;
+        if (!selectedObjectId) {
             setSensors([]);
             setSelectedSensor(null);
             setSensorSearch("");
@@ -274,7 +278,7 @@ function MapPage() {
         }
 
         const objectId =
-            selectedObject.object_id;
+            selectedObjectId;
 
         async function loadSensors() {
             try {
@@ -287,6 +291,7 @@ function MapPage() {
                         objectId,
                     );
 
+                if (cancelled) return;
                 const sortedSensors =
                     sortSensorsForDisplay(
                         data.sensors,
@@ -334,29 +339,32 @@ function MapPage() {
                 preferredSensorStatusRef.current =
                     null;
             } catch (error) {
+                if (cancelled) return;
                 setSensorsError(
                     error instanceof Error
                         ? error.message
                         : "Не удалось получить датчики",
                 );
             } finally {
-                setSensorsLoading(false);
+                if (!cancelled) setSensorsLoading(false);
             }
         }
 
         void loadSensors();
-    }, [selectedObject?.object_id]);
+        return () => { cancelled = true; };
+    }, [selectedObjectId]);
 
 
     useEffect(() => {
-        if (!selectedSensor) {
+        let cancelled = false;
+        if (!selectedSensorId) {
             setSensorHistory(null);
             setHistoryError(null);
             return;
         }
 
         const channelId =
-            selectedSensor.channel_id;
+            selectedSensorId;
 
         async function loadHistory() {
             try {
@@ -369,8 +377,9 @@ function MapPage() {
                         200,
                     );
 
-                setSensorHistory(data);
+                if (!cancelled) setSensorHistory(data);
             } catch (error) {
+                if (cancelled) return;
                 setHistoryError(
                     error instanceof Error
                         ? error.message
@@ -379,12 +388,13 @@ function MapPage() {
 
                 setSensorHistory(null);
             } finally {
-                setHistoryLoading(false);
+                if (!cancelled) setHistoryLoading(false);
             }
         }
 
         void loadHistory();
-    }, [selectedSensor?.channel_id]);
+        return () => { cancelled = true; };
+    }, [selectedSensorId]);
 
     useEffect(() => {
         const objectIdRaw =
@@ -843,7 +853,7 @@ function MapPage() {
                 </div>
 
                 <div className="legend-note">
-                    Геометрия объектов демонстрационная
+                    Схематическая карта · при отсутствии координат показаны демонстрационные точки
                 </div>
             </div>
 

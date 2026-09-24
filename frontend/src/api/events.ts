@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -46,7 +47,7 @@ export async function getEvents(
         );
     }
 
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/events?${params.toString()}`,
     );
 

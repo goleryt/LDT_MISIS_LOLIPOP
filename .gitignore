@@ -43,3 +43,10 @@ Thumbs.db
 
 # Visual Studio
 .vs/
+test-results/
+playwright-report/
+infra/compose.verify.yaml
+infra/sources.json
+infra/certs/
+*.dump
+*.dump.sha256

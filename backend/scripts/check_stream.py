@@ -1,0 +1,49 @@
+"""End-to-end near-real-time check on a test deployment only; no forecasts."""
+import os
+import secrets
+import time
+from datetime import datetime, timedelta, timezone
+import httpx
+from sqlalchemy import delete
+from app.core.config import get_settings
+from app.core.security import token_hash
+from app.db.platform import LoginSession, User
+from app.db.session import SessionLocal
+
+def main():
+    if get_settings().environment != "test":
+        raise SystemExit("ENVIRONMENT=test required")
+    token=secrets.token_urlsafe(48)
+    key=token_hash(token)
+    with SessionLocal.begin() as db:
+        if not db.get(User,"stream-check"):
+            db.add(User(username="stream-check",role="integrator",provider="local",active=True))
+            db.flush()
+        db.add(LoginSession(token_hash=key,username="stream-check",csrf_token=secrets.token_urlsafe(32),
+                            expires_at=datetime.now(timezone.utc)+timedelta(minutes=2)))
+    started=time.perf_counter()
+    stamp=datetime.now(timezone.utc)
+    event_id=int(stamp.timestamp()*1000)
+    payload={"external_id":str(event_id),"observed_at":stamp.isoformat(),"channel_id":1,
+             "event_id":event_id,"alarm":True,"value":"25"}
+    try:
+        with httpx.Client(base_url="http://127.0.0.1:8000",trust_env=False) as client:
+            response=client.post("/api/v1/integrations/telemetry",json=[payload],headers={"Authorization":f"Bearer {token}"})
+            response.raise_for_status()
+            assert response.json()["inserted"]==1
+            result=client.post("/api/v1/auth/login",json={"username":os.environ["TEST_USERNAME"],"password":os.environ["TEST_PASSWORD"]})
+            result.raise_for_status()
+            client.headers["X-CSRF-Token"]=result.json()["csrf_token"]
+            notifications=client.get("/api/v1/notifications").json()
+            assert any(row["object_id"]==1 and row["kind"]=="observed_alarm" for row in notifications)
+            elapsed=time.perf_counter()-started
+            assert elapsed<300
+            assert client.get("/api/v1/predictions").json()==[]
+            client.post("/api/v1/auth/logout").raise_for_status()
+            print(f"Telemetry accepted and notification visible in {elapsed:.3f} seconds; no predictions.")
+    finally:
+        with SessionLocal.begin() as db:
+            db.execute(delete(LoginSession).where(LoginSession.token_hash==key))
+
+if __name__=="__main__":
+    main()

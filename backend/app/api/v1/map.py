@@ -9,6 +9,8 @@ from app.db.models import (
     ObjectCatalogue,
 )
 from app.db.session import SessionLocal
+from app.db.platform import ObjectLocation
+from app.core.read_cache import cached_snapshot
 
 
 router = APIRouter(
@@ -71,6 +73,7 @@ def synthetic_point_for_object(
 
 
 @router.get("/objects")
+@cached_snapshot
 def get_map_objects() -> list[dict[str, object]]:
     ranked_events = (
         select(
@@ -171,6 +174,8 @@ def get_map_objects() -> list[dict[str, object]]:
             statement
         ).mappings().all()
 
+    with SessionLocal() as session:
+        locations = {row.object_id: (row.longitude, row.latitude) for row in session.scalars(select(ObjectLocation))}
     result: list[dict[str, object]] = []
 
     for row in rows:
@@ -205,6 +210,8 @@ def get_map_objects() -> list[dict[str, object]]:
             )
         )
 
+        if object_id in locations:
+            longitude, latitude = locations[object_id]
         last_event_time = row[
             "last_event_time"
         ]
@@ -238,7 +245,7 @@ def get_map_objects() -> list[dict[str, object]]:
                         latitude,
                     ],
                 },
-                "geometry_is_synthetic": True,
+                "geometry_is_synthetic": object_id not in locations,
             }
         )
 

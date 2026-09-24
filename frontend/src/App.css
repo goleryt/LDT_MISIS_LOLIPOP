@@ -3136,3 +3136,21 @@ button:hover {
         flex-wrap: wrap;
     }
 }
+
+.auth-screen { min-height:100vh; display:grid; place-items:center; background:#0d1720; color:#e7eef6; }
+.auth-card { width:min(420px,90vw); display:grid; gap:18px; padding:32px; background:#172633; border-radius:12px; }
+.auth-card label,.prediction-detail label { display:grid; gap:6px; }
+.auth-card input,.operations-page input,.operations-page select,.operations-page textarea { padding:10px; border:1px solid #526372; background:#14232d; color:#edf3f8; border-radius:5px; }
+.auth-card button,.session-bar button,.operations-page button,.notification-panel button { cursor:pointer; padding:8px 12px; border:1px solid #587283; border-radius:5px; background:#1e5266; color:white; }
+button:disabled { cursor:not-allowed; opacity:.55; }
+.session-bar { position:fixed; right:18px; bottom:12px; z-index:150; display:flex; gap:12px; align-items:center; padding:5px 10px; border-radius:6px; background:#122532; color:#d8e8f2; font-size:12px; }
+.notification-panel { position:relative; padding:10px 24px; background:#172a37; color:#e6eef4; }
+.notification-panel div { display:flex; align-items:center; gap:16px; padding:8px; }
+.notification-panel a { color:#9fd7ed; }
+.operations-page { padding:28px; color:#dce9f1; overflow:auto; height:100%; }
+.operations-page table { border-collapse:collapse; width:100%; }
+.operations-page td,.operations-page th { padding:10px; text-align:left; border-bottom:1px solid #334552; }
+.status-notice { padding:14px; border-left:3px solid #5c91a6; background:#162c39; }
+.prediction-detail { max-width:900px; margin-top:24px; }
+.prediction-detail fieldset { display:grid; gap:12px; padding:20px; margin-top:18px; }
+[role=alert] { color:#ffb0a8; }

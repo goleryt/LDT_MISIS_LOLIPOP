@@ -1,0 +1,7 @@
+[
+  {"name":"equipment","kind":"equipment","url":"https://equipment.customer.example/api/export","token_env":"EQUIPMENT_READ_TOKEN"},
+  {"name":"smvu","kind":"telemetry","url":"https://smvu.customer.example/api/export","token_env":"SMVU_READ_TOKEN"},
+  {"name":"ods","kind":"ods","url":"https://ods.customer.example/api/export","token_env":"ODS_READ_TOKEN"},
+  {"name":"work_status","kind":"work_status","url":"https://requests.customer.example/api/export","token_env":"REQUESTS_READ_TOKEN"},
+  {"name":"weather","kind":"weather","url":"https://weather.customer.example/api/export","token_env":"WEATHER_READ_TOKEN"}
+]

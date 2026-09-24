@@ -1,0 +1,4 @@
+[
+  {"name":"mock-equipment","kind":"equipment","url":"http://mock-source:8091/equipment"},
+  {"name":"mock-smvu","kind":"telemetry","url":"http://mock-source:8091/telemetry"}
+]

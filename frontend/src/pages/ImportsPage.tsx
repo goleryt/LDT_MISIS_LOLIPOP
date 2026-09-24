@@ -1,3 +1,4 @@
+import { canWrite } from "../api/session";
 import {
     useEffect,
     useMemo,
@@ -76,6 +77,7 @@ function getStatusLabel(
 
 
 function ImportsPage() {
+    const [kind, setKind] = useState("events_journal");
     const fileInputRef =
         useRef<HTMLInputElement>(null);
 
@@ -160,14 +162,12 @@ function ImportsPage() {
         }
 
         if (
-            !file.name
-                .toLowerCase()
-                .endsWith(".csv")
+            !/\.(csv|xlsx|json|xml)$/i.test(file.name)
         ) {
             setSelectedFile(null);
 
             setError(
-                "Поддерживаются только CSV-файлы.",
+                "Поддерживаются CSV, XLSX, JSON, XML.",
             );
 
             return;
@@ -178,9 +178,10 @@ function ImportsPage() {
 
 
     async function handleUpload() {
+        if (!canWrite("imports")) { setError("Недостаточно прав для импорта"); return; }
         if (!selectedFile) {
             setError(
-                "Сначала выберите CSV-файл.",
+                "Сначала выберите файл CSV/XLSX/JSON/XML.",
             );
 
             return;
@@ -193,7 +194,7 @@ function ImportsPage() {
 
             const result =
                 await uploadEventsFile(
-                    selectedFile,
+                    selectedFile, kind,
                 );
 
             if (result.already_imported) {
@@ -319,7 +320,7 @@ function ImportsPage() {
                         <h2>Загрузить журнал событий</h2>
 
                         <p>
-                            Выберите CSV-файл или
+                            Выберите файл CSV/XLSX/JSON/XML или
                             перетащите его в область ниже
                         </p>
                     </div>
@@ -356,7 +357,10 @@ function ImportsPage() {
                         fileInputRef.current?.click()
                     }
                 >
-                    <input
+                    <label>Тип данных <select value={kind} disabled={uploading || !canWrite("imports")} onChange={e => setKind(e.target.value)}>
+<option value="events_journal">События датчиков</option><option value="objects">Объекты</option><option value="channels">Каналы датчиков</option>
+</select></label>
+                        <input
                         ref={fileInputRef}
                         type="file"
                         accept=".csv,text/csv"
@@ -374,7 +378,7 @@ function ImportsPage() {
                     </div>
 
                     <strong>
-                        Перетащите CSV-файл сюда
+                        Перетащите файл CSV/XLSX/JSON/XML сюда
                     </strong>
 
                     <span>

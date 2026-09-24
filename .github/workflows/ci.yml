@@ -1,34 +1,46 @@
-name: CI
-
-on:
-  pull_request:
-  push:
-    branches:
-      - main
-      - backend
-
+name: Validate service
+on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ldt_test
+          POSTGRES_PASSWORD: test-database-password
+          POSTGRES_DB: ldt_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U ldt_test -d ldt_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      ENVIRONMENT: test
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ldt_test
+      POSTGRES_USER: ldt_test
+      POSTGRES_PASSWORD: test-database-password
     defaults:
       run:
         working-directory: backend
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: "5432"
-      POSTGRES_DB: ldt_misis
-      POSTGRES_USER: ldt_user
-      POSTGRES_PASSWORD: ci_password
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: python -m compileall -q app scripts alembic
-      - run: python -c "from app.main import app; assert '/health' in app.openapi()['paths']"
-      - run: alembic heads
-
+          python-version: "3.14"
+      - run: pip install -r requirements-dev.txt
+      - run: alembic upgrade head
+      - run: alembic check
+      - run: pytest -q --junitxml=../test-results/backend.xml
+      - run: alembic downgrade 7bb10cf49ac2 && alembic upgrade head && alembic check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-results
+          path: test-results/
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -42,4 +54,51 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - run: npm run lint
       - run: npm run build
+  containers:
+    runs-on: ubuntu-latest
+    env:
+      TEST_USERNAME: dispatcher
+      TEST_PASSWORD: test-only-smoke-password-12345
+      BASE_URL: http://localhost:8080
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: |
+          cp backend/.env.example backend/.env
+          sed -i 's/ENVIRONMENT=development/ENVIRONMENT=test/' backend/.env
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci up --build -d --wait
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T -e TEST_USERNAME -e TEST_PASSWORD backend python -m scripts.seed_test_data
+      - run: pip install httpx==0.28.1
+      - run: python tests/smoke.py
+      - run: python tests/load.py
+      - run: |
+          cd frontend
+          npm ci
+          npx playwright install --with-deps chrome
+          npx playwright test
+      - name: Check telemetry delivery without ML
+        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T -e TEST_USERNAME -e TEST_PASSWORD backend python -m scripts.check_stream
+      - name: Check backup and restore
+        run: |
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/backup.sh
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/verify-restore.sh ldt_restore_check
+      - name: Save logs
+        if: always()
+        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci logs --no-color > container-logs.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-results
+          path: |
+            container-logs.txt
+            frontend/test-results/
+            test-results/
+      - if: always()
+        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci down

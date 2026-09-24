@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -10,7 +11,7 @@ import type {
 export async function getActiveAlarms(
     limit = 100,
 ): Promise<ActiveAlarmsResponse> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/alarms?limit=${limit}`,
     );
 

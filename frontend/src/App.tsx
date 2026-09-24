@@ -1,3 +1,7 @@
+import { lazy, Suspense } from "react";
+const ReportsPage = lazy(() => import("./pages/ReportsPage"));
+import SessionGate from "./components/SessionGate";
+const PredictionsPage = lazy(() => import("./pages/PredictionsPage"));
 import {
     Navigate,
     Route,
@@ -7,18 +11,20 @@ import {
 import "./App.css";
 
 import AppLayout from "./layouts/AppLayout";
-import AlarmsPage from "./pages/AlarmsPage";
-import EventJournalPage from "./pages/EventJournalPage";
-import ImportsPage from "./pages/ImportsPage";
-import MapPage from "./pages/MapPage";
-import ObjectsPage from "./pages/ObjectsPage";
-import RequestsPage from "./pages/RequestsPage";
+const AlarmsPage = lazy(() => import("./pages/AlarmsPage"));
+const EventJournalPage = lazy(() => import("./pages/EventJournalPage"));
+const ImportsPage = lazy(() => import("./pages/ImportsPage"));
+const MapPage = lazy(() => import("./pages/MapPage"));
+const ObjectsPage = lazy(() => import("./pages/ObjectsPage"));
+const RequestsPage = lazy(() => import("./pages/RequestsPage"));
 
 
 function App() {
     return (
-        <Routes>
+        <SessionGate><Suspense fallback={<div className="operations-page">Загрузка раздела…</div>}><Routes>
             <Route element={<AppLayout />}>
+                <Route path="/predictions" element={<PredictionsPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
                 <Route
                     path="/"
                     element={<MapPage />}
@@ -59,7 +65,7 @@ function App() {
                     }
                 />
             </Route>
-        </Routes>
+        </Routes></Suspense></SessionGate>
     );
 }
 

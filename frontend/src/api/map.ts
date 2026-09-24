@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -6,7 +7,7 @@ import type { MapObject } from "../types/map";
 
 
 export async function getMapObjects(): Promise<MapObject[]> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/map/objects`,
     );
 

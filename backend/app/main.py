@@ -1,64 +1,34 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.api.v1.alarms import router as alarms_router
-from app.api.v1.events import router as events_router
-from app.api.v1.imports import router as imports_router
-from app.api.v1.map import router as map_router
-from app.api.v1.objects import router as objects_router
-from app.api.v1.requests import router as requests_router
-from app.api.v1.sensors import router as sensors_router
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from sqlalchemy import text
+from app.api.v1 import alarms, events, imports, map, objects, requests, sensors, auth, platform, integrations, predictions, geo
 from app.core.config import get_settings
-
+from app.core.middleware import SecurityMiddleware
+from app.db.session import engine
+from app.api.v1 import reports
 
 settings = get_settings()
-
-
-app = FastAPI(
-    title=settings.app_name,
-    version=settings.app_version,
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=(
-        settings.cors_origin_list
-    ),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.include_router(
-    map_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    objects_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    sensors_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    alarms_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    events_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    requests_router,
-    prefix="/api/v1",
-)
-app.include_router(
-    imports_router,
-    prefix="/api/v1",
-)
-
+app = FastAPI(title=settings.app_name, version=settings.app_version)
+for module in (map, objects, sensors, alarms, events, requests, imports, auth, platform, integrations, predictions, geo):
+    app.include_router(module.router, prefix="/api/v1")
+app.include_router(reports.router, prefix="/api/v1")
+app.add_middleware(SecurityMiddleware)
+app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origin_list, allow_credentials=True,
+                   allow_methods=["GET", "POST", "PATCH", "PUT", "OPTIONS"],
+                   allow_headers=["Content-Type", "X-CSRF-Token", "Authorization"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts.split(","))
 
 @app.get("/health", tags=["system"])
-def health_check() -> dict[str, str]:
+def health_check():
     return {"status": "ok"}
+
+@app.get("/ready", tags=["system"])
+def readiness():
+    try:
+        with engine.connect() as db:
+            if db.scalar(text("SELECT version_num FROM alembic_version")) != "5e192ace0042":
+                raise ValueError("Schema migration required")
+    except Exception:
+        raise HTTPException(503, "Database not ready") from None
+    return {"status": "ready"}

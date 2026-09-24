@@ -1,3 +1,4 @@
+import { apiFetch } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -9,7 +10,7 @@ import type {
 
 
 export async function getImports(): Promise<DataImport[]> {
-    const response = await fetch(
+    const response = await apiFetch(
         `${API_BASE_URL}/api/v1/imports`,
     );
 
@@ -25,13 +26,14 @@ export async function getImports(): Promise<DataImport[]> {
 
 export async function uploadEventsFile(
     file: File,
+    kind = "events_journal",
 ): Promise<ImportEventsResult> {
     const formData = new FormData();
 
     formData.append("file", file);
 
-    const response = await fetch(
-        `${API_BASE_URL}/api/v1/imports/events`,
+    const response = await apiFetch(
+        `${API_BASE_URL}/api/v1/imports/events?kind=${encodeURIComponent(kind)}`,
         {
             method: "POST",
             body: formData,

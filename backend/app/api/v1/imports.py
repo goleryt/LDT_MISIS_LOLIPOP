@@ -1,4 +1,5 @@
 import tempfile
+from typing import Literal
 from pathlib import Path
 
 from fastapi import (
@@ -48,6 +49,7 @@ def serialize_import(
 @router.post("/events")
 def upload_events_file(
     file: UploadFile = File(...),
+    kind: Literal["events_journal", "objects", "channels"] = "events_journal",
 ) -> dict[str, object]:
     file_name = file.filename
 
@@ -57,10 +59,11 @@ def upload_events_file(
             detail="File name is required",
         )
 
-    if Path(file_name).suffix.lower() != ".csv":
+    suffix = Path(file_name).suffix.lower()
+    if suffix not in {".csv", ".xlsx", ".json", ".xml"}:
         raise HTTPException(
             status_code=400,
-            detail="Only CSV files are supported",
+            detail="Supported formats: CSV, XLSX, JSON, XML",
         )
 
     temp_path: Path | None = None
@@ -68,7 +71,7 @@ def upload_events_file(
     try:
         with tempfile.NamedTemporaryFile(
             mode="wb",
-            suffix=".csv",
+            suffix=suffix,
             delete=False,
         ) as temp_file:
             temp_path = Path(
@@ -103,7 +106,8 @@ def upload_events_file(
 
         return import_events_file(
             temp_path,
-            original_file_name=file_name,
+            original_file_name=Path(file_name).name,
+            import_type=kind,
         )
 
     except HTTPException:

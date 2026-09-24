@@ -1,3 +1,4 @@
+import { canWrite } from "../api/session";
 import {
     useEffect,
     useMemo,
@@ -213,9 +214,9 @@ function RequestsPage() {
 
 
     useEffect(() => {
+        let cancelled = false;
         if (objectId === null) {
             setSensors([]);
-            setChannelId(null);
             return;
         }
 
@@ -226,24 +227,16 @@ function RequestsPage() {
                         objectId!,
                     );
 
+                if (cancelled) return;
                 setSensors(data.sensors);
-
-                if (
-                    channelId !== null &&
-                    !data.sensors.some(
-                        (sensor) =>
-                            sensor.channel_id ===
-                            channelId,
-                    )
-                ) {
-                    setChannelId(null);
-                }
+                setChannelId(current => current !== null && !data.sensors.some(sensor => sensor.channel_id === current) ? null : current);
             } catch {
-                setSensors([]);
+                if (!cancelled) setSensors([]);
             }
         }
 
         void loadSensors();
+        return () => { cancelled = true; };
         // channelId is intentionally not a dependency:
         // changing the sensor must not reload the whole object.
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -639,7 +632,7 @@ function RequestsPage() {
                             type="button"
                             className="requests-primary-button"
                             disabled={
-                                saving ||
+                                !canWrite("requests") || saving ||
                                 objectId === null ||
                                 !title.trim()
                             }
@@ -754,6 +747,7 @@ function RequestsPage() {
                                                         `request-status-select ${request.status}`
                                                     }
                                                     value={request.status}
+                                                    disabled={!canWrite("requests")}
                                                     onChange={(event) =>
                                                         void changeStatus(
                                                             request,

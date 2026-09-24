@@ -66,7 +66,7 @@ def begin_file_import(
             f"File not found: {path}"
         )
 
-    file_sha256 = calculate_file_sha256(path)
+    file_sha256 = hashlib.sha256((import_type + ":" + calculate_file_sha256(path)).encode()).hexdigest()
     file_size_bytes = path.stat().st_size
     file_name = original_file_name or path.name
 
@@ -188,14 +188,15 @@ def fail_file_import(
         session.commit()
 
 
-def import_events_file(
+def _import_file(
     file_path: str | Path,
     *,
     original_file_name: str | None = None,
+    import_type: str = "events_journal",
 ) -> dict[str, object]:
     registration = begin_file_import(
         file_path,
-        import_type=IMPORT_TYPE_EVENTS_JOURNAL,
+        import_type=import_type,
         original_file_name=original_file_name,
     )
 
@@ -208,9 +209,20 @@ def import_events_file(
         }
 
     try:
-        stats = load_events_journal(
-            file_path
-        )
+        import tempfile
+        from app.ingestion.csv_loader import (CHANNEL_REQUIRED_COLUMNS, OBJECT_REQUIRED_COLUMNS,
+                                             EVENT_REQUIRED_COLUMNS, load_channel_catalogue, load_object_catalogue)
+        from app.ingestion.formats import normalize_to_csv
+        columns = {"events_journal": EVENT_REQUIRED_COLUMNS, "channels": CHANNEL_REQUIRED_COLUMNS,
+                   "objects": OBJECT_REQUIRED_COLUMNS}[import_type]
+        with tempfile.TemporaryDirectory() as directory:
+            normalized = Path(directory) / "normalized.csv"
+            normalize_to_csv(Path(file_path), normalized, columns)
+            if import_type == "events_journal":
+                stats = load_events_journal(normalized)
+            else:
+                count = (load_channel_catalogue if import_type == "channels" else load_object_catalogue)(normalized)
+                stats = {"processed_rows": count, "inserted_rows": count, "repeated_headers": 0, "skipped_duplicates": 0}
 
         skipped_rows = (
             stats["repeated_headers"]
@@ -228,7 +240,7 @@ def import_events_file(
         fail_file_import(
             registration.import_id,
             error_message=(
-                f"{type(exc).__name__}: {exc}"
+                "Invalid input file" if isinstance(exc, ValueError) else "Import failed; inspect server logs"
             ),
         )
         raise
@@ -240,3 +252,16 @@ def import_events_file(
         "already_imported": False,
         **stats,
     }
+def import_events_file(file_path, *, original_file_name=None, import_type="events_journal"):
+    from sqlalchemy import text
+    from app.db.session import engine
+    # Session-scoped advisory lock covers registration and all separately committed registry operations.
+    key = int.from_bytes(hashlib.sha256((import_type + calculate_file_sha256(file_path)).encode()).digest()[:8], "big", signed=True)
+    with engine.connect() as lock:
+        acquired = lock.scalar(text("SELECT pg_try_advisory_lock(:key)"), {"key": key})
+        if not acquired:
+            raise ValueError("This file is already being imported; retry later")
+        try:
+            return _import_file(file_path, original_file_name=original_file_name, import_type=import_type)
+        finally:
+            lock.execute(text("SELECT pg_advisory_unlock(:key)"), {"key": key})
