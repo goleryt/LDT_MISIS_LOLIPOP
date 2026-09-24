@@ -31,6 +31,16 @@
     line-height: 1.2;
 }
 
+.settings-account {
+    margin: -8px 0 0;
+    color: var(--design-muted);
+    font-size: 15px;
+}
+
+.settings-account strong {
+    color: var(--design-ink);
+}
+
 .settings-group {
     margin: 0;
     padding: 0;

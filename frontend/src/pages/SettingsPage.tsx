@@ -3,6 +3,7 @@ import {
 } from "react";
 
 import {
+    getSession,
     jsonRequest,
 } from "../api/session";
 
@@ -111,6 +112,17 @@ function SettingsPage() {
                 <h1 id="settings-title">
                     Настройки
                 </h1>
+
+                {getSession() && (
+                    <p className="settings-account">
+                        Вы вошли как{" "}
+                        <strong>
+                            {getSession()?.username}
+                        </strong>
+                        {" · "}
+                        {getSession()?.role}
+                    </p>
+                )}
 
                 <fieldset className="settings-group">
                     <legend>Тема</legend>

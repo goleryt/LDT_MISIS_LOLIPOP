@@ -3,6 +3,7 @@ import { API_BASE_URL } from "./config";
 export type Session = { username: string; role: string; csrf_token: string };
 let current: Session | null = null;
 export function setSession(value: Session | null) { current = value; }
+export function getSession(): Session | null { return current; }
 export function canWrite(domain: "imports" | "requests" | "predictions") {
   const roles = domain === "imports" ? ["admin", "dispatcher"] :
     domain === "requests" ? ["admin", "dispatcher", "technician"] : ["admin", "dispatcher", "analyst"];
