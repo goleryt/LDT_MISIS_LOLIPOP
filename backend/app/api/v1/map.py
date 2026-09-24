@@ -29,10 +29,11 @@ def synthetic_point_for_object(
     object_id: int,
 ) -> tuple[float, float]:
     """
-    Создаёт стабильную демонстрационную координату объекта.
+    Создаёт стабильную условную координату объекта внутри Москвы.
 
     Координата не является реальным местоположением объекта.
-    Для одного object_id результат всегда одинаковый.
+    Для одного object_id результат всегда одинаковый; никакая
+    географическая близость объектов из каталога не подразумевается.
     """
     digest = hashlib.sha256(
         str(object_id).encode("utf-8")
@@ -115,6 +116,8 @@ def get_map_objects() -> list[dict[str, object]]:
         .subquery()
     )
 
+    # The catalogue key groups channels under an object record. It does not
+    # establish an address, equipment identity, or one channel per device.
     statement = (
         select(
             ObjectCatalogue.ид_объект.label(
@@ -246,6 +249,7 @@ def get_map_objects() -> list[dict[str, object]]:
                     ],
                 },
                 "geometry_is_synthetic": object_id not in locations,
+                "data_is_synthetic": False,
             }
         )
 

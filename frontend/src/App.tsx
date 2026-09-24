@@ -17,6 +17,7 @@ const ImportsPage = lazy(() => import("./pages/ImportsPage"));
 const MapPage = lazy(() => import("./pages/MapPage"));
 const ObjectsPage = lazy(() => import("./pages/ObjectsPage"));
 const RequestsPage = lazy(() => import("./pages/RequestsPage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 
 
 function App() {
@@ -53,6 +54,11 @@ function App() {
                 <Route
                     path="/requests"
                     element={<RequestsPage />}
+                />
+
+                <Route
+                    path="/settings"
+                    element={<SettingsPage />}
                 />
 
                 <Route

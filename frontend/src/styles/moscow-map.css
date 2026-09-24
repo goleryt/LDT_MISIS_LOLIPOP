@@ -1,0 +1,974 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../assets/fonts/Montserrat.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("../assets/fonts/Nunito-Latin.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 200 1000;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+        U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("../assets/fonts/Nunito-Cyrillic.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 200 1000;
+    font-display: swap;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root {
+    --design-ground: #f7f7f5;
+    --design-surface: #ffffff;
+    --design-ink: #18181b;
+    --design-muted: #71717a;
+    --design-border: #e4e4e7;
+    --design-blue: #3157d5;
+
+    /* Gradient/glow accents: same palette, same hues, no dark theme —
+       just the depth treatment from the reference sites. */
+    --design-blue-deep: #1f3fa6;
+    --design-blue-soft: #6b86e6;
+    --design-glow: rgb(49 87 213 / 35%);
+    --design-gradient-primary: linear-gradient(
+        135deg,
+        var(--design-blue) 0%,
+        var(--design-blue-deep) 100%
+    );
+
+    /* Page-background glow — bold, like the reference sites, same blue.
+       One knob to turn it up/down everywhere it's used. */
+    --design-glow-bg:
+        radial-gradient(
+            1000px 700px at 6% -12%,
+            rgb(31 63 166 / 55%),
+            transparent 55%
+        ),
+        radial-gradient(
+            1300px 900px at 10% -15%,
+            rgb(49 87 213 / 40%),
+            transparent 62%
+        ),
+        radial-gradient(
+            1000px 750px at 102% 108%,
+            rgb(49 87 213 / 28%),
+            transparent 55%
+        );
+
+    /* Reference-matched dark hero glow. Used everywhere EXCEPT the Карта
+       page: the schematic map and its page shell stay on the light
+       Figma palette, untouched, per instruction. */
+    --page-base: #050b18;
+    --page-text: #f3f5fc;
+    --page-muted: #93a0c3;
+    --page-sidebar-glow: rgb(74 138 255 / 45%);
+    --page-line: rgb(255 255 255 / 8%);
+    --page-hover: rgb(255 255 255 / 8%);
+    --page-active-bg: linear-gradient(
+        90deg,
+        rgb(74 138 255 / 30%) 0%,
+        rgb(74 138 255 / 8%) 100%
+    );
+    --page-active-bar: #4a8aff;
+    --page-active-text: #ffffff;
+    --page-accent: var(--design-blue-soft);
+    --accent: var(--design-blue);
+    --accent-ring: rgb(49 87 213 / 25%);
+
+    /* Only two things on this background: a beam from the top, a beam
+       from the bottom, then straight to flat darkness — nothing else. */
+    --page-bg:
+        radial-gradient(
+            220px 620px at 50% -6%,
+            rgb(170 215 255 / 98%) 0%,
+            rgb(110 175 255 / 85%) 17%,
+            rgb(74 138 255 / 50%) 36%,
+            rgb(49 87 213 / 20%) 55%,
+            transparent 74%
+        ),
+        radial-gradient(
+            220px 620px at 50% 106%,
+            rgb(170 215 255 / 98%) 0%,
+            rgb(110 175 255 / 85%) 17%,
+            rgb(74 138 255 / 50%) 36%,
+            rgb(49 87 213 / 20%) 55%,
+            transparent 74%
+        ),
+        var(--page-base);
+
+    /* "Liquid glass" (iOS 26 style) for panels/cards on the dark pages:
+       a diagonal sheen instead of one flat translucent tone, a bright
+       top edge like light catching a curved glass surface, and a
+       matching soft shadow for depth. */
+    --design-glass-bg: linear-gradient(
+        165deg,
+        rgb(255 255 255 / 78%) 0%,
+        rgb(255 255 255 / 42%) 45%,
+        rgb(255 255 255 / 60%) 100%
+    );
+    --design-glass-bg-strong: linear-gradient(
+        165deg,
+        rgb(255 255 255 / 90%) 0%,
+        rgb(255 255 255 / 58%) 45%,
+        rgb(255 255 255 / 76%) 100%
+    );
+    --design-glass-border: rgb(255 255 255 / 60%);
+    --design-glass-blur: blur(28px) saturate(190%);
+    --design-glass-shadow:
+        0 10px 34px rgb(10 20 50 / 25%),
+        inset 0 1px 0 rgb(255 255 255 / 75%),
+        inset 0 0 0 1px rgb(255 255 255 / 12%);
+}
+
+/* ===== Light theme: the same beams-and-glass design in beige. Chosen in
+   Настройки (Светлая / Тёмная / Как на устройстве); the theme layer sets
+   html[data-theme]. The Карта page keeps its own palette in both. ===== */
+html[data-theme="light"] {
+    --page-base: #ece1ca;
+    --page-text: #2e2618;
+    --page-muted: #7c6d54;
+    --page-sidebar-glow: rgb(255 246 222 / 85%);
+    --page-line: rgb(94 70 24 / 16%);
+    --page-hover: rgb(94 70 24 / 9%);
+    --page-active-bg: linear-gradient(
+        90deg,
+        rgb(79 84 64 / 17%) 0%,
+        rgb(79 84 64 / 4%) 100%
+    );
+    --page-active-bar: #4f5440;
+    --page-active-text: #3f4332;
+    --page-accent: #4f5440;
+
+    /* What was blue (buttons, logo, switches, focus) becomes a dark
+       grey-olive in the beige theme. */
+    --accent: #4f5440;
+    --accent-ring: rgb(79 84 64 / 28%);
+    --design-glow: rgb(61 65 50 / 35%);
+    --design-gradient-primary: linear-gradient(
+        135deg,
+        #5d624b 0%,
+        #3d4132 100%
+    );
+
+    --page-bg:
+        radial-gradient(
+            220px 620px at 50% -6%,
+            rgb(255 254 249 / 98%) 0%,
+            rgb(255 248 230 / 85%) 17%,
+            rgb(247 233 199 / 52%) 36%,
+            rgb(234 214 172 / 22%) 55%,
+            transparent 74%
+        ),
+        radial-gradient(
+            220px 620px at 50% 106%,
+            rgb(255 254 249 / 98%) 0%,
+            rgb(255 248 230 / 85%) 17%,
+            rgb(247 233 199 / 52%) 36%,
+            rgb(234 214 172 / 22%) 55%,
+            transparent 74%
+        ),
+        var(--page-base);
+
+    --design-glass-bg: linear-gradient(
+        165deg,
+        rgb(255 251 240 / 84%) 0%,
+        rgb(255 246 226 / 46%) 45%,
+        rgb(255 250 236 / 66%) 100%
+    );
+    --design-glass-bg-strong: linear-gradient(
+        165deg,
+        rgb(255 252 244 / 92%) 0%,
+        rgb(255 247 230 / 60%) 45%,
+        rgb(255 251 240 / 80%) 100%
+    );
+    --design-glass-border: rgb(255 255 255 / 75%);
+    --design-glass-shadow:
+        0 10px 34px rgb(94 70 24 / 20%),
+        inset 0 1px 0 rgb(255 255 255 / 90%),
+        inset 0 0 0 1px rgb(255 255 255 / 20%);
+}
+
+/* Higher-specificity than index.css's plain `body {}` rule — Vite dev
+   sometimes injects that <style> tag after this one, and a tie on
+   specificity is decided by tag order, not file import order. */
+html body,
+#root {
+    font-family: "Nunito", "Montserrat", Inter, system-ui, sans-serif;
+}
+
+body {
+    color: var(--design-ink);
+}
+
+/* App-wide chrome goes dark + vivid glow, matching the reference sites.
+   The Карта page (.map-page, below) is deliberately left out of this and
+   keeps the original light Figma palette — it is not touched. */
+.app-shell,
+.app-workspace {
+    background: var(--page-bg);
+    background-attachment: fixed;
+}
+
+.sidebar {
+    background:
+        radial-gradient(
+            700px 480px at 50% -15%,
+            var(--page-sidebar-glow),
+            transparent 55%
+        ),
+        var(--page-base);
+    border-right: 1px solid var(--page-line);
+    color: var(--page-text);
+}
+
+.brand-mark {
+    position: relative;
+    border-radius: 11px;
+    background: var(--design-gradient-primary);
+    box-shadow:
+        0 6px 18px var(--design-glow),
+        inset 0 1px 0 rgb(255 255 255 / 25%);
+}
+
+.brand-text span {
+    color: var(--page-muted);
+}
+
+.nav-item {
+    color: var(--page-muted);
+}
+
+.nav-item:hover {
+    background: var(--page-hover);
+    color: var(--page-text);
+}
+
+.nav-item.active {
+    background: var(--page-active-bg);
+    box-shadow: inset 3px 0 0 var(--page-active-bar);
+    color: var(--page-active-text);
+    font-weight: 650;
+}
+
+.nav-item svg {
+    stroke-width: 1.8;
+}
+
+/* ===== Карта — untouched, original light palette ===== */
+.map-page {
+    background: var(--design-ground);
+}
+
+.schematic-map,
+.schematic-map-svg {
+    background: var(--design-ground);
+}
+
+.schematic-map-svg {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition: none;
+}
+
+.schematic-map-svg.dragging {
+    cursor: grabbing;
+}
+
+.schematic-map-background,
+.city-ground {
+    fill: var(--design-ground);
+}
+
+.city-grid-line {
+    fill: none;
+    stroke: #e0e2df;
+    stroke-width: 1;
+    opacity: .8;
+}
+
+.city-neighborhood {
+    fill: #f3f3f1;
+    stroke: #ebebe9;
+    stroke-width: 1.4;
+}
+
+.city-neighborhood.city-core {
+    fill: #fafaf9;
+}
+
+.city-parks path {
+    fill: #e8f1e8;
+    stroke: #d5e7d6;
+    stroke-width: 2;
+}
+
+.city-parks text {
+    fill: #8ba58d;
+    font-size: 11px;
+    font-weight: 550;
+    letter-spacing: .025em;
+}
+
+.city-street-casing path {
+    fill: none;
+    stroke: #e7e8e5;
+    stroke-width: 7;
+    stroke-linecap: round;
+}
+
+.city-streets path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    opacity: .93;
+}
+
+.city-avenue-casing path,
+.city-ring-casing {
+    fill: none;
+    stroke: #e1e1dd;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.city-avenues path,
+.city-ring {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.city-ring.inner {
+    stroke-width: 7;
+}
+
+.city-river-bank,
+.city-river {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.city-river-bank {
+    stroke: #fff;
+    stroke-width: 34;
+}
+
+.city-river {
+    stroke: #bfdef0;
+    stroke-width: 27;
+}
+
+.city-river-label {
+    fill: #4e9ac1;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: .16em;
+}
+
+.city-area-labels text {
+    fill: #93939b;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .16em;
+}
+
+.city-landmarks circle {
+    fill: var(--design-blue);
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+.city-landmarks text {
+    fill: #53586a;
+    font-size: 12px;
+    font-weight: 650;
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 4;
+    stroke-linejoin: round;
+}
+
+.map-place-card,
+.map-page .summary-card,
+.map-data-badge,
+.map-page .map-legend,
+.schematic-map-controls,
+.schematic-reset-button,
+.map-object-tooltip {
+    border: 1px solid var(--design-border);
+    background: var(--design-surface);
+    box-shadow: 0 8px 30px rgb(24 24 27 / 7%);
+    color: var(--design-ink);
+}
+
+.map-place-card {
+    position: absolute;
+    z-index: 590;
+    top: 16px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 260px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    pointer-events: none;
+    /* Soft glow, same blue as the reference sites, on the light surface. */
+    background:
+        radial-gradient(
+            120% 140% at 100% 0%,
+            rgb(49 87 213 / 10%),
+            transparent 60%
+        ),
+        var(--design-surface);
+}
+
+.map-place-eyebrow {
+    color: var(--design-blue);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.map-place-card strong {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.map-place-card > span:last-child {
+    color: var(--design-muted);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.map-page .map-summary {
+    top: 16px;
+    max-width: calc(100% - 310px);
+}
+
+.map-page .summary-card {
+    min-height: 60px;
+    border-radius: 12px;
+}
+
+.map-page .summary-card:hover,
+.map-page .summary-card.active {
+    border-color: #bdc8f0;
+    box-shadow: 0 10px 30px rgb(49 87 213 / 12%);
+}
+
+.map-page .summary-card.active {
+    background:
+        radial-gradient(
+            140% 160% at 0% 0%,
+            rgb(49 87 213 / 8%),
+            transparent 65%
+        ),
+        var(--design-surface);
+}
+
+.summary-card svg {
+    stroke-width: 1.8;
+}
+
+.summary-card span {
+    color: var(--design-muted);
+}
+
+.summary-card strong {
+    color: var(--design-ink);
+}
+
+.map-data-badge {
+    top: 90px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    color: #595d69;
+    font-size: 10px;
+}
+
+.map-data-badge svg {
+    color: var(--design-blue);
+}
+
+.schematic-object {
+    outline: none;
+}
+
+.schematic-object-point {
+    stroke: #fff;
+    stroke-width: 3.5;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 2px 4px rgb(24 24 27 / 22%));
+}
+
+.schematic-object-point.normal {
+    fill: #1eba79;
+    stroke: #fff;
+}
+
+.schematic-object-point.alarm {
+    fill: #e05a60;
+    stroke: #fff;
+}
+
+.schematic-object-point.unknown {
+    fill: #8c939f;
+    stroke: #fff;
+}
+
+.schematic-object.selected .schematic-object-point,
+.schematic-object:focus-visible .schematic-object-point {
+    stroke: var(--design-blue);
+    stroke-width: 4;
+}
+
+.schematic-object-pulse {
+    stroke: var(--design-blue);
+}
+
+.schematic-cluster-point {
+    fill: #fff;
+    stroke: var(--design-blue);
+    filter: drop-shadow(0 2px 5px rgb(24 24 27 / 20%));
+}
+
+.schematic-cluster text {
+    fill: var(--design-blue);
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.schematic-cluster-alarm {
+    fill: #e05a60;
+    stroke: #fff;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+}
+
+.schematic-cluster:focus-visible .schematic-cluster-point {
+    stroke: #162c80;
+    stroke-width: 4;
+    vector-effect: non-scaling-stroke;
+}
+
+.map-page .map-legend {
+    width: 272px;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.map-page .legend-title {
+    color: var(--design-ink);
+    font-size: 12px;
+}
+
+.map-page .legend-item {
+    color: #52525b;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.map-page .legend-dot.normal { background: #1eba79; }
+.map-page .legend-dot.alarm { background: #e05a60; }
+.map-page .legend-dot.unknown { background: #8c939f; }
+
+.map-page .legend-note {
+    border-color: var(--design-border);
+    color: var(--design-muted);
+}
+
+.schematic-map-controls {
+    right: 18px;
+    bottom: 24px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.schematic-map-controls button {
+    width: 42px;
+    height: 42px;
+    color: var(--design-ink);
+}
+
+.schematic-map-controls button + button {
+    border-color: var(--design-border);
+}
+
+.schematic-map-controls button:hover:not(:disabled) {
+    background: #f1f3fb;
+}
+
+.schematic-reset-button {
+    right: 72px;
+    bottom: 24px;
+    min-height: 42px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--design-gradient-primary);
+    box-shadow: 0 8px 20px var(--design-glow);
+    color: white;
+    font-size: 11px;
+    font-weight: 650;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.schematic-reset-button:hover {
+    box-shadow: 0 10px 26px var(--design-glow);
+    transform: translateY(-1px);
+    color: white;
+}
+
+.map-object-tooltip {
+    width: 245px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    backdrop-filter: none;
+}
+
+.map-object-tooltip::after {
+    background: #fff;
+    border-color: var(--design-border);
+}
+
+.map-object-tooltip-header strong,
+.map-object-tooltip-meta strong {
+    color: var(--design-ink);
+}
+
+.map-object-tooltip-header strong {
+    font-size: 11px;
+}
+
+.map-object-tooltip-status,
+.map-object-tooltip small {
+    color: var(--design-muted);
+    font-size: 9px;
+}
+
+.map-object-tooltip.alarm .map-object-tooltip-status {
+    color: #d34d55;
+}
+
+.map-object-tooltip-meta span {
+    background: var(--design-ground);
+    color: var(--design-muted);
+}
+
+.map-object-tooltip.normal .map-object-tooltip-dot { background: #1eba79; }
+.map-object-tooltip.alarm .map-object-tooltip-dot { background: #e05a60; }
+.map-object-tooltip.unknown .map-object-tooltip-dot { background: #8c939f; }
+
+.sensor-request-button {
+    border: 0;
+    background: var(--design-gradient-primary);
+    box-shadow: 0 8px 20px var(--design-glow);
+    color: white;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.sensor-request-button:hover:not(:disabled) {
+    box-shadow: 0 10px 26px var(--design-glow);
+    transform: translateY(-1px);
+    background: var(--design-gradient-primary);
+}
+
+.sensor-request-button:disabled {
+    background: var(--design-border);
+    box-shadow: none;
+    color: var(--design-muted);
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+/* ===== Global gradient/glow accents — same treatment on every page,
+   not just the map (this stylesheet is now imported from AppLayout). ===== */
+
+.primary-button,
+.requests-primary-button {
+    border: 0;
+    background: var(--design-gradient-primary);
+    box-shadow: 0 8px 20px var(--design-glow);
+    color: white;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.primary-button:hover:not(:disabled),
+.requests-primary-button:hover:not(:disabled) {
+    box-shadow: 0 10px 26px var(--design-glow);
+    transform: translateY(-1px);
+    background: var(--design-gradient-primary);
+    color: white;
+}
+
+.primary-button:disabled,
+.requests-primary-button:disabled {
+    background: var(--design-border);
+    box-shadow: none;
+    color: var(--design-muted);
+}
+
+.object-stat-card.active {
+    border-color: var(--design-blue);
+    background:
+        radial-gradient(
+            140% 160% at 0% 0%,
+            rgb(49 87 213 / 8%),
+            transparent 65%
+        ),
+        var(--design-surface);
+    box-shadow: 0 0 0 2px rgb(49 87 213 / 10%);
+}
+
+.journal-sort-button.active,
+.journal-filter-trigger.active {
+    color: var(--design-blue);
+}
+
+.sensor-list-more {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--design-border);
+    border-radius: 8px;
+    background: var(--design-surface);
+    color: var(--design-blue);
+    font-size: 11px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.sensor-list-more:hover,
+.sensor-list-more:focus-visible {
+    background: #f1f3fb;
+}
+
+.has-object-drawer .map-place-card {
+    right: calc(var(--object-drawer-width) + 18px);
+}
+
+@media (max-width: 1400px) {
+    .has-object-drawer .map-summary,
+    .has-object-drawer .map-place-card,
+    .has-object-drawer .map-data-badge {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .map-page .map-summary {
+        max-width: calc(100% - 295px);
+        gap: 6px;
+    }
+
+    .map-page .summary-card {
+        min-width: 104px;
+        padding-inline: 10px;
+    }
+}
+
+@media (max-width: 900px) {
+    .map-place-card {
+        width: 220px;
+        right: 14px;
+    }
+
+    .map-page .map-summary {
+        top: 112px;
+        max-width: calc(100% - 28px);
+    }
+
+    .map-data-badge {
+        top: 70px;
+    }
+
+    .has-object-drawer .map-place-card {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .map-place-card {
+        top: 12px;
+        right: 12px;
+        width: 176px;
+        padding: 9px 11px;
+    }
+
+    .map-place-card strong {
+        font-size: 16px;
+    }
+
+    .map-page .map-summary {
+        top: 105px;
+    }
+
+    .map-data-badge {
+        top: 250px;
+        left: 12px;
+    }
+
+    .map-page .map-legend {
+        left: 12px;
+        width: calc(100% - 86px);
+    }
+
+    .schematic-map-controls {
+        right: 12px;
+        bottom: 18px;
+    }
+
+    .schematic-reset-button {
+        top: 294px;
+        right: 12px;
+        bottom: auto;
+    }
+}
+
+/* ===== Other pages (everything except Карта) sit directly on the dark
+   app-workspace glow — drop their own flat backgrounds and relight the
+   text that isn't already inside a white card. ===== */
+.objects-page,
+.events-page,
+.requests-page,
+.imports-page,
+.alarms-page {
+    background: transparent;
+}
+
+.objects-header h1,
+.events-header h1,
+.requests-header h1,
+.imports-header h1,
+.alarms-header h1 {
+    color: var(--page-text);
+}
+
+.objects-header p,
+.events-header p,
+.requests-header p,
+.imports-header p,
+.alarms-header p {
+    color: var(--page-muted);
+}
+
+.page-eyebrow {
+    color: var(--page-accent);
+}
+
+.journal-auto-refresh {
+    color: var(--page-text);
+}
+
+.journal-range-alert {
+    color: var(--page-muted);
+}
+
+/* ===== Frosted glass panels (everything except Карта) =====
+   Same cards, just translucent + blurred over the dark glow instead of
+   flat opaque white — the iOS/macOS glass look. */
+.stat-card,
+.upload-card,
+.history-card,
+.alarm-stat-card,
+.alarms-panel,
+.object-stat-card,
+.request-stat-card,
+.objects-panel,
+.events-panel,
+.requests-panel,
+.request-create-panel,
+.journal-icon-button,
+.journal-period,
+.journal-top-nav,
+.journal-board,
+.journal-filter-popover,
+.journal-filter-trigger,
+.journal-status-filter,
+.secondary-button,
+.alarms-refresh-button,
+.objects-refresh-button,
+.events-refresh-button,
+.requests-secondary-button,
+.object-map-button,
+.request-map-button,
+.events-pagination button,
+.request-status-select,
+.journal-filter-actions button,
+.journal-footer button {
+    background: var(--design-glass-bg) !important;
+    border-color: var(--design-glass-border) !important;
+    box-shadow: var(--design-glass-shadow) !important;
+    backdrop-filter: var(--design-glass-blur);
+    -webkit-backdrop-filter: var(--design-glass-blur);
+}
+
+/* Stat numbers/panels read better a touch less see-through. */
+.stat-card,
+.alarm-stat-card,
+.object-stat-card,
+.request-stat-card,
+.objects-panel,
+.events-panel,
+.requests-panel,
+.request-create-panel,
+.journal-board {
+    background: var(--design-glass-bg-strong) !important;
+}
+
+/* The events table's own white header cells squared off the card's
+   rounded top corners (border-radius only shapes the card itself, not
+   an opaque child painted flush against the edge). Round the card and
+   the corner cells together so it actually reads as one rounded panel. */
+.journal-board {
+    overflow: hidden;
+    border-radius: 20px !important;
+}
+
+.journal-table thead th:first-child {
+    border-top-left-radius: 20px;
+}
+
+.journal-table thead th:last-child {
+    border-top-right-radius: 20px;
+}
+
+/* The date/time range field read as almost square at its width (11px on
+   a 68px-tall bar) — round it properly, pill-shaped like the rest of the
+   glass controls. */
+.journal-period {
+    border-radius: 999px !important;
+    padding: 0 22px;
+}
+
+.journal-icon-button,
+.journal-top-nav {
+    border-radius: 18px !important;
+}
+
+/* Pages from the backend branch (Прогнозы, Отчёты) sit directly on the
+   themed background, so their text follows the theme instead of a fixed
+   light-on-dark colour. */
+.operations-page {
+    color: var(--page-text);
+}
+
+.operations-page td,
+.operations-page th {
+    border-bottom-color: var(--page-line);
+}

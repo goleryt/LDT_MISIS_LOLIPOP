@@ -22,4 +22,5 @@ export interface MapObject {
     };
 
     geometry_is_synthetic: boolean;
+    data_is_synthetic?: boolean;
 }

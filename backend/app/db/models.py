@@ -187,7 +187,6 @@ class DataImport(Base):
         DateTime(timezone=True),
         nullable=True,
     )
-
 class PreventiveRequest(Base):
     """Профилактическая заявка диспетчера."""
 
@@ -249,4 +248,3 @@ class PreventiveRequest(Base):
         DateTime(timezone=True),
         nullable=True,
     )
-

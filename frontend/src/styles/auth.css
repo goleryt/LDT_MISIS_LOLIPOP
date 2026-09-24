@@ -1,0 +1,154 @@
+/* Вход: та же тёмная тема с лучами и «жидкое стекло»,
+   что и на остальных страницах (токены из moscow-map.css). */
+
+.auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    /* Экран сам прокручивается: на низком окне карточка не обрезается,
+       а на высоком остаётся по центру (margin: auto у карточки). */
+    overflow-y: auto;
+    padding: 32px 16px;
+    background: var(--page-bg);
+    color: var(--design-ink);
+}
+
+.auth-card {
+    width: min(440px, 100%);
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 26px 32px 28px;
+    border: 1px solid var(--design-glass-border);
+    border-radius: 28px;
+    background: var(--design-glass-bg-strong);
+    box-shadow: var(--design-glass-shadow);
+    backdrop-filter: var(--design-glass-blur);
+    -webkit-backdrop-filter: var(--design-glass-blur);
+}
+
+.auth-card h1 {
+    margin: 0 0 6px;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.auth-card label {
+    margin-top: 8px;
+    color: var(--design-ink);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.auth-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.auth-input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--design-border);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 70%);
+    color: var(--design-ink);
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.auth-input::placeholder {
+    color: #9b9ba3;
+}
+
+.auth-input:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.auth-input-wrap .auth-input {
+    padding-right: 46px;
+}
+
+.auth-icon-button {
+    position: absolute;
+    right: 6px;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--design-ink);
+    cursor: pointer;
+}
+
+.auth-icon-button:hover {
+    background: var(--accent-ring);
+}
+
+.auth-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.auth-check input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.auth-error {
+    margin: 4px 0 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgb(224 90 96 / 12%);
+    color: #b53a42;
+    font-size: 14px;
+}
+
+.auth-submit {
+    min-height: 48px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 14px;
+    background: var(--design-gradient-primary);
+    box-shadow: 0 8px 20px var(--design-glow);
+    color: #fff;
+    font: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+    box-shadow: 0 10px 26px var(--design-glow);
+    transform: translateY(-1px);
+}
+
+.auth-submit:disabled {
+    background: var(--design-border);
+    box-shadow: none;
+    color: var(--design-muted);
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 22px 20px 24px;
+        border-radius: 24px;
+    }
+}

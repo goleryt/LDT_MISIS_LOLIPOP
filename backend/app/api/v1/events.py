@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Query
-from sqlalchemy import select
+from datetime import datetime
+from typing import Literal
+
+from fastapi import APIRouter, HTTPException, Query
+from sqlalchemy import or_, select
 
 from app.db.models import (
     ChannelCatalogue,
@@ -37,7 +40,27 @@ def get_events(
         default=None,
         ge=1,
     ),
+    time_from: datetime | None = Query(default=None),
+    time_to: datetime | None = Query(default=None),
+    alarm_state: Literal["all", "alarm", "normal", "unknown"] = "all",
+    object_query: str | None = Query(default=None, max_length=100),
+    sensor_query: str | None = Query(default=None, max_length=100),
+    event_query: str | None = Query(default=None, max_length=100),
+    sort_by: Literal["time", "object", "sensor", "event", "status"] = "time",
+    sort_desc: bool = True,
 ) -> dict[str, object]:
+    if (time_from and time_from.tzinfo) or (time_to and time_to.tzinfo):
+        raise HTTPException(
+            status_code=422,
+            detail="Time range must use local datetimes without timezone offsets",
+        )
+
+    if time_from and time_to and time_from > time_to:
+        raise HTTPException(
+            status_code=422,
+            detail="time_from must not be later than time_to",
+        )
+
     statement = (
         select(
             EventsJournal.id.label(
@@ -92,10 +115,51 @@ def get_events(
         )
     )
 
-    if alarm is not None:
+    if alarm_state == "alarm":
+        statement = statement.where(EventsJournal.d_alarm.is_(True))
+    elif alarm_state == "normal":
+        statement = statement.where(EventsJournal.d_alarm.is_(False))
+    elif alarm_state == "unknown":
+        statement = statement.where(EventsJournal.d_alarm.is_(None))
+    elif alarm is not None:
         statement = statement.where(
             EventsJournal.d_alarm.is_(alarm)
         )
+
+    if time_from is not None:
+        statement = statement.where(EventsJournal.d_event_time >= time_from)
+
+    if time_to is not None:
+        statement = statement.where(EventsJournal.d_event_time <= time_to)
+
+    if object_query:
+        query = object_query.strip()
+        if query:
+            predicate = ObjectCatalogue.диспетчерское_название_объекта.ilike(
+                f"%{query}%"
+            )
+            if query.isdecimal() and len(query) <= 18:
+                predicate = or_(predicate, ChannelCatalogue.ид_объект == int(query))
+            statement = statement.where(predicate)
+
+    if sensor_query:
+        query = sensor_query.strip()
+        if query:
+            predicate = ChannelCatalogue.название_датчика.ilike(f"%{query}%")
+            if query.isdecimal() and len(query) <= 18:
+                predicate = or_(predicate, EventsJournal.ид_канала_данных == int(query))
+            statement = statement.where(predicate)
+
+    if event_query:
+        query = event_query.strip()
+        if query:
+            predicate = or_(
+                EventsJournal.значение_датчика.ilike(f"%{query}%"),
+                EventsJournal.d_value_state.ilike(f"%{query}%"),
+            )
+            if query.isdecimal() and len(query) <= 18:
+                predicate = or_(predicate, EventsJournal.ид_события == int(query))
+            statement = statement.where(predicate)
 
     if object_id is not None:
         statement = statement.where(
@@ -109,14 +173,20 @@ def get_events(
             == channel_id
         )
 
+    sort_columns = {
+        "time": EventsJournal.d_event_time,
+        "object": ObjectCatalogue.диспетчерское_название_объекта,
+        "sensor": ChannelCatalogue.название_датчика,
+        "event": EventsJournal.ид_события,
+        "status": EventsJournal.d_alarm,
+    }
+    sort_column = sort_columns[sort_by]
+    sort_order = sort_column.desc() if sort_desc else sort_column.asc()
+    row_order = EventsJournal.id.desc() if sort_desc else EventsJournal.id.asc()
+
     statement = (
         statement
-        .order_by(
-            EventsJournal.d_event_time
-            .desc()
-            .nullslast(),
-            EventsJournal.id.desc(),
-        )
+        .order_by(sort_order.nullslast(), row_order)
         .offset(offset)
         .limit(limit + 1)
     )

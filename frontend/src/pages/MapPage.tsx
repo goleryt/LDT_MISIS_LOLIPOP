@@ -28,6 +28,7 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
+import "../styles/moscow-map.css";
 
 import {
     getObjectSensors,
@@ -74,6 +75,18 @@ type SummaryFilter =
     | "alarm"
     | "unknown";
 
+const SENSOR_PAGE_SIZE = 100;
+
+function channelCountLabel(count: number): string {
+    const form = new Intl.PluralRules("ru-RU").select(count);
+    const noun = form === "one"
+        ? "канал"
+        : form === "few"
+            ? "канала"
+            : "каналов";
+    return `${count} ${noun}`;
+}
+
 
 function sensorEventTime(
     sensor: ObjectSensor,
@@ -111,11 +124,14 @@ function sortSensorsForDisplay(
                 return rightAlarm - leftAlarm;
             }
 
-            /*
-             * Когда появится ML-контракт:
-             * здесь между alarm и временем
-             * добавим сортировку risk_score DESC.
-             */
+            // Экспериментальный ML-риск (shadow-режим, см. backend
+            // app/ml/service.py). Каналы без риска (нет данных) — в конец.
+            const leftRisk = left.risk_score ?? -1;
+            const rightRisk = right.risk_score ?? -1;
+
+            if (leftRisk !== rightRisk) {
+                return rightRisk - leftRisk;
+            }
 
             const timeDifference =
                 sensorEventTime(right) -
@@ -137,7 +153,6 @@ function sortSensorsForDisplay(
 
 function MapPage() {
     const navigate = useNavigate();
-
     const [searchParams] =
         useSearchParams();
 
@@ -164,6 +179,9 @@ function MapPage() {
 
     const [sensorSearch, setSensorSearch] =
         useState("");
+
+    const [visibleSensorCount, setVisibleSensorCount] =
+        useState(SENSOR_PAGE_SIZE);
 
     const [selectedSensor, setSelectedSensor] =
         useState<ObjectSensor | null>(null);
@@ -215,6 +233,7 @@ function MapPage() {
 
         setSelectedSensor(null);
         setSensorSearch("");
+        setVisibleSensorCount(SENSOR_PAGE_SIZE);
         setSelectedObject(object);
     }
 
@@ -274,6 +293,7 @@ function MapPage() {
             setSensors([]);
             setSelectedSensor(null);
             setSensorSearch("");
+            setVisibleSensorCount(SENSOR_PAGE_SIZE);
             return;
         }
 
@@ -298,6 +318,7 @@ function MapPage() {
                     );
 
                 setSensors(sortedSensors);
+                setVisibleSensorCount(SENSOR_PAGE_SIZE);
 
                 const preferredChannelId =
                     preferredSensorChannelIdRef.current;
@@ -319,6 +340,12 @@ function MapPage() {
                     setSelectedSensor(
                         preferredSensor,
                     );
+                    if (preferredSensor) {
+                        setVisibleSensorCount(Math.max(
+                            SENSOR_PAGE_SIZE,
+                            sortedSensors.indexOf(preferredSensor) + 1,
+                        ));
+                    }
                 } else if (preferredStatus) {
                     const preferredSensor =
                         sortedSensors.find(
@@ -491,6 +518,13 @@ function MapPage() {
         };
     }, [objects]);
 
+    const hasSyntheticGeometry = objects.some(
+        (item) => item.geometry_is_synthetic,
+    );
+    const hasSyntheticRecords = objects.some(
+        (item) => item.data_is_synthetic,
+    );
+
     const summaryObjects = useMemo(() => {
         if (!activeSummaryFilter) {
             return [];
@@ -563,6 +597,8 @@ function MapPage() {
         });
     }, [sensors, sensorSearch]);
 
+    const visibleSensors = filteredSensors.slice(0, visibleSensorCount);
+
     const sensorStatistics = useMemo(() => {
         return {
             normal: sensors.filter(
@@ -601,14 +637,18 @@ function MapPage() {
     }, [sensorHistory]);
 
     return (
-        <div className="map-page">
+        <div className={selectedObject ? "map-page has-object-drawer" : "map-page"}>
             <SchematicMap
                 objects={objects}
                 selectedObject={selectedObject}
-                onSelectObject={(object) => {
-                    selectMapObject(object);
-                }}
+                onSelectObject={selectMapObject}
             />
+
+            <div className="map-place-card" aria-label="Схема Москвы">
+                <span className="map-place-eyebrow">Обзор инфраструктуры</span>
+                <strong>Москва</strong>
+                <span>Авторская интерактивная схема города</span>
+            </div>
 
             <div className="map-summary">
                 <button
@@ -721,6 +761,17 @@ function MapPage() {
                     </div>
                 </button>
             </div>
+
+            {hasSyntheticGeometry && (
+                <div className="map-data-badge" title={hasSyntheticRecords
+                    ? "Демонстрационные объекты, каналы и события вымышлены; точки не являются адресами"
+                    : "Точки устойчиво вычислены из ID объектов; их положение не соответствует реальному адресу"}>
+                    <MapPin size={13} />
+                    {hasSyntheticRecords
+                        ? "Демо-данные · условные точки и события"
+                        : "Условное размещение · не адреса объектов"}
+                </div>
+            )}
             {activeSummaryFilter && (
                 <div className="summary-list-panel">
                     <div className="summary-list-header">
@@ -813,7 +864,7 @@ function MapPage() {
                                                 item.sensors_with_data
                                             }{" "}
                                             из{" "}
-                                            {item.sensor_count} датчиков
+                                            {channelCountLabel(item.sensor_count)}
                                         </span>
                                     </div>
 
@@ -852,9 +903,11 @@ function MapPage() {
                     Нет событий
                 </div>
 
-                <div className="legend-note">
-                    Схематическая карта · при отсутствии координат показаны демонстрационные точки
-                </div>
+                {hasSyntheticGeometry && (
+                    <div className="legend-note">
+                        Точки вычислены из ID объектов. Их положение не показывает реальные адреса или зоны риска.
+                    </div>
+                )}
             </div>
 
             {error && (
@@ -889,6 +942,14 @@ function MapPage() {
                         </button>
                     </div>
 
+                    {selectedObject.geometry_is_synthetic && (
+                        <p className="drawer-location-note">
+                            {selectedObject.data_is_synthetic
+                                ? "Демо-данные: объект, каналы и события вымышлены. Точка на карте условная и не показывает реальное местоположение."
+                                : "Точка на карте условная: она вычислена из ID объекта и не показывает его реальное местоположение."}
+                        </p>
+                    )}
+
                     <div
                         className={
                             `object-status object-status-${selectedObject.status}`
@@ -914,7 +975,7 @@ function MapPage() {
                         </div>
 
                         <div>
-                            <span>Всего датчиков</span>
+                            <span>Каналов датчиков</span>
 
                             <strong>
                                 {selectedObject.sensor_count}
@@ -964,10 +1025,10 @@ function MapPage() {
                     <div className="drawer-section sensors-section">
                         <div className="sensors-heading">
                             <div>
-                                <h3>Датчики объекта</h3>
+                                <h3>Каналы объекта</h3>
 
                                 <span>
-                                    {sensors.length} каналов
+                                    {channelCountLabel(sensors.length)} · связь по ID объекта
                                 </span>
                             </div>
 
@@ -993,11 +1054,10 @@ function MapPage() {
                                 type="text"
                                 value={sensorSearch}
                                 placeholder="Поиск датчика, типа, ПК..."
-                                onChange={(event) =>
-                                    setSensorSearch(
-                                        event.target.value,
-                                    )
-                                }
+                                onChange={(event) => {
+                                    setSensorSearch(event.target.value);
+                                    setVisibleSensorCount(SENSOR_PAGE_SIZE);
+                                }}
                             />
                         </div>
 
@@ -1015,7 +1075,7 @@ function MapPage() {
                             </div>
                         ) : (
                             <div className="sensor-list">
-                                {filteredSensors.map((sensor) => (
+                                {visibleSensors.map((sensor) => (
                                     <button
                                         type="button"
                                         key={sensor.channel_id}
@@ -1048,6 +1108,15 @@ function MapPage() {
                                         </div>
 
                                         <div className="sensor-row-meta">
+                                            {sensor.risk_score !== null && (
+                                                <span
+                                                    className="sensor-risk-badge"
+                                                    title="Экспериментальная ML-оценка (shadow-режим), не подтверждённая вероятность отказа"
+                                                >
+                                                    риск {(sensor.risk_score * 100).toFixed(1)}%
+                                                </span>
+                                            )}
+
                                             {sensor.picket !== null && (
                                                 <span>
                                                     ПК {sensor.picket}
@@ -1060,6 +1129,15 @@ function MapPage() {
                                         </div>
                                     </button>
                                 ))}
+                                {visibleSensors.length < filteredSensors.length && (
+                                    <button
+                                        type="button"
+                                        className="sensor-list-more"
+                                        onClick={() => setVisibleSensorCount((current) => current + SENSOR_PAGE_SIZE)}
+                                    >
+                                        Показать ещё · {visibleSensors.length} из {filteredSensors.length}
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>
@@ -1162,6 +1240,31 @@ function MapPage() {
                         </div>
                     </div>
 
+                    {selectedSensor.risk_score !== null && (
+                        <div className="sensor-value-card sensor-risk-card">
+                            <div className="sensor-value-icon">
+                                <AlertTriangle size={20} />
+                            </div>
+
+                            <div>
+                                <span>
+                                    ML-риск (эксперимент, shadow-режим)
+                                </span>
+
+                                <strong>
+                                    {(selectedSensor.risk_score * 100).toFixed(1)}%
+                                </strong>
+
+                                <small className="sensor-risk-disclaimer">
+                                    Калиброванная вероятность наблюдаемого
+                                    proxy-состояния на {selectedSensor.risk_window_start}
+                                    {" "}— не подтверждённая вероятность физического
+                                    отказа. Модель: {selectedSensor.risk_model_version}.
+                                </small>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="sensor-detail-row">
                         <span>Последнее событие</span>
 
@@ -1186,13 +1289,16 @@ function MapPage() {
                         <button
                             type="button"
                             className="sensor-request-button"
+                            disabled={selectedObject.data_is_synthetic}
                             onClick={() =>
                                 navigate(
                                     `/requests?objectId=${selectedObject.object_id}&channelId=${selectedSensor.channel_id}`,
                                 )
                             }
                         >
-                            Создать профилактическую заявку
+                            {selectedObject.data_is_synthetic
+                                ? "Заявки недоступны в демо"
+                                : "Создать профилактическую заявку"}
                         </button>
                     )}
                     <div className="sensor-history-section">

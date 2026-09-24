@@ -1,0 +1,48 @@
+{
+  "model_version": "cold-start-router-proxy-v1",
+  "format": "joblib dictionary + predictor.py",
+  "call": "bundle = load_bundle(path); predict([record], bundle)",
+  "selected_policy": "base_lightgbm",
+  "input_fields": {
+    "as_of_date": "string ISO date YYYY-MM-DD",
+    "d_alarm_count_24h": "nullable number",
+    "d_alarm_count_previous_24h": "nullable number",
+    "d_alarm_share_24h": "nullable number",
+    "d_alarm_share_previous_24h": "nullable number",
+    "d_catalogue_match": "nullable number",
+    "d_current_failure_state": "boolean",
+    "d_days_since_failure_state_event": "nullable number",
+    "d_event_count_24h": "nullable number",
+    "d_event_count_previous_24h": "nullable number",
+    "d_failure_state_event_count_24h": "nullable number",
+    "d_gap_days_since_previous": "nullable number",
+    "d_month": "nullable number",
+    "d_observed_days_so_far": "integer >= 1",
+    "d_state_n_unique_24h": "nullable number",
+    "d_value_numeric_last": "nullable number",
+    "d_value_numeric_max_24h": "nullable number",
+    "d_value_numeric_mean_24h": "nullable number",
+    "d_value_numeric_min_24h": "nullable number",
+    "d_value_numeric_previous": "nullable number",
+    "d_value_numeric_std_24h": "nullable number",
+    "d_weekday": "nullable number",
+    "тип_датчика": "nullable string",
+    "тип_инж_системы": "nullable string"
+  },
+  "output_score": "calibrated probability of the observable proxy state in [D+2,D+3); not probability of confirmed physical failure",
+  "preprocessing": {
+    "inside_bundle": [
+      "missing-value handling by LightGBM",
+      "category mapping with unknown categories mapped to missing",
+      "type-relative robust deviation",
+      "cold/warm routing",
+      "Platt calibration"
+    ],
+    "backend_required": [
+      "construct daily aggregate fields from events available by end of D",
+      "maintain causal d_observed_days_so_far",
+      "apply top-K/cooldown policy outside the model"
+    ]
+  },
+  "decision_status": "experimental_shadow"
+}

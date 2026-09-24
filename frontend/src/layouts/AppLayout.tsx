@@ -20,6 +20,10 @@ import {
     Outlet,
 } from "react-router-dom";
 
+// Global design tokens/chrome (sidebar, nav, gradients) live here so they
+// apply on every route, not only after visiting the map page.
+import "../styles/moscow-map.css";
+
 
 function AppLayout() {
     const [collapsed, setCollapsed] =
@@ -178,15 +182,20 @@ function AppLayout() {
                         )}
                     </button>
 
-                    <div
-                        className="nav-item settings-item"
-                        title="Права и учётные записи управляются администратором"
+                    <NavLink
+                        to="/settings"
+                        title="Настройки"
+                        className={({ isActive }) =>
+                            isActive
+                                ? "nav-item settings-item active"
+                                : "nav-item settings-item"
+                        }
                     >
                         <Settings size={21} />
                         {!collapsed && (
-                            <span>Управление доступом</span>
+                            <span>Настройки</span>
                         )}
-                    </div>
+                    </NavLink>
                 </div>
             </aside>
 
