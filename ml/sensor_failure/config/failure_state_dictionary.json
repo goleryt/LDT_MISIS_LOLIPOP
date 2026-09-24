@@ -1,0 +1,6 @@
+{
+  "version": "0.1",
+  "description": "Candidate observable technical states for the proxy target; not confirmed physical failures.",
+  "default": ["Неисправен", "Обесточен"],
+  "by_тип_датчика": {}
+}

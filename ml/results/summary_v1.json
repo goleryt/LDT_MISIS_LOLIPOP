@@ -1,0 +1,42 @@
+{
+  "schema_version": "ml-aggregate-results-1.0",
+  "scope": "pre-2025 development; no confirmed incident outcomes",
+  "evidence_warning": "Synthetic recall is not real incident recall; proxy PR-AUC is not confirmed-incident PR-AUC.",
+  "source_archive_sha256": {
+    "results_10_v2.zip": "f8c99afeaa63c10a6ef2e6bcbbd81c86da53e9160a68d8e1c750a792a9c4ec14",
+    "results_11_v2_last.zip": "15b8eabd06382514d56181f9675b406a009d5faf557ce0b4eed005eaf1ae6bde",
+    "results_12_v2.zip": "e7bc4d3453d97a8d379d9132c4f58c07eb82e06b6d83e733a50ac683a42b3220"
+  },
+  "source_bundle_sha256": {
+    "object_day": "e8c74eddea20c1ee94f15e7584d6b53517f2e5ece317eefbe385f5d47b11a82a",
+    "channel_element": "20ab3bdcfafc7f740333e1364cb0c310faeaa1a14602b63a387f1e4e0f47370f",
+    "registry": "ad9f14dc41d187ef12c5a570a6b4800c3045bd5289eb9090a5f758a565ce5b8f"
+  },
+  "proxy_modules": {
+    "access": {"evidence_level": "E2", "backend_candidate": false, "reason": "primary alert budget saturated"},
+    "fire": {"evidence_level": "E2", "backend_candidate": false, "reason": "insufficient validation positives"},
+    "availability": {
+      "evidence_level": "E1",
+      "backend_candidate": false,
+      "selected_model": "cadence_rule",
+      "tcn_pr_auc_by_fold": [0.32779663477549675, 0.3879869387112857],
+      "cadence_rule_pr_auc_by_fold": [0.20763160430868477, 0.24027178187108475],
+      "label_coverage_by_fold": [0.5185861321196229, 0.5241360565349072],
+      "tcn_unresolved_alert_share_by_fold": [0.9016814572629612, 0.8916832378055913]
+    }
+  },
+  "synthetic_modules": {
+    "access": {"evidence_level": "E4", "backend_scenario_score_allowed": true, "learned_heldout_recall_by_fold": [0.006, 0.002], "selected_detector_by_fold": ["robust_anomaly", "robust_anomaly"]},
+    "fire": {"evidence_level": "E4", "backend_scenario_score_allowed": true, "learned_heldout_recall_by_fold": [0.506, 0.534], "selected_detector_by_fold": ["robust_anomaly", "learned_logistic"]},
+    "flood": {"evidence_level": "E4", "backend_scenario_score_allowed": false, "supported_validation_coverage_by_fold": [0.007514761137949544, 0.0067612502771004215], "reason": "budget saturated"}
+  },
+  "scorecard": {
+    "router_contract_version": "missing-target-router-3.0",
+    "status": "completed",
+    "run_mode": "full",
+    "score_rows": 579735,
+    "allowed_modules": ["access_synthetic", "fire_synthetic"],
+    "abstaining_modules": ["access", "fire", "flood", "availability"],
+    "confirmed_incident_probability_available": false
+  }
+}
