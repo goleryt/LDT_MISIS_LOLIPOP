@@ -124,11 +124,14 @@ function sortSensorsForDisplay(
                 return rightAlarm - leftAlarm;
             }
 
-            /*
-             * Когда появится ML-контракт:
-             * здесь между alarm и временем
-             * добавим сортировку risk_score DESC.
-             */
+            // Экспериментальный ML-риск (shadow-режим, см. backend
+            // app/ml/service.py). Каналы без риска (нет данных) — в конец.
+            const leftRisk = left.risk_score ?? -1;
+            const rightRisk = right.risk_score ?? -1;
+
+            if (leftRisk !== rightRisk) {
+                return rightRisk - leftRisk;
+            }
 
             const timeDifference =
                 sensorEventTime(right) -
@@ -1095,6 +1098,15 @@ function MapPage() {
                                         </div>
 
                                         <div className="sensor-row-meta">
+                                            {sensor.risk_score !== null && (
+                                                <span
+                                                    className="sensor-risk-badge"
+                                                    title="Экспериментальная ML-оценка (shadow-режим), не подтверждённая вероятность отказа"
+                                                >
+                                                    риск {(sensor.risk_score * 100).toFixed(1)}%
+                                                </span>
+                                            )}
+
                                             {sensor.picket !== null && (
                                                 <span>
                                                     ПК {sensor.picket}
@@ -1217,6 +1229,31 @@ function MapPage() {
                             </strong>
                         </div>
                     </div>
+
+                    {selectedSensor.risk_score !== null && (
+                        <div className="sensor-value-card sensor-risk-card">
+                            <div className="sensor-value-icon">
+                                <AlertTriangle size={20} />
+                            </div>
+
+                            <div>
+                                <span>
+                                    ML-риск (эксперимент, shadow-режим)
+                                </span>
+
+                                <strong>
+                                    {(selectedSensor.risk_score * 100).toFixed(1)}%
+                                </strong>
+
+                                <small className="sensor-risk-disclaimer">
+                                    Калиброванная вероятность наблюдаемого
+                                    proxy-состояния на {selectedSensor.risk_window_start}
+                                    {" "}— не подтверждённая вероятность физического
+                                    отказа. Модель: {selectedSensor.risk_model_version}.
+                                </small>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="sensor-detail-row">
                         <span>Последнее событие</span>

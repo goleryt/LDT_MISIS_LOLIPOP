@@ -1215,6 +1215,29 @@
     font-size: 13px;
 }
 
+.sensor-risk-badge {
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: #fff7ed;
+    color: #c2410c;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sensor-risk-card .sensor-value-icon {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.sensor-risk-disclaimer {
+    display: block;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 8px;
+    line-height: 1.4;
+}
+
 .sensor-detail-row {
     display: flex;
     justify-content: space-between;

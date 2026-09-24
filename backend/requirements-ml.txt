@@ -1,0 +1,10 @@
+# Необязательно: экспериментальная ML-модель (app/ml). Без этих пакетов и
+# файла app/ml/experimental_cold_start_model.joblib backend работает как
+# раньше, а risk_score в ответах равен null.
+# Модель обучена с scikit-learn==1.6.1 — нужен Python, для которого есть
+# такие колёса (проверено на 3.13).
+joblib>=1.3,<2
+lightgbm>=4.4,<5
+numpy>=1.26,<3
+pandas>=2.1,<3
+scikit-learn==1.6.1

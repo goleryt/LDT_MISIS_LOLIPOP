@@ -7,17 +7,24 @@ import {
 import "./App.css";
 
 import AppLayout from "./layouts/AppLayout";
+import AuthPage from "./pages/AuthPage";
 import AlarmsPage from "./pages/AlarmsPage";
 import EventJournalPage from "./pages/EventJournalPage";
 import ImportsPage from "./pages/ImportsPage";
 import MapPage from "./pages/MapPage";
 import ObjectsPage from "./pages/ObjectsPage";
 import RequestsPage from "./pages/RequestsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 
 function App() {
     return (
         <Routes>
+            <Route
+                path="/login"
+                element={<AuthPage />}
+            />
+
             <Route element={<AppLayout />}>
                 <Route
                     path="/"
@@ -47,6 +54,11 @@ function App() {
                 <Route
                     path="/requests"
                     element={<RequestsPage />}
+                />
+
+                <Route
+                    path="/settings"
+                    element={<SettingsPage />}
                 />
 
                 <Route

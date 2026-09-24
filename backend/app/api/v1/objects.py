@@ -7,6 +7,7 @@ from app.db.models import (
     ObjectCatalogue,
 )
 from app.db.session import SessionLocal
+from app.ml.service import score_channels
 
 
 router = APIRouter(
@@ -159,6 +160,18 @@ def get_object_sensors(
             statement
         ).mappings().all()
 
+        risk_by_channel = score_channels(
+            session,
+            [
+                (
+                    int(row["channel_id"]),
+                    row["sensor_type"],
+                    row["system_type"],
+                )
+                for row in rows
+            ],
+        )
+
         sensors: list[
             dict[str, object]
         ] = []
@@ -182,11 +195,19 @@ def get_object_sensors(
                 "event_time"
             ]
 
+            channel_id = int(
+                row["channel_id"]
+            )
+
+            # Experimental shadow-model risk (see app/ml/service.py).
+            # None when the channel has no events to score yet.
+            risk = risk_by_channel.get(
+                channel_id
+            )
+
             sensors.append(
                 {
-                    "channel_id": int(
-                        row["channel_id"]
-                    ),
+                    "channel_id": channel_id,
                     "name": row[
                         "sensor_name"
                     ],
@@ -223,8 +244,59 @@ def get_object_sensors(
                     "latest_value_state": row[
                         "state_value"
                     ],
+                    "risk_score": (
+                        risk["risk_score"]
+                        if risk
+                        else None
+                    ),
+                    "risk_is_alert_candidate": (
+                        risk["risk_is_alert_candidate"]
+                        if risk
+                        else None
+                    ),
+                    "risk_window_start": (
+                        risk["risk_window_start"]
+                        if risk
+                        else None
+                    ),
+                    "risk_window_end_exclusive": (
+                        risk["risk_window_end_exclusive"]
+                        if risk
+                        else None
+                    ),
+                    "risk_decision_status": (
+                        risk["risk_decision_status"]
+                        if risk
+                        else None
+                    ),
+                    "risk_model_version": (
+                        risk["risk_model_version"]
+                        if risk
+                        else None
+                    ),
                 }
             )
+
+        # Stable multi-key sort applied lowest-priority first:
+        # 1. активная тревога; 2. ML-риск по убыванию (эксперимент,
+        # см. app/ml/service.py); 3. время последнего события по убыванию;
+        # 4. channel_id как стабильный tie-breaker.
+        sensors.sort(key=lambda sensor: sensor["channel_id"])
+        sensors.sort(
+            key=lambda sensor: sensor["last_event_time"] or "",
+            reverse=True,
+        )
+        sensors.sort(
+            key=lambda sensor: (
+                sensor["risk_score"]
+                if sensor["risk_score"] is not None
+                else -1.0
+            ),
+            reverse=True,
+        )
+        sensors.sort(
+            key=lambda sensor: 0 if sensor["alarm"] is True else 1
+        )
 
         return {
             "object_id": int(

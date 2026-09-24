@@ -24,6 +24,19 @@ export interface ObjectSensor {
     latest_value_raw: string | null;
     latest_value_numeric: number | null;
     latest_value_state: string | null;
+
+    /**
+     * Experimental shadow-model score: calibrated probability of an
+     * observable proxy state, not a confirmed physical failure. See
+     * backend `app/ml/service.py`. Null when the channel has no data
+     * to score yet.
+     */
+    risk_score: number | null;
+    risk_is_alert_candidate: boolean | null;
+    risk_window_start: string | null;
+    risk_window_end_exclusive: string | null;
+    risk_decision_status: string | null;
+    risk_model_version: string | null;
 }
 
 

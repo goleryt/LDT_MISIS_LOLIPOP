@@ -9,6 +9,7 @@ import {
     ChevronRight,
     Database,
     List,
+    LogIn,
     Map,
     Settings,
     Upload,
@@ -18,6 +19,10 @@ import {
     NavLink,
     Outlet,
 } from "react-router-dom";
+
+// Global design tokens/chrome (sidebar, nav, gradients) live here so they
+// apply on every route, not only after visiting the map page.
+import "../styles/moscow-map.css";
 
 
 function AppLayout() {
@@ -175,9 +180,25 @@ function AppLayout() {
                         )}
                     </button>
 
-                    <div
-                        className="nav-item settings-item"
-                        title="Настройки будут подключены после авторизации"
+                    <NavLink
+                        to="/login"
+                        title="Войти"
+                        className="nav-item"
+                    >
+                        <LogIn size={21} />
+                        {!collapsed && (
+                            <span>Войти</span>
+                        )}
+                    </NavLink>
+
+                    <NavLink
+                        to="/settings"
+                        title="Настройки"
+                        className={({ isActive }) =>
+                            isActive
+                                ? "nav-item settings-item active"
+                                : "nav-item settings-item"
+                        }
                     >
                         <Settings size={21} />
                         {!collapsed && (
@@ -185,7 +206,7 @@ function AppLayout() {
                                 Настройки
                             </span>
                         )}
-                    </div>
+                    </NavLink>
                 </div>
             </aside>
 
