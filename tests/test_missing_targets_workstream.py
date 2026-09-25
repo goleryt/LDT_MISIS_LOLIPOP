@@ -505,6 +505,10 @@ def test_multitarget_synthetic_challenge_is_e4_and_uses_heldout_family(tmp_path:
             on=["d_object_key", "d_cutoff_date"], how="inner",
         )
         replay = predict_scenario_bundle(history, frame, tmp_path, task)
+        # GPT 26: сценарий внедрён в историю D−2…D → детекция на D, окно паттерна [D−2; D+1), не D+2
+        assert (replay["horizon"] == "detection_at_D").all()
+        assert (replay["window_start"] == replay["d_cutoff_date"] - timedelta(days=2)).all()
+        assert (replay["window_end_exclusive"] == replay["d_cutoff_date"] + timedelta(days=1)).all()
         comparison = replay.join(
             saved.select("d_object_key", "d_cutoff_date", "selected_score"),
             on=["d_object_key", "d_cutoff_date"],

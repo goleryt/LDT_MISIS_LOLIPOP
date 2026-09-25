@@ -15,7 +15,7 @@ LightGBM лучше ранжирует proxy, но логистическая р
 ## Поток A — временная backend-модель
 
 1. Исправить название/описание цели в model contract и API-документах, не меняя само поле без версионирования.
-2. Получить у Claude отсутствующие `05_lightgbm_propensity_research_cpu.ipynb` и `REPRODUCE.md`; до этого его прогон считается неполностью аудируемым.
+2. ~~Получить у Claude `05_lightgbm_propensity_research_cpu.ipynb` и `REPRODUCE.md`.~~ Внесены в ветку: `ml/sensor_failure/pre2025_audit_runtime.py`, генератор, `notebooks/kaggle/05_…ipynb`, `docs/REPRODUCE_05_RU.md`, `tests/test_pre2025_audit_runtime.py`. Прогон, результаты которого цитируются выше, был сделан до внесения; повторный FULL-прогон на текущей версии нужен для полной аудируемости.
 3. Сравнить на одних validation-строках `logistic`, `M0_lightgbm` и `no_calendar`.
 4. Применить gates симметрично ко всем:
    - episode recall @ 50/day, cooldown 72h;
@@ -24,6 +24,14 @@ LightGBM лучше ранжирует proxy, но логистическая р
    - PR-AUC и calibration — вторичные;
    - при статистической ничьей выбирается более простая модель.
 5. Упаковать победителя как versioned shadow-model. Backend не показывает score как вероятность физической поломки.
+
+## Поток A1 — цель v2 для основной модели (notebook 13)
+
+Реализованы шаги 1–4 раздела 9 `docs/ML_TZ_BEST_FIT_SOLUTION_RU.md`: строгая onset-цель v2 из panel v2
+(без пересканирования архива), причинные cadence-признаки, B0–B4 + LightGBM на rolling-фолдах, E1–E3 с одним
+изменяемым фактором. План: `docs/EXPERIMENT_13_EPISODE_V2_RU.md`; запуск: `docs/REPRODUCE_13_RU.md`.
+Статус: код и тесты готовы, нужен FULL-прогон на Kaggle CPU. Результат решает, какую цель и какой набор
+признаков упаковывать в shadow-модель потока A (шаг 5).
 
 ## Поток B — missing-target notebooks 07–12
 
