@@ -5,6 +5,8 @@ type Prediction = { id: number; object_id: number; incident_type: string; probab
   horizon_hours: number; calculated_at: string; model_version: string; recommendation: string | null;
   status: string; revision: number; actual_outcome: string | null; request_id: number | null };
 type Decision = { actor: string; decision: string; reason: string; notes: string | null; actual_outcome: string | null; created_at: string };
+// Тип из ответа ML-пакета — наблюдаемое событие в журнале, а не пожар.
+const TYPE_LABELS: Record<string, string> = { gas_threshold_cross: "Пересечение газом 1 % CH4 (proxy)" };
 export default function PredictionsPage() {
   const [rows, setRows] = useState<Prediction[]>([]);
   const [message, setMessage] = useState("");
@@ -55,8 +57,8 @@ export default function PredictionsPage() {
   return <section className="operations-page"><h1>Журнал прогнозов</h1><p className="status-notice">{message}</p>
     {error && <p role="alert">{error}</p>}
     {!rows.length && <p>Прогнозов нет. Текущие срабатывания доступны в разделе «Тревоги».</p>}
-    {rows.length > 0 && <table><thead><tr><th>Объект</th><th>Тип</th><th>Вероятность</th><th>Горизонт</th><th>Статус</th><th>Просмотр</th></tr></thead>
-      <tbody>{rows.map(row => <tr key={row.id}><td>{row.object_id}</td><td>{row.incident_type}</td><td>{(row.probability * 100).toFixed(1)}%</td>
+    {rows.length > 0 && <table><thead><tr><th>Объект</th><th>Тип</th><th>Оценка (proxy)</th><th>Горизонт</th><th>Статус</th><th>Просмотр</th></tr></thead>
+      <tbody>{rows.map(row => <tr key={row.id}><td>{row.object_id}</td><td>{TYPE_LABELS[row.incident_type] ?? row.incident_type}</td><td>{(row.probability * 100).toFixed(1)}%</td>
         <td>{row.horizon_hours} ч</td><td>{row.status}</td><td><button onClick={() => select(row)}>Открыть</button></td></tr>)}</tbody></table>}
     {selected && <article className="prediction-detail"><h2>Прогноз №{selected.id}</h2>
       <p>Модель: {selected.model_version} · Расчёт: {new Date(selected.calculated_at).toLocaleString("ru-RU")}</p>

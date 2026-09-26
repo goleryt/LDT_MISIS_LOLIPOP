@@ -1,11 +1,11 @@
 from typing import Literal
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import func, select
 from app.api.v1.platform import serialize
 from app.api.v1.requests import validate_target
 from app.db.models import PreventiveRequest
-from app.db.platform import Notification, Prediction, PredictionDecision
+from app.db.platform import MlScore, Notification, Prediction, PredictionDecision
 from app.db.session import SessionLocal
 from app.predictions import ModelUnavailable, PredictionResult, get_provider
 
@@ -26,8 +26,15 @@ class DecisionInput(BaseModel):
 
 @router.get("/status")
 def status():
-    return {"available": False, "state": "model_not_configured",
-            "message": "Реальная ML-модель не подключена. Прогнозы не рассчитываются."}
+    with SessionLocal() as db:
+        last = db.scalar(select(func.max(MlScore.as_of_date)))
+        model = db.scalar(select(MlScore.model_version).where(MlScore.kind == "gas").order_by(MlScore.as_of_date.desc()).limit(1))
+    if last is None:
+        return {"available": False, "state": "no_ml_run_yet",
+                "message": "ML-пакет подключён, но суточный расчёт ещё не выполнялся (scripts.run_ml_daily)."}
+    return {"available": True, "state": "experimental_shadow", "as_of_date": last.isoformat(), "model_version": model,
+            "message": "Экспериментальный shadow-режим: оценка наблюдаемого пересечения газом 1 % в окне прогноза. "
+                       "Это не вероятность пожара и не подтверждённый инцидент."}
 
 @router.get("/reasons")
 def reasons():

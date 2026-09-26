@@ -7,13 +7,59 @@ from app.db.models import (
     ObjectCatalogue,
 )
 from app.db.session import SessionLocal
-from app.ml.service import score_channels
+from app.db.platform import MlScore
 
 
 router = APIRouter(
     prefix="/objects",
     tags=["objects"],
 )
+
+
+def latest_gas_scores(session, channel_ids: list[int]) -> dict[int, dict[str, object]]:
+    """Newest stored ML result per channel (written by the daily batch, app/ml_job.py).
+
+    The API never runs the model. The score is a proxy of an observed gas-threshold
+    crossing in the forecast window, not a fire probability; abstentions keep their
+    reason codes so the UI can say why there is no forecast.
+    """
+    if not channel_ids:
+        return {}
+
+    statement = (
+        select(MlScore)
+        .where(
+            MlScore.kind == "gas",
+            MlScore.channel_id.in_(channel_ids),
+        )
+        .distinct(MlScore.channel_id)
+        .order_by(
+            MlScore.channel_id,
+            MlScore.as_of_date.desc(),
+            MlScore.id.desc(),
+        )
+    )
+
+    return {
+        int(row.channel_id): {
+            "risk_score": row.score,
+            "risk_is_alert_candidate": row.selected,
+            "risk_window_start": (
+                row.window_start.isoformat() if row.window_start else None
+            ),
+            "risk_window_end_exclusive": (
+                row.window_end_exclusive.isoformat()
+                if row.window_end_exclusive
+                else None
+            ),
+            "risk_decision_status": row.decision_status,
+            "risk_model_version": row.model_version,
+            "risk_reason_codes": row.reason_codes or [],
+            "risk_maintenance_context": row.maintenance_context,
+            "risk_as_of_date": row.as_of_date.isoformat(),
+        }
+        for row in session.scalars(statement)
+    }
 
 
 @router.get("/{object_id}/sensors")
@@ -160,16 +206,9 @@ def get_object_sensors(
             statement
         ).mappings().all()
 
-        risk_by_channel = score_channels(
+        risk_by_channel = latest_gas_scores(
             session,
-            [
-                (
-                    int(row["channel_id"]),
-                    row["sensor_type"],
-                    row["system_type"],
-                )
-                for row in rows
-            ],
+            [int(row["channel_id"]) for row in rows],
         )
 
         sensors: list[
@@ -199,8 +238,8 @@ def get_object_sensors(
                 row["channel_id"]
             )
 
-            # Experimental shadow-model risk (see app/ml/service.py).
-            # None when the channel has no events to score yet.
+            # Stored result of the daily ML batch; None for channels the
+            # model does not cover (not gas) or not scored yet.
             risk = risk_by_channel.get(
                 channel_id
             )
@@ -274,12 +313,27 @@ def get_object_sensors(
                         if risk
                         else None
                     ),
+                    "risk_reason_codes": (
+                        risk["risk_reason_codes"]
+                        if risk
+                        else []
+                    ),
+                    "risk_maintenance_context": (
+                        risk["risk_maintenance_context"]
+                        if risk
+                        else None
+                    ),
+                    "risk_as_of_date": (
+                        risk["risk_as_of_date"]
+                        if risk
+                        else None
+                    ),
                 }
             )
 
         # Stable multi-key sort applied lowest-priority first:
         # 1. активная тревога; 2. ML-риск по убыванию (эксперимент,
-        # см. app/ml/service.py); 3. время последнего события по убыванию;
+        # см. app/ml_job.py); 3. время последнего события по убыванию;
         # 4. channel_id как стабильный tie-breaker.
         sensors.sort(key=lambda sensor: sensor["channel_id"])
         sensors.sort(

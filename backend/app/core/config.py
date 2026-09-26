@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -34,6 +35,11 @@ class Settings(BaseSettings):
     ldap_role_groups: dict[str, str] = {}
     integration_sources_file: str = ""
     integration_poll_seconds: int = Field(default=30, ge=5, le=120)
+    # ML (пакет LCT_ML_backend_v1): суточный расчёт отдельной задачей, API только читает результат.
+    ml_bundles_dir: str = ""
+    ml_export_days: int = Field(default=430, ge=401, le=800)
+    ml_top_k_per_day: int = Field(default=25, ge=1, le=500)
+    ml_cooldown_days: int = Field(default=3, ge=1, le=14)
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")
@@ -46,6 +52,11 @@ class Settings(BaseSettings):
         if self.auth_provider == "ldap" and not (self.ldap_host and self.ldap_base_dn and self.ldap_bind_dn and self.ldap_bind_password and self.ldap_role_groups):
             raise ValueError("LDAP connection, search credentials and explicit group mapping are required")
         return self
+
+    @property
+    def ml_bundles_path(self) -> Path:
+        # По умолчанию models/bundles в корне репозитория: модели в Git не хранятся.
+        return Path(self.ml_bundles_dir) if self.ml_bundles_dir else Path(__file__).resolve().parents[3] / "models" / "bundles"
 
     @property
     def cors_origin_list(self) -> list[str]:

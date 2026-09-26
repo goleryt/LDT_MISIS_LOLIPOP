@@ -8,7 +8,7 @@ class PredictionResult(BaseModel):
     provider_id: str = Field(min_length=1, max_length=200)
     object_id: int = Field(ge=1)
     channel_id: int | None = Field(None, ge=1)
-    incident_type: Literal["fire", "intrusion", "flood", "sensor_failure", "system_failure"]
+    incident_type: Literal["fire", "intrusion", "flood", "sensor_failure", "system_failure", "gas_threshold_cross"]
     probability: float = Field(ge=0, le=1)
     horizon_hours: int = Field(ge=24)
     calculated_at: AwareDatetime
@@ -30,7 +30,7 @@ class PredictionProvider(Protocol):
 
 class UnconfiguredProvider:
     def predict(self, object_id: int) -> list[PredictionResult]:
-        raise ModelUnavailable("Real ML model is not connected")
+        raise ModelUnavailable("Расчёт по запросу не поддерживается: прогнозы считаются раз в сутки (scripts.run_ml_daily)")
 
 def get_provider() -> PredictionProvider:
     # Replace this factory only when the real model and its input contract are available.

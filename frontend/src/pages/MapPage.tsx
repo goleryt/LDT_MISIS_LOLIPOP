@@ -105,6 +105,15 @@ function sensorEventTime(
 }
 
 
+// Причины, по которым модель не выдала прогноз (коды из ответа ML-пакета).
+const RISK_REASON_TEXT: Record<string, string> = {
+    NOT_GAS_STREAM: "канал не газовый",
+    NO_GAS_READING_AT_D: "нет газовых показаний на конец суток",
+    ABOVE_THRESHOLD_AT_D:
+        "газ уже ≥ 1 % — это текущая тревога, а не прогноз",
+};
+
+
 function sortSensorsForDisplay(
     sensors: ObjectSensor[],
 ): ObjectSensor[] {
@@ -125,7 +134,7 @@ function sortSensorsForDisplay(
             }
 
             // Экспериментальный ML-риск (shadow-режим, см. backend
-            // app/ml/service.py). Каналы без риска (нет данных) — в конец.
+            // app/ml_job.py). Каналы без риска (нет данных) — в конец.
             const leftRisk = left.risk_score ?? -1;
             const rightRisk = right.risk_score ?? -1;
 
@@ -1111,7 +1120,7 @@ function MapPage() {
                                             {sensor.risk_score !== null && (
                                                 <span
                                                     className="sensor-risk-badge"
-                                                    title="Экспериментальная ML-оценка (shadow-режим), не подтверждённая вероятность отказа"
+                                                    title="Оценка наблюдаемого пересечения газом 1 % (shadow-режим). Не вероятность пожара"
                                                 >
                                                     риск {(sensor.risk_score * 100).toFixed(1)}%
                                                 </span>
@@ -1240,7 +1249,8 @@ function MapPage() {
                         </div>
                     </div>
 
-                    {selectedSensor.risk_score !== null && (
+                    {(selectedSensor.risk_score !== null ||
+                        selectedSensor.risk_reason_codes.length > 0) && (
                         <div className="sensor-value-card sensor-risk-card">
                             <div className="sensor-value-icon">
                                 <AlertTriangle size={20} />
@@ -1248,19 +1258,47 @@ function MapPage() {
 
                             <div>
                                 <span>
-                                    ML-риск (эксперимент, shadow-режим)
+                                    Прогноз по газу (эксперимент, shadow-режим)
                                 </span>
 
-                                <strong>
-                                    {(selectedSensor.risk_score * 100).toFixed(1)}%
-                                </strong>
+                                {selectedSensor.risk_score !== null ? (
+                                    <>
+                                        <strong>
+                                            {(selectedSensor.risk_score * 100).toFixed(1)}%
+                                        </strong>
 
-                                <small className="sensor-risk-disclaimer">
-                                    Калиброванная вероятность наблюдаемого
-                                    proxy-состояния на {selectedSensor.risk_window_start}
-                                    {" "}— не подтверждённая вероятность физического
-                                    отказа. Модель: {selectedSensor.risk_model_version}.
-                                </small>
+                                        <small className="sensor-risk-disclaimer">
+                                            Оценка наблюдаемого пересечения газом 1 % CH4
+                                            в окне {selectedSensor.risk_window_start} —{" "}
+                                            {selectedSensor.risk_window_end_exclusive} (не
+                                            включая). Это не вероятность пожара и не
+                                            подтверждённый инцидент. Расчёт на конец
+                                            суток {selectedSensor.risk_as_of_date}, модель{" "}
+                                            {selectedSensor.risk_model_version}.
+                                        </small>
+                                    </>
+                                ) : (
+                                    <small className="sensor-risk-disclaimer">
+                                        Прогноз не выдан:{" "}
+                                        {selectedSensor.risk_reason_codes
+                                            .map(
+                                                (code) =>
+                                                    RISK_REASON_TEXT[code] ?? code,
+                                            )
+                                            .join("; ")}
+                                        .
+                                    </small>
+                                )}
+
+                                {selectedSensor.risk_maintenance_context ===
+                                    "possible_recent_silence" && (
+                                    <small className="sensor-risk-disclaimer">
+                                        Вероятно, после ТО/поверки: газовые датчики
+                                        объекта несколько суток молчали, затем вернулись
+                                        с показаниями. Оценку и тревогу это не скрывает —
+                                        решает диспетчер.
+                                    </small>
+                                )}
                             </div>
                         </div>
                     )}

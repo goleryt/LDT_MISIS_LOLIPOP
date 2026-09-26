@@ -26,10 +26,10 @@ export interface ObjectSensor {
     latest_value_state: string | null;
 
     /**
-     * Experimental shadow-model score: calibrated probability of an
-     * observable proxy state, not a confirmed physical failure. See
-     * backend `app/ml/service.py`. Null when the channel has no data
-     * to score yet.
+     * Stored result of the daily ML batch (backend `app/ml_job.py`) for a
+     * gas channel: a proxy score of an observed CH4 >= 1 % crossing in the
+     * forecast window. Not a fire probability, not a confirmed incident.
+     * Null for channels the model does not cover or has not scored yet.
      */
     risk_score: number | null;
     risk_is_alert_candidate: boolean | null;
@@ -37,6 +37,9 @@ export interface ObjectSensor {
     risk_window_end_exclusive: string | null;
     risk_decision_status: string | null;
     risk_model_version: string | null;
+    risk_reason_codes: string[];
+    risk_maintenance_context: string | null;
+    risk_as_of_date: string | null;
 }
 
 

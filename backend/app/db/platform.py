@@ -1,6 +1,6 @@
 """Operational tables; forecast rows are written only by a real provider."""
-from datetime import datetime
-from sqlalchemy import BigInteger, Boolean, DateTime, Float, ForeignKey, Integer, JSON, String, Text, UniqueConstraint, CheckConstraint, func
+from datetime import date, datetime
+from sqlalchemy import BigInteger, Boolean, Date, DateTime, Float, ForeignKey, Integer, JSON, String, Text, UniqueConstraint, CheckConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 from app.db.base import Base
 
@@ -104,3 +104,35 @@ class IntegrationCursor(Base):
     cursor: Mapped[str | None] = mapped_column(Text)
     last_success: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_error: Mapped[str | None] = mapped_column(String(200))
+
+
+class MlScore(Base):
+    """One runtime record of the daily ML batch (LCT_ML_backend_v1), stored as delivered.
+
+    `score` is a proxy score, not the probability of a fire or a confirmed incident;
+    the meaning is carried by `target_code`, `score_kind`, `evidence_level` and
+    `decision_status` from the bundle itself. Re-running a day replaces that day.
+    """
+    __tablename__ = "ml_scores"
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    as_of_date: Mapped[date] = mapped_column(Date, index=True)
+    run_id: Mapped[str] = mapped_column(String(100))
+    kind: Mapped[str] = mapped_column(String(20))  # gas | incident
+    bundle: Mapped[str] = mapped_column(String(100))
+    model_version: Mapped[str | None] = mapped_column(String(200))
+    target_code: Mapped[str | None] = mapped_column(String(100))
+    object_id: Mapped[int | None] = mapped_column(BigInteger, index=True)
+    channel_id: Mapped[int | None] = mapped_column(BigInteger, index=True)
+    incident_type: Mapped[str | None] = mapped_column(String(50))
+    score: Mapped[float | None] = mapped_column(Float)
+    score_kind: Mapped[str | None] = mapped_column(String(50))
+    evidence_level: Mapped[str | None] = mapped_column(String(10))
+    decision_status: Mapped[str | None] = mapped_column(String(40))
+    reason_codes: Mapped[list | None] = mapped_column(JSON)
+    window_start: Mapped[date | None] = mapped_column(Date)
+    window_end_exclusive: Mapped[date | None] = mapped_column(Date)
+    maintenance_context: Mapped[str | None] = mapped_column(String(40))
+    selected: Mapped[bool] = mapped_column(Boolean, default=False)  # top-K/day after cooldown
+    rank: Mapped[int | None] = mapped_column(Integer)
+    payload: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
