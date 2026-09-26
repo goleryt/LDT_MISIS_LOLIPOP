@@ -152,3 +152,47 @@ def test_synthetic_end_to_end_writes_aggregates_only(tmp_path: Path) -> None:
     for name in ("results_21_gas_triage.json", "summary_21_gas_triage_ru.md"):
         text = (tmp_path / "out" / name).read_text(encoding="utf-8")
         assert "secret-channel" not in text and "secret-object" not in text
+
+
+def test_live_label_ignores_everything_after_cutoff() -> None:
+    """V5: appending any data after c must not change triage_live."""
+    t0 = datetime(2024, 6, 10, 12)
+    c = t0 + timedelta(minutes=gt.LIVE_MINUTES)
+    base = _seconds("a", "o", t0) + _seconds("b", "o", t0 - timedelta(hours=1))
+    future = (_seconds("c", "o", c + timedelta(seconds=1))           # neighbor after c
+              + _seconds("a", "o", t0 + timedelta(minutes=40), peak=3.0))  # later high alarm on a
+    archive_end = t0 + timedelta(hours=3)
+
+    def live(rows: list[dict]) -> str:
+        return next(e for e in _label(pl.DataFrame(rows), archive_end)
+                    if e["d_channel_key"] == "a" and e["cross_t"] == t0)["triage_live"]
+
+    assert live(base) == live(base + future) == "likely_bump_test"
+
+
+def test_walk_of_five_sensors_live_vs_retro() -> None:
+    t0 = datetime(2024, 6, 11, 9)
+    rows: list[dict] = []
+    for i, ch in enumerate("abcde"):
+        rows += _seconds(ch, "o", t0 + timedelta(minutes=20 * i))
+    events = sorted(_label(pl.DataFrame(rows), datetime(2024, 6, 12, 12)), key=lambda e: e["cross_t"])
+    assert [e["triage_live"] for e in events] == ["short_isolated"] + ["likely_bump_test"] * 4
+    assert {e["triage_retro"] for e in events} == {"likely_bump_test"}
+
+
+def test_long_event_after_silence_and_in_series_needs_attention() -> None:
+    t0 = datetime(2024, 6, 10, 12)
+    rows = _seconds("a", "o", t0, drop_min=30) + _seconds("b", "o", t0)
+    shapes = gt._event_shapes_for_bucket(pl, pl.DataFrame(rows).sort("d_channel_key", "t"))
+    activity = pl.DataFrame({"d_object_key": ["o", "o"], "day": [date(2024, 2, 1), date(2024, 6, 10)]})
+    runs = pl.DataFrame({"d_object_key": ["o"], "start": [date(2024, 6, 2)],
+                         "end": [date(2024, 6, 9)], "length": [8]})
+    by_channel = {e["d_channel_key"]: e for e in gt.label_events(shapes, activity, runs, t0 + timedelta(hours=1))}
+    assert by_channel["a"]["after_silence"] == "true" and by_channel["a"]["other_ch_by_live_cutoff"] == 1
+    assert by_channel["a"]["triage_live"] == "needs_attention"
+    assert by_channel["b"]["triage_live"] == "likely_after_maintenance"
+
+
+def test_decision_cohort_matches_spec() -> None:
+    assert gt.COHORT_PERIODS[0] == "le2022" and "2026H1" not in gt.COHORT_PERIODS
+    assert set(gt.COHORT_PERIODS) == {p for block in gt.COHORT_BLOCKS.values() for p in block}

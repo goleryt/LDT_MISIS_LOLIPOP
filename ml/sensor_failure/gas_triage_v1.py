@@ -29,7 +29,10 @@ PEAK_LIMIT = 2.6
 NEIGHBOR_HOURS = 6
 CONTEXT_DAYS = 90
 ATTENTION = {"needs_attention", "short_isolated", "pending"}
-PERIODS = ("2023H1", "2023H2", "2024H1", "2024H2", "2025H1", "2025H2", "2026H1")
+PERIODS = ("le2022", "2023H1", "2023H2", "2024H1", "2024H2", "2025H1", "2025H2", "2026H1")
+# Decision cohort for V1/N1 (spec 013 §7): all periods <= 2024 plus 2025; 2026H1 is an observation only.
+COHORT_PERIODS = PERIODS[:-1]
+COHORT_BLOCKS = {"le2024": ("le2022", "2023H1", "2023H2", "2024H1", "2024H2"), "2025": ("2025H1", "2025H2")}
 
 
 def make_config_21(mode: str, overrides: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -183,7 +186,7 @@ def _rate(rows: list[dict[str, Any]], field: str) -> float | None:
 def _label_summary(events: list[dict[str, Any]], label_field: str) -> dict[str, Any]:
     by_label: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for e in events:
-        by_label[e[label_field] or "pending"].append(e)
+        by_label[e[label_field] or "censored_right"].append(e)
     result = {}
     for label, rows in sorted(by_label.items()):
         object_counts = Counter(e["d_object_key"] for e in rows)
@@ -219,7 +222,7 @@ def _bootstrap_calendar(events: list[dict[str, Any]], label_field: str,
 
 def _n1_control(events: list[dict[str, Any]], archive_start: datetime,
                 archive_end: datetime, strict: bool = False) -> dict[str, Any]:
-    cohort = [e for e in events if e["period"] in PERIODS[:-1]]
+    cohort = [e for e in events if e["period"] in COHORT_PERIODS]
     if not cohort:
         return {"n": 0, "passed": False, "reason": "empty_cohort"}
     # The observed and shifted fractions use exactly the same event cohort.
@@ -286,7 +289,17 @@ def _v1_calendar(cohort: list[dict[str, Any]], label_field: str) -> dict[str, An
         q = [e for e in rows if e[label_field] in ATTENTION]
         wb, wq = _rate(b, "is_weekend"), _rate(q, "is_weekend")
         loo_passes.append(bool(wb is not None and wq is not None and wb <= .05 and 2 * wb <= wq))
-    return {"cohort": "2023-2025", "bump_n": len(bump), "attention_n": len(attention),
+    blocks = {}
+    for block, names in COHORT_BLOCKS.items():
+        rows = [e for e in cohort if e["period"] in names]
+        b = [e for e in rows if e[label_field] == "likely_bump_test"]
+        q = [e for e in rows if e[label_field] in ATTENTION]
+        blocks[block] = {"bump_n": len(b), "attention_n": len(q),
+                         "bump_weekend_share": _rate(b, "is_weekend"),
+                         "attention_weekend_share": _rate(q, "is_weekend")}
+    return {"cohort": "le2022-2025H2", "bump_n": len(bump), "attention_n": len(attention),
+            "degenerate_zero_weekend_queue": bool(queue_weekend == 0),
+            "by_block_diagnostic": blocks,
             "bump_weekend_share": bump_weekend, "attention_weekend_share": queue_weekend,
             "bump_outside_07_19_share": _rate(bump, "outside_07_19"),
             "attention_outside_07_19_share": _rate(attention, "outside_07_19"),
@@ -295,13 +308,14 @@ def _v1_calendar(cohort: list[dict[str, Any]], label_field: str) -> dict[str, An
             "passed": passed}
 
 
-def _daily_burden(events: list[dict[str, Any]], period: str,
+def _daily_burden(events: list[dict[str, Any]], period: str, archive_start: datetime,
                   archive_end: datetime) -> dict[str, Any]:
     period_def = next((start, end) for name, start, end in gf.PERIODS if name == period)
     start, end = period_def
     if start is None:
         # The archive's early-years start is an observed bound, not an invented 2019-01-01.
         start = min((e["day"] for e in events), default=end)
+    start = max(start, archive_start.date())
     end = min(end, archive_end.date() + timedelta(days=1))
     days = max(1, (end - start).days)
     total = Counter(e["day"] for e in events)
@@ -322,7 +336,7 @@ def aggregate_21(events: list[dict[str, Any]], runs_count: int, seconds_count: i
                  panel: dict[str, Any]) -> dict[str, Any]:
     by_period = {name: [e for e in events if e["period"] == name]
                  for name, _, _ in gf.PERIODS}
-    cohort = [e for e in events if e["period"] in PERIODS[:-1]]
+    cohort = [e for e in events if e["period"] in COHORT_PERIODS]
     v1 = _v1_calendar(cohort, "triage_live")
     v1_strict = _v1_calendar(cohort, "triage_live_strict")
     n1 = _n1_control(events, archive_start, archive_end)
@@ -355,7 +369,7 @@ def aggregate_21(events: list[dict[str, Any]], runs_count: int, seconds_count: i
                              "hypothesis_share": round(sum((e["triage_live"] or "").startswith("likely_")
                                                         for e in in_window) / len(in_window), 6) if in_window else None,
                              "series_only_share": _rate(in_window, "series_only")},
-                         "v6_daily_burden": _daily_burden(rows, name, archive_end)}
+                         "v6_daily_burden": _daily_burden(rows, name, archive_start, archive_end)}
     prior = [e for e in cohort if e["triage_live"] is not None]
     late = [e for e in by_period["2026H1"] if e["triage_live"] is not None]
     def attention_share(rows: list[dict[str, Any]]) -> float | None:
@@ -376,6 +390,10 @@ def aggregate_21(events: list[dict[str, Any]], runs_count: int, seconds_count: i
                        "active_bundle_changed": False, "backend_deployed": False}}
 
 
+def _pct(value: float | None) -> str:
+    return "—" if value is None else f"{100 * value:.1f} %"
+
+
 def summary_markdown(result: dict[str, Any]) -> str:
     lines = ["# Ноутбук 21 — исследовательский триаж газовых тревог", "",
              "Метки совместимы с гипотезой проверки датчиков, но не подтверждают поверку или инцидент.",
@@ -383,8 +401,16 @@ def summary_markdown(result: dict[str, Any]) -> str:
              f"Статус: **{result['status']}**; строгих пересечений: **{result['crossings_total']:,}**; "
              f"ограниченных пауз: **{result['silence_runs']:,}**.", "",
              "## Предзаданные проверки", "",
-             f"- V1 календарь: **{'прошёл' if result['v1_calendar']['passed'] else 'не прошёл'}**.",
-             f"- N1 синхронизация: **{'прошёл' if result['n1_synchrony_control']['passed'] else 'не прошёл'}**.",
+             f"- V1 календарь: **{'прошёл' if result['v1_calendar']['passed'] else 'не прошёл'}**; "
+             f"выходные у likely_bump_test {_pct(result['v1_calendar']['bump_weekend_share'])}, "
+             f"у очереди внимания {_pct(result['v1_calendar']['attention_weekend_share'])}; "
+             f"CI95 разницы {result['v1_calendar']['bootstrap']['weekend_queue_minus_bump_ci95']}. "
+             f"Строгий вариант: {'прошёл' if result['v1_calendar_strict']['passed'] else 'не прошёл'}.",
+             f"- N1 синхронизация: **{'прошёл' if result['n1_synchrony_control']['passed'] else 'не прошёл'}**; "
+             f"реальная доля серий {_pct(result['n1_synchrony_control'].get('observed_share'))}, "
+             f"перестановки: медиана {_pct(result['n1_synchrony_control'].get('permuted_median_share'))}, "
+             f"максимум {_pct(result['n1_synchrony_control'].get('permuted_max_share'))}. "
+             f"Строгий вариант: {'прошёл' if result['n1_synchrony_control_strict']['passed'] else 'не прошёл'}.",
              f"- Stop-rule: **{result['backend_gate']}**. Прохождение не доказывает истинную причину тревог.", "",
              "## Метки по периодам", "",
              "| Период | Событий | Needs attention | Short isolated | After maintenance | Bump test | Pending D |",
@@ -414,6 +440,11 @@ def run_stage21(cfg: dict[str, Any], log: Any = print) -> dict[str, Any]:
     events = label_events(events, activity, runs, archive_end)
     events = [e for e in events if e["period"] is not None]
     if cfg["mode"] == "FULL" and (len(events), runs.height) != (7_222, 93):
+        by_period = Counter(e["period"] for e in events)
+        (out / "results_21_identity_mismatch.json").write_text(gf._safe_result_text(
+            {"status": "stopped_identity_mismatch", "crossings_total": len(events), "silence_runs": runs.height,
+             "expected": {"crossings_total": 7_222, "silence_runs": 93}, "crossings_by_period": dict(by_period),
+             "gas_seconds": seconds_count}) + "\n", encoding="utf-8")
         raise ValueError(f"Stage 19 identity mismatch: crossings={len(events)}, runs={runs.height}; expected 7222/93")
     result = aggregate_21(events, runs.height, seconds_count, archive_start, archive_end, cfg,
                           {"manifest_sha256": gf._sha256(manifest_path), "rows": int(manifest["rows"]),
