@@ -33,5 +33,5 @@ class UnconfiguredProvider:
         raise ModelUnavailable("Расчёт по запросу не поддерживается: прогнозы считаются раз в сутки (scripts.run_ml_daily)")
 
 def get_provider() -> PredictionProvider:
-    # Replace this factory only when the real model and its input contract are available.
+    # Predictions come from the daily ML batch (app/ml_job.py); on-demand inference is deliberately not offered.
     return UnconfiguredProvider()

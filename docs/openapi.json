@@ -258,6 +258,134 @@
               ],
               "title": "Channel Id"
             }
+          },
+          {
+            "name": "time_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Time From"
+            }
+          },
+          {
+            "name": "time_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Time To"
+            }
+          },
+          {
+            "name": "alarm_state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "all",
+                "alarm",
+                "normal",
+                "unknown"
+              ],
+              "type": "string",
+              "default": "all",
+              "title": "Alarm State"
+            }
+          },
+          {
+            "name": "object_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Object Query"
+            }
+          },
+          {
+            "name": "sensor_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sensor Query"
+            }
+          },
+          {
+            "name": "event_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event Query"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "time",
+                "object",
+                "sensor",
+                "event",
+                "status"
+              ],
+              "type": "string",
+              "default": "time",
+              "title": "Sort By"
+            }
+          },
+          {
+            "name": "sort_desc",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Sort Desc"
+            }
           }
         ],
         "responses": {

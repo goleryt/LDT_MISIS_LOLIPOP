@@ -31,7 +31,8 @@
         "intrusion",
         "flood",
         "sensor_failure",
-        "system_failure"
+        "system_failure",
+        "gas_threshold_cross"
       ],
       "title": "Incident Type",
       "type": "string"

@@ -32,7 +32,7 @@ def upgrade():
         sa.Column("selected", sa.Boolean(), nullable=False, server_default=sa.false()),
         sa.Column("rank", sa.Integer()),
         sa.Column("payload", sa.JSON(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
+        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
     )
     op.create_index("ix_ml_scores_as_of_date", "ml_scores", ["as_of_date"])
     op.create_index("ix_ml_scores_object_id", "ml_scores", ["object_id"])

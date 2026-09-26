@@ -42,6 +42,10 @@ httpx==0.28.1
 reportlab==5.0.1
 ```
 
+### ML-окружение суточной задачи (не входит в образ API)
+
+Python 3.12; версии закреплены в `backend/requirements-ml.txt` и взяты из пакета LCT_ML_backend_v1: numpy 2.0.2, pandas 2.3.3, lightgbm 4.6.0, polars 1.35.2; pyarrow 25.0.1 добавлен (нужен runtime, в списке пакета отсутствует). Файл `backend/app/ml_runtime/lct_ml_runtime.py` перенесён из пакета без изменений.
+
 ## Frontend
 
 Точные версии полного дерева зафиксированы package-lock.json; установка — npm ci.
@@ -68,10 +72,10 @@ FastAPI/Pydantic — API и контракты; SQLAlchemy/psycopg/Alembic — P
 
 React/Router — интерфейс и навигация; Recharts — история показаний; Lucide — значки; Vite/TypeScript — сборка; Oxlint — статический анализ; Playwright — браузерные сценарии.
 
-Noto Sans Regular включён для кириллицы в PDF. Источник: https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf/NotoSans. Лицензия SIL Open Font License 1.1 находится рядом: backend/app/assets/FONT-LICENSE.txt.
+Шрифт интерфейса Nunito (SIL OFL 1.1, лицензия — frontend/src/assets/fonts/OFL-Nunito.txt) включён локально. Noto Sans Regular включён для кириллицы в PDF. Источник: https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf/NotoSans. Лицензия SIL Open Font License 1.1 находится рядом: backend/app/assets/FONT-LICENSE.txt.
 
 ## Контракты
 
 - openapi.json — снимок HTTP API.
 - integration-record.schema.json — входная запись источника; обязательность полей конкретного типа описана в INTEGRATIONS.md.
-- prediction-result.schema.json — только схема результата будущей реальной модели, без примеров вымышленных вероятностей.
+- prediction-result.schema.json — схема записи прогноза (в том числе тип gas_threshold_cross); без примеров вымышленных вероятностей.
