@@ -11,6 +11,7 @@ internally and are never serialized.
 
 from __future__ import annotations
 
+import gc
 import hashlib
 import json
 import math
@@ -69,6 +70,8 @@ def make_config_19(mode: str, overrides: dict[str, Any] | None = None) -> dict[s
         "verify_sha256": True,
         "smoke_years": [2023, 2024],
         "smoke_channel_share": 20,
+        # Bound peak RAM: every bucket contains complete cross-year histories for its channels.
+        "channel_buckets": 64,
         "keep_stage": False,
     }
     cfg.update(overrides or {})
@@ -144,7 +147,7 @@ def gas_seconds_from_raw(pl: Any, raw: Any, catalogue: Any, taxonomy: dict[str, 
     ev = ev.join(ch_map, on="ch", how="left").join(obj_map, on="ид_объект", how="left")
     return (ev.group_by("d_channel_key", "d_object_key", "t").agg(
         pl.col("num").min().alias("mn"), pl.col("num").max().alias("mx")
-    ).sort("d_channel_key", "t"))
+    ))
 
 
 def strict_crossing_features(pl: Any, seconds: Any, threshold: float = 1.0, rise_threshold: float = 0.5,
@@ -197,13 +200,12 @@ def strict_crossing_features(pl: Any, seconds: Any, threshold: float = 1.0, rise
     return pl.DataFrame(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
 
 
-def bounded_silence_runs(pl: Any, seconds: Any, min_silence_days: int = 4) -> Any:
-    """Bounded gaps between real object gas-reading days; no leading/trailing invented gaps."""
+def bounded_silence_runs_from_activity(pl: Any, observed: Any, min_silence_days: int = 4) -> Any:
+    """Bounded gaps between observed object-days; no leading/trailing invented gaps."""
     schema = {"d_object_key": pl.String, "start": pl.Date, "end": pl.Date, "length": pl.Int32}
-    if seconds.is_empty():
+    if observed.is_empty():
         return pl.DataFrame(schema=schema)
-    observed = (seconds.select("d_object_key", pl.col("t").dt.date().alias("day"))
-                .unique().sort("d_object_key", "day"))
+    observed = observed.unique().sort("d_object_key", "day")
     rows: list[dict[str, Any]] = []
     for group in observed.partition_by("d_object_key", maintain_order=True):
         days = group["day"].to_list()
@@ -214,6 +216,50 @@ def bounded_silence_runs(pl: Any, seconds: Any, min_silence_days: int = 4) -> An
                 rows.append({"d_object_key": obj, "start": left + timedelta(days=1),
                              "end": right - timedelta(days=1), "length": length})
     return pl.DataFrame(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
+
+
+def bounded_silence_runs(pl: Any, seconds: Any, min_silence_days: int = 4) -> Any:
+    """Bounded gaps between real object gas-reading days; no leading/trailing invented gaps."""
+    if seconds.is_empty():
+        observed = pl.DataFrame(schema={"d_object_key": pl.String, "day": pl.Date})
+    else:
+        observed = seconds.select("d_object_key", pl.col("t").dt.date().alias("day")).unique()
+    return bounded_silence_runs_from_activity(pl, observed, min_silence_days)
+
+
+def process_seconds_buckets(pl: Any, paths: list[Path], cfg: dict[str, Any], log: Any = print) -> tuple[Any, Any]:
+    """Process complete channel histories in bounded-RAM hash buckets."""
+    n_buckets = int(cfg["channel_buckets"])
+    if not 1 <= n_buckets <= 65_535:
+        raise ValueError("channel_buckets must be between 1 and 65535")
+    crossing_frames = []
+    activity_frames = []
+    scans = [pl.scan_parquet(path) for path in paths]
+    for bucket in range(n_buckets):
+        seconds = (pl.concat(scans, how="vertical_relaxed")
+                   .filter(pl.col("_channel_bucket") == bucket)
+                   .collect()
+                   .sort("d_channel_key", "t"))
+        if seconds.is_empty():
+            continue
+        crossing_frames.append(strict_crossing_features(
+            pl, seconds, cfg["threshold"], cfg["rise_threshold"],
+            cfg["peak_window_minutes"], cfg["duration_cap_minutes"],
+        ))
+        activity_frames.append(
+            seconds.select("d_object_key", pl.col("t").dt.date().alias("day")).unique()
+        )
+        log(f"channel bucket {bucket + 1}/{n_buckets}: {seconds.height:,} gas seconds")
+        del seconds
+        gc.collect()
+    empty_seconds = pl.DataFrame(schema={"d_channel_key": pl.String, "d_object_key": pl.String,
+                                         "t": pl.Datetime("us"), "mn": pl.Float64, "mx": pl.Float64})
+    crossings = (pl.concat(crossing_frames, how="vertical_relaxed") if crossing_frames
+                 else strict_crossing_features(pl, empty_seconds))
+    activity = (pl.concat(activity_frames, how="vertical_relaxed").unique()
+                if activity_frames else
+                pl.DataFrame(schema={"d_object_key": pl.String, "day": pl.Date}))
+    return crossings, activity
 
 
 def add_maintenance_context(pl: Any, crossings: Any, runs: Any, before_days: int = 3,
@@ -505,7 +551,10 @@ def run_stage19(cfg: dict[str, Any], log: Any = print) -> dict[str, Any]:
                .select("ид_канала_данных").drop_nulls().unique().to_series().to_list())
     if not gas_ids:
         raise ValueError("the catalogue contains no gas channels")
-    second_frames = []
+    seconds_dir = stage / "gas_seconds"
+    seconds_dir.mkdir()
+    second_paths: list[Path] = []
+    gas_seconds_total = 0
     for path in year_files:
         # Scan the complete journal but collect only gas-channel rows; the full 313M-row archive never enters RAM.
         raw = (pl.scan_parquet(path).select(ep.EVENT_COLUMNS)
@@ -513,13 +562,25 @@ def run_stage19(cfg: dict[str, Any], log: Any = print) -> dict[str, Any]:
         seconds = gas_seconds_from_raw(pl, raw, catalogue, taxonomy)
         if cfg["mode"] == "SMOKE" and not seconds.is_empty():
             seconds = seconds.filter(pl.col("d_channel_key").hash(seed=7) % cfg["smoke_channel_share"] == 0)
-        second_frames.append(seconds)
+        del raw
+        gc.collect()
+        # Sorting by the materialized bucket lets Parquet skip unrelated row groups on every bucket pass.
+        seconds = seconds.with_columns(
+            (pl.col("d_channel_key").hash(seed=19) % cfg["channel_buckets"])
+            .cast(pl.UInt16).alias("_channel_bucket")
+        ).sort("_channel_bucket", "d_channel_key", "t")
+        seconds_path = seconds_dir / f"{path.stem}_gas_seconds.parquet"
+        seconds.write_parquet(seconds_path, compression="zstd", row_group_size=250_000)
+        second_paths.append(seconds_path)
+        gas_seconds_total += seconds.height
         log(f"{path.name}: gas seconds {seconds.height:,}")
-    seconds = pl.concat(second_frames, how="vertical_relaxed").sort("d_channel_key", "t") if second_frames else pl.DataFrame()
-    crossings = strict_crossing_features(pl, seconds, cfg["threshold"], cfg["rise_threshold"],
-                                         cfg["peak_window_minutes"], cfg["duration_cap_minutes"])
+        # The staged raw year is no longer needed; release both disk and memory before the next year.
+        path.unlink(missing_ok=True)
+        del seconds
+        gc.collect()
+    crossings, activity = process_seconds_buckets(pl, second_paths, cfg, log)
     crossings = add_same_object_count(pl, crossings)
-    runs = bounded_silence_runs(pl, seconds, cfg["min_silence_days"])
+    runs = bounded_silence_runs_from_activity(pl, activity, cfg["min_silence_days"])
     crossings = add_maintenance_context(pl, crossings, runs, cfg["before_days"], cfg["after_days"])
     crossings = crossings.with_columns(
         pl.col("day").map_elements(period_name, return_dtype=pl.String).alias("period")
@@ -544,7 +605,7 @@ def run_stage19(cfg: dict[str, Any], log: Any = print) -> dict[str, Any]:
         "runtime_s": round(time.time() - started, 1),
         "panel": partial["panel"],
         "raw": {"journal_years": sorted(int(y) for y in stage_audit.get("years", {})),
-                "gas_seconds": seconds.height},
+                "gas_seconds": gas_seconds_total},
         "crossings_total": crossings.height, "silence_runs": runs.height,
         "fingerprint_pre2025": locked,
         "crossing_strata": aggregate_crossings(pl, crossings),
