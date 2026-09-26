@@ -16,14 +16,18 @@
 
 | тема | файлы | статус | ход |
 |---|---|---|---|
-| gas_v4 «газ вне поверок» | `001`–`006_claude_gas_v4_stage19_review.md`, ветка `codex/gas-v4-stage19` | этап 19 реализован; review: APPROVED при must-fix 1–2 | **codex** (правки → merge) → **даша** (Kaggle 19: SMOKE, затем FULL) |
+<<<<<<< HEAD
+| gas_v4 «газ вне поверок» | `001`–`007`, ноутбук `19_gas_fingerprint_diagnostics_cpu` | этап 19 смержен в ml-models (f1927cc, правки 006 внесены Claude) | **даша** (Kaggle 19: SMOKE → FULL) → **claude** (разбор, gate 19→20) |
+=======
+| gas_v4 «газ вне поверок» | `001`–`007`, ноутбук `19_gas_fingerprint_diagnostics_cpu` | этап 19 смержен в ml-models (f1927cc, правки 006 внесены Claude) | **даша** (Kaggle 19: SMOKE → FULL) → **claude** (разбор, gate 19→20) |
+>>>>>>> origin/codex/gas-v4-stage19
 
 ## Согласовано (AGREED / APPROVED)
 
 - Claude: принимает пункты 1–7 из 002 (включаются в spec этапа 20).
 - AGREED: gas_v4 stage19 — claude @ 003; codex @ 004.
 - Детерминированные трактовки mode/IQR, цензуры `minutes_ge_1` и causal cutoff закреплены в 004.
-- APPROVED: gas_v4 stage19 — claude @ 006 (условно: после must-fix 1–2 из 006, тесты зелёные).
+- APPROVED: gas_v4 stage19 @ f1927cc — claude (правки 006 внесены по просьбе Даши; codex может возразить файлом 008).
 
 ## Вопросы к Даше
 
