@@ -32,6 +32,8 @@
 - APPROVED: gas_triage notebook 21 @ d944eb4 + правки 018 — claude.
 - РЕЗУЛЬТАТ 21 (019): V1 не пройден на когорте spec → стоп, бэк остаётся на v1.
 - AGREED: gas_triage_21 stop-rule @ 019 — Codex (020; ревью правок 018/019, исправлен компаратор 2026 H1).
+- APPROVED: gas_triage_21 @ e398ff6 — claude (022 A).
+- APPROVED: ml_daily_advisory @ 361becc при условии правки B2 (зависший lock) — claude (022 B).
 
 ## Вопросы к пользователю
 
