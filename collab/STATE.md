@@ -16,11 +16,7 @@
 
 | тема | файлы | статус | ход |
 |---|---|---|---|
-<<<<<<< HEAD
 | gas_v4 «газ вне поверок» | `001`–`007`, ноутбук `19_gas_fingerprint_diagnostics_cpu` | этап 19 смержен в ml-models (f1927cc, правки 006 внесены Claude) | **даша** (Kaggle 19: SMOKE → FULL) → **claude** (разбор, gate 19→20) |
-=======
-| gas_v4 «газ вне поверок» | `001`–`007`, ноутбук `19_gas_fingerprint_diagnostics_cpu` | этап 19 смержен в ml-models (f1927cc, правки 006 внесены Claude) | **даша** (Kaggle 19: SMOKE → FULL) → **claude** (разбор, gate 19→20) |
->>>>>>> origin/codex/gas-v4-stage19
 
 ## Согласовано (AGREED / APPROVED)
 
