@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
+import time
 from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
@@ -141,3 +143,37 @@ def test_daily_job_waits_for_ready_data_and_does_not_publish_failure(tmp_path: P
         job.run_daily([source], source, bundles, out, "2025-01-01", ready_marker=marker,
                       runtime_factory=ChangingRuntime)
     assert not list(out.glob("*.json")) and not list(out.glob("*.lock"))
+
+
+def test_stale_lock_requires_explicit_recovery_and_age_threshold(tmp_path: Path) -> None:
+    source = tmp_path / "journal.csv"
+    source.write_text("synthetic", encoding="utf-8")
+    bundles = tmp_path / "bundles"
+    bundles.mkdir()
+    (bundles / "gas.zip").write_bytes(b"synthetic")
+    out = tmp_path / "out"
+    out.mkdir()
+    lock = out / "forecast_2025-01-01_r1.lock"
+    lock.write_text('{"pid": 1, "host": "old-host"}', encoding="utf-8")
+    params = ([source], source, bundles, out, "2025-01-01")
+
+    with pytest.raises(RuntimeError, match="age .* h"):
+        job.run_daily(*params)
+    with pytest.raises(RuntimeError, match="verify the previous job"):
+        job.run_daily(*params, break_stale_lock_hours=2)
+    assert lock.exists()
+
+    old = time.time() - 3 * 3600
+    os.utime(lock, (old, old))
+
+    class FakeRuntime:
+        def __init__(self, _: Path):
+            pass
+
+        def score_day(self, *_args, **kwargs):
+            return {"as_of_date": "2025-01-01", "request_id": kwargs["request_id"],
+                    "gas": [{"recommendation": {"code": "REVIEW_GAS_TREND"}}], "incidents": []}
+
+    result = job.run_daily(*params, break_stale_lock_hours=2, runtime_factory=FakeRuntime)
+    assert result["status"] == "written"
+    assert not lock.exists()

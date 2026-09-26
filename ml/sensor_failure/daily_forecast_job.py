@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import socket
 import tempfile
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -58,10 +59,13 @@ def run_daily(journal_files: list[str | Path], catalogue_file: str | Path,
               ready_marker: str | Path | None = None,
               ppr_windows_file: str | Path | None = None,
               recent_incidents_file: str | Path | None = None,
-              runtime_factory: Callable[[Path], Any] | None = None) -> dict[str, Any]:
+              runtime_factory: Callable[[Path], Any] | None = None,
+              break_stale_lock_hours: float | None = None) -> dict[str, Any]:
     day = _day(as_of_date)
     if revision < 1:
         raise ValueError("revision must be >= 1")
+    if break_stale_lock_hours is not None and break_stale_lock_hours <= 0:
+        raise ValueError("break_stale_lock_hours must be > 0")
     if not journal_files:
         raise ValueError("at least one journal file is required")
     journals = [Path(p) for p in journal_files]
@@ -85,11 +89,26 @@ def run_daily(journal_files: list[str | Path], catalogue_file: str | Path,
     output.mkdir(parents=True, exist_ok=True)
     target = output / f"forecast_{day.isoformat()}_r{revision}.json"
     lock = output / f"forecast_{day.isoformat()}_r{revision}.lock"
-    try:
-        descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-    except FileExistsError as exc:
-        raise RuntimeError(f"daily calculation already running for {day} revision {revision}") from exc
-    os.close(descriptor)
+    for attempt in range(2):
+        try:
+            descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            break
+        except FileExistsError as exc:
+            stat = lock.stat()
+            age_hours = max(0.0, (datetime.now(timezone.utc).timestamp() - stat.st_mtime) / 3600)
+            if (attempt == 0 and break_stale_lock_hours is not None and
+                    age_hours >= break_stale_lock_hours and
+                    lock.stat().st_mtime_ns == stat.st_mtime_ns):
+                lock.unlink()
+                continue
+            raise RuntimeError(
+                f"daily calculation lock exists: {lock} (age {age_hours:.2f} h); "
+                "verify the previous job is stopped before using --break-stale-lock-hours"
+            ) from exc
+    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        json.dump({"pid": os.getpid(), "host": socket.gethostname(),
+                   "started_at_utc": datetime.now(timezone.utc).isoformat()}, handle)
+        handle.write("\n")
     try:
         if target.exists():
             existing = json.loads(target.read_text(encoding="utf-8"))
@@ -149,10 +168,13 @@ def main() -> None:
     parser.add_argument("--ready-marker", help="Optional UTF-8 file containing the completed as_of_date")
     parser.add_argument("--ppr-windows-file", help="Optional JSON array of verified PPR windows")
     parser.add_argument("--recent-incidents-file", help="Optional JSON array of confirmed recent incidents")
+    parser.add_argument("--break-stale-lock-hours", type=float,
+                        help="After checking the previous job is stopped, remove a lock at least N hours old")
     args = parser.parse_args()
     result = run_daily(args.journal, args.catalogue, args.bundles_dir, args.output_dir,
                        args.as_of_date, args.revision, args.ready_marker,
-                       args.ppr_windows_file, args.recent_incidents_file)
+                       args.ppr_windows_file, args.recent_incidents_file,
+                       break_stale_lock_hours=args.break_stale_lock_hours)
     print(json.dumps(result, ensure_ascii=False))  # counts/path only, never row identifiers
 
 
