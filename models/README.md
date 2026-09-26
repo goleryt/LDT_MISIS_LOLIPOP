@@ -1,14 +1,8 @@
-# ML-модели
+﻿# ML-модели
 
-Бинарные файлы моделей не хранятся в Git (`models/*` в `.gitignore`), хранится только это описание.
-
-## Пакет LCT_ML_backend_v1
-
-Модели лежат ZIP-бандлами в `models/bundles/` (путь меняется через `ML_BUNDLES_DIR`):
-`gas_cross_v3_bundle.zip`, `incident_head_bundle.zip`, `ACTIVE.json` и `*.sha256` рядом с каждым ZIP.
-Бандлы приходят от ML-команды; runtime сам сверяет SHA-256 и отказывается грузить подменённый файл.
-Код входа `backend/app/ml_runtime/lct_ml_runtime.py` перенесён из пакета без изменений.
-
-Подробности интеграции, запуск и ограничения: [`docs/ML_INTEGRATION_RU.md`](../docs/ML_INTEGRATION_RU.md).
-
-Backend/frontend не генерируют собственный `risk_score`: показывается только то, что вернул runtime.
+Проверенная поставка: LCT_ML_backend_v1.1. Бинарные файлы игнорируются Git.
+В итоговый архив включены gas_cross_v3_bundle.zip, его .sha256 и ACTIVE.json.
+Производственный адаптер загружает только выбранный gas-бандл.
+Incident-head со stub-метками отключён; его результаты не сохраняются и не показываются.
+Контрольные суммы исходной поставки: docs/ML_PACKAGE_SHA256.json.
+Запуск и ограничения: [ML_INTEGRATION_RU](../docs/ML_INTEGRATION_RU.md).

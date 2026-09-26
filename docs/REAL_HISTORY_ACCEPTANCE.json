@@ -1,0 +1,18 @@
+{
+  "scenario": "real_frozen_model_on_eight_real_channels",
+  "as_of_date": "2026-06-29",
+  "seconds": 9.127,
+  "gas_rows": 3,
+  "scored": 1,
+  "statuses": {
+    "experimental_shadow": 1,
+    "abstain": 2
+  },
+  "reason_counts": {
+    "NOT_GAS_STREAM": 2
+  },
+  "object_mapping_present": true,
+  "database_written": false,
+  "quality_measured": false,
+  "limitations": "Bounded channel sample; object links read from existing catalogue; partial peer context; no validated incident labels; no fleet-wide accuracy claim."
+}

@@ -42,7 +42,7 @@ def latest_gas_scores(session, channel_ids: list[int]) -> dict[int, dict[str, ob
 
     return {
         int(row.channel_id): {
-            "risk_score": row.score,
+            "risk_score": row.score if row.selected else None,
             "risk_is_alert_candidate": row.selected,
             "risk_window_start": (
                 row.window_start.isoformat() if row.window_start else None

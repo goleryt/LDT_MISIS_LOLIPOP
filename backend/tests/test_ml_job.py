@@ -1,5 +1,6 @@
 """Daily ML batch storage and API read-back, with a fake runtime output (no ML libraries needed)."""
 from datetime import date, timedelta
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
 
@@ -58,7 +59,8 @@ def test_top_k_selection_and_predictions():
         assert [p.channel_id for p in predictions] == [2, 3]
         first = predictions[0]
         assert first.incident_type == "gas_threshold_cross" and first.horizon_hours == 24
-        assert first.predicted_for == first.calculated_at + timedelta(hours=24)
+        assert first.predicted_for.astimezone(ZoneInfo("Europe/Moscow")).date() == D + timedelta(days=2)
+        assert first.ml_metadata["window_start"] == "2026-06-22"
         assert first.recommendation is None and first.status == "new"
 
 

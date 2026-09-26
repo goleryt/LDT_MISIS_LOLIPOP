@@ -28,30 +28,11 @@ const THEME_OPTIONS: {
     { value: "system", label: "Как на устройстве" },
 ];
 
-const EMAIL_NOTIFICATIONS_KEY =
-    "settings.emailNotifications";
-
-
-function readEmailNotifications(): boolean {
-    try {
-        return (
-            window.localStorage.getItem(
-                EMAIL_NOTIFICATIONS_KEY,
-            ) === "1"
-        );
-    } catch {
-        return false;
-    }
-}
-
-
 function SettingsPage() {
     const [theme, setTheme] =
         useState<ThemePreference>(
             getThemePreference,
         );
-    const [emailNotifications, setEmailNotifications] =
-        useState(readEmailNotifications);
     const [logoutError, setLogoutError] =
         useState("");
     const [loggingOut, setLoggingOut] =
@@ -60,23 +41,6 @@ function SettingsPage() {
     function changeTheme(value: ThemePreference) {
         setTheme(value);
         setThemePreference(value);
-    }
-
-    // Пока на сервере нет профиля пользователя, флажок хранится
-    // только в этом браузере.
-    function changeEmailNotifications(
-        value: boolean,
-    ) {
-        setEmailNotifications(value);
-
-        try {
-            window.localStorage.setItem(
-                EMAIL_NOTIFICATIONS_KEY,
-                value ? "1" : "0",
-            );
-        } catch {
-            // Без хранилища настройка не переживёт перезагрузку.
-        }
     }
 
     async function signOut() {
@@ -151,18 +115,15 @@ function SettingsPage() {
                 </fieldset>
 
                 <label className="settings-switch-row">
-                    <span>Уведомления на почту</span>
+                    <span>Уведомления на почту — не подключены</span>
 
                     <input
                         type="checkbox"
                         role="switch"
                         className="settings-switch"
-                        checked={emailNotifications}
-                        onChange={(event) =>
-                            changeEmailNotifications(
-                                event.target.checked,
-                            )
-                        }
+                        checked={false}
+                        disabled
+                        title="Почтовая доставка не подключена. Уведомления доступны внутри приложения."
                     />
                 </label>
 

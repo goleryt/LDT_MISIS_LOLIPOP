@@ -1130,7 +1130,7 @@ function MapPage() {
                                                     className="sensor-risk-badge"
                                                     title="Оценка наблюдаемого пересечения газом 1 % (shadow-режим). Не вероятность пожара"
                                                 >
-                                                    риск {(sensor.risk_score * 100).toFixed(1)}%
+                                                    газ · {(sensor.risk_score * 100).toFixed(1)}% · {sensor.risk_as_of_date}
                                                 </span>
                                             )}
 

@@ -1,0 +1,408 @@
+diff --git a/backend/alembic/versions/ae01c55ae1fc_add_channel_daily_features_table.py b/backend/alembic/versions/ae01c55ae1fc_add_channel_daily_features_table.py
+new file mode 100644
+index 0000000..8b3c428
+--- /dev/null
++++ b/backend/alembic/versions/ae01c55ae1fc_add_channel_daily_features_table.py
+@@ -0,0 +1,82 @@
++"""add channel daily features table
++
++Revision ID: ae01c55ae1fc
++Revises: 393827181fa5
++Create Date: 2026-09-21 21:11:44.050101
++
++"""
++from typing import Sequence, Union
++
++from alembic import op
++import sqlalchemy as sa
++
++
++# revision identifiers, used by Alembic.
++revision: str = 'ae01c55ae1fc'
++down_revision: Union[str, Sequence[str], None] = '393827181fa5'
++branch_labels: Union[str, Sequence[str], None] = None
++depends_on: Union[str, Sequence[str], None] = None
++
++
++def upgrade() -> None:
++    """Upgrade schema."""
++    op.create_table(
++        "channel_daily_features",
++        sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
++        sa.Column("ид_канала_данных", sa.BigInteger(), nullable=False),
++        sa.Column("as_of_date", sa.Date(), nullable=False),
++        sa.Column("d_observed_days_so_far", sa.Integer(), nullable=False),
++        sa.Column("d_current_failure_state", sa.Boolean(), nullable=False),
++        sa.Column("d_event_count_24h", sa.Integer(), nullable=False),
++        sa.Column("d_alarm_count_24h", sa.Integer(), nullable=False),
++        sa.Column("d_alarm_share_24h", sa.Float(), nullable=True),
++        sa.Column("d_failure_state_event_count_24h", sa.Integer(), nullable=False),
++        sa.Column("d_value_numeric_mean_24h", sa.Float(), nullable=True),
++        sa.Column("d_value_numeric_min_24h", sa.Float(), nullable=True),
++        sa.Column("d_value_numeric_max_24h", sa.Float(), nullable=True),
++        sa.Column("d_value_numeric_std_24h", sa.Float(), nullable=True),
++        sa.Column("d_value_numeric_last", sa.Float(), nullable=True),
++        sa.Column("d_state_n_unique_24h", sa.Integer(), nullable=False),
++        sa.Column("d_gap_days_since_previous", sa.Integer(), nullable=True),
++        sa.Column("d_event_count_previous_24h", sa.Integer(), nullable=True),
++        sa.Column("d_alarm_count_previous_24h", sa.Integer(), nullable=True),
++        sa.Column("d_alarm_share_previous_24h", sa.Float(), nullable=True),
++        sa.Column("d_value_numeric_previous", sa.Float(), nullable=True),
++        sa.Column("d_days_since_failure_state_event", sa.Integer(), nullable=True),
++        sa.Column("d_weekday", sa.Integer(), nullable=False),
++        sa.Column("d_month", sa.Integer(), nullable=False),
++        sa.Column("d_catalogue_match", sa.Boolean(), nullable=False),
++        sa.Column("тип_инж_системы", sa.String(), nullable=True),
++        sa.Column("тип_датчика", sa.String(), nullable=True),
++        sa.PrimaryKeyConstraint("id"),
++        sa.UniqueConstraint(
++            "ид_канала_данных",
++            "as_of_date",
++            name="uq_channel_daily_features_channel_date",
++        ),
++    )
++    op.create_index(
++        op.f("ix_channel_daily_features_ид_канала_данных"),
++        "channel_daily_features",
++        ["ид_канала_данных"],
++        unique=False,
++    )
++    op.create_index(
++        op.f("ix_channel_daily_features_as_of_date"),
++        "channel_daily_features",
++        ["as_of_date"],
++        unique=False,
++    )
++
++
++def downgrade() -> None:
++    """Downgrade schema."""
++    op.drop_index(
++        op.f("ix_channel_daily_features_as_of_date"),
++        table_name="channel_daily_features",
++    )
++    op.drop_index(
++        op.f("ix_channel_daily_features_ид_канала_данных"),
++        table_name="channel_daily_features",
++    )
++    op.drop_table("channel_daily_features")
+diff --git a/backend/app/db/models.py b/backend/app/db/models.py
+index d932286..d1af235 100644
+--- a/backend/app/db/models.py
++++ b/backend/app/db/models.py
+@@ -1,15 +1,17 @@
+ from __future__ import annotations
+ 
+-from datetime import datetime
++from datetime import date, datetime
+ 
+ from sqlalchemy import (
+     BigInteger,
+     Boolean,
++    Date,
+     DateTime,
+     Float,
+     Integer,
+     String,
+     Text,
++    UniqueConstraint,
+     func,
+ )
+ from sqlalchemy.orm import Mapped, mapped_column
+@@ -176,4 +178,59 @@ class DataImport(Base):
+     completed_at: Mapped[datetime | None] = mapped_column(
+         DateTime(timezone=True),
+         nullable=True,
+-    )
+\ No newline at end of file
++    )
++
++
++class ChannelDailyFeatures(Base):
++    """Причинная дневная панель признаков по каналам.
++
++    Строится батчем из events_journal и channel_catalogue; служит входом для
++    failure_state_presence proxy-модели (BACKEND_API_INTERFACE_RU.md, раздел 6).
++    (ид_канала_данных, as_of_date) уникальны.
++    """
++
++    __tablename__ = "channel_daily_features"
++
++    id: Mapped[int] = mapped_column(
++        BigInteger,
++        primary_key=True,
++        autoincrement=True,
++    )
++
++    ид_канала_данных: Mapped[int] = mapped_column(BigInteger, index=True)
++    as_of_date: Mapped[date] = mapped_column(Date, index=True)
++
++    d_observed_days_so_far: Mapped[int] = mapped_column(Integer)
++    d_current_failure_state: Mapped[bool] = mapped_column(Boolean)
++
++    d_event_count_24h: Mapped[int] = mapped_column(Integer)
++    d_alarm_count_24h: Mapped[int] = mapped_column(Integer)
++    d_alarm_share_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_failure_state_event_count_24h: Mapped[int] = mapped_column(Integer)
++    d_value_numeric_mean_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_value_numeric_min_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_value_numeric_max_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_value_numeric_std_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_value_numeric_last: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_state_n_unique_24h: Mapped[int] = mapped_column(Integer)
++
++    d_gap_days_since_previous: Mapped[int | None] = mapped_column(Integer, nullable=True)
++    d_event_count_previous_24h: Mapped[int | None] = mapped_column(Integer, nullable=True)
++    d_alarm_count_previous_24h: Mapped[int | None] = mapped_column(Integer, nullable=True)
++    d_alarm_share_previous_24h: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_value_numeric_previous: Mapped[float | None] = mapped_column(Float, nullable=True)
++    d_days_since_failure_state_event: Mapped[int | None] = mapped_column(Integer, nullable=True)
++
++    d_weekday: Mapped[int] = mapped_column(Integer)
++    d_month: Mapped[int] = mapped_column(Integer)
++    d_catalogue_match: Mapped[bool] = mapped_column(Boolean)
++    тип_инж_системы: Mapped[str | None] = mapped_column(String, nullable=True)
++    тип_датчика: Mapped[str | None] = mapped_column(String, nullable=True)
++
++    __table_args__ = (
++        UniqueConstraint(
++            "ид_канала_данных",
++            "as_of_date",
++            name="uq_channel_daily_features_channel_date",
++        ),
++    )
+diff --git a/backend/app/features/__init__.py b/backend/app/features/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/backend/app/features/daily_panel.py b/backend/app/features/daily_panel.py
+new file mode 100644
+index 0000000..43468f5
+--- /dev/null
++++ b/backend/app/features/daily_panel.py
+@@ -0,0 +1,193 @@
++from datetime import date
++
++from sqlalchemy import text
++
++from app.db.session import SessionLocal
++
++
++BUILD_CHANNEL_DAILY_FEATURES_SQL = """
++WITH daily AS (
++    SELECT
++        "ид_канала_данных" AS channel_id,
++        d_event_time::date AS event_date,
++        COUNT(*) AS event_count,
++        COUNT(*) FILTER (WHERE d_alarm) AS alarm_count,
++        COUNT(*) FILTER (
++            WHERE d_value_state IN ('Неисправен', 'Обесточен')
++        ) AS failure_state_event_count,
++        AVG(d_value_numeric) AS value_numeric_mean,
++        MIN(d_value_numeric) AS value_numeric_min,
++        MAX(d_value_numeric) AS value_numeric_max,
++        STDDEV_POP(d_value_numeric) AS value_numeric_std,
++        COUNT(DISTINCT d_value_state) AS state_n_unique
++    FROM events_journal
++    WHERE d_event_time IS NOT NULL
++        AND (CAST(:start_date AS date) IS NULL OR d_event_time::date >= :start_date)
++        AND (CAST(:end_date AS date) IS NULL OR d_event_time::date <= :end_date)
++    GROUP BY "ид_канала_данных", d_event_time::date
++),
++last_numeric AS (
++    SELECT DISTINCT ON ("ид_канала_данных", d_event_time::date)
++        "ид_канала_данных" AS channel_id,
++        d_event_time::date AS event_date,
++        d_value_numeric AS value_numeric_last
++    FROM events_journal
++    WHERE d_value_numeric IS NOT NULL
++    ORDER BY "ид_канала_данных", d_event_time::date, d_event_time DESC
++),
++last_state AS (
++    SELECT DISTINCT ON ("ид_канала_данных", d_event_time::date)
++        "ид_канала_данных" AS channel_id,
++        d_event_time::date AS event_date,
++        d_value_state AS last_state
++    FROM events_journal
++    WHERE d_value_state IS NOT NULL
++    ORDER BY "ид_канала_данных", d_event_time::date, d_event_time DESC
++),
++enriched AS (
++    SELECT
++        d.channel_id,
++        d.event_date,
++        d.event_count,
++        d.alarm_count,
++        d.failure_state_event_count,
++        d.value_numeric_mean,
++        d.value_numeric_min,
++        d.value_numeric_max,
++        d.value_numeric_std,
++        d.state_n_unique,
++        ln.value_numeric_last,
++        COALESCE(ls.last_state IN ('Неисправен', 'Обесточен'), FALSE) AS current_failure_state,
++        ROW_NUMBER() OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++        ) AS observed_days_so_far,
++        LAG(d.event_date) OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++        ) AS previous_event_date,
++        LAG(d.event_count) OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++        ) AS event_count_previous,
++        LAG(d.alarm_count) OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++        ) AS alarm_count_previous,
++        LAG(ln.value_numeric_last) OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++        ) AS value_numeric_previous,
++        MAX(d.event_date) FILTER (WHERE d.failure_state_event_count > 0) OVER (
++            PARTITION BY d.channel_id ORDER BY d.event_date
++            ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
++        ) AS last_failure_date_before_today
++    FROM daily d
++    LEFT JOIN last_numeric ln
++        ON ln.channel_id = d.channel_id AND ln.event_date = d.event_date
++    LEFT JOIN last_state ls
++        ON ls.channel_id = d.channel_id AND ls.event_date = d.event_date
++)
++INSERT INTO channel_daily_features (
++    "ид_канала_данных",
++    as_of_date,
++    d_observed_days_so_far,
++    d_current_failure_state,
++    d_event_count_24h,
++    d_alarm_count_24h,
++    d_alarm_share_24h,
++    d_failure_state_event_count_24h,
++    d_value_numeric_mean_24h,
++    d_value_numeric_min_24h,
++    d_value_numeric_max_24h,
++    d_value_numeric_std_24h,
++    d_value_numeric_last,
++    d_state_n_unique_24h,
++    d_gap_days_since_previous,
++    d_event_count_previous_24h,
++    d_alarm_count_previous_24h,
++    d_alarm_share_previous_24h,
++    d_value_numeric_previous,
++    d_days_since_failure_state_event,
++    d_weekday,
++    d_month,
++    d_catalogue_match,
++    "тип_инж_системы",
++    "тип_датчика"
++)
++SELECT
++    e.channel_id,
++    e.event_date,
++    e.observed_days_so_far,
++    e.current_failure_state,
++    e.event_count,
++    e.alarm_count,
++    CASE WHEN e.event_count > 0 THEN e.alarm_count::float / e.event_count ELSE NULL END,
++    e.failure_state_event_count,
++    e.value_numeric_mean,
++    e.value_numeric_min,
++    e.value_numeric_max,
++    e.value_numeric_std,
++    e.value_numeric_last,
++    e.state_n_unique,
++    CASE WHEN e.previous_event_date IS NOT NULL
++        THEN (e.event_date - e.previous_event_date)
++        ELSE NULL END,
++    e.event_count_previous,
++    e.alarm_count_previous,
++    CASE WHEN e.event_count_previous > 0
++        THEN e.alarm_count_previous::float / e.event_count_previous
++        ELSE NULL END,
++    e.value_numeric_previous,
++    CASE WHEN e.last_failure_date_before_today IS NOT NULL
++        THEN (e.event_date - e.last_failure_date_before_today)
++        ELSE NULL END,
++    EXTRACT(ISODOW FROM e.event_date)::int,
++    EXTRACT(MONTH FROM e.event_date)::int,
++    (cc."ид_канала_данных" IS NOT NULL),
++    cc."тип_инж_системы",
++    cc."тип_датчика"
++FROM enriched e
++LEFT JOIN channel_catalogue cc ON cc."ид_канала_данных" = e.channel_id
++ON CONFLICT ("ид_канала_данных", as_of_date) DO UPDATE SET
++    d_observed_days_so_far = EXCLUDED.d_observed_days_so_far,
++    d_current_failure_state = EXCLUDED.d_current_failure_state,
++    d_event_count_24h = EXCLUDED.d_event_count_24h,
++    d_alarm_count_24h = EXCLUDED.d_alarm_count_24h,
++    d_alarm_share_24h = EXCLUDED.d_alarm_share_24h,
++    d_failure_state_event_count_24h = EXCLUDED.d_failure_state_event_count_24h,
++    d_value_numeric_mean_24h = EXCLUDED.d_value_numeric_mean_24h,
++    d_value_numeric_min_24h = EXCLUDED.d_value_numeric_min_24h,
++    d_value_numeric_max_24h = EXCLUDED.d_value_numeric_max_24h,
++    d_value_numeric_std_24h = EXCLUDED.d_value_numeric_std_24h,
++    d_value_numeric_last = EXCLUDED.d_value_numeric_last,
++    d_state_n_unique_24h = EXCLUDED.d_state_n_unique_24h,
++    d_gap_days_since_previous = EXCLUDED.d_gap_days_since_previous,
++    d_event_count_previous_24h = EXCLUDED.d_event_count_previous_24h,
++    d_alarm_count_previous_24h = EXCLUDED.d_alarm_count_previous_24h,
++    d_alarm_share_previous_24h = EXCLUDED.d_alarm_share_previous_24h,
++    d_value_numeric_previous = EXCLUDED.d_value_numeric_previous,
++    d_days_since_failure_state_event = EXCLUDED.d_days_since_failure_state_event,
++    d_weekday = EXCLUDED.d_weekday,
++    d_month = EXCLUDED.d_month,
++    d_catalogue_match = EXCLUDED.d_catalogue_match,
++    "тип_инж_системы" = EXCLUDED."тип_инж_системы",
++    "тип_датчика" = EXCLUDED."тип_датчика"
++"""
++
++
++def build_channel_daily_features(
++    start_date: date | None = None,
++    end_date: date | None = None,
++) -> int:
++    """Пересчитывает channel_daily_features из events_journal + channel_catalogue.
++
++    Причинно: previous-day и failure-state-history считаются оконными функциями
++    по наблюдаемым channel-дням, без обращения к будущим датам.
++    """
++    with SessionLocal() as session:
++        try:
++            result = session.execute(
++                text(BUILD_CHANNEL_DAILY_FEATURES_SQL),
++                {"start_date": start_date, "end_date": end_date},
++            )
++            session.commit()
++            return result.rowcount
++        except Exception:
++            session.rollback()
++            raise
+diff --git a/backend/app/main.py b/backend/app/main.py
+index 68102ca..619e23f 100644
+--- a/backend/app/main.py
++++ b/backend/app/main.py
+@@ -1,6 +1,8 @@
+-from fastapi import FastAPI
++from fastapi import FastAPI, Response, status
++from sqlalchemy import text
+ 
+ from app.core.config import get_settings
++from app.db.session import SessionLocal
+ 
+ 
+ settings = get_settings()
+@@ -13,4 +15,16 @@ app = FastAPI(
+ 
+ @app.get("/health", tags=["system"])
+ def health_check() -> dict[str, str]:
+-    return {"status": "ok"}
+\ No newline at end of file
++    return {"status": "ok"}
++
++
++@app.get("/ready", tags=["system"])
++def readiness_check(response: Response) -> dict[str, str]:
++    try:
++        with SessionLocal() as session:
++            session.execute(text("SELECT 1"))
++    except Exception:
++        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
++        return {"status": "unavailable", "detail": "database connection failed"}
++
++    return {"status": "ready"}
