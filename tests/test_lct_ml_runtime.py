@@ -87,6 +87,10 @@ def test_runtime_scores_gas_incidents_and_context(setup) -> None:
     assert all(x["maintenance_context"] == "unknown" for x in out["gas"] if x.get("ид_объект") == "OBJ1")
     assert {x["ид_объект"] for x in out["incidents"]} == {"OBJ0", "OBJ1", "OBJ2"}
     assert all(x["request_id"] == "req-1" for x in out["gas"] + out["incidents"])
+    assert all(not x["recommendation"]["automated_action_allowed"] for x in out["gas"] + out["incidents"])
+    assert all(x["recommendation"]["version"] == "manual-advisory-v1" for x in out["gas"] + out["incidents"])
+    assert all(x["recommendation"]["code"] in {"DEMO_ONLY", "NO_INCIDENT_FORECAST"}
+               for x in out["incidents"])
     ppr = [{"ид_объект": "OBJ2", "start": (AS_OF - timedelta(days=1)).isoformat(), "end": (AS_OF + timedelta(days=3)).isoformat()}]
     out2 = r.score_day([j], c, AS_OF, ppr_windows=ppr)
     assert {m["ид_объект"]: m for m in out2["maintenance_context"]}["OBJ2"]["maintenance_context"] == "verified_schedule"

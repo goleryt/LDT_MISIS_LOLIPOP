@@ -28,13 +28,63 @@ from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 
-RUNTIME_VERSION = "lct-ml-runtime-1.0"
+RUNTIME_VERSION = "lct-ml-runtime-1.1"
 SILENCE_RULE_VERSION = "journal_silence_rule_v1"
+RECOMMENDATION_VERSION = "manual-advisory-v1"
 GAS_TYPE = "Газовый датчик"
 
 
 class RuntimeContractError(ValueError):
     pass
+
+
+def _recommendation(code: str, text: str, basis: list[str]) -> dict[str, Any]:
+    """Advisory text only: no score threshold, priority change, or automatic work order."""
+    return {"version": RECOMMENDATION_VERSION, "code": code, "text_ru": text,
+            "basis_codes": basis, "automated_action_allowed": False}
+
+
+def gas_recommendation(row: dict[str, Any]) -> dict[str, Any]:
+    reasons = set(row.get("reason_codes") or [])
+    if "ABOVE_THRESHOLD_AT_D" in reasons:
+        return _recommendation("CURRENT_ALARM_PROTOCOL",
+                               "Газ уже выше порога: проверить текущую тревогу по действующему регламенту. Прогноз здесь неприменим.",
+                               ["ABOVE_THRESHOLD_AT_D"])
+    if "NO_GAS_READING_AT_D" in reasons:
+        return _recommendation("CHECK_TELEMETRY",
+                               "Проверить поступление показаний и состояние канала; прогноз не сформирован.",
+                               ["NO_GAS_READING_AT_D"])
+    if row.get("decision_status") == "abstain":
+        return _recommendation("NO_GAS_FORECAST",
+                               "Прогноз не сформирован; сверить причину отказа и полноту входных данных.",
+                               sorted(reasons) or ["ABSTAIN"])
+    context = row.get("maintenance_context")
+    if context == "verified_schedule":
+        return _recommendation("REVIEW_VERIFIED_PPR",
+                               "Сверить прогноз и текущие показания с подтверждённым окном ППР; тревогу не скрывать.",
+                               ["GAS_PROXY", "VERIFIED_SCHEDULE"])
+    if context == "possible_recent_silence":
+        return _recommendation("CHECK_MAINTENANCE_LOG",
+                               "Проверить журнал работ и последние показания: недавняя пауза датчиков не подтверждает поверку.",
+                               ["GAS_PROXY", "POSSIBLE_RECENT_SILENCE"])
+    return _recommendation("REVIEW_GAS_TREND",
+                           "Если прогноз выбран для показа, вручную проверить динамику газа и текущие тревоги.",
+                           ["GAS_PROXY"])
+
+
+def incident_recommendation(row: dict[str, Any]) -> dict[str, Any]:
+    reason = row.get("abstain_reason")
+    if reason:
+        return _recommendation("NO_INCIDENT_FORECAST",
+                               "Прогноз инцидента не сформирован; проверить указанную причину.",
+                               [str(reason)] + (["STUB_LABELS"] if row.get("label_source") == "stub" else []))
+    if row.get("label_source") == "stub" or row.get("evidence_level") == "E4":
+        return _recommendation("DEMO_ONLY",
+                               "Демонстрационный результат на заглушке: не использовать для оперативных действий.",
+                               ["STUB_LABELS"])
+    return _recommendation("REVIEW_INCIDENT_FACTORS",
+                           "Вручную проверить профильные датчики и подтверждённый реестр перед решением.",
+                           ["INCIDENT_REGISTER"])
 
 
 def _sha256(path: Path) -> str:
@@ -226,6 +276,7 @@ class MLRuntime:
                 obj = ch_obj.get(r.get("ид_канала_данных"))
                 r.update({"bundle": b.name, "is_primary": b.name == self.primary_gas, "ид_объект": obj,
                           **ctx.get(obj, unknown)})
+                r["recommendation"] = gas_recommendation(r)
                 gas_out.append(r)
 
         inc_out: list[dict[str, Any]] = []
@@ -242,6 +293,7 @@ class MLRuntime:
                         if b.bundle["spec"].get("label_source") == "stub" else None)
                     r.update({"bundle": b.name, "score_meaning": meaning,
                               **ctx.get(r["ид_объект"], unknown)})
+                    r["recommendation"] = incident_recommendation(r)
                     inc_out.append(r)
         return {"runtime_version": RUNTIME_VERSION, "as_of_date": d.isoformat(), "request_id": request_id,
                 "bundles": [b.info for b in self.bundles], "primary_gas": self.primary_gas,
