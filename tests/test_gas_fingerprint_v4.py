@@ -165,6 +165,38 @@ def test_generated_notebook_embeds_current_code_and_compiles() -> None:
             compile("".join(cell["source"]), "19_gas_fingerprint_diagnostics_cpu.ipynb", "exec")
 
 
+def test_disk_buckets_preserve_cross_year_channel_history(tmp_path: Path) -> None:
+    t0 = datetime(2023, 12, 31, 23, 59)
+    seconds = pl.DataFrame({
+        "d_channel_key": ["c1", "c1", "c1", "c2"],
+        "d_object_key": ["o1", "o1", "o1", "o2"],
+        "t": [t0, t0 + timedelta(minutes=1), t0 + timedelta(minutes=2), t0],
+        "mn": [0.2, 1.2, 0.7, 0.1],
+        "mx": [0.2, 1.2, 0.7, 0.1],
+    })
+    paths = [tmp_path / "2023.parquet", tmp_path / "2024.parquet"]
+    cfg = gf.make_config_19("FULL", {"channel_buckets": 3})
+    staged = seconds.with_columns(
+        (pl.col("d_channel_key").hash(seed=19) % cfg["channel_buckets"])
+        .cast(pl.UInt16).alias("_channel_bucket")
+    ).sort("_channel_bucket", "d_channel_key", "t")
+    staged.filter(pl.col("t").dt.year() == 2023).write_parquet(paths[0])
+    staged.filter(pl.col("t").dt.year() == 2024).write_parquet(paths[1])
+
+    bucketed, activity = gf.process_seconds_buckets(pl, paths, cfg, log=lambda *_: None)
+    expected = gf.strict_crossing_features(
+        pl, seconds.sort("d_channel_key", "t"), cfg["threshold"], cfg["rise_threshold"],
+        cfg["peak_window_minutes"], cfg["duration_cap_minutes"],
+    )
+
+    assert bucketed.sort("d_channel_key", "cross_t").to_dicts() == expected.to_dicts()
+    assert activity.sort("d_object_key", "day").to_dicts() == [
+        {"d_object_key": "o1", "day": date(2023, 12, 31)},
+        {"d_object_key": "o1", "day": date(2024, 1, 1)},
+        {"d_object_key": "o2", "day": date(2023, 12, 31)},
+    ]
+
+
 def test_rise_uses_last_low_reading_and_long_gaps_are_binned() -> None:
     """searchsorted rise == naive scan; a return after a multi-day gap falls into gt1440."""
     t0 = datetime(2024, 3, 1, 8)
