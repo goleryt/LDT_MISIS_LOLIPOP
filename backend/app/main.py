@@ -1,3 +1,7 @@
+from functools import lru_cache
+from pathlib import Path
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
@@ -23,11 +27,20 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts.s
 def health_check():
     return {"status": "ok"}
 
+@lru_cache
+def expected_schema_revision() -> str:
+    # The migration head comes from the Alembic scripts, not a constant that goes stale
+    # (a new migration used to make /ready answer 503 until someone edited this file).
+    backend_dir = Path(__file__).resolve().parents[1]
+    config = Config(str(backend_dir / "alembic.ini"))
+    config.set_main_option("script_location", str(backend_dir / "alembic"))
+    return ScriptDirectory.from_config(config).get_current_head()
+
 @app.get("/ready", tags=["system"])
 def readiness():
     try:
         with engine.connect() as db:
-            if db.scalar(text("SELECT version_num FROM alembic_version")) != "5e192ace0042":
+            if db.scalar(text("SELECT version_num FROM alembic_version")) != expected_schema_revision():
                 raise ValueError("Schema migration required")
     except Exception:
         raise HTTPException(503, "Database not ready") from None
