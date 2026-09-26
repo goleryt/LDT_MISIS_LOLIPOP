@@ -196,3 +196,25 @@ def test_long_event_after_silence_and_in_series_needs_attention() -> None:
 def test_decision_cohort_matches_spec() -> None:
     assert gt.COHORT_PERIODS[0] == "le2022" and "2026H1" not in gt.COHORT_PERIODS
     assert set(gt.COHORT_PERIODS) == {p for block in gt.COHORT_BLOCKS.values() for p in block}
+
+
+def test_2026_comparator_remains_2023_to_2025_only() -> None:
+    def event(period: str, when: datetime, label: str) -> dict:
+        return {"period": period, "day": when.date(), "cross_t": when,
+                "decision_t": when + timedelta(minutes=15), "d_object_key": period,
+                "d_channel_key": period, "triage_live": label,
+                "triage_live_strict": label, "triage_retro": label,
+                "is_weekend": False, "outside_07_19": False,
+                "shape_ok": label == "likely_bump_test", "state_at_c": "observed_below",
+                "in_posthoc_window": False, "series_only": False,
+                "status_at_day_end": "decided", "status_at_archive_end": "decided",
+                "ended_fast": True, "after_silence": "false", "last_reading_age_min": 1.0}
+
+    events = [event("le2022", datetime(2020, 6, 10, 12), "needs_attention"),
+              event("2023H1", datetime(2023, 6, 10, 12), "likely_bump_test"),
+              event("2026H1", datetime(2026, 6, 10, 12), "needs_attention")]
+    result = gt.aggregate_21(events, 0, 3, datetime(2020, 1, 1), datetime(2026, 6, 30),
+                             {"mode": "SMOKE", "analysis_version": "test"}, {})
+    assert result["n1_synchrony_control"]["n"] == 2  # 2020 and 2023 both count for N1
+    assert result["v3_2026h1_observation"]["prior_2023_2025_attention_share"] == 0
+    assert result["v3_2026h1_observation"]["2026h1_attention_share"] == 1

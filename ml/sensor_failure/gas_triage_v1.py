@@ -38,7 +38,7 @@ COHORT_BLOCKS = {"le2024": ("le2022", "2023H1", "2023H2", "2024H1", "2024H2"), "
 def make_config_21(mode: str, overrides: dict[str, Any] | None = None) -> dict[str, Any]:
     cfg = gf.make_config_19(mode)
     cfg.update({"stage_dir": os.environ.get("LDT_STAGE_DIR", "/tmp/ldt_gas_triage_21"),
-                "keep_stage": False, "analysis_version": "21-v1"})
+                "keep_stage": False, "analysis_version": "21-v2-full-cohort"})
     cfg.update(overrides or {})
     return cfg
 
@@ -370,7 +370,8 @@ def aggregate_21(events: list[dict[str, Any]], runs_count: int, seconds_count: i
                                                         for e in in_window) / len(in_window), 6) if in_window else None,
                              "series_only_share": _rate(in_window, "series_only")},
                          "v6_daily_burden": _daily_burden(rows, name, archive_start, archive_end)}
-    prior = [e for e in cohort if e["triage_live"] is not None]
+    # V3 compares 2026 H1 with 2023–2025; V1/N1 intentionally use the wider cohort.
+    prior = [e for e in events if e["period"] in PERIODS[1:-1] and e["triage_live"] is not None]
     late = [e for e in by_period["2026H1"] if e["triage_live"] is not None]
     def attention_share(rows: list[dict[str, Any]]) -> float | None:
         return round(sum(e["triage_live"] in ATTENTION for e in rows) / len(rows), 6) if rows else None
