@@ -9,6 +9,7 @@ venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.pytest_tmp*/
 .ipynb_checkpoints/
 
 # Frontend-generated files
@@ -50,3 +51,5 @@ infra/sources.json
 infra/certs/
 *.dump
 *.dump.sha256
+
+.ml-work/
