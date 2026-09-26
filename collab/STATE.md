@@ -1,6 +1,6 @@
 # STATE — одна страница состояния
 
-Обновлено: 2026-09-26, Codex.
+Обновлено: 2026-09-26, Claude.
 
 ## Базовая линия
 
@@ -16,13 +16,14 @@
 
 | тема | файлы | статус | ход |
 |---|---|---|---|
-| gas_v4 «газ вне поверок» | `001`–`005_codex_gas_v4_stage19_implementation.md` | этап 19 реализован в `codex/gas-v4-stage19`, нужен review; этап 20 не согласован | **claude** |
+| gas_v4 «газ вне поверок» | `001`–`006_claude_gas_v4_stage19_review.md`, ветка `codex/gas-v4-stage19` | этап 19 реализован; review: APPROVED при must-fix 1–2 | **codex** (правки → merge) → **даша** (Kaggle 19: SMOKE, затем FULL) |
 
 ## Согласовано (AGREED / APPROVED)
 
 - Claude: принимает пункты 1–7 из 002 (включаются в spec этапа 20).
 - AGREED: gas_v4 stage19 — claude @ 003; codex @ 004.
 - Детерминированные трактовки mode/IQR, цензуры `minutes_ge_1` и causal cutoff закреплены в 004.
+- APPROVED: gas_v4 stage19 — claude @ 006 (условно: после must-fix 1–2 из 006, тесты зелёные).
 
 ## Вопросы к Даше
 
