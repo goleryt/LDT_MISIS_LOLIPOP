@@ -163,3 +163,42 @@ def test_generated_notebook_embeds_current_code_and_compiles() -> None:
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
             compile("".join(cell["source"]), "19_gas_fingerprint_diagnostics_cpu.ipynb", "exec")
+
+
+def test_rise_uses_last_low_reading_and_long_gaps_are_binned() -> None:
+    """searchsorted rise == naive scan; a return after a multi-day gap falls into gt1440."""
+    t0 = datetime(2024, 3, 1, 8)
+    sec = pl.DataFrame({
+        "d_channel_key": ["c"] * 6, "d_object_key": ["o"] * 6,
+        "t": [t0, t0 + timedelta(minutes=5), t0 + timedelta(minutes=6), t0 + timedelta(minutes=30),
+              t0 + timedelta(days=3), t0 + timedelta(days=3, minutes=1)],
+        "mn": [0.3, 0.7, 1.4, 0.2, 2.2, 0.1],
+        "mx": [0.3, 0.7, 1.4, 0.2, 2.2, 0.1],
+    })
+    ev = gf.strict_crossing_features(pl, sec).sort("cross_t")
+    assert ev.height == 2
+    assert ev["rise_minutes"].to_list() == [6.0, 3 * 1440 - 30.0]
+    ev = ev.with_columns(pl.lit(1).alias("same_object_same_day"), pl.lit(None, dtype=pl.Int32).alias("days_since_silence_end"))
+    hist = gf.stratum_summary(ev)["rise_minutes_hist"]
+    assert hist["le1"] == 0 and hist["gt5_le15"] == 1 and hist["gt1440"] == 1
+
+
+def test_gas_seconds_pseudonyms_match_pseudo_key() -> None:
+    tax = gf.ep.load_taxonomy(MODULE / "config" / "state_taxonomy_v3.json")
+    cat = pl.DataFrame({"ид_канала_данных": ["A", "B"], "тип_инж_системы": ["x", "x"],
+                        "тип_датчика": ["Газовый датчик", "Газовый датчик"], "ид_объект": ["O1", "O2"]})
+    raw = pl.DataFrame({"ид_события": ["1", "2", "3"], "ид_канала_данных": ["A", "B", "A"],
+                        "дата": ["2024-01-01"] * 3, "время": ["10:00:00", "10:00:00", "10:00:01"],
+                        "тревожное": ["f"] * 3, "значение_датчика": ["0,2", "0,3", "1,5"]})
+    sec = gf.gas_seconds_from_raw(pl, raw, cat, tax)
+    got = set(sec.select("d_channel_key", "d_object_key").unique().iter_rows())
+    assert got == {(gf.ep.pseudo_key("A"), gf.ep.pseudo_key("O1")), (gf.ep.pseudo_key("B"), gf.ep.pseudo_key("O2"))}
+    assert sec.height == 3
+
+
+def test_sanity_vs_17_flags_large_drift() -> None:
+    per = {"2025H2": {"positives_in_window_excluded_from_clean_target": 531, "positives_outside_window": 34},
+           "2026H1": {"positives_in_window_excluded_from_clean_target": 150, "positives_outside_window": 117}}
+    sv = gf.sanity_vs_17(per, {"mode": "FULL"})
+    assert sv["periods"]["2025H2"]["within_tolerance"] and not sv["periods"]["2026H1"]["within_tolerance"]
+    assert not sv["all_within_tolerance"]

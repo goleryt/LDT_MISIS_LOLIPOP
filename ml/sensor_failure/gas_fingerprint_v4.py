@@ -39,6 +39,10 @@ PERIODS = (
     ("2026H1", date(2026, 1, 1), date(2026, 7, 1)),
 )
 DEV_PERIODS = ("2023H2", "2024H1", "2024H2")
+# Audit 17 v2 (same frozen panel): positives in / outside the post-hoc window. Windows there were built from panel
+# gas_max, here from raw gas seconds; 17 also required d_label_decision_end <= period end. Small drift is expected.
+REFERENCE_17 = {"2025H2": {"in_window": 531, "outside_window": 33}, "2026H1": {"in_window": 226, "outside_window": 117}}
+SANITY_TOLERANCE = 0.10
 
 
 class PanelMismatch(ValueError):
@@ -133,10 +137,12 @@ def gas_seconds_from_raw(pl: Any, raw: Any, catalogue: Any, taxonomy: dict[str, 
     ev = ep.classify_events(pl, subset, taxonomy, catalogue).filter(
         (pl.col("cls") == "numeric") & pl.col("is_gas") & pl.col("ид_объект").is_not_null()
     )
-    return (ev.with_columns(
-        pl.col("ch").map_elements(ep.pseudo_key, return_dtype=pl.String).alias("d_channel_key"),
-        pl.col("ид_объект").map_elements(ep.pseudo_key, return_dtype=pl.String).alias("d_object_key"),
-    ).group_by("d_channel_key", "d_object_key", "t").agg(
+    # Pseudonyms are computed once per unique id (as in event_panel_v3), not per row: tens of millions of rows.
+    ev = ev.with_columns(pl.col("ch").cast(pl.String), pl.col("ид_объект").cast(pl.String))
+    ch_map = ep.key_map(pl, ev["ch"].unique().to_list(), "d_channel_key").rename({"raw": "ch"})
+    obj_map = ep.key_map(pl, ev["ид_объект"].unique().to_list(), "d_object_key").rename({"raw": "ид_объект"})
+    ev = ev.join(ch_map, on="ch", how="left").join(obj_map, on="ид_объект", how="left")
+    return (ev.group_by("d_channel_key", "d_object_key", "t").agg(
         pl.col("num").min().alias("mn"), pl.col("num").max().alias("mx")
     ).sort("d_channel_key", "t"))
 
@@ -179,8 +185,8 @@ def strict_crossing_features(pl: Any, seconds: Any, threshold: float = 1.0, rise
             else:
                 duration = float(duration_cap_minutes)
                 censored = True
-            prior = low_idx[low_idx < i]
-            rise = None if not len(prior) else (t0 - int(times[int(prior[-1])])) / 60_000_000
+            k = int(np.searchsorted(low_idx, i)) - 1        # last reading < rise_threshold before i (low_idx sorted)
+            rise = None if k < 0 else (t0 - int(times[int(low_idx[k])])) / 60_000_000
             dt = group["t"][int(i)]
             rows.append({
                 "d_channel_key": channels[i], "d_object_key": objects[i], "cross_t": dt,
@@ -239,6 +245,8 @@ def add_maintenance_context(pl: Any, crossings: Any, runs: Any, before_days: int
     return crossings.with_columns(
         pl.Series("in_posthoc_window", flags),
         pl.Series("days_since_silence_end", ages, dtype=pl.Int32),
+        # Always False by construction: the crossing itself is a real gas reading, so the object is not silent at
+        # the event instant. Kept as an explicit column for the stage-20 feature contract (003 A3).
         pl.lit(False).alias("silence_ongoing_at_event"),
     )
 
@@ -302,7 +310,8 @@ def stratum_summary(frame: Any) -> dict[str, Any]:
         "peak_60m_hist": _hist(peak, [1.5, 1.9, 2.6, 3.8, 4.6],
                                 ["1.0_1.5", "1.5_1.9", "1.9_2.6", "2.6_3.8", "3.8_4.6", "gt4.6"]),
         "minutes_ge_1_hist": duration_hist,
-        "rise_minutes_hist": _hist(rise, [1, 5, 15, 60], ["le1", "gt1_le5", "gt5_le15", "gt15_le60", "gt60"]),
+        "rise_minutes_hist": _hist(rise, [1, 5, 15, 60, 1440],
+                                   ["le1", "gt1_le5", "gt5_le15", "gt15_le60", "gt60_le1440", "gt1440"]),
         "days_since_silence_end_hist": _hist(
             silence_age, [1, 7, 21, 60], ["le1", "gt1_le7", "gt7_le21", "gt21_le60", "gt60"]
         ),
@@ -415,7 +424,20 @@ def panel_power(pl: Any, parts: list[Path], runs: Any, cfg: dict[str, Any]) -> d
     gate["proceed_to_stage20"] = bool(gate["each_dev_at_least_10"] and gate["sum_at_least_60"]
                                       and gate["top1_at_most_50pct"])
     gate["decision"] = "eligible_for_stage20_spec" if gate["proceed_to_stage20"] else "insufficient_labels_keep_v3"
-    return {"periods": result, "gate_19_to_20": gate}
+    return {"periods": result, "gate_19_to_20": gate, "sanity_vs_17": sanity_vs_17(result, cfg)}
+
+
+def sanity_vs_17(periods: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
+    """Compare window assignment with audit 17 v2; a large drift means the windows are built differently."""
+    out: dict[str, Any] = {"tolerance": SANITY_TOLERANCE, "comparable": cfg["mode"] == "FULL", "periods": {}}
+    for period, ref in REFERENCE_17.items():
+        got = {"in_window": periods[period]["positives_in_window_excluded_from_clean_target"],
+               "outside_window": periods[period]["positives_outside_window"]}
+        rel = {k: (abs(got[k] - v) / v if v else None) for k, v in ref.items()}
+        out["periods"][period] = {"stage19": got, "audit17": ref, "relative_diff": rel,
+                                  "within_tolerance": all(r is not None and r <= SANITY_TOLERANCE for r in rel.values())}
+    out["all_within_tolerance"] = all(p["within_tolerance"] for p in out["periods"].values())
+    return out
 
 
 def _safe_result_text(result: dict[str, Any]) -> str:
@@ -441,6 +463,15 @@ def summary_markdown(result: dict[str, Any]) -> str:
                      f"{s['positives_outside_window']} | {s['objects_with_positive']} | "
                      f"{s['top1_object_share'] if s['top1_object_share'] is not None else '—'} | "
                      f"{s['top3_object_share'] if s['top3_object_share'] is not None else '—'} |")
+    sv = result["power"].get("sanity_vs_17")
+    if sv:
+        lines += ["", "Сверка с аудитом 17 v2 (положительные в окне / вне окна): " + "; ".join(
+            f"{p}: {v['stage19']['in_window']} / {v['stage19']['outside_window']} "
+            f"(17 v2: {v['audit17']['in_window']} / {v['audit17']['outside_window']})"
+            for p, v in sv["periods"].items())
+            + (". Расхождение в пределах 10 %." if sv["all_within_tolerance"] else
+               ". **ВНИМАНИЕ: расхождение > 10 % — окна построены иначе, чем в 17; решение по gate отложить до разбора.**")
+            + ("" if sv["comparable"] else " (SMOKE — не сравнимо.)")]
     lines += ["", f"Решение: **{gate['decision']}** (Σ dev = {gate['dev_positives']}, "
               f"top-1 = {gate['dev_top1_object_share'] if gate['dev_top1_object_share'] is not None else '—'}).", "",
               "Stage 20 не запускается автоматически: даже пройденный gate означает только достаточность для отдельной спецификации.", "",
