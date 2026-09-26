@@ -972,3 +972,20 @@ body {
 .operations-page th {
     border-bottom-color: var(--page-line);
 }
+
+/* Sensor-type icons sit on glass panels: use the strong ink colour, not the muted one. */
+.alarm-sensor-cell .sensor-type-icon,
+.journal-cell-inline .sensor-type-icon {
+    color: var(--design-ink);
+}
+
+/* An icon next to the sensor name made the inline-flex cell wider than its column:
+   keep it inside the cell so the name is truncated instead of running under the next one. */
+.journal-cell-inline {
+    max-width: 100%;
+}
+
+.journal-cell-inline > .journal-sensor-cell {
+    min-width: 0;
+    flex: 1 1 auto;
+}

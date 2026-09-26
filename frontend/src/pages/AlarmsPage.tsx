@@ -1,3 +1,4 @@
+import SensorIcon from "../components/SensorIcon";
 import {
     useEffect,
     useMemo,
@@ -443,16 +444,24 @@ function AlarmsPage() {
                                             </td>
 
                                             <td>
-                                                <div className="alarm-table-main">
-                                                    <strong>
-                                                        {alarm.sensor_type ??
-                                                            "Не указан"}
-                                                    </strong>
+                                                <div className="alarm-sensor-cell">
+                                                    <SensorIcon
+                                                        sensorType={alarm.sensor_type}
+                                                        systemType={alarm.system_type}
+                                                        size={22}
+                                                    />
 
-                                                    <span>
-                                                        {alarm.system_type ??
-                                                            "Система не указана"}
-                                                    </span>
+                                                    <div className="alarm-table-main">
+                                                        <strong>
+                                                            {alarm.sensor_type ??
+                                                                "Не указан"}
+                                                        </strong>
+
+                                                        <span>
+                                                            {alarm.system_type ??
+                                                                "Система не указана"}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </td>
 

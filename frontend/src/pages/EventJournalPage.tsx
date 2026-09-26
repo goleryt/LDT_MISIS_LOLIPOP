@@ -1,3 +1,4 @@
+import SensorIcon from "../components/SensorIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -313,8 +314,11 @@ function EventJournalPage() {
                                         <Building2 size={17} />
                                         <span>{event.object_name ?? (event.object_id !== null ? `Объект #${event.object_id}` : "Объект не определён")}</span>
                                     </span></td>
-                                    <td><span className="journal-sensor-cell" title={event.sensor_type ?? undefined}>
-                                        {event.sensor_name ?? `Канал #${event.channel_id}`}
+                                    <td><span className="journal-cell-inline">
+                                        <SensorIcon sensorType={event.sensor_type} name={event.sensor_name} size={17} />
+                                        <span className="journal-sensor-cell" title={event.sensor_type ?? undefined}>
+                                            {event.sensor_name ?? `Канал #${event.channel_id}`}
+                                        </span>
                                     </span></td>
                                     <td><span className="journal-cell-inline journal-event-cell" title={`ID события: ${event.event_id}`}>
                                         <span className="journal-event-glyph">#</span>

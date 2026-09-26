@@ -28,6 +28,7 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
+import SensorIcon from "../components/SensorIcon";
 import "../styles/moscow-map.css";
 
 import {
@@ -1104,6 +1105,13 @@ function MapPage() {
                                             }
                                         />
 
+                                        <SensorIcon
+                                            sensorType={sensor.sensor_type}
+                                            systemType={sensor.system_type}
+                                            name={sensor.name}
+                                            size={20}
+                                        />
+
                                         <div className="sensor-row-main">
                                             <strong>
                                                 {sensor.name ??
@@ -1198,7 +1206,13 @@ function MapPage() {
                         <div>
                             <span>Тип датчика</span>
 
-                            <strong>
+                            <strong className="sensor-type-value">
+                                <SensorIcon
+                                    sensorType={selectedSensor.sensor_type}
+                                    systemType={selectedSensor.system_type}
+                                    name={selectedSensor.name}
+                                    size={16}
+                                />
                                 {selectedSensor.sensor_type ??
                                     "Не указан"}
                             </strong>

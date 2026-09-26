@@ -3844,3 +3844,26 @@ button:disabled { cursor:not-allowed; opacity:.55; }
     .journal-top-nav { margin-left: auto; }
     .journal-auto-refresh { font-size: 13px; }
 }
+
+
+/* Иконки типов датчиков (components/SensorIcon.tsx) */
+.sensor-type-icon {
+    flex: 0 0 auto;
+    color: #475569;
+}
+
+.sensor-row .sensor-type-icon {
+    margin-right: 2px;
+}
+
+.sensor-type-value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.alarm-sensor-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
