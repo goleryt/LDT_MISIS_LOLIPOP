@@ -3,7 +3,7 @@
 Run once per day after day D is closed, in an environment that has the ML
 requirements (pinned in models/bundles/requirements.txt, Python 3.11-3.12):
 
-    python -m scripts.run_ml_daily [--date YYYY-MM-DD]
+    python -m scripts.run_ml_daily --ready-marker /path/ready.txt [--date YYYY-MM-DD]
 
 The API process never imports the ML libraries; it only reads the stored rows.
 
@@ -17,21 +17,25 @@ Raw journal rows are exported to a temporary directory and are never logged.
 from __future__ import annotations
 
 import csv
+import hashlib
+import json
+import math
+import shutil
 import logging
 import tempfile
 from collections.abc import Callable
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import delete, select
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from app.core.config import Settings, get_settings
 from app.db.models import ChannelCatalogue, EventsJournal
-from app.db.platform import MlScore, Prediction
-from app.db.session import SessionLocal
+from app.db.platform import MlScore, MlRun, Prediction
+from app.db.session import SessionLocal, engine
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +44,6 @@ CATALOGUE_COLUMNS = ("ид_канала_данных", "тип_инж_систе
                      "тег_инженерной_системы", "название_датчика", "ид_объект")
 # Gas records that carry no information for the UI (the channel is simply not gas).
 SKIP_REASONS = {"NOT_GAS_STREAM"}
-PREDICTION_HORIZON_HOURS = 24
 
 
 class MlJobError(RuntimeError):
@@ -49,7 +52,7 @@ class MlJobError(RuntimeError):
 
 def last_closed_day(settings: Settings, now: datetime | None = None) -> date:
     now = now or datetime.now(ZoneInfo(settings.source_timezone))
-    return now.date() - timedelta(days=1)
+    return now.astimezone(ZoneInfo(settings.source_timezone)).date() - timedelta(days=1)
 
 
 def export_journal(db: Session, start: datetime, end_exclusive: datetime, out_dir: Path) -> list[Path]:
@@ -133,69 +136,178 @@ def select_alerts(db: Session, d: date, rows: list[MlScore], top_k: int, cooldow
     return chosen
 
 
-def store_output(db: Session, output: dict[str, Any], settings: Settings) -> dict[str, int]:
-    """Replace day D in `ml_scores`, pick alerts and register them as (not confirmed) predictions."""
+def store_output(db: Session, output: dict[str, Any], settings: Settings, revision: int = 1) -> dict[str, Any]:
+    """Persist an immutable day/revision, selecting shadow forecasts without automatic actions."""
     d = date.fromisoformat(output["as_of_date"])
     run_id = output.get("request_id") or f"daily-{d}"
-    db.execute(delete(MlScore).where(MlScore.as_of_date == d))
+    if revision < 1:
+        raise MlJobError("INVALID_REVISION")
+    digest = hashlib.sha256(json.dumps(output, sort_keys=True, ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+    db.execute(text("SELECT pg_advisory_xact_lock(90260926)"))
+    run = db.scalar(select(MlRun).where(MlRun.as_of_date == d, MlRun.revision == revision))
+    if run and run.state == "completed":
+        if run.output_hash != digest:
+            raise MlJobError("DAY_ALREADY_EXISTS_USE_NEW_REVISION")
+        return {**(run.summary or {}), "state": "already_written"}
+    if run is None:
+        run = MlRun(as_of_date=d, revision=revision, state="running")
+        db.add(run)
+    run_id = f"{run_id}:r{revision}"
+    for record in output.get("gas", []):
+        score = record.get("score")
+        if score is not None and (not isinstance(score, (int, float)) or not math.isfinite(score) or not 0 <= score <= 1):
+            raise MlJobError("INVALID_SCORE")
+        if score is not None and record.get("decision_status") != "experimental_shadow":
+            raise MlJobError("SCORE_WITHOUT_SHADOW_STATUS")
+        if record.get("label_source") == "stub" or record.get("evidence_level") == "E4":
+            raise MlJobError("STUB_GAS_RESULT_REJECTED")
+        if record.get("is_primary", True) and not set(record.get("reason_codes") or []) & SKIP_REASONS:
+            channel = db.get(ChannelCatalogue, _as_int(record.get("ид_канала_данных")))
+            if channel is None or channel.ид_объект != _as_int(record.get("ид_объект")):
+                raise MlJobError("UNKNOWN_OR_MISMATCHED_CHANNEL")
+        start, end = _as_date(record.get("window_start")), _as_date(record.get("window_end_exclusive"))
+        if score is not None and (not start or not end or start < d + timedelta(days=2) or end <= start):
+            raise MlJobError("INVALID_FORECAST_WINDOW")
     rows = [_row("gas", d, run_id, r) for r in output.get("gas", [])
             if r.get("is_primary", True) and not (set(r.get("reason_codes") or []) & SKIP_REASONS)]
-    rows += [_row("incident", d, run_id, r) for r in output.get("incidents", [])]
+    # Incident head is trained on stub labels. Never promote demo scores into production records.
+    suppressed_incidents = len(output.get("incidents", []))
+    channels = [r.channel_id for r in rows]
+    if len(set(channels)) != len(channels):
+        raise MlJobError("DUPLICATE_GAS_CHANNEL")
     chosen = select_alerts(db, d, rows, settings.ml_top_k_per_day, settings.ml_cooldown_days)
     db.add_all(rows)
     db.flush()
 
     tz = ZoneInfo(settings.source_timezone)
-    calculated_at = datetime.combine(d + timedelta(days=1), time(0), tzinfo=tz)
+    reference_at = datetime.combine(d + timedelta(days=1), time(0), tzinfo=tz)
+    calculated_at = datetime.now(timezone.utc)
     predicted = 0
     for row in chosen:
         if row.object_id is None:
             continue
-        provider_id = f"{row.bundle}:{d}:{row.channel_id}"
+        provider_id = f"{row.bundle}:{d}:{row.channel_id}:r{revision}"
         exists = db.scalar(select(Prediction.id).where(Prediction.provider_id == provider_id,
                                                        Prediction.model_version == row.model_version))
         if exists:
             continue
-        # No recommendation and no notification: the shadow score must not create work or alarms by itself.
+        # Preserve manual advice without creating work or alarms automatically.
         db.add(Prediction(provider_id=provider_id, object_id=row.object_id, channel_id=row.channel_id,
                           incident_type=row.incident_type or "gas_threshold_cross", probability=row.score,
-                          horizon_hours=PREDICTION_HORIZON_HOURS, calculated_at=calculated_at,
-                          predicted_for=calculated_at + timedelta(hours=PREDICTION_HORIZON_HOURS),
-                          model_version=row.model_version or "unknown", recommendation=None))
+                          horizon_hours=int((datetime.combine(row.window_start, time(0), tzinfo=tz) - reference_at).total_seconds() // 3600),
+                          calculated_at=calculated_at,
+                          predicted_for=datetime.combine(row.window_start, time(0), tzinfo=tz),
+                          model_version=row.model_version or "unknown",
+                          recommendation=(row.payload.get("recommendation") or {}).get("text_ru"),
+                          ml_metadata={"as_of_date": d.isoformat(), "revision": revision,
+                                       "reference_at": reference_at.isoformat(), "window_start": row.window_start.isoformat(),
+                                       "window_end_exclusive": row.window_end_exclusive.isoformat(),
+                                       "bundle": row.bundle, "evidence_level": row.evidence_level,
+                                       "decision_status": row.decision_status, "target_code": row.target_code,
+                                       "score_kind": row.score_kind, "maintenance_context": row.maintenance_context,
+                                       "recommendation": row.payload.get("recommendation"),
+                                       "bundles": output.get("bundles", []), "operational_ready": False}))
         predicted += 1
     gas = [r for r in rows if r.kind == "gas"]
-    return {"gas_rows": len(gas), "gas_scored": sum(r.score is not None for r in gas),
-            "incident_rows": len(rows) - len(gas), "alerts_selected": len(chosen), "predictions_created": predicted}
+    summary = {"gas_rows": len(gas), "gas_scored": sum(r.score is not None for r in gas),
+               "incident_rows": 0, "suppressed_incident_rows": suppressed_incidents,
+               "alerts_selected": len(chosen), "predictions_created": predicted}
+    run.state, run.output_hash, run.summary = "completed", digest, summary
+    run.finished_at, run.error_code = datetime.now(timezone.utc), None
+    return summary
 
 
 def _default_runtime(settings: Settings, work_dir: Path):
     # Imported here: the ML libraries exist only in the ML environment, not in the API process.
     from app.ml_runtime.lct_ml_runtime import MLRuntime
 
-    return MLRuntime(settings.ml_bundles_path, work_dir=work_dir / "bundles")
+    # Deploy only the selected real gas model. The delivered incident head uses stub labels.
+    active = json.loads((settings.ml_bundles_path / "ACTIVE.json").read_text())
+    name = active.get("gas", "")
+    if not name.startswith("gas_") or Path(name).name != name or "/" in name or "\\" in name:
+        raise MlJobError("INVALID_ACTIVE_BUNDLE")
+    selected = work_dir / "selected"
+    selected.mkdir()
+    for filename in ("ACTIVE.json", name + ".zip", name + ".zip.sha256"):
+        shutil.copy2(settings.ml_bundles_path / filename, selected / filename)
+    return MLRuntime(selected, work_dir=work_dir / "bundles")
+
 
 
 def run_daily(as_of: date | None = None, settings: Settings | None = None,
-              runtime_factory: Callable[[Settings, Path], Any] | None = None) -> dict[str, Any]:
+              runtime_factory: Callable[[Settings, Path], Any] | None = None,
+              revision: int = 1, journal_files: list[Path] | None = None,
+              catalogue_file: Path | None = None, ready_marker: Path | None = None) -> dict[str, Any]:
     settings = settings or get_settings()
     d = as_of or last_closed_day(settings)
+    if d > last_closed_day(settings) or revision < 1:
+        raise MlJobError("DAY_NOT_CLOSED_OR_INVALID_REVISION")
+    if ready_marker is None or not ready_marker.is_file() or ready_marker.read_text().strip() != d.isoformat():
+        raise MlJobError("DAY_NOT_CERTIFIED_READY")
+    if bool(journal_files) != bool(catalogue_file):
+        raise MlJobError("JOURNAL_AND_CATALOGUE_REQUIRED_TOGETHER")
     start = datetime.combine(d - timedelta(days=settings.ml_export_days), time(0))
-    end_exclusive = datetime.combine(d + timedelta(days=1), time(0))
-    with tempfile.TemporaryDirectory(prefix="lct_ml_job_") as tmp:
-        work = Path(tmp)
-        with SessionLocal() as db:
-            files = export_journal(db, start, end_exclusive, work)
-            channels = export_catalogue(db, work / "catalogue.csv")
-        if not files:
-            raise MlJobError(f"в журнале нет событий за {start.date()}..{d}")
-        runtime = (runtime_factory or _default_runtime)(settings, work)
+    end = datetime.combine(d + timedelta(days=1), time(0))
+    with engine.connect() as lock:
+        acquired = lock.scalar(text("SELECT pg_try_advisory_lock(90260927)"))
+        lock.commit()
+        if not acquired:
+            raise MlJobError("ML_JOB_ALREADY_RUNNING")
         try:
-            output = runtime.score_day(files, work / "catalogue.csv", d, request_id=f"daily-{d}")
-        except Exception as exc:  # bundle-specific ContractError (e.g. INSUFFICIENT_HISTORY) is not importable here
-            raise MlJobError(f"{type(exc).__name__}: {exc}") from exc
-    with SessionLocal.begin() as db:
-        summary = store_output(db, output, settings)
-    summary.update({"as_of_date": d.isoformat(), "journal_files": len(files), "channels": channels,
-                    "primary_gas": output.get("primary_gas"), "runtime_version": output.get("runtime_version")})
-    logger.info("ML daily run finished: %s", summary)
-    return summary
+            with tempfile.TemporaryDirectory(prefix="lct_ml_job_") as tmp:
+                work = Path(tmp)
+                if journal_files:
+                    files, cat = list(journal_files), catalogue_file
+                    channels = None
+                else:
+                    with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+                        with Session(bind=connection) as db:
+                            files = export_journal(db, start, end, work)
+                            cat = work / "catalogue.csv"
+                            channels = export_catalogue(db, cat)
+                if not files:
+                    raise MlJobError("INSUFFICIENT_HISTORY")
+                paths = files + [cat] + sorted(settings.ml_bundles_path.glob("*.zip")) + [settings.ml_bundles_path / "ACTIVE.json"]
+                paths += [Path(__file__), Path(__file__).parent / "ml_runtime/lct_ml_runtime.py"]
+                def fingerprint():
+                    h = hashlib.sha256()
+                    h.update(f"{d}:{revision}:{settings.ml_top_k_per_day}:{settings.ml_cooldown_days}".encode())
+                    for path in paths:
+                        h.update(path.name.encode())
+                        with path.open("rb") as handle:
+                            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                                h.update(chunk)
+                    return h.hexdigest()
+                digest = fingerprint()
+                with SessionLocal.begin() as db:
+                    previous = db.scalar(select(MlRun).where(MlRun.as_of_date == d, MlRun.revision == revision))
+                    if previous and previous.state == "completed":
+                        if previous.fingerprint != digest:
+                            raise MlJobError("INPUT_CHANGED_USE_NEW_REVISION")
+                        return {**(previous.summary or {}), "as_of_date": d.isoformat(), "state": "already_written"}
+                    if previous is None:
+                        previous = MlRun(as_of_date=d, revision=revision, state="running")
+                        db.add(previous)
+                    previous.state, previous.fingerprint, previous.error_code = "running", digest, None
+                try:
+                    runtime = (runtime_factory or _default_runtime)(settings, work)
+                    output = runtime.score_day(files, cat, d, request_id=f"daily-{d}")
+                    if output.get("as_of_date") != d.isoformat() or not output.get("gas"):
+                        raise MlJobError("EMPTY_OR_WRONG_DAY_RESULT")
+                    if fingerprint() != digest:
+                        raise MlJobError("INPUT_CHANGED_DURING_RUN")
+                    with SessionLocal.begin() as db:
+                        summary = store_output(db, output, settings, revision)
+                except Exception as exc:
+                    # Persist failure without raw journal rows, paths or external exception text.
+                    code = str(exc) if isinstance(exc, MlJobError) else type(exc).__name__
+                    if "INSUFFICIENT_HISTORY" in str(exc): code = "INSUFFICIENT_HISTORY"
+                    with SessionLocal.begin() as db:
+                        row = db.scalar(select(MlRun).where(MlRun.as_of_date == d, MlRun.revision == revision))
+                        row.state, row.error_code, row.finished_at = "failed", code[:100], datetime.now(timezone.utc)
+                    raise MlJobError(code) from exc
+                return {**summary, "as_of_date": d.isoformat(), "revision": revision, "channels": channels,
+                        "journal_files": len(files), "runtime_version": output.get("runtime_version"), "state": "completed"}
+        finally:
+            lock.execute(text("SELECT pg_advisory_unlock(90260927)"))
+            lock.commit()

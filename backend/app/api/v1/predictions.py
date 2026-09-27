@@ -1,11 +1,14 @@
 from typing import Literal
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+from app.core.config import get_settings
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from app.api.v1.platform import serialize
 from app.api.v1.requests import validate_target
 from app.db.models import PreventiveRequest
-from app.db.platform import MlScore, Notification, Prediction, PredictionDecision
+from app.db.platform import MlRun, MlScore, Notification, Prediction, PredictionDecision
 from app.db.session import SessionLocal
 from app.predictions import ModelUnavailable, PredictionResult, get_provider
 
@@ -32,9 +35,15 @@ def status():
     if last is None:
         return {"available": False, "state": "no_ml_run_yet",
                 "message": "ML-пакет подключён, но суточный расчёт ещё не выполнялся (scripts.run_ml_daily)."}
-    return {"available": True, "state": "experimental_shadow", "as_of_date": last.isoformat(), "model_version": model,
+    today = datetime.now(ZoneInfo(get_settings().source_timezone)).date()
+    return {"available": True, "stale": last < today - timedelta(days=1), "state": "experimental_shadow", "as_of_date": last.isoformat(), "model_version": model,
             "message": "Экспериментальный shadow-режим: оценка наблюдаемого пересечения газом 1 % в окне прогноза. "
                        "Это не вероятность пожара и не подтверждённый инцидент."}
+
+@router.get("/runs")
+def runs(limit: int = Query(30, ge=1, le=100)):
+    with SessionLocal() as db:
+        return [serialize(row) for row in db.scalars(select(MlRun).order_by(MlRun.id.desc()).limit(limit))]
 
 @router.get("/reasons")
 def reasons():

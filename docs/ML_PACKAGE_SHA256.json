@@ -1,0 +1,21 @@
+{
+  "daily_forecast_job.py": "3b5200d250a29b0c24c838f1d57767228ec3b27744859e463207579cfaf994da",
+  "lct_ml_runtime.py": "3c192d60502375018b92d84f8b9e7451565ef046f3867ccb617183af1bf52366",
+  "README_BACKEND_RU.md": "4e832404199a6a5c9b24f89adee0af846783757b4fdc051146c3a8dbdbf37873",
+  "requirements.txt": "24cbea61aacfc4e8b140a0c9c36bb4ae352b064f53684252b0ff234b84ce67f1",
+  "ACTIVE.json": "e9e91dc6da9d4004512f239e38d0f93edaa63e083ccd7db1887d0a3b3c8553d6",
+  "gas_cross_v3_bundle.zip": "1747b09c0a289f8509b1ef066442936f315c4f7958d1815825a7f90296503e20",
+  "gas_cross_v3_bundle.zip.sha256": "af0ff08d2b5fc540c0bfc71f603714ee511ad8bf1e1bbe695ae9e2889bb406e6",
+  "incident_head_bundle.zip": "3c8b4b46ae8b17f12a5e6aa16e3722a9907817c65c73cbed3a06880203d1e2c5",
+  "incident_head_bundle.zip.sha256": "acc4d849ea912398b81ec82ff584b03f02ff59ffa7210926e7aea816b646ff11",
+  "incident_register_coverage_stub.json": "6e1709cf039fe688e83c04e9a4732b399631c194eccee875891042e71dc3f871",
+  "incident_register_stub.csv": "a7fd6ab32c566634af5327a43603be048ce25f348bc824be93721e983dbf5cdb",
+  "AUDIT_17_GAS_MAINTENANCE_RU.md": "e7bd2113b1ca52e73dd0b2a124ada8aa890d4e07800f2fd13d3ebe4e439082d5",
+  "EXPORT_16_GAS_BUNDLE_V3_RU.md": "978d5db9a32519f19c9f91703fa450d28ae87910b8a8c9ece491ed1c5fac6c13",
+  "INCIDENT_REGISTER_CONTRACT_RU.md": "8868cb285a531dc8f534cce0d774f804fd6f09192e86a8d3aa6812e09842e42b",
+  "ML_DAILY_ADVISORY_HANDOFF_RU.md": "9e876f0cea167fc065f52f5276e48f1bf6836a1c67d8b25a23f20ce1687390ad",
+  "results_17_maintenance_audit_summary_ru.md": "be06363c542f0f95afffb0e2893793220efd6e8ef067b18c8a51ff81258b9b03",
+  "results_18_incident_head_summary_ru.md": "20cd46acb455d3415cad36ad4edb475f21e02252f1b69ab2890e0fdcb22a351e",
+  "example_output.json": "5786e73322fec9dc2f5f2580c8a663be75e992e3d5ec508ff20b2b33dfec131d",
+  "example_run.py": "485df9276a3cb0ebc4111513917b6aac233f836a6f09b5328b552db2a1587913"
+}

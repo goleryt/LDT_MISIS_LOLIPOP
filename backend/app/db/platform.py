@@ -56,6 +56,7 @@ class Prediction(Base):
     predicted_for: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     model_version: Mapped[str] = mapped_column(String(100))
     recommendation: Mapped[str | None] = mapped_column(Text)
+    ml_metadata: Mapped[dict | None] = mapped_column(JSON)
     status: Mapped[str] = mapped_column(String(30), default="new")
     revision: Mapped[int] = mapped_column(Integer, default=1)
     actual_outcome: Mapped[str | None] = mapped_column(Text)
@@ -111,7 +112,7 @@ class MlScore(Base):
 
     `score` is a proxy score, not the probability of a fire or a confirmed incident;
     the meaning is carried by `target_code`, `score_kind`, `evidence_level` and
-    `decision_status` from the bundle itself. Re-running a day replaces that day.
+    `decision_status` from the bundle itself. Results are immutable per day/revision; prior decisions are retained.
     """
     __tablename__ = "ml_scores"
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
@@ -136,3 +137,18 @@ class MlScore(Base):
     rank: Mapped[int | None] = mapped_column(Integer)
     payload: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class MlRun(Base):
+    __tablename__ = "ml_runs"
+    __table_args__ = (UniqueConstraint("as_of_date", "revision"),)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    as_of_date: Mapped[date] = mapped_column(Date, index=True)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    state: Mapped[str] = mapped_column(String(20))
+    fingerprint: Mapped[str | None] = mapped_column(String(64))
+    output_hash: Mapped[str | None] = mapped_column(String(64))
+    summary: Mapped[dict | None] = mapped_column(JSON)
+    error_code: Mapped[str | None] = mapped_column(String(100))
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

@@ -1058,6 +1058,49 @@
         }
       }
     },
+    "/api/v1/predictions/runs": {
+      "get": {
+        "tags": [
+          "predictions"
+        ],
+        "summary": "Runs",
+        "operationId": "runs_api_v1_predictions_runs_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 30,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/predictions/reasons": {
       "get": {
         "tags": [

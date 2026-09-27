@@ -1,0 +1,13 @@
+{
+  "users": 20,
+  "requests": 1200,
+  "errors": 0,
+  "duration_seconds": 9.076,
+  "p50_ms": 125.625,
+  "p95_ms": 231.528,
+  "baseline_p95_ms": 84.406,
+  "p95_ratio": 2.74,
+  "acceptance_p95_ms": 2000,
+  "acceptance_ratio": 5,
+  "passed": true
+}

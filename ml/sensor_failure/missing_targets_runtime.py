@@ -1716,6 +1716,9 @@ def run_multitarget_synthetic_challenge(
     return results
 
 
+SCENARIO_HORIZON = "detection_at_D"   # окно = паттерн [D−2; D+1), не будущее окно
+
+
 def predict_scenario_bundle(history: Any, frame: Any, bundle_dir: str | Path, task: str) -> Any:
     """Replay a notebook-10 E4 detector on canonical object-day history."""
     import joblib
@@ -1764,8 +1767,10 @@ def predict_scenario_bundle(history: Any, frame: Any, bundle_dir: str | Path, ta
         pl.lit(contract["target_code"]).alias("target_code"),
         pl.lit("synthetic_scenario_match").alias("score_kind"),
         pl.lit("E4").alias("evidence_level"),
-        (pl.col("d_cutoff_date") + pl.duration(days=2)).alias("window_start"),
-        (pl.col("d_cutoff_date") + pl.duration(days=3)).alias("window_end_exclusive"),
+        # сценарий внедряется в lag0–lag2 (история D−2…D): это детекция текущего паттерна, а не прогноз на D+2 (GPT 26)
+        pl.lit(SCENARIO_HORIZON).alias("horizon"),
+        (pl.col("d_cutoff_date") - pl.duration(days=2)).alias("window_start"),
+        (pl.col("d_cutoff_date") + pl.duration(days=1)).alias("window_end_exclusive"),
         pl.Series("decision_status", np.where(supported, "experimental_shadow", "abstain")),
         pl.Series("reason_codes", np.where(supported, "[]", '["NO_SUPPORTED_SENSOR"]')),
     )
@@ -2778,8 +2783,14 @@ def build_missing_targets_scorecard(
                 pl.lit(score_exposure_allowed).alias("score_exposure_allowed"),
                 pl.lit(contract["score_kind"]).alias("score_kind"),
                 pl.lit(contract["evidence_level"]).alias("evidence_level"),
-                pl.col("d_target_start_date").alias("window_start"),
-                pl.col("d_target_end_date_exclusive").alias("window_end_exclusive"),
+                *((pl.lit(SCENARIO_HORIZON).alias("horizon"),
+                   # d_target_start_date = D+2 → паттерн [D−2; D+1)
+                   (pl.col("d_target_start_date") - pl.duration(days=4)).alias("window_start"),
+                   (pl.col("d_target_start_date") - pl.duration(days=1)).alias("window_end_exclusive"))
+                  if contract["score_kind"] == "synthetic_scenario_match" else
+                  (pl.lit("forecast_d2").alias("horizon"),
+                   pl.col("d_target_start_date").alias("window_start"),
+                   pl.col("d_target_end_date_exclusive").alias("window_end_exclusive"))),
                 (pl.col("decision_status") if "decision_status" in predictions.columns and score_exposure_allowed else pl.lit(status)).alias("decision_status"),
                 pl.lit(json.dumps(reasons, ensure_ascii=False)).alias("reason_codes"),
             )

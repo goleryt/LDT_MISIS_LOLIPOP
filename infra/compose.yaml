@@ -1,4 +1,26 @@
 services:
+  ml:
+    profiles: ["ml"]
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.ml
+    env_file: ../backend/.env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      ML_BUNDLES_DIR: /models/bundles
+      ML_READY_DIR: /ready
+    volumes:
+      - ../models/bundles:/models/bundles:ro
+      - ../data/ml-ready:/ready:ro
+      - ml_work:/work
+    tmpfs: ["/tmp:size=64m"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
   postgres:
     image: postgres:16-alpine
     environment:
@@ -91,5 +113,6 @@ services:
     restart: unless-stopped
 
 volumes:
+  ml_work:
   postgres_data:
   backups:
