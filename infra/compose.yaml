@@ -13,7 +13,8 @@ services:
     volumes:
       - ../models/bundles:/models/bundles:ro
       - ../data/ml-ready:/ready:ro
-    tmpfs: ["/tmp:size=2g"]
+      - ml_work:/work
+    tmpfs: ["/tmp:size=64m"]
     read_only: true
     security_opt: ["no-new-privileges:true"]
     depends_on:
@@ -112,5 +113,6 @@ services:
     restart: unless-stopped
 
 volumes:
+  ml_work:
   postgres_data:
   backups:

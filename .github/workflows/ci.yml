@@ -79,7 +79,11 @@ jobs:
       - name: Build isolated ML runtime
         run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci --profile ml build ml
       - run: python tests/smoke.py
-      - run: python tests/load.py
+      - name: Twenty paced dispatcher sessions
+        run: python tests/load.py
+        env:
+          LOAD_INTERVAL_SECONDS: "1"
+          LOAD_ROUNDS: "3"
       - run: |
           cd frontend
           npm ci

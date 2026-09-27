@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm 
 COPY requirements.txt requirements-ml.txt ./
 RUN pip install --no-cache-dir -r requirements-ml.txt && useradd --uid 10001 --create-home app
 COPY . .
+RUN install -d -o app -g app -m 0700 /work
 USER app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 TMPDIR=/work
 CMD ["python", "-m", "scripts.ml_scheduler"]
