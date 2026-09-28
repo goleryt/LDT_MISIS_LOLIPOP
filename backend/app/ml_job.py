@@ -1,7 +1,7 @@
 """Daily ML batch: DB -> LCT_ML_backend_v1 runtime -> `ml_scores` (+ selected -> `predictions`).
 
 Run once per day after day D is closed, in an environment that has the ML
-requirements (pinned in models/bundles/requirements.txt, Python 3.11-3.12):
+requirements (pinned in backend/requirements-ml.txt, Python 3.11-3.12):
 
     python -m scripts.run_ml_daily --ready-marker /path/ready.txt [--date YYYY-MM-DD]
 

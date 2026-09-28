@@ -18,7 +18,7 @@
 
 Расчёт идёт раз в сутки отдельной задачей, API модель не запускает и читает готовый результат из БД.
 
-1. Положить бандлы пакета в `models/bundles/` (в Git не хранятся; SHA-256 проверяется).
+1. Проверить, что в `models/bundles/` находятся `gas_cross_v3_bundle.zip`, его `.sha256` и `ACTIVE.json`. Утверждённый газовый бандл включён в репозиторий; его SHA-256 проверяется при запуске.
 2. Окружение задачи: Python 3.12, `pip install -r backend/requirements-ml.txt`.
 3. Запуск: `cd backend && python -m scripts.run_ml_daily --ready-marker /data/ready_YYYY-MM-DD.txt --date YYYY-MM-DD`. Маркер содержит дату завершённых суток. Нужна история журнала не меньше 401 суток вместе с D. Для планировщика используйте профиль Docker `ml`; подробности и внешние CSV — в инструкции ML.
 
@@ -34,6 +34,7 @@
 - [Фактические результаты проверок](docs/TEST_RESULTS.md)
 - [Итог объединения веток и приёмка v1.1](docs/FINAL_ACCEPTANCE.md)
 - [ML-пакет: запуск, смысл оценки, ограничения](docs/ML_INTEGRATION_RU.md)
+- [Исследовательский газовый триаж: отрицательная проверка и решение](docs/GAS_TRIAGE_RESEARCH_RU.md)
 - [Перечень компонентов](docs/COMPONENTS.md)
 
 OpenAPI: /openapi.json после авторизации; статическая схема — docs/openapi.json.

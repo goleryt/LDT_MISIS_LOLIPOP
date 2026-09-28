@@ -25,8 +25,9 @@ Incident-head из поставки имеет label_source=stub. Произво
 
 ## Docker
 
-1. Поместить gas_cross_v3_bundle.zip, gas_cross_v3_bundle.zip.sha256 и ACTIVE.json
-   из поставки в models/bundles. Бинарные файлы игнорируются Git; итоговый архив их содержит.
+1. Проверить три включённых в репозиторий файла в models/bundles:
+   gas_cross_v3_bundle.zip, gas_cross_v3_bundle.zip.sha256 и ACTIVE.json.
+   Сверить SHA-256 ZIP с docs/ML_PACKAGE_SHA256.json перед запуском.
 2. Создать backend/.env из примера, задать собственные секреты, загрузить справочники
    и историю. Модель требует не менее 400 предшествующих суток; экспорт охватывает 430.
 3. Из корня проекта:

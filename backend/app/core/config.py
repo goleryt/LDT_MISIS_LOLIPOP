@@ -55,7 +55,7 @@ class Settings(BaseSettings):
 
     @property
     def ml_bundles_path(self) -> Path:
-        # По умолчанию models/bundles в корне репозитория: модели в Git не хранятся.
+        # По умолчанию models/bundles в корне репозитория: утверждённый газовый бандл хранится в Git.
         return Path(self.ml_bundles_dir) if self.ml_bundles_dir else Path(__file__).resolve().parents[3] / "models" / "bundles"
 
     @property

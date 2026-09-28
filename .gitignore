@@ -22,9 +22,14 @@ build/
 data/*
 !data/README.md
 
-# Trained models: keep only the explanation file in Git
+# Trained models: include only the approved frozen gas bundle
 models/*
 !models/README.md
+!models/bundles/
+models/bundles/*
+!models/bundles/gas_cross_v3_bundle.zip
+!models/bundles/gas_cross_v3_bundle.zip.sha256
+!models/bundles/ACTIVE.json
 
 # Data and model formats
 *.xlsx
