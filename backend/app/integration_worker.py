@@ -51,6 +51,8 @@ def poll_source(source: Source, client: httpx.Client):
             if len(body) > get_settings().max_upload_bytes or time.monotonic() - started > 30:
                 raise ValueError("Source response exceeds size or time budget")
     payload = json.loads(body)
+    if not isinstance(payload, dict) or "next_cursor" not in payload:
+        raise ValueError("Source must return an object with records and next_cursor")
     if not isinstance(payload.get("records"), list) or len(payload["records"]) > 2000:
         raise ValueError("Source must return at most 2000 records and next_cursor")
     next_cursor = payload.get("next_cursor")
