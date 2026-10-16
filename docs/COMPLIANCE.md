@@ -15,12 +15,12 @@
 | §4/§10 прогноз ≥24 ч | Frozen газовый runtime: наблюдаемое пересечение 1 % CH4, shadow/proxy, своё окно и provenance | PARTIAL буквального ТЗ: не пожар/подтопление/НСД/отказ; нет доказанных метрик реальных инцидентов. Новые классы/модели вне этапа |
 | §10 заявки | draft → new → in_progress → completed/cancelled, проверка admin/dispatcher, terminal lock, audit | PASS; обычная ручная заявка сохраняет new; внешний статус не подтверждает draft |
 | §10 web-уведомления | Хранение, индивидуальный unread/read, точная ссылка, дедупликация, последовательный polling | PASS; shadow не создаёт critical alert; SMTP/SMS/Telegram/новая эскалация исключены |
-| §11 ≥20 пользователей | 1/20 read/20 mixed, 918 запросов без ошибок, p95 normal 284.264 мс / mixed 274.828 мс | PASS короткого локального профиля; endurance и целевая инфраструктура NOT TESTED |
+| §11 ≥20 пользователей | 1/20 read/20 mixed, 918 запросов без ошибок, p95 normal 471.094 мс / mixed 448.224 мс (RC cloud QA) | PASS короткого локального профиля; endurance и целевая инфраструктура NOT TESTED |
 | §11 near-real-time ≤300 с | Транзакционный ingestion, lag, polling; локально 0.244 с до сохранения уведомления | PASS локального примера; промышленная задержка — внешняя проверка |
 | §11 TLS ≥1.2 | nginx TLS1.2/1.3, reject1.1, HSTS/CSP, private API/DB | PASS локальной TLS-конфигурации; production сертификаты/DNS — инфраструктура |
 | §11 RBAC/LDAP | Backend enforcement, sessions/CSRF/expiry; LDAPS verify/read-only/no fallback | RBAC PASS; LDAP PARTIAL: транспортный контракт проверен, настоящий AD отсутствует |
 | §11 audit | actor/role/time/action/entity/result, история решений/заявок/интеграций, отказы | PASS локального аудита; защищённый внешний архив/SIEM — EXTERNAL DEPENDENCY |
-| §11 резервирование/восстановление ≤4 ч | Автокопия, checksum, rotation, failed marker, новый target, восстановленный smoke | PARTIAL: 200000 событий за 1 с; полный 12-летний архив/offsite/RPO/RTO не испытаны |
+| §11 резервирование/восстановление ≤4 ч | Автокопия, checksum, rotation, failed marker, новый target, восстановленный smoke | PARTIAL: 200371 событие за 3 с (RC); полный 12-летний архив/offsite/RPO/RTO не испытаны |
 | §11 Linux/PostgreSQL ≥12 | Linux containers, PostgreSQL16, Alembic head d01602; новый clone/volume/seed/start | PASS текущей конфигурации; PostgreSQL18 в октябре не проверялся |
 | §11 Chrome/Яндекс.Браузер | Chrome155: основные flows, map и 390px; параметр нативного пути Yandex в Playwright | Chrome PASS; Яндекс NOT TESTED, не установлен |
 | §13 read-only/хранение | GET worker, LDAP read-only, SQL operational/archive/analytics views | PASS адаптера; физический архив/сроки хранения/реальные внешние ID требуют инфраструктуры/данных |
@@ -31,7 +31,7 @@
 ## Не смешивать состояния поставок
 
 Публичный прототип уже опубликован: https://ldt-demo-production.up.railway.app/.
-Это сентябрьская версия. Октябрьская ветка не пушилась и не выкатывалась.
+Это сентябрьская версия. Первые 11 октябрьских commits опубликованы в старой ветке; новые release/final-rc commits не пушились и не выкатывались.
 В Railway API/PG running, ml-demo-job остановлен; постоянных scheduler/integration services нет.
 Облачный manager login/read/logout подтверждён, admin GET возвращает 403; карта отдаёт 79 объектов. Остальные роли/полнота данных не перепроверены.
 

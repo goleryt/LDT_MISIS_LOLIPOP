@@ -114,5 +114,26 @@ Restore в существующую БД запрещён. Rotation провер
 
 Railway HTTPS root/health/ready отвечали 200 16.10.2026; anonymous events — 401.
 Облачные API и PostgreSQL running; отдельный ml-demo-job остановлен после расчёта,
-постоянных scheduler/integration services нет. Октябрьская ветка не публиковалась,
+постоянных scheduler/integration services нет. Новые RC-коммиты не публиковались,
 деплой и push требуют отдельного разрешения владельца. Manager login/read/logout и запрет admin API проверены; остальные demo-роли/полноту данных проверить вручную перед показом. Локальная приёмка не заменяет приёмку облачной версии.
+
+## Release candidate
+
+Текущая ветка `release/final-rc`, application/test commit `f7d1d05`.
+Cloud build с APP_COMMIT и smoke +3 Chrome flows подтверждены:
+[идентификатор](evidence/release-rc/application-commit.txt),
+[build](evidence/release-rc/cloud-build-commit.txt),
+[smoke](evidence/release-rc/cloud-commit-smoke.txt),
+[Chrome](evidence/release-rc/chrome-commit.txt).
+Чистый QA использует отдельные volumes, 20000 наблюдений, без вымышленных прогнозов.
+Свежая резервная копия: 200371 событие, checksum, новая БД, restore3с, API smoke.
+Первая автоматическая копия теперь ждёт migrate.
+
+Полный workflow отдельного staging и необходимые ручные действия:
+[DEPLOYMENT_RC](DEPLOYMENT_RC.md). Web image не запускает scheduler/worker/backup
+и не применяет миграции автоматически; pre-deploy выполняется отдельно.
+Backend tests исключены из runtime-образов. Для вспомогательного
+`scripts/run_container_tests.sh` нужно отдельно read-only смонтировать
+`backend/tests` в `/app/tests` контейнера, подключённого только к disposable test DB.
+Обычный поддержанный путь regression: requirements-dev и pytest из исходников.
+Не запускать этот helper на demo/production DB.

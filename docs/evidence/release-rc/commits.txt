@@ -1,0 +1,8 @@
+13c58c5 fix: reject stale dispatcher request edits without losing history
+e539a8c fix: tolerate corrupt backup metadata and identify API builds
+a877612 fix: validate integration envelopes and verify cursor recovery
+ce14dcc fix: stabilize notification polling and prediction URL navigation
+9fdf37f test: verify simultaneous dispatcher edits have one winner
+36d7aa9 fix: wait for schema migration before automatic backups
+d3d15cd feat: package isolated cloud web deployment with safe startup
+f7d1d05 test: exercise request version checks in mixed load profile

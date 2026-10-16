@@ -1,0 +1,46 @@
+{
+  "base_url": "http://127.0.0.1:18089",
+  "profiles": [
+    {
+      "profile": "1_user_baseline",
+      "users": 1,
+      "requests": 18,
+      "errors": 0,
+      "error_rate": 0.0,
+      "duration_seconds": 2.552,
+      "rps": 7.053,
+      "p50_ms": 86.524,
+      "p95_ms": 255.329,
+      "p99_ms": 255.329,
+      "request_interval_seconds": 0.1
+    },
+    {
+      "profile": "20_users_normal",
+      "users": 20,
+      "requests": 360,
+      "errors": 0,
+      "error_rate": 0.0,
+      "duration_seconds": 4.081,
+      "rps": 88.216,
+      "p50_ms": 167.133,
+      "p95_ms": 471.094,
+      "p99_ms": 535.855,
+      "request_interval_seconds": 0.1
+    },
+    {
+      "profile": "20_users_mixed",
+      "users": 20,
+      "requests": 540,
+      "errors": 0,
+      "error_rate": 0.0,
+      "duration_seconds": 5.772,
+      "rps": 93.549,
+      "p50_ms": 159.696,
+      "p95_ms": 448.224,
+      "p99_ms": 558.283,
+      "request_interval_seconds": 0.1
+    }
+  ],
+  "passed": true,
+  "acceptance_note": "PASS means no HTTP/transport errors; customer SLA not defined."
+}

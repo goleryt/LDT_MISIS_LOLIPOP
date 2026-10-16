@@ -1805,6 +1805,18 @@
       },
       "PreventiveRequestUpdate": {
         "properties": {
+          "expected_updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Updated At"
+          },
           "title": {
             "anyOf": [
               {

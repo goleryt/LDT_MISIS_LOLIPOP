@@ -67,6 +67,15 @@ GET /reports/observations или /reports/repairs: обязательные date
 с mock HTTP-сервисом и Chrome UI проверен отдельно — [evidence](evidence/2026-10-16/mock-e2e.txt).
 После ошибки следующий цикл продолжает работу; промышленные протоколы и SLA не доказаны mock-тестом.
 
+RC worker проверяет, что JSON envelope является объектом и содержит next_cursor,
+до обработки строк. Ошибочная форма, пропущенный cursor, invalid JSON и ConnectError
+не сбрасывают ранее сохранённый cursor. Повтор и восстановление проверяются
+`test_worker_malformed.py` в полном RC suite. Живой QA worker опросил все пять
+источников, cursor=367, last_error=null: [snapshot](evidence/release-rc/live-integrations.txt).
+У mock-work без MOCK_REQUEST_ID пустой набор: применение статуса к реальной локальной
+заявке проверено контрактными тестами, не приписывается этому snapshot.
+Воспроизводимый отдельный cloud QA: [DEPLOYMENT_RC](DEPLOYMENT_RC.md).
+
 Импорт: при сбое строка реестра остаётся failed/processing, данные не фиксируются частично;
 retry повторяет атомарную транзакцию. Матрица четырёх форматов и искусственно прерванной
 загрузки — `test_import_acceptance.py`/`test_workflows.py`.

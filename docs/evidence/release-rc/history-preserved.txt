@@ -1,0 +1,13 @@
+Original 11 commits, unchanged hashes:
+6f3c06ee0e080bee053010b3c0f09006dc8beb7e fix: align request draft workflow with specification
+81c3a0b9c0ca92487974eb50c8c53c1831d8bb22 fix: attribute audit records and expose operational worker status
+fbaa3bcefdd7fd9eb33e15370e2bf6575cbdf062 fix: commit import data and registry atomically with retry coverage
+9cccb6853ab5b0a3329370d72974ebbd8d2f3935 fix: clarify monitoring UX and verify integration and report contracts
+9a834ff3420763d192266cefa39fa55c36461554 test: verify LDAP transport and complete CI draft acceptance flow
+861f0107f62de2d19e993a0986e0f8d658f8ebab fix: complete import selection and recoverable UI feedback
+860c15b69dc0e1b72a846dd9d78262344424c9d2 fix: expose backup failures and measure complete local load profiles
+6493c52cd79786f413d82f200aae4f17bebd3376 fix: make backup health metadata readable by unprivileged API
+1c843ad88a20cde79e9ce968402411ca6d7fc060 test: verify map interactions and compact Chrome navigation
+50cbdd9933a478af568d90186671476cbd65755b fix: explain empty map and expose report progress with safe errors
+a5ba6e0b95b5e4152a753a92decd92d92a141f36 docs: record October final acceptance and reproducible verification evidence
+RC working branch: release/final-rc; main refs untouched; no remote push.

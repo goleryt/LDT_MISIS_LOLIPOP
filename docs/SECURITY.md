@@ -51,7 +51,8 @@ TLS 1.2/1.3 на nginx, сертификат и ключ монтируются 
 ограничение draft, историю и переходы. `test_workflows.py` — исходные права, rate limit,
 origin, отсутствие пароля в аудите. `test_ldap_contract.py` проверяет TLS CERT_REQUIRED,
 read_only, отсутствие referrals, экранирование поиска и отказ без локального fallback.
-Результат входит в 82 успешных теста 16.10.2026; [evidence](evidence/2026-10-16/backend-final.txt).
+Результат входит в свежий RC regression; [итоговая приёмка](FINAL_ACCEPTANCE_2026-10.md),
+[полный pytest](evidence/release-rc/backend-final.txt).
 Роль `manager` соответствует просмотру; отдельной роли viewer нет.
 
 Это проверка контрактов LDAPS с подменённым транспортом. Настоящий bind к AD,
@@ -63,3 +64,15 @@ Bearer машинной роли integrator. Чувствительные тел
 плейсхолдеры; пароли тестов являются изолированными fixture, не доступом к стенду.
 Устаревший публичный пароль убран из текущего README, но очистка старой Git-истории
 и ротация действующих облачных credentials этим этапом не выполнялись.
+
+RC cloud-образ выполняется uid 10001, не содержит backend/tests или .env;
+изолированный запуск проверен с read-only filesystem и отдельным /tmp.
+API не доверяет присланным proxy headers; внешняя платформа завершает HTTPS,
+production cookies принудительно Secure. Нативная HTTPS-проверка подтвердила
+CSRF 403, admin 403 для dispatcher, logout 200 → 401 и отсутствие cookie по HTTP:
+[tls-security](evidence/release-rc/tls-security.json). Сертификат локальный тестовый;
+это не проверка сертификата нового Railway deployment.
+
+Защита от устаревших правок заявок действует при переданном expected_updated_at;
+актуальный UI всегда передаёт имеющуюся версию. Legacy REST без версии сохраняет
+совместимость и не получает такой гарантии. Пароли и сеансы не включены в evidence.

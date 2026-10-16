@@ -1,0 +1,439 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.cloud
+#1 transferring dockerfile: 778B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for public.ecr.aws/docker/library/python:3.14-slim
+#2 DONE 0.3s
+
+#3 [internal] load metadata for public.ecr.aws/docker/library/node:24-alpine
+#3 DONE 0.3s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 215B 0.0s done
+#4 DONE 0.1s
+
+#5 [stage-1 1/8] FROM public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2
+#5 resolve public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2
+#5 resolve public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 0.1s done
+#5 DONE 0.1s
+
+#6 [frontend 1/6] FROM public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+#6 resolve public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 0.1s done
+#6 DONE 0.1s
+
+#7 [internal] load build context
+#7 ...
+
+#8 [stage-1 2/8] WORKDIR /app
+#8 CACHED
+
+#7 [internal] load build context
+#7 transferring context: 1.46MB 0.2s done
+#7 DONE 0.4s
+
+#9 [stage-1 3/8] RUN apt-get update && apt-get install -y --no-install-recommends nginx && rm -rf /var/lib/apt/lists/*
+#9 ...
+
+#10 [frontend 2/6] WORKDIR /ui
+#10 CACHED
+
+#11 [frontend 3/6] COPY frontend/package*.json ./
+#11 DONE 0.1s
+
+#12 [frontend 4/6] RUN npm ci --no-audit --no-fund
+#12 ...
+
+#9 [stage-1 3/8] RUN apt-get update && apt-get install -y --no-install-recommends nginx && rm -rf /var/lib/apt/lists/*
+#9 0.965 Hit:1 http://deb.debian.org/debian trixie InRelease
+#9 1.085 Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+#9 1.336 Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+#9 1.546 Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9678 kB]
+#9 14.58 Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [4412 B]
+#9 15.29 Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [269 kB]
+#9 16.10 Fetched 10.0 MB in 16s (640 kB/s)
+#9 16.10 Reading package lists...
+#9 17.70 Reading package lists...
+#9 19.22 Building dependency tree...
+#9 19.76 Reading state information...
+#9 20.33 The following additional packages will be installed:
+#9 20.33   iproute2 libbpf1 libcap2-bin libcom-err2 libelf1t64 libgssapi-krb5-2
+#9 20.34   libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libmnl0 libtirpc-common
+#9 20.34   libtirpc3t64 libxtables12 nginx-common
+#9 20.34 Suggested packages:
+#9 20.34   python3:any krb5-doc krb5-user fcgiwrap nginx-doc ssl-cert
+#9 20.34 Recommended packages:
+#9 20.34   libpam-cap krb5-locales
+#9 20.53 The following NEW packages will be installed:
+#9 20.53   iproute2 libbpf1 libcap2-bin libcom-err2 libelf1t64 libgssapi-krb5-2
+#9 20.53   libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libmnl0 libtirpc-common
+#9 20.53   libtirpc3t64 libxtables12 nginx nginx-common
+#9 21.16 0 upgraded, 16 newly installed, 0 to remove and 5 not upgraded.
+#9 21.16 Need to get 2960 kB of archives.
+#9 21.16 After this operation, 10.1 MB of additional disk space will be used.
+#9 21.16 Get:1 http://deb.debian.org/debian trixie/main amd64 libelf1t64 amd64 0.192-4 [189 kB]
+#9 22.19 Get:2 http://deb.debian.org/debian trixie/main amd64 libbpf1 amd64 1:1.5.0-3 [169 kB]
+#9 22.54 Get:3 http://deb.debian.org/debian trixie/main amd64 libmnl0 amd64 1.0.5-3 [11.9 kB]
+#9 22.56 Get:4 http://deb.debian.org/debian trixie/main amd64 libkrb5support0 amd64 1.21.3-5+deb13u1 [33.1 kB]
+#9 22.63 Get:5 http://deb.debian.org/debian trixie/main amd64 libcom-err2 amd64 1.47.2-3+b12 [25.0 kB]
+#9 22.67 Get:6 http://deb.debian.org/debian trixie/main amd64 libk5crypto3 amd64 1.21.3-5+deb13u1 [81.2 kB]
+#9 22.85 Get:7 http://deb.debian.org/debian trixie/main amd64 libkeyutils1 amd64 1.6.3-6 [9456 B]
+#9 22.87 Get:8 http://deb.debian.org/debian trixie/main amd64 libkrb5-3 amd64 1.21.3-5+deb13u1 [326 kB]
+#9 23.61 Get:9 http://deb.debian.org/debian trixie/main amd64 libgssapi-krb5-2 amd64 1.21.3-5+deb13u1 [138 kB]
+#9 23.88 Get:10 http://deb.debian.org/debian trixie/main amd64 libtirpc-common all 1.3.6+ds-1 [11.0 kB]
+#9 23.90 Get:11 http://deb.debian.org/debian trixie/main amd64 libtirpc3t64 amd64 1.3.6+ds-1 [83.3 kB]
+#9 24.05 Get:12 http://deb.debian.org/debian trixie/main amd64 libxtables12 amd64 1.8.11-2 [31.9 kB]
+#9 24.11 Get:13 http://deb.debian.org/debian trixie/main amd64 libcap2-bin amd64 1:2.75-10+deb13u1+b3 [36.5 kB]
+#9 24.48 Get:14 http://deb.debian.org/debian trixie/main amd64 iproute2 amd64 6.15.0-1 [1089 kB]
+#9 26.35 Get:15 http://deb.debian.org/debian-security trixie-security/main amd64 nginx-common all 1.26.3-3+deb13u9 [112 kB]
+#9 26.42 Get:16 http://deb.debian.org/debian-security trixie-security/main amd64 nginx amd64 1.26.3-3+deb13u9 [613 kB]
+#9 27.82 debconf: unable to initialize frontend: Dialog
+#9 27.82 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#9 27.82 debconf: falling back to frontend: Readline
+#9 27.82 debconf: unable to initialize frontend: Readline
+#9 27.82 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 16.)
+#9 27.82 debconf: falling back to frontend: Teletype
+#9 27.84 debconf: unable to initialize frontend: Teletype
+#9 27.84 debconf: (This frontend requires a controlling tty.)
+#9 27.84 debconf: falling back to frontend: Noninteractive
+#9 29.92 Preconfiguring packages ...
+#9 30.09 Fetched 2960 kB in 7s (453 kB/s)
+#9 30.15 Selecting previously unselected package libelf1t64:amd64.
+#9 30.15 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 5660 files and directories currently installed.)
+#9 30.22 Preparing to unpack .../00-libelf1t64_0.192-4_amd64.deb ...
+#9 30.24 Unpacking libelf1t64:amd64 (0.192-4) ...
+#9 30.32 Selecting previously unselected package libbpf1:amd64.
+#9 30.32 Preparing to unpack .../01-libbpf1_1%3a1.5.0-3_amd64.deb ...
+#9 30.33 Unpacking libbpf1:amd64 (1:1.5.0-3) ...
+#9 30.45 Selecting previously unselected package libmnl0:amd64.
+#9 30.45 Preparing to unpack .../02-libmnl0_1.0.5-3_amd64.deb ...
+#9 30.46 Unpacking libmnl0:amd64 (1.0.5-3) ...
+#9 30.54 Selecting previously unselected package libkrb5support0:amd64.
+#9 30.54 Preparing to unpack .../03-libkrb5support0_1.21.3-5+deb13u1_amd64.deb ...
+#9 30.55 Unpacking libkrb5support0:amd64 (1.21.3-5+deb13u1) ...
+#9 30.63 Selecting previously unselected package libcom-err2:amd64.
+#9 30.63 Preparing to unpack .../04-libcom-err2_1.47.2-3+b12_amd64.deb ...
+#9 30.64 Unpacking libcom-err2:amd64 (1.47.2-3+b12) ...
+#9 30.72 Selecting previously unselected package libk5crypto3:amd64.
+#9 30.72 Preparing to unpack .../05-libk5crypto3_1.21.3-5+deb13u1_amd64.deb ...
+#9 30.73 Unpacking libk5crypto3:amd64 (1.21.3-5+deb13u1) ...
+#9 30.80 Selecting previously unselected package libkeyutils1:amd64.
+#9 30.80 Preparing to unpack .../06-libkeyutils1_1.6.3-6_amd64.deb ...
+#9 30.81 Unpacking libkeyutils1:amd64 (1.6.3-6) ...
+#9 30.88 Selecting previously unselected package libkrb5-3:amd64.
+#9 30.88 Preparing to unpack .../07-libkrb5-3_1.21.3-5+deb13u1_amd64.deb ...
+#9 30.89 Unpacking libkrb5-3:amd64 (1.21.3-5+deb13u1) ...
+#9 30.99 Selecting previously unselected package libgssapi-krb5-2:amd64.
+#9 30.99 Preparing to unpack .../08-libgssapi-krb5-2_1.21.3-5+deb13u1_amd64.deb ...
+#9 31.00 Unpacking libgssapi-krb5-2:amd64 (1.21.3-5+deb13u1) ...
+#9 31.09 Selecting previously unselected package libtirpc-common.
+#9 31.09 Preparing to unpack .../09-libtirpc-common_1.3.6+ds-1_all.deb ...
+#9 31.10 Unpacking libtirpc-common (1.3.6+ds-1) ...
+#9 31.20 Selecting previously unselected package libtirpc3t64:amd64.
+#9 31.20 Preparing to unpack .../10-libtirpc3t64_1.3.6+ds-1_amd64.deb ...
+#9 31.21 Adding 'diversion of /lib/x86_64-linux-gnu/libtirpc.so.3 to /lib/x86_64-linux-gnu/libtirpc.so.3.usr-is-merged by libtirpc3t64'
+#9 31.23 Adding 'diversion of /lib/x86_64-linux-gnu/libtirpc.so.3.0.0 to /lib/x86_64-linux-gnu/libtirpc.so.3.0.0.usr-is-merged by libtirpc3t64'
+#9 31.24 Unpacking libtirpc3t64:amd64 (1.3.6+ds-1) ...
+#9 31.38 Selecting previously unselected package libxtables12:amd64.
+#9 31.38 Preparing to unpack .../11-libxtables12_1.8.11-2_amd64.deb ...
+#9 31.44 Unpacking libxtables12:amd64 (1.8.11-2) ...
+#9 31.68 Selecting previously unselected package libcap2-bin.
+#9 31.68 Preparing to unpack .../12-libcap2-bin_1%3a2.75-10+deb13u1+b3_amd64.deb ...
+#9 31.69 Unpacking libcap2-bin (1:2.75-10+deb13u1+b3) ...
+#9 31.81 Selecting previously unselected package iproute2.
+#9 31.81 Preparing to unpack .../13-iproute2_6.15.0-1_amd64.deb ...
+#9 31.94 Unpacking iproute2 (6.15.0-1) ...
+#9 32.16 Selecting previously unselected package nginx-common.
+#9 32.16 Preparing to unpack .../14-nginx-common_1.26.3-3+deb13u9_all.deb ...
+#9 32.19 Unpacking nginx-common (1.26.3-3+deb13u9) ...
+#9 32.32 Selecting previously unselected package nginx.
+#9 32.32 Preparing to unpack .../15-nginx_1.26.3-3+deb13u9_amd64.deb ...
+#9 32.34 Unpacking nginx (1.26.3-3+deb13u9) ...
+#9 32.51 Setting up libkeyutils1:amd64 (1.6.3-6) ...
+#9 32.53 Setting up libtirpc-common (1.3.6+ds-1) ...
+#9 32.56 Setting up nginx-common (1.26.3-3+deb13u9) ...
+#9 33.08 debconf: unable to initialize frontend: Dialog
+#9 33.08 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#9 33.08 debconf: falling back to frontend: Readline
+#9 33.08 debconf: unable to initialize frontend: Readline
+#9 33.08 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+#9 33.08 debconf: falling back to frontend: Teletype
+#9 33.10 debconf: unable to initialize frontend: Teletype
+#9 33.10 debconf: (This frontend requires a controlling tty.)
+#9 33.10 debconf: falling back to frontend: Noninteractive
+#9 33.54 Setting up libcom-err2:amd64 (1.47.2-3+b12) ...
+#9 33.56 Setting up libelf1t64:amd64 (0.192-4) ...
+#9 33.59 Setting up libkrb5support0:amd64 (1.21.3-5+deb13u1) ...
+#9 33.61 Setting up libcap2-bin (1:2.75-10+deb13u1+b3) ...
+#9 33.64 Setting up libmnl0:amd64 (1.0.5-3) ...
+#9 33.67 Setting up libk5crypto3:amd64 (1.21.3-5+deb13u1) ...
+#9 33.69 Setting up libxtables12:amd64 (1.8.11-2) ...
+#9 33.71 Setting up libkrb5-3:amd64 (1.21.3-5+deb13u1) ...
+#9 33.74 Setting up libbpf1:amd64 (1:1.5.0-3) ...
+#9 33.76 Setting up libgssapi-krb5-2:amd64 (1.21.3-5+deb13u1) ...
+#9 33.79 Setting up libtirpc3t64:amd64 (1.3.6+ds-1) ...
+#9 33.81 Setting up iproute2 (6.15.0-1) ...
+#9 33.95 debconf: unable to initialize frontend: Dialog
+#9 33.95 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#9 33.95 debconf: falling back to frontend: Readline
+#9 33.95 debconf: unable to initialize frontend: Readline
+#9 33.95 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+#9 33.95 debconf: falling back to frontend: Teletype
+#9 33.97 debconf: unable to initialize frontend: Teletype
+#9 33.97 debconf: (This frontend requires a controlling tty.)
+#9 33.97 debconf: falling back to frontend: Noninteractive
+#9 34.13 Setting up nginx (1.26.3-3+deb13u9) ...
+#9 34.18 invoke-rc.d: could not determine current runlevel
+#9 34.20 invoke-rc.d: policy-rc.d denied execution of start.
+#9 34.21 Processing triggers for libc-bin (2.41-12+deb13u4) ...
+#9 DONE 34.7s
+
+#12 [frontend 4/6] RUN npm ci --no-audit --no-fund
+#12 ...
+
+#13 [stage-1 4/8] COPY backend/requirements.txt ./
+#13 DONE 0.1s
+
+#14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#14 5.781 Collecting alembic==1.20.0 (from -r requirements.txt (line 1))
+#14 6.441   Downloading alembic-1.20.0-py3-none-any.whl.metadata (7.3 kB)
+#14 6.593 Collecting annotated-doc==0.0.5 (from -r requirements.txt (line 2))
+#14 6.716   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#14 6.859 Collecting annotated-types==0.8.0 (from -r requirements.txt (line 3))
+#14 6.969   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#14 7.159 Collecting anyio==4.15.1 (from -r requirements.txt (line 4))
+#14 7.295   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#14 7.516 Collecting click==8.5.0 (from -r requirements.txt (line 5))
+#14 7.672   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#14 8.040 Collecting fastapi==0.141.1 (from -r requirements.txt (line 6))
+#14 8.152   Downloading fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+#14 ...
+
+#12 [frontend 4/6] RUN npm ci --no-audit --no-fund
+#12 42.77 
+#12 42.77 added 74 packages in 42s
+#12 42.78 npm notice
+#12 42.78 npm notice New major version of npm available! 11.19.0 -> 12.2.0
+#12 42.78 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+#12 42.78 npm notice To update run: npm install -g npm@12.2.0
+#12 42.78 npm notice
+#12 DONE 43.1s
+
+#14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#14 ...
+
+#15 [frontend 5/6] COPY frontend/ ./
+#15 DONE 0.2s
+
+#14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#14 8.881 Collecting greenlet==3.5.6 (from -r requirements.txt (line 7))
+#14 9.003   Downloading greenlet-3.5.6-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+#14 9.141 Collecting h11==0.16.0 (from -r requirements.txt (line 8))
+#14 9.278   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#14 9.521 Collecting httptools==0.8.0 (from -r requirements.txt (line 9))
+#14 9.639   Downloading httptools-0.8.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#14 9.797 Collecting idna==3.19 (from -r requirements.txt (line 10))
+#14 9.914   Downloading idna-3.19-py3-none-any.whl.metadata (9.2 kB)
+#14 10.07 Collecting Mako==1.4.1 (from -r requirements.txt (line 11))
+#14 10.19   Downloading mako-1.4.1-py3-none-any.whl.metadata (2.9 kB)
+#14 10.48 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 12))
+#14 10.60   Downloading markupsafe-3.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#14 10.75 Collecting psycopg==3.3.5 (from -r requirements.txt (line 13))
+#14 10.90   Downloading psycopg-3.3.5-py3-none-any.whl.metadata (4.3 kB)
+#14 11.43 Collecting psycopg-binary==3.3.5 (from -r requirements.txt (line 14))
+#14 11.54   Downloading psycopg_binary-3.3.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+#14 12.23 Collecting pydantic==2.13.5 (from -r requirements.txt (line 15))
+#14 12.35   Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+#14 12.72 Collecting pydantic-settings==2.15.0 (from -r requirements.txt (line 16))
+#14 12.92   Downloading pydantic_settings-2.15.0-py3-none-any.whl.metadata (3.9 kB)
+#14 15.07 Collecting pydantic_core==2.46.5 (from -r requirements.txt (line 17))
+#14 15.19   Downloading pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#14 15.35 Collecting python-dotenv==1.2.3 (from -r requirements.txt (line 18))
+#14 15.47   Downloading python_dotenv-1.2.3-py3-none-any.whl.metadata (29 kB)
+#14 15.61 Collecting python-multipart==0.0.32 (from -r requirements.txt (line 19))
+#14 15.74   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#14 15.99 Collecting PyYAML==6.0.3 (from -r requirements.txt (line 20))
+#14 16.11   Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#14 17.20 Collecting SQLAlchemy==2.0.53 (from -r requirements.txt (line 21))
+#14 17.31   Downloading sqlalchemy-2.0.53-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.7 kB)
+#14 17.51 Collecting starlette==1.6.0 (from -r requirements.txt (line 22))
+#14 17.63   Downloading starlette-1.6.0-py3-none-any.whl.metadata (6.4 kB)
+#14 17.76 Collecting typing-inspection==0.4.4 (from -r requirements.txt (line 23))
+#14 17.88   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#14 18.07 Collecting typing_extensions==4.16.0 (from -r requirements.txt (line 24))
+#14 18.19   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#14 18.35 Collecting tzdata==2026.4 (from -r requirements.txt (line 25))
+#14 18.48   Downloading tzdata-2026.4-py2.py3-none-any.whl.metadata (1.4 kB)
+#14 18.67 Collecting uvicorn==0.53.0 (from -r requirements.txt (line 26))
+#14 18.78   Downloading uvicorn-0.53.0-py3-none-any.whl.metadata (6.6 kB)
+#14 ...
+
+#16 [frontend 6/6] RUN npm run build
+#16 0.891 
+#16 0.891 > frontend@0.0.0 build
+#16 0.891 > tsc -b && vite build
+#16 0.891 
+#16 ...
+
+#14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#14 19.13 Collecting watchfiles==1.2.0 (from -r requirements.txt (line 27))
+#14 19.26   Downloading watchfiles-1.2.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#14 19.68 Collecting websockets==17.1 (from -r requirements.txt (line 28))
+#14 19.78   Downloading websockets-17.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.3 kB)
+#14 19.96 Collecting openpyxl==3.1.5 (from -r requirements.txt (line 29))
+#14 20.08   Downloading openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+#14 20.23 Collecting defusedxml==0.7.1 (from -r requirements.txt (line 30))
+#14 20.35   Downloading defusedxml-0.7.1-py2.py3-none-any.whl.metadata (32 kB)
+#14 20.55 Collecting ldap3==2.9.1 (from -r requirements.txt (line 31))
+#14 20.72   Downloading ldap3-2.9.1-py2.py3-none-any.whl.metadata (5.4 kB)
+#14 20.88 Collecting httpx==0.28.1 (from -r requirements.txt (line 32))
+#14 21.00   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#14 21.54 Collecting reportlab==5.0.1 (from -r requirements.txt (line 33))
+#14 21.68   Downloading reportlab-5.0.1-py3-none-any.whl.metadata (1.6 kB)
+#14 21.87 Collecting et-xmlfile (from openpyxl==3.1.5->-r requirements.txt (line 29))
+#14 21.98   Downloading et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+#14 22.17 Collecting pyasn1>=0.4.6 (from ldap3==2.9.1->-r requirements.txt (line 31))
+#14 22.29   Downloading pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+#14 ...
+
+#16 [frontend 6/6] RUN npm run build
+#16 12.46 vite v8.3.0 building client environment for production...
+#16 12.52 transforming...
+#16 12.90 ✓ 2491 modules transformed.
+#16 13.17 rendering chunks...
+#16 13.41 computing gzip size...
+#16 13.42 dist/index.html                                 0.60 kB │ gzip:   0.39 kB
+#16 13.42 dist/assets/Nunito-Cyrillic-CTI5J-Gh.woff2     20.78 kB
+#16 13.42 dist/assets/Nunito-Latin-CjueodBP.woff2        39.15 kB
+#16 13.42 dist/assets/SettingsPage-sM3oPCog.css           2.56 kB │ gzip:   0.90 kB
+#16 13.42 dist/assets/index-BTmTUR5D.css                 66.66 kB │ gzip:  12.90 kB
+#16 13.42 dist/assets/map-CybSNgIf.js                     0.15 kB │ gzip:   0.15 kB
+#16 13.42 dist/assets/objects-JXTwH_OF.js                 0.16 kB │ gzip:   0.15 kB
+#16 13.42 dist/assets/clock-3-DCVyag7t.js                 0.19 kB │ gzip:   0.18 kB
+#16 13.42 dist/assets/search-DfTAolb6.js                  0.20 kB │ gzip:   0.18 kB
+#16 13.42 dist/assets/circle-question-mark-BsB34v2N.js    0.31 kB │ gzip:   0.24 kB
+#16 13.42 dist/assets/refresh-cw-Bf0mtBFB.js              0.35 kB │ gzip:   0.24 kB
+#16 13.42 dist/assets/building-complex-DJgZVzqY.js        0.44 kB │ gzip:   0.27 kB
+#16 13.42 dist/assets/shield-check-CrSQSff5.js            0.58 kB │ gzip:   0.37 kB
+#16 13.42 dist/assets/SettingsPage-txhWcwqn.js            1.94 kB │ gzip:   0.98 kB
+#16 13.42 dist/assets/ReportsPage-BURphb3a.js             2.19 kB │ gzip:   1.12 kB
+#16 13.42 dist/assets/SensorIcon-CKlk7EPk.js              5.19 kB │ gzip:   2.46 kB
+#16 13.42 dist/assets/ObjectsPage-D0liZNdp.js             6.00 kB │ gzip:   2.06 kB
+#16 13.42 dist/assets/AlarmsPage-B2oVCjwZ.js              6.48 kB │ gzip:   2.21 kB
+#16 13.42 dist/assets/PredictionsPage-08YmsnGh.js         7.06 kB │ gzip:   2.73 kB
+#16 13.42 dist/assets/ImportsPage-C4ezeYJU.js             9.31 kB │ gzip:   3.17 kB
+#16 13.42 dist/assets/EventJournalPage-NtUDeOfP.js       11.03 kB │ gzip:   3.80 kB
+#16 13.42 dist/assets/session-CaK5B-Wp.js                11.13 kB │ gzip:   4.52 kB
+#16 13.42 dist/assets/RequestsPage-k5u0RHbr.js           14.83 kB │ gzip:   4.62 kB
+#16 13.42 dist/assets/index-Bd5_2tVh.js                 268.25 kB │ gzip:  85.80 kB
+#16 13.42 dist/assets/MapPage-CsEZn_1z.js               382.88 kB │ gzip: 112.46 kB
+#16 13.42 
+#16 13.43 ✓ built in 962ms
+#16 DONE 13.6s
+
+#14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#14 22.46 Collecting certifi (from httpx==0.28.1->-r requirements.txt (line 32))
+#14 22.58   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+#14 22.72 Collecting httpcore==1.* (from httpx==0.28.1->-r requirements.txt (line 32))
+#14 22.85   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#14 23.54 Collecting pillow>=9.0.0 (from reportlab==5.0.1->-r requirements.txt (line 33))
+#14 23.67   Downloading pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#14 24.18 Collecting charset-normalizer (from reportlab==5.0.1->-r requirements.txt (line 33))
+#14 24.31   Downloading charset_normalizer-3.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+#14 24.49 Downloading alembic-1.20.0-py3-none-any.whl (268 kB)
+#14 24.85 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#14 24.97 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#14 25.10 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#14 25.30 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#14 25.53 Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+#14 25.75 Downloading greenlet-3.5.6-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (670 kB)
+#14 26.38    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 670.8/670.8 kB 1.0 MB/s  0:00:00
+#14 26.49 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#14 26.64 Downloading httptools-0.8.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (481 kB)
+#14 27.26 Downloading idna-3.19-py3-none-any.whl (68 kB)
+#14 27.41 Downloading mako-1.4.1-py3-none-any.whl (80 kB)
+#14 27.60 Downloading markupsafe-3.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (23 kB)
+#14 27.72 Downloading psycopg-3.3.5-py3-none-any.whl (213 kB)
+#14 28.08 Downloading psycopg_binary-3.3.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+#14 37.65    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 544.4 kB/s  0:00:09
+#14 37.77 Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+#14 38.80 Downloading pydantic_settings-2.15.0-py3-none-any.whl (69 kB)
+#14 39.67 Downloading pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#14 48.52    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 223.0 kB/s  0:00:08
+#14 48.63 Downloading python_dotenv-1.2.3-py3-none-any.whl (22 kB)
+#14 48.80 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#14 49.01 Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (794 kB)
+#14 52.91    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 794.2/794.2 kB 170.4 kB/s  0:00:03
+#14 53.16 Downloading sqlalchemy-2.0.53-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.4 MB)
+#14 71.87    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 182.1 kB/s  0:00:18
+#14 71.99 Downloading starlette-1.6.0-py3-none-any.whl (75 kB)
+#14 72.41 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#14 72.54 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#14 72.84 Downloading tzdata-2026.4-py2.py3-none-any.whl (347 kB)
+#14 74.06 Downloading uvicorn-0.53.0-py3-none-any.whl (87 kB)
+#14 74.43 Downloading watchfiles-1.2.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (453 kB)
+#14 76.45 Downloading websockets-17.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (224 kB)
+#14 77.55 Downloading openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+#14 78.72 Downloading defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+#14 78.95 Downloading ldap3-2.9.1-py2.py3-none-any.whl (432 kB)
+#14 81.00 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#14 81.40 Downloading reportlab-5.0.1-py3-none-any.whl (2.0 MB)
+#14 88.81    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 258.1 kB/s  0:00:07
+#14 88.94 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#14 89.57 Downloading pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+#14 116.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 262.0 kB/s  0:00:26
+#14 116.5 Downloading pyasn1-0.6.4-py3-none-any.whl (84 kB)
+#14 116.8 Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#14 117.2 Downloading charset_normalizer-3.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (255 kB)
+#14 117.9 Downloading et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+#14 118.5 Installing collected packages: websockets, tzdata, typing_extensions, PyYAML, python-multipart, python-dotenv, pyasn1, psycopg-binary, psycopg, pillow, MarkupSafe, idna, httptools, h11, greenlet, et-xmlfile, defusedxml, click, charset-normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, reportlab, pydantic_core, openpyxl, Mako, ldap3, httpcore, anyio, watchfiles, starlette, pydantic, httpx, alembic, pydantic-settings, fastapi
+#14 129.3 
+#14 129.3 Successfully installed Mako-1.4.1 MarkupSafe-3.0.3 PyYAML-6.0.3 SQLAlchemy-2.0.53 alembic-1.20.0 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset-normalizer-3.5.2 click-8.5.0 defusedxml-0.7.1 et-xmlfile-2.0.0 fastapi-0.141.1 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.28.1 idna-3.19 ldap3-2.9.1 openpyxl-3.1.5 pillow-12.3.0 psycopg-3.3.5 psycopg-binary-3.3.5 pyasn1-0.6.4 pydantic-2.13.5 pydantic-settings-2.15.0 pydantic_core-2.46.5 python-dotenv-1.2.3 python-multipart-0.0.32 reportlab-5.0.1 starlette-1.6.0 typing-inspection-0.4.4 typing_extensions-4.16.0 tzdata-2026.4 uvicorn-0.53.0 watchfiles-1.2.0 websockets-17.1
+#14 129.3 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#14 DONE 130.3s
+
+#17 [stage-1 6/8] COPY backend/ ./
+#17 DONE 0.2s
+
+#18 [stage-1 7/8] COPY --from=frontend /ui/dist /site
+#18 DONE 0.2s
+
+#19 [stage-1 8/8] COPY infra/cloud.nginx.conf /app/cloud.nginx.conf
+#19 DONE 0.1s
+
+#20 exporting to image
+#20 exporting layers
+#20 exporting layers 7.2s done
+#20 exporting manifest sha256:6363146c519ae32f0454e5d3da027eb8888f391285f89551a7fdbfb957f9672f 0.0s done
+#20 exporting config sha256:8022cc56cf8df30031f87d7fd9d9b392a41e1343afb7172c70333c7c14846f1d 0.0s done
+#20 exporting attestation manifest sha256:96a55717698daa3def3246b5c72dbb509e10115b429fada502d339f127cc951b 0.0s done
+#20 exporting manifest list sha256:7e0cb511d8296d2bc5f9db232d957331a76d448c7e0610f8c6f36a2ad239fd5f
+#20 exporting manifest list sha256:7e0cb511d8296d2bc5f9db232d957331a76d448c7e0610f8c6f36a2ad239fd5f 0.0s done
+#20 naming to docker.io/library/ldt-rc-cloud:latest done
+#20 unpacking to docker.io/library/ldt-rc-cloud:latest
+#20 unpacking to docker.io/library/ldt-rc-cloud:latest 2.1s done
+#20 DONE 9.6s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/n47kzxdhwkzlz639wyqglrcgm

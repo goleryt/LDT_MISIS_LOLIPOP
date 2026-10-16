@@ -1,0 +1,1 @@
+tini_ready_then_sigterm_exit=0

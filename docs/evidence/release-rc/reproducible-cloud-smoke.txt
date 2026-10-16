@@ -1,0 +1,2 @@
+Synthetic monitoring fixture ready: 50 objects, 1000 sensors, up to 20000 events; no predictions.
+Smoke passed

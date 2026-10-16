@@ -1,161 +1,128 @@
-# Финальная приёмка немодельного контура — 16.10.2026
+# Финальная приёмка RC — 16.10.2026
 
-Ветка: `final/non-ml-hardening-20261016`. Исходная origin/main: `5d64126`, чистый новый worktree.
-Оригинальная пользовательская папка, main и публичный demo не изменялись; push не выполнялся.
-Проверенный application commit чистого развёртывания: `860c15b`; последующие изменения:
-`6493c52` — права backup-меток (проверены отдельно), `1c843ad` — тест карты.
-Последний application commit — `50cbdd9`: понятные empty/loading/error карты и отчёта, безопасные ошибки API; проверены сборкой и восемью Chrome tests.
-Чистая копия обновлена локальным fast-forward до 50cbdd9, frontend пересобран, backup marker проверен; три Chrome tests прошли.
-Последующие commits с документацией/evidence не меняют исполняемое поведение.
-Точный итоговый HEAD показывает `git rev-parse HEAD`.
+Ветка **release/final-rc**. Исходные 11 коммитов до `a5ba6e0` сохранены с теми же
+hashes; переименована только ветка. Application/test commit: **f7d1d05**.
+Последующие commits изменяют документацию/evidence. Итоговый HEAD: `git rev-parse HEAD`.
+Main и пользовательский checkout не менялись. Новые RC-коммиты не пушились;
+первые 11 ранее были опубликованы в старой ветке. RC не развёрнут на Railway.
 
-Нормативный источник: [официальное ТЗ](<8. ДЖКХ.pdf>), 16 страниц.
-Файл TZ_FINAL_REVIEW_AND_NON_ML_QUESTIONS_RU.md в текущей поставке не найден.
-Решения владельца после консультации: [FINAL_SCOPE_DECISIONS_RU](FINAL_SCOPE_DECISIONS_RU.md).
-Ожидания ответа жюри больше нет.
+Нормативный источник: [8. ДЖКХ.pdf](<8. ДЖКХ.pdf>), 16 страниц.
+[Решения владельца](FINAL_SCOPE_DECISIONS_RU.md) применены без ожидания жюри.
+ML полностью заморожен: предметная математика, признаки, target, thresholds,
+calibration, shadow/abstain, scheduler и бандлы не менялись.
+[Проверка diff](evidence/release-rc/ml-frozen.txt). Нового inference на этапе RC не было;
+UI использовал настоящий ранее сохранённый результат из восстановленного snapshot.
+Fixture unit tests не считаются результатами inference или оценкой качества модели.
 
-Статусы: **PASS** — проверено в указанном объёме; **PARTIAL** — часть подтверждена;
-**NOT TESTED** — не проверено; **EXTERNAL DEPENDENCY** — нужны внешние данные/инфраструктура.
-**OUT OF SCOPE (FIXED DECISION)** — исключено прямым решением владельца, без ожидания уточнения.
-PASS локального контракта не означает промышленную сертификацию.
+Статусы: PASS — подтверждено в указанном объёме; PARTIAL — подтверждено частично;
+NOT TESTED — не проверено; EXTERNAL DEPENDENCY — нужна внешняя инфраструктура/данные;
+NOT APPLICABLE — исключено зафиксированным решением этого этапа.
+PASS контракта не является промышленной сертификацией или общим выполнением ТЗ.
 
-## Свежие результаты
+## Свежие результаты RC
 
-| Проверка | Фактический результат | Evidence |
+| Проверка | Actual result | Evidence |
 |---|---|---|
-| Backend compile/import + pytest | 82 passed, 4 предупреждения зависимостей, 40.11 с; Python 3.14.6, отдельный PostgreSQL 16 | [backend-final](evidence/2026-10-16/backend-final.txt), [JUnit](evidence/2026-10-16/backend-final.xml) |
-| Alembic | Пустая БД → d01602; current=heads; check без новых операций; downgrade до 7bb10cf49ac2 → upgrade → check прошли | [migration-final](evidence/2026-10-16/migration-final.txt) |
-| Frontend | tsc/Vite PASS; npm ci выполнен в Docker; lint 0 ошибок, 9 предупреждений set-state-in-effect | [build](evidence/2026-10-16/frontend-final.txt), [lint](evidence/2026-10-16/frontend-lint.txt) |
-| Chrome 155.0.8059.84 | 8 сценариев одним итоговым прогоном PASS, включая pan/zoom/tooltip/click/390px и map loading/empty/error recovery/report progress; runtime pageerror=0 в общем сценарии | [browser-final](evidence/2026-10-16/browser-final.txt), [map](evidence/2026-10-16/browser-map.txt), [compact](evidence/2026-10-16/compact-chrome.png) |
-| Clean clone | Локальный Git clone 860c15b → env example → Docker build → новые volumes → миграции → seed 20000 → smoke PASS; после обновления до 50cbdd9 — 3 Chrome flows PASS | [clean-deployment](evidence/2026-10-16/clean-deployment.txt), [browser-clean](evidence/2026-10-16/browser-clean.txt) |
-| Docker / ML image | backend/migrate/frontend собраны, API/PG healthy; отдельный ML image собран | [build](evidence/2026-10-16/docker-build.txt), [ML build](evidence/2026-10-16/ml-container-build.txt) |
-| Сохранённый ML-контракт | Настоящий frozen gas runtime на явно синтетической истории: 1 сохранённый результат, 2.391 с; provenance/window/idempotence/no-auto-alert/stub rejection проверены | [ML contract](evidence/2026-10-16/ml-contract-real.txt) |
-| Near-real-time | telemetry → DB → уведомление: 0.244 с до сохранённого уведомления; новых прогнозов от telemetry не создаётся | [telemetry](evidence/2026-10-16/telemetry.txt) |
-| TLS | 1.2/1.3 разрешены, 1.1 отвергнут; HTTPS health 200, HSTS/CSP; локальный тестовый сертификат | [TLS](evidence/2026-10-16/tls.json) |
-| Backup/restore | Автозапуск/ручная копия, checksum, rotation/отказ проверены; новая БД: d01602, 200000 событий, restore 1 с; восстановленный API smoke PASS | [restore](evidence/2026-10-16/restore.txt), [smoke](evidence/2026-10-16/restored-smoke.txt), [failure/rotation](evidence/2026-10-16/backup-checks.txt), [права metadata](evidence/2026-10-16/backup-metadata.txt) |
+| Полный backend | **108 passed**, 4 dependency deprecations, 76.14 с; Python3.14.6, отдельный PostgreSQL16, test DB | [pytest](evidence/release-rc/backend-final.txt), [JUnit](evidence/release-rc/backend-final.xml) |
+| Frontend | TypeScript/Vite PASS; npm ci в cloud build; lint 0 ошибок / **10 warnings** set-state-in-effect | [build](evidence/release-rc/frontend-build.txt), [lint](evidence/release-rc/frontend-lint.txt) |
+| Chrome155.0.8059.84 / Windows11Home10.0.26200 | 11 PASS одним прогоном; после визуальных правок 3 PASS; дополнительно 4 PASS на локальном HTTPS с production auth settings | [Chrome](evidence/release-rc/chrome.txt), [visual](evidence/release-rc/visual-final.txt), [HTTPS](evidence/release-rc/chrome-tls.txt) |
+| Visual QA | 30 desktop-снимков 1280/1440/1920, dark/light; long Russian text; overflow/pageerror проверены автоматически, выбранные снимки просмотрены | [matrix](evidence/release-rc/visual/matrix.json), [карта/датчик](evidence/release-rc/visual/1280-9.png), [prediction](evidence/release-rc/visual/1280-6.png), [заявки](evidence/release-rc/visual/1440-4.png), [отчёт](evidence/release-rc/visual/1440-7.png), [drawer](evidence/release-rc/visual/long-name-drawer.png), [уведомление](evidence/release-rc/visual/long-notification.png) |
+| Alembic | current=heads=d01602; check: no new operations; чистые новые PG/volumes проходят миграции | [check](evidence/release-rc/migrations-current.txt), [clean startup](evidence/release-rc/reproducible-cloud-startup.txt) |
+| Cloud Docker | root multistage build + npm ci/build, uid10001, read-only QA, private API, nginx, Tini; новые PG/backup volumes, 20000 synthetic events → smoke PASS | [build](evidence/release-rc/cloud-build-final.txt), [portable smoke](evidence/release-rc/reproducible-cloud-smoke.txt), [lifecycle](evidence/release-rc/cloud-lifecycle-final.txt), [ранний stop](evidence/release-rc/cloud-init-stop.json) |
+| Сборка зафиксированного application commit | f7d1d05, build → healthy → smoke → 3 Chrome flows PASS | [commit](evidence/release-rc/application-commit.txt), [build](evidence/release-rc/cloud-build-commit.txt), [smoke](evidence/release-rc/cloud-commit-smoke.txt), [Chrome](evidence/release-rc/chrome-commit.txt) |
+| TLS/auth | /health,/ready200; Secure cookie не отправляется по HTTP; CSRF403, admin403 для dispatcher, logout200 →401 | [native HTTPS](evidence/release-rc/tls-security.json) |
+| Load | **918 requests / 0 errors**, 1user/20read/20mixed; p95 read471.094мс / mixed448.224мс; p99 535.855/558.283мс; RPS88.216/93.549 | [JSON](evidence/release-rc/load.json), [before](evidence/release-rc/load-stats-before.txt), [after](evidence/release-rc/load-stats-after.txt) |
+| Backup/restore | checksum OK; свежий dump → **новая** ldt_rc_restore_verify; **200371 событий**, d01602, restore3с; API smoke PASS | [backup](evidence/release-rc/backup-current.txt), [restore](evidence/release-rc/restore-current.txt), [API](evidence/release-rc/restored-current-smoke.txt) |
+| Автокопия после migrate | До исправления первый dump имел 0 schema entries; после — 3, в том числе на новых volumes | [до](evidence/release-rc/initial-auto-backup-schema.txt), [после](evidence/release-rc/auto-backup-clean-schema.txt), [startup](evidence/release-rc/auto-backup-clean-start.txt) |
+| Worker | Все 5 mock sources: cursor367, last_success есть, last_error=null; JSON/schema/cursor/timeout/500/connect/retry/idempotency в suite | [live](evidence/release-rc/live-integrations.txt), backend-final |
+| Scheduler | Живой frozen scheduler без ready marker: waiting_for_marker, last_success=null; predictions остаётся1. Затем QA scheduler остановлен | [heartbeat](evidence/release-rc/scheduler-waiting.txt), [исходное число](evidence/release-rc/ml-count-before-scheduler.txt) |
+| Старый публичный demo | HTTPS root/health/ready200, anonymous auth/me401; это не новый RC | [public-demo](evidence/release-rc/public-demo.json) |
 
-Синтетические входные данные и mock явно обозначены. Контрактные unit tests с fixture
-не являются источником прогнозов demo и не оценивают Precision/Recall.
-Проверка настоящего runtime не меняет его предметную математику.
+Короткий load не является endurance/SLA. Раньше p95 был284.264/274.828мс; теперь
+на cloud nginx +4API workers и восстановленной БД измерено примерно +65.7%/+63.1%.
+Конфигурация/фоновые контейнеры отличаются; это сравнение наблюдений, не доказанная
+причинная регрессия API. Локальные snapshots CPU/RAM не являются peak-профилем.
+DB pool endpoint отражает один процесс, не агрегат всех workers. Промышленный архив
+и целевая инфраструктура не измерялись. Повторная оптимизация без установленного SLA не выполнялась.
 
-Дополнительный экспорт: 5050 явно синтетических заявок → 5000 строк с усечением.
-XLSX: 0.392 с / 119074 байт; PDF: 15.064 с / 516137 байт / 295 страниц.
-Кириллица и metadata проверены извлечением; визуально просмотрены первая/последняя страницы,
-не все 295. [Результат](evidence/2026-10-16/reports-large.json),
-[первая](evidence/2026-10-16/report-first.png), [последняя](evidence/2026-10-16/report-last.png).
+## Requirement matrix
 
-## Матрица мастер-плана
+Команды от корня; pytest из backend, только ENVIRONMENT=test / отдельная ldt_test.
+Нельзя запускать fixture suite против demo/production: fixtures очищают тестовые таблицы.
 
-Команды приведены относительно корня репозитория. Backend команды запускаются из backend
-в отдельной ENVIRONMENT=test / POSTGRES_DB=ldt_test, **не в БД с демонстрационными данными**.
-Ссылки Implementation указывают файлы кода; актуальный список API/миграций — [repository-audit](evidence/2026-10-16/repository-audit.json).
+| Requirement | Status | Implementation | Verification / Command/test | Actual result / Evidence | Known limitation |
+|---|---|---|---|---|---|
+| Backend regression / import | PASS | backend/tests, app.main | python -m compileall -q app scripts; pytest -q | 108PASS, backend-final | 4 предупреждения зависимостей |
+| Frontend regression | PASS | frontend/src, e2e | npm ci; npm run build; npm run lint; npx playwright test | build +11Chrome PASS; logs выше | 10 lint warnings; не все сочетания состояний/ролей |
+| Clean deployment | PASS | infra/Dockerfile.cloud, compose.cloud-qa.yaml | build → compose up → migrate → seed → smoke | новые volumes, 20000 events; reproducible-cloud-* | Локальный Docker, dependency cache; Railway отдельно |
+| Health/readiness | PASS | ready.py, operations.py, start_cloud.py | test_ready, test_rc_diagnostics; /ready | DB/schema check, app version/commit, backup corrupt metadata guard | Heartbeat не мониторинг процесса; pool одного worker |
+| Заявки / конкурентность | PASS | requests.py, RequestReview.tsx, d01601 | test_request_drafts; test_request_concurrency; Chrome draft | draft→new→in_progress→completed/cancelled; история/actor; два потока200/409 | Legacy REST без expected_updated_at не защищён от устаревшей последовательной правки |
+| Prediction→recommendation→draft | PASS | predictions.py, PredictionsPage.tsx | RUN_ML_E2E=true playwright | Сохранённый настоящий результат→decision→draft→confirmation; URL/refresh/Back | Не новый inference; качество модели не оценивалось |
+| Карта→объект→sensor/history | PASS | SchematicMap, ObjectDrawer, MapPage | Chrome map/navigation tests; test_workflows | tooltip/pan/zoom/reset/deep link/фильтры/легенда | Point/fallback; условные координаты маркированы |
+| UI loading/empty/error/success | PARTIAL | pages, SessionGate, ErrorBoundary | workflows.spec/release.spec, UI_STATE_AUDIT | Нет pageerror/overflow/undefined/NaN в проверенной матрице; error recovery | Не все комбинации каждого экрана/темы/роли/125-150% |
+| Notifications | PASS | Notifications.tsx, notifications API | test_security_acceptance; polling race Chrome | read/personal state, дедупликация, ссылка, recovery; старый poll не возвращает прочитанное | Длительный offline/endurance не проверен |
+| Backend RBAC/security | PASS | security.py, auth.py, dependencies | test_security_acceptance, test_workflows, TLS native | manager/technician/dispatcher/analyst/admin,401/403/expiry/logout/CSRF | manager=viewer; корпоративные политики отдельно |
+| Audit | PASS | middleware, AuditEntry, decision/request history | security/drafts/workflows tests | actor/role/time/action/entity/result; no credential bodies | Защита от администратора БД/SIEM внешняя |
+| CSV/XLSX/JSON/XML imports | PASS | ingestion/import_registry, imports API | test_import_acceptance, test_workflows | valid/duplicate/schema/partial-invalid/oversized/interrupted/retry/atomic rollback | Не весь исходный промышленный архив |
+| GeoJSON/WKT | PASS | geo.py + importer | test_real_geo_and_schematic_fallback | реальные Point + честный условный fallback | Геоданные заказчика отсутствуют; линии/полигоны не придуманы |
+| Mock integrations | PASS | integration_worker, adapters, mock_source | integration_acceptance, worker_malformed; Compose --profile mocks | 5 контрактов и live cursors; source→DB/API/UI в Chrome | Mock-work live без ID пустой; переход статуса покрыт unit/integration tests |
+| Reports PDF/XLSX | PASS | reports.py, ReportsPage | test_reports; Chrome download | Кириллица/метаданные/период/source/rowcount/empty/truncation/формулы | Большой5050→5000 тест ранее на a5base, код отчёта в RC не менялся |
+| Backup/restore | PARTIAL | backup.sh, restore.sh, Compose depends_on | backup → verify-restore → smoke | 200371events,checksum,3с,newDB; авто после migrate | Offsite, полный12лет, нормативный RPO/RTO не доказаны |
+| Operational scheduler | PARTIAL | frozen ml_scheduler, worker_heartbeats | запуск без marker + DB snapshot | waiting_for_marker, без новых predictions | Successful inference этим этапом не запускался; last_success отсутствует |
+| Performance ≥20users | PASS | tests/load.py | 1baseline/20read/20mixed | 918req,0errors; load.json | Короткий локальный профиль; не промышленный SLA |
+| Chrome | PASS | Playwright channel=chrome | workflows + release tests | Chrome155,11+3+4 повторных проверки | Локальный QA, не новый remote RC |
+| Яндекс.Браузер | NOT TESTED | playwright YANDEX_BROWSER_PATH | BROWSER_ACCEPTANCE_RC checklist | Исполняемый файл/registry не найдены | Требуется нативный запуск человеком |
+| Remote RC smoke | NOT TESTED | cloud packaging / DEPLOYMENT_RC | полный remote checklist после публикации | RC не опубликован | EXTERNAL MANUAL ACTION REQUIRED; отдельное разрешение на публикацию |
+| Railway конфигурация | PARTIAL | cloud env/nginx, pre-deploy инструкции | local production settings/TLS + Docker | Web/DB/migrate/worker/scheduler/backup описаны | Бесплатный лимит, DNS, private DB и реальные workers проверить в аккаунте |
+| LDAP/LDAPS | EXTERNAL DEPENDENCY | существующий adapter | test_ldap_contract | verified TLS/read_only/no referrals/no fallback | Реальный AD/bind/CA/группы отсутствуют |
+| Промышленная интеграция/архив/география | EXTERNAL DEPENDENCY | GET adapters, Point import | INTEGRATIONS + заказчик | Контракт и mock подтверждены | Нужны endpoints/credentials, реальные данные и координаты |
+| Полное прогнозирование ТЗ | PARTIAL | существующий frozen gas contour | ML_INTEGRATION_RU; unchanged diff | Смысл shadow сохранён; не вероятность аварии | Новые модели/классы/сезонность/retraining вне этапа |
+| Новые каналы/политики/GIS/retraining | NOT APPLICABLE | фиксированные решения владельца | FINAL_SCOPE_DECISIONS_RU | Не добавлены | Это не утверждение выполнения спорных буквальных пунктов ТЗ |
+| Документация | PASS | README, ARCHITECTURE/SECURITY/INTEGRATIONS/COMPLIANCE | link check + evidence inventory | Актуальная локальная RC поставка отделена от старого demo | accompanying DOCX/PDF отдельно отсутствует |
+| Материалы финала | PARTIAL | FINAL_ARTIFACTS_RC | inventory | Git/live demo есть; architecture/evidence/deploy/checklist есть | Presentation и актуальная DOCX/PDF — MISSING FINAL ARTIFACT |
 
-| Requirement | Status | Implementation | How to verify / Command/test | Actual result | Evidence | Known limitation |
-|---|---|---|---|---|---|---|
-| A. Свежая приёмка backend/frontend | PASS | backend/tests, frontend/e2e | compileall; alembic upgrade/check; pytest; npm ci/lint/build; playwright test | 82 backend + 8 Chrome PASS | backend-final, frontend-final, browser-final/map | Полная матрица всех UI-состояний отдельно не автоматизирована |
-| A/O. Clean Docker/PG | PASS | infra/compose.yaml, Dockerfile | clone → env → compose build/up --wait → seed → smoke | Новая БД/тома; 20000 событий; smoke + 3 Chrome PASS | clean-deployment, browser-clean | Использован кеш зависимостей Docker; clone локальный, опубликованная main ещё старая |
-| B. Railway demo | PARTIAL | публичный URL / read-only Railway CLI snapshot | HTTPS GET /, /health, /ready; read-only CLI services | 200/200/200; API/PG running; manager login 200, 79 объектов, read API 200, admin reads 403, logout 200 → 401 | public-demo.json, public-demo-read-account.json, railway-services.json | Manager login/read/logout/401 и 403 admin API подтверждены; остальные облачные роли/полнота данных не перепроверены; scheduler/integrations не развёрнуты постоянно; ветка не опубликована |
-| C. Draft workflow | PASS | api/v1/requests.py, predictions.py, RequestReview.tsx, d01601 | test_request_drafts; real gas Chrome flow | Draft создан, отредактирован, подтверждён; история и связь сохранены | request-tests, browser-draft/final, draft-confirmed-chrome.png | Ручная обычная заявка сохраняет new; внешнее подтверждение draft запрещено |
-| D. UX/loading/error/empty/success | PARTIAL | api/session.ts, SessionGate, AppErrorBoundary, страницы | Chrome normal + intercepted 503 recovery; build | Понятный error/retry, timeout, feedback, нет pageerror в основном flow | browser-final, compact-chrome.png | Не выполнен полный ручной перебор каждого состояния/темы/роли; 9 lint warnings |
-| E. Карта/семантика | PASS | SchematicMap.tsx, MapPage.tsx, geo.py | test_real_geo_and_schematic_fallback; Chrome map test | Pan/zoom/tooltip/click, sensor deep link, легенда «Фактическое состояние» | browser-map, backend-final | Без исходных координат размещение условное; Point достаточно по решению владельца |
-| F. Backend RBAC/auth/CSRF | PASS | core/security.py, api/v1/auth.py | test_security_acceptance, test_workflows, test_request_drafts | 401/403, роли, login/logout/expiry, CSRF проверены | backend-final.xml | Проверка локального приложения; не внешний penetration test |
-| F. LDAP/AD | PARTIAL | core/ldap_adapter.py | test_ldap_contract | TLS verify/read-only/no-referrals/escaped search/no-fallback PASS | backend-final.xml | Настоящего каталога/CA/групп нет |
-| G. Audit | PASS | core/middleware.py, RequestChange, d01602, admin.py | attributed_actions; password absence; request/decision/import flows | Actor/role/time/action/entity/result, history, отказ в доступе сохраняются | backend-final, security-tests | Исторические/анонимные поля nullable; БД не заменяет независимый WORM/SIEM |
-| H. Imports | PASS | ingestion/csv_loader.py, tabular.py, import registry | test_import_acceptance; test_workflows formats; Chrome JSON | 4 формата, duplicate/schema/oversize/partial bad/interrupt/retry/rollback PASS | import-tests, backend-final, browser-final | Limits и формат колонок — INTEGRATIONS; произвольные новые схемы не угадываются |
-| I. Mock integrations | PASS | integration_worker.py, integrations service, mock_source.py | test_integration_acceptance; compose.mock + actual worker → Chrome | 5 источников, 500/timeout/retry/cursor/upsert/idempotence; linked notification/read/audit | mock-e2e, operations, browser-import-mock/final | Только mock/adapter; не промышленное подключение |
-| J. Web notifications | PASS | platform.py, Notifications.tsx | per-user visibility, stream duplicate, Chrome exact sensor/read | Хранение, индивидуальное read, дедупликация, переход работают | backend-final, browser-final | Poll 15 с после ответа; без новой эскалации/SMTP/SMS/Telegram |
-| K. Reports | PASS | api/v1/reports.py | test_reports; Chrome PDF/XLSX download | Metadata, encoding, empty/large/truncation/formula protection проверены | backend-final, browser-final | Лимит 5000 строк и 367 дней; «локальные заявки», не внешние выполненные ремонты |
-| L. Observability | PASS | operations.py, d01602, workers, backup metadata | test_operational_status; runtime metadata under API uid | API/DB, heartbeat, import/job, failures, backup доступны без credentials | backend-final, operations-final.json, backup-metadata | Last_seen требует контроля возраста; pool только текущего процесса, не агрегат |
-| M. Performance | PASS | tests/load.py, четыре API workers | LOAD_USERS=20, LOAD_ROUNDS=3, interval=0.1 | 918 requests, 0 ошибок, показатели ниже | load.json, load-final.txt | Короткая локальная нагрузка; не endurance/целевое оборудование/SLA |
-| N. Backup/restore | PARTIAL | backup.sh, restore.sh, compose volume | backup; failure; old-file rotation; restore new DB; smoke | 200000 событий восстановлены, checksum и отказ/rotation PASS | backup*, restore, restored-smoke | Полный 12-летний объём и offsite/RPO/RTO не проверены |
-| P. Chrome | PASS | Playwright channel chrome | login→map→sensor/history→prediction→decision→draft→reports→logout | Основные flows и компактная навигация PASS | browser-* | Исчерпывающая визуальная матрица остаётся ручной |
-| P. Яндекс.Браузер | NOT TESTED | YANDEX_BROWSER_PATH support | checklist ниже; playwright --project=yandex | В трёх стандартных путях браузер отсутствует | browser-availability.json | Chromium/Chrome не выдаётся за нативный Яндекс |
-| Q. Documentation | PASS | README, ARCHITECTURE, INTEGRATIONS, SECURITY, COMPLIANCE, RUNBOOK | Проверка ссылок/кода; старые карты и отчёты помечены historical | Нынешний статус отделён от сентября и облака | docs-validation.json | Презентация/актуальный DOCX/PDF — отдельные материалы |
-| R. Evidence | PASS | docs/evidence/2026-10-16 | raw logs, JUnit, metadata, screenshots | Свежие положительные и исходные отрицательные результаты сохранены | [индекс](evidence/2026-10-16/README.md) | Логи не подтверждают непроверенные промышленные claims |
-| S. Submission artifacts | PARTIAL | GitHub, Railway, docs | anonymous HTTPS + файловый поиск | Repo/demo доступны 200; документация в Git | submission-links.json | Октябрьская ветка только локальна; актуальные presentation и accompanying DOCX/PDF в ветке отсутствуют |
+## Исправленные реальные проблемы
 
-Имена evidence без расширения в таблице относятся к одноимённым файлам каталога
-[evidence/2026-10-16](evidence/2026-10-16/). Исходная инвентаризация: 35 API-операций,
-12 миграций, 12 backend test modules, 9 frontend routes, 6 фактических ролей.
-CI расширен, но GitHub Actions на новой ветке **NOT TESTED**: push запрещён.
+- Последовательная/одновременная устаревшая правка заявки могла затереть решение:
+  добавлен optional version contract +409; UI передаёт версию, сохранена история.
+- Обновление списка могло оставить старые поля формы с новой версией: review remount по updated_at.
+- Повреждённая backup metadata ломала diagnostics: строгая проверка JSON/aware timestamp.
+- Неверный integration envelope/missing cursor мог упасть или сбросить progress:
+  валидация до ingestion и recovery tests.
+- Старый polling мог вернуть прочитанное уведомление; повторный submit: tombstones/pending guard.
+- Prediction detail терял выбранный ID при refresh/Back, устаревшие fetch:
+  URL state, отмена запроса, loading и безопасный error.
+- Тёмная ссылка/календарь и длинное уведомление были плохо читаемы: локальная CSS-правка.
+- Backup стартовал раньше migrate: исправлена зависимость, первый чистый dump содержит схему.
+- Ранний SIGTERM контейнера с Python PID1 мог зависнуть до kill137:
+  Tini, повторный ранний stop143 за0.72с без forced kill; готовый stop0.
 
-## Нагрузка
+Тестовый внешний TLS-proxy после пересоздания upstream использовал старый IP;
+перезапуск собственного QA proxy восстановил /health и повторный security smoke.
+Это ограничение локального тестового edge, не заявление о дефекте Railway.
 
-Среда: локальный Docker Desktop/Linux PostgreSQL16, 4 API workers, около 200000 исходных
-событий плюс записи тестов. Три профиля выполнены последовательно, без параллельного
-браузерного/сборочного теста. Отдельные старые проекты на машине оставались запущены.
-Baseline 18 / normal 360 / mixed 540 запросов; login/logout не входят в эти счётчики.
-Mixed: чтения + POST request + PATCH in_progress + PATCH completed.
+## Что осталось проверить человеку / внешние зависимости
 
-| Профиль | Requests | Errors | Error rate | p50 ms | p95 ms | p99 ms | RPS |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 user | 18 | 0 | 0 % | 25.705 | 122.656 | 122.656 | 9.668 |
-| 20 users normal | 360 | 0 | 0 % | 57.576 | 284.264 | 347.404 | 138.210 |
-| 20 users mixed | 540 | 0 | 0 % | 60.735 | 274.828 | 384.216 | 144.156 |
+1. Нативный Яндекс и оставшиеся сочетания тем/масштабов/ролей: [browser checklist](BROWSER_ACCEPTANCE_RC.md).
+2. После отдельного разрешения публикации — staging с отдельной БД, доступный бесплатный
+   лимит, секреты вне Git, pre-deploy/health/HTTPS, постоянные worker/scheduler/backup,
+   полный remote flow каждой роли. [Точные инструкции](DEPLOYMENT_RC.md).
+3. Данные/координаты/полный архив, AD/CA/группы, промышленный источник, SIEM,
+   offsite backup и измерения на целевой инфраструктуре — заказчик.
+4. PPTX/PDF и актуальная accompanying DOCX/PDF, публичные права и зафиксированный
+   final commit: [FINAL_ARTIFACTS_RC](FINAL_ARTIFACTS_RC.md).
+5. Устаревшие облачные credentials/ранее раскрытые токены ротировать у владельца;
+   RC не переписывал Git-историю и не менял production secrets.
 
-CPU/RAM сохранены двумя Docker stats снимками до/после, **не пиковым профилем**.
-DB pool доступен как мгновенный показатель текущего процесса; полной временной серии нет.
-Квантили на коротком baseline имеют малую статистическую устойчивость.
-PASS означает отсутствие HTTP/transport ошибок; допустимый процент деградации не выдуман.
+Ни один пункт не ждёт уточнения жюри. Невыполненное обозначено по фактической причине.
+Сентябрьские документы и [октябрьский baseline](evidence/2026-10-16/backend-final.txt)
+сохранены как история; MAP_TZ_COVERAGE_RU явно HISTORICAL/SUPERSEDED.
+Большой report/backup failure/rotation/TLS1.1 rejection из первого этапа остаются
+действительными проверками неизменённых компонентов, но не называются свежим RC прогоном.
 
-Полный разбор состояний экранов: [UI_STATE_AUDIT_2026-10](UI_STATE_AUDIT_2026-10.md).
-Изменённые файлы и коммиты: [CHANGE_MANIFEST_2026-10](CHANGE_MANIFEST_2026-10.md).
-
-## Исходные отказы и исправления
-
-- Первый smoke выполнялся одновременно с bulk seed и получил timeout карты.
-  После окончания seed smoke прошёл; изолированное чтение карты заняло 0.672 с.
-- Первый Chrome login на нестандартном порту получил 403: Origin отсутствовал в тестовом
-  override CORS_ORIGINS. Исправлена конфигурация теста, не ослаблена проверка Origin.
-- Первый clean startup: POSTGRES_* оболочки перекрыли --env-file, пароль контейнера PG
-  отличался от backend env_file. Тестовое окружение приведено к одной конфигурации.
-- Backup metadata были 0600, API uid10001 не мог их читать. Исправлены только права
-  безопасных меток на 0644; dump остались 0600, том API read-only. Подтверждено runtime.
-- Pan-test сначала пытался тянуть карту под карточкой объекта; hover ожидал неподвижности
-  анимированного SVG. Тест исправлен на открытую область и реальное движение указателя;
-  поведение приложения не подменяется принудительной отправкой событий.
-
-- Повторный mock UI-тест исчерпал старые непрочитанные уведомления при остановленном
-  mock worker. Источник возобновлён; тест ждёт новое фактическое mock-событие и polling,
-  после чего все восемь сценариев прошли. Тест требует работающих mock/worker;
-  старое прочтение пользователя не удалялось. После приёмки генерация остановлена.
-
-## Внешние зависимости и фиксированные исключения
-
-**EXTERNAL DEPENDENCY:** промышленный LDAPS/CA/группы; GET URLs/credentials и реальные
-поля СМВУ/ОДС/оборудования/заявок/погоды; реальная Point-геометрия;
-полный обезличенный архив; offsite backup, защищённый аудит/SIEM, мониторинг,
-корпоративные DNS/TLS и испытания полного восстановления.
-
-**ML:** качество и калибровка существующей proxy-цели на подтверждённых реальных исходах
-этим этапом не доказаны. Новые классы/модели/retraining/сезонность и изменение математики —
-**OUT OF SCOPE (FIXED DECISION)**. То же относится к новой GIS-концепции,
-свободному UI-редактору Top-K/cooldown, SMTP/SMS/Telegram и новой политике эскалации.
-Предметные правила РТЭК не добавлялись без источника; существующая рекомендация ручная.
-
-Дополнительные непроверенные пункты не скрыты под внешними зависимостями:
-нативный Яндекс, полная визуальная матрица UI, актуальная презентация/сопроводительный
-DOCX/PDF, остальные облачные роли/полнота данных, remote CI и публикация новой ветки.
-
-## Точный ручной checklist перед показом
-
-1. Выбрать явно текущую локальную версию либо опубликованное сентябрьское demo.
-   Не заявлять, что локальные commits уже работают в Railway.
-2. В Chrome и установленном Яндекс.Браузере: login manager → карта → zoom/pan/tooltip →
-   объект → конкретный датчик → график/история; проверить условные точки и фактические цвета.
-3. Manager: чтение доступно, изменяющие API запрещены. Dispatcher: прогноз → detail →
-   decision → recommendation → **черновик** → правка → подтверждение new → in_progress →
-   completed/cancelled. Technician не подтверждает draft.
-4. Web notification → точный объект/канал → read; обновить страницу; проверить
-   независимость прочтения для другой учётной записи. При потере сети показать ошибку,
-   восстановить сеть и дождаться очередного опроса.
-5. Импорт четырёх форматов → registry/history; duplicate и invalid файл → понятный результат.
-   Отчёты PDF/XLSX: период, заголовок, источник, количество, кириллица, пустой результат.
-6. Проверить empty/loading/error/success на каждом разделе, светлую/тёмную тему,
-   масштаб 100/125/150 %, узкий экран, длинные названия. Logout → закрытый API 401.
-7. Admin: operations last_seen/last_success/import/job/backup, audit actor/role/result.
-   Для промышленного запуска отдельно выполнить AD, реальные источники и offsite restore.
-8. Яндекс: задать YANDEX_BROWSER_PATH и выполнить `npx playwright test --project=yandex`
-   на изолированном стенде; записать версию и результат. Пока это NOT TESTED.
-9. Собрать актуальную презентацию и сопровождающий DOCX/PDF, открыть ссылки без
-   авторизации. Обновить облако/публиковать Git только после отдельного разрешения владельца.
+Полный перечень commits и файлов: [CHANGE_MANIFEST_2026-10](CHANGE_MANIFEST_2026-10.md).
+Evidence не содержит паролей/cookies/токенов; browser traces в Git не добавлялись.
+Локальные ссылки и известные token/private-key signatures проверены автоматически:
+[document-check](evidence/release-rc/document-check.json). Сигнатурный scan не доказывает
+отсутствие всех возможных типов секретов. Cloud CI smoke добавлен, но сам удалённый
+GitHub Actions pipeline ещё **NOT TESTED**, поскольку RC не отправлялся в remote.
