@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import hashlib
 from pathlib import Path
 
@@ -139,8 +140,9 @@ def complete_file_import(
     processed_rows: int,
     inserted_rows: int,
     skipped_rows: int,
+    db=None,
 ) -> None:
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         data_import = session.get(
             DataImport,
             import_id,
@@ -160,7 +162,7 @@ def complete_file_import(
             timezone.utc
         )
 
-        session.commit()
+        if db is None: session.commit()
 
 
 def fail_file_import(
@@ -215,26 +217,29 @@ def _import_file(
         from app.ingestion.formats import normalize_to_csv
         columns = {"events_journal": EVENT_REQUIRED_COLUMNS, "channels": CHANNEL_REQUIRED_COLUMNS,
                    "objects": OBJECT_REQUIRED_COLUMNS}[import_type]
-        with tempfile.TemporaryDirectory() as directory:
-            normalized = Path(directory) / "normalized.csv"
-            normalize_to_csv(Path(file_path), normalized, columns)
-            if import_type == "events_journal":
-                stats = load_events_journal(normalized)
-            else:
-                count = (load_channel_catalogue if import_type == "channels" else load_object_catalogue)(normalized)
-                stats = {"processed_rows": count, "inserted_rows": count, "repeated_headers": 0, "skipped_duplicates": 0}
+        # Data and successful registry status commit together, including process interruption.
+        with SessionLocal.begin() as session:
+            with tempfile.TemporaryDirectory() as directory:
+                normalized = Path(directory) / "normalized.csv"
+                normalize_to_csv(Path(file_path), normalized, columns)
+                if import_type == "events_journal":
+                    stats = load_events_journal(normalized, db=session)
+                else:
+                    count = (load_channel_catalogue if import_type == "channels" else load_object_catalogue)(normalized, db=session)
+                    stats = {"processed_rows": count, "inserted_rows": count, "repeated_headers": 0, "skipped_duplicates": 0}
 
-        skipped_rows = (
-            stats["repeated_headers"]
-            + stats["skipped_duplicates"]
-        )
+            skipped_rows = (
+                stats["repeated_headers"]
+                + stats["skipped_duplicates"]
+            )
 
-        complete_file_import(
-            registration.import_id,
-            processed_rows=stats["processed_rows"],
-            inserted_rows=stats["inserted_rows"],
-            skipped_rows=skipped_rows,
-        )
+            complete_file_import(
+                registration.import_id,
+                db=session,
+                processed_rows=stats["processed_rows"],
+                inserted_rows=stats["inserted_rows"],
+                skipped_rows=skipped_rows,
+            )
 
     except Exception as exc:
         fail_file_import(

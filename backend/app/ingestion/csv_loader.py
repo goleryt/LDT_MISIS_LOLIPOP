@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import csv
 import math
 import re
@@ -210,6 +211,7 @@ def _upsert_object_batch(
 
 def load_channel_catalogue(
     file_path: str | Path,
+    *, db: Session | None = None,
 ) -> int:
     path = Path(file_path)
 
@@ -221,7 +223,7 @@ def load_channel_catalogue(
     processed_rows = 0
     batch: list[dict] = []
 
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
             with path.open(
                 "r",
@@ -319,10 +321,10 @@ def load_channel_catalogue(
 
                     processed_rows += len(batch)
 
-            session.commit()
+            if db is None: session.commit()
 
         except Exception:
-            session.rollback()
+            if db is None: session.rollback()
             raise
 
     return processed_rows
@@ -330,6 +332,7 @@ def load_channel_catalogue(
 
 def load_object_catalogue(
     file_path: str | Path,
+    *, db: Session | None = None,
 ) -> int:
     path = Path(file_path)
 
@@ -408,17 +411,17 @@ def load_object_catalogue(
     if not rows:
         return 0
 
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
             _upsert_object_batch(
                 session,
                 rows,
             )
 
-            session.commit()
+            if db is None: session.commit()
 
         except Exception:
-            session.rollback()
+            if db is None: session.rollback()
             raise
 
     return len(rows)
@@ -690,6 +693,7 @@ def _insert_event_batch(
 
 def load_events_journal(
     file_path: str | Path,
+    *, db: Session | None = None,
 ) -> dict[str, int]:
     path = Path(file_path)
 
@@ -705,7 +709,7 @@ def load_events_journal(
 
     batch: list[dict] = []
 
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
             with path.open(
                 "r",
@@ -767,10 +771,10 @@ def load_events_journal(
                         len(batch) - inserted
                     )
 
-            session.commit()
+            if db is None: session.commit()
 
         except Exception:
-            session.rollback()
+            if db is None: session.rollback()
             raise
 
     return {
