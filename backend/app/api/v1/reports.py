@@ -25,15 +25,16 @@ def neutralize_cell(value):
         return "'" + value
     return value
 
-def export(rows, columns, title, format, truncated):
+def export(rows, columns, title, format, truncated, metadata):
     if format == "json":
-        return {"title": title, "rows": rows, "truncated": truncated, "row_limit": ROW_LIMIT}
+        return {"title": title, "rows": rows, "truncated": truncated, "row_limit": ROW_LIMIT, **metadata}
+    note = f"Сформирован: {metadata['generated_at']} · Источник: {metadata['source']} · Строк: {len(rows)} · Время: {metadata['timezone']}"
     output = io.BytesIO()
     if format == "xlsx":
         workbook = Workbook(write_only=True)
         sheet = workbook.create_sheet("Отчёт")
         sheet.append([title])
-        sheet.append(["Достигнут лимит строк; сузьте период" if truncated else "Все строки выбранного периода"])
+        sheet.append([note + (" · Достигнут лимит строк; сузьте период" if truncated else " · Все строки выбранного периода")])
         sheet.append([label for _, label in columns])
         for row in rows:
             sheet.append([neutralize_cell(row[key]) for key, _ in columns])
@@ -41,7 +42,8 @@ def export(rows, columns, title, format, truncated):
         media = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     else:
         style = ParagraphStyle("body", fontName="NotoSans", fontSize=8, leading=11)
-        story = [Paragraph(escape(title), style), Spacer(1,12)]
+        story = [Paragraph(escape(title), style), Spacer(1,8), Paragraph(escape(note), style), Spacer(1,12)]
+        if not rows: story.append(Paragraph("За выбранный период записей нет.",style))
         if truncated:
             story.append(Paragraph("Достигнут лимит строк. Сузьте период для полного отчёта.", style))
         data = [[Paragraph(escape(label), style) for _, label in columns]]
@@ -76,9 +78,13 @@ def report(kind: Literal["observations","repairs"], date_from: date, date_to: da
                      PreventiveRequest.created_at<end.replace(tzinfo=timezone.utc)).order_by(PreventiveRequest.id)
         columns=[("id","Заявка"),("object_id","Объект"),("title","Тема"),("status","Статус"),
                  ("created_at","Создана UTC"),("completed_at","Завершена UTC")]
-        title=f"История заявок (даты UTC) · {date_from} — {date_to}"
+        title=f"История локальных заявок (даты UTC) · {date_from} — {date_to}"
     with SessionLocal() as db:
         result=db.execute(query.limit(ROW_LIMIT+1)).mappings().all()
     truncated=len(result)>ROW_LIMIT
     rows=[{key:(value.isoformat() if isinstance(value,(date,datetime)) else value) for key,value in row.items()} for row in result[:ROW_LIMIT]]
-    return export(rows,columns,title,format,truncated)
+    from app.core.config import get_settings
+    metadata = {"generated_at":datetime.now(timezone.utc).isoformat(), "source":"events_journal (daily aggregates)" if kind == "observations" else "preventive_requests",
+                "timezone":get_settings().source_timezone if kind == "observations" else "UTC", "row_count":len(rows),
+                "date_from":date_from.isoformat(), "date_to":date_to.isoformat()}
+    return export(rows,columns,title,format,truncated,metadata)

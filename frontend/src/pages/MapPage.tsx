@@ -895,7 +895,7 @@ function MapPage() {
              
             <div className="map-legend">
                 <div className="legend-title">
-                    Состояние объектов
+                    Фактическое состояние
                 </div>
 
                 <div className="legend-item">

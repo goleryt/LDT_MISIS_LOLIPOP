@@ -4,6 +4,8 @@ services:
     build: ../backend
     command: ["python", "-m", "scripts.mock_source"]
     expose: ["8091"]
+    environment:
+      MOCK_REQUEST_ID: ${MOCK_REQUEST_ID:-0}
   integrations:
     environment:
       ALLOW_MOCK_INGESTION: "true"

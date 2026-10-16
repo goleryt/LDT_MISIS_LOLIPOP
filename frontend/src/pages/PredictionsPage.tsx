@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { canWrite, jsonRequest } from "../api/session";
 type Prediction = { id: number; object_id: number; incident_type: string; probability: number;
   horizon_hours: number; calculated_at: string; model_version: string; recommendation: string | null;
@@ -10,6 +10,8 @@ type Decision = { actor: string; decision: string; reason: string; notes: string
 // Тип из ответа ML-пакета — наблюдаемое событие в журнале, а не пожар.
 const TYPE_LABELS: Record<string, string> = { gas_threshold_cross: "Пересечение газом 1 % CH4 (proxy)" };
 export default function PredictionsPage() {
+  const [params] = useSearchParams();
+  const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<Prediction[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [message, setMessage] = useState("");
@@ -40,8 +42,9 @@ export default function PredictionsPage() {
     } catch (e) { setError(e instanceof Error ? e.message : "Не удалось загрузить историю"); }
     finally { setBusy(false); }
   }
-  useEffect(() => { void refresh().catch(e => setError(e.message)); }, []);
-  async function select(row: Prediction) {
+  useEffect(() => { void refresh().catch(e => setError(e.message)).finally(() => setLoading(false)); }, []);
+  useEffect(() => { const id = Number(params.get("predictionId")); if (Number.isSafeInteger(id) && id > 0) void select({ id }); }, [params]);
+  async function select(row: Pick<Prediction, "id">) {
     try {
       const detail = await jsonRequest<Prediction & { decisions: Decision[] }>(`/api/v1/predictions/${row.id}`);
       setSelected(detail); setHistory(detail.decisions); setNotes(""); setOutcome(detail.actual_outcome ?? ""); setError("");
@@ -68,9 +71,10 @@ export default function PredictionsPage() {
     finally { setBusy(false); }
   }
   return <section className="operations-page"><h1>Журнал прогнозов</h1><p className="status-notice">{message}</p>
-    {error && <p role="alert">{error}</p>}
+    {error && <p role="alert">{error} <button onClick={() => { setError(""); setLoading(true); void refresh().catch(e => setError(e.message)).finally(() => setLoading(false)); }}>Повторить загрузку</button></p>}
+    {loading && <p role="status">Загрузка прогнозов…</p>}
     <details><summary>Журнал суточных расчётов</summary>{runs.length ? runs.map(run => <p key={run.id}>{run.as_of_date} · ревизия {run.revision} · {run.state}{run.error_code ? ` · ${run.error_code}` : ""}</p>) : <p>Запусков пока нет. Нужны проверенные исходные данные и отметка завершения суток.</p>}</details>
-    {!rows.length && <p>Прогнозов нет. Текущие срабатывания доступны в разделе «Тревоги».</p>}
+    {!loading && !error && !rows.length && <p>Прогнозов нет. Текущие срабатывания доступны в разделе «Тревоги».</p>}
     {rows.length > 0 && <table><thead><tr><th>Объект</th><th>Тип</th><th>Оценка (proxy)</th><th>Окно прогноза</th><th>Статус</th><th>Просмотр</th></tr></thead>
       <tbody>{rows.map(row => <tr key={row.id}><td>{row.object_id}</td><td>{TYPE_LABELS[row.incident_type] ?? row.incident_type}</td><td>{(row.probability * 100).toFixed(1)}%</td>
         <td>{row.ml_metadata ? `${row.ml_metadata.window_start} — ${row.ml_metadata.window_end_exclusive} (не включая)` : `${row.horizon_hours} ч`}</td><td>{row.status}</td><td><button onClick={() => select(row)}>Открыть</button></td></tr>)}</tbody></table>}

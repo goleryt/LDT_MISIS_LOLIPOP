@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -41,20 +41,7 @@ export async function uploadEventsFile(
     );
 
     if (!response.ok) {
-        let message =
-            `Ошибка загрузки: HTTP ${response.status}`;
-
-        try {
-            const body = await response.json();
-
-            if (body.detail) {
-                message = body.detail;
-            }
-        } catch {
-            // Оставляем стандартное сообщение.
-        }
-
-        throw new Error(message);
+        throw responseError(response);
     }
 
     return response.json();

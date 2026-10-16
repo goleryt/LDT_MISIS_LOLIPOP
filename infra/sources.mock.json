@@ -1,4 +1,7 @@
 [
   {"name":"mock-equipment","kind":"equipment","url":"http://mock-source:8091/equipment"},
-  {"name":"mock-smvu","kind":"telemetry","url":"http://mock-source:8091/telemetry"}
+  {"name":"mock-smvu","kind":"telemetry","url":"http://mock-source:8091/telemetry"},
+  {"name":"mock-ods","kind":"ods","url":"http://mock-source:8091/ods"},
+  {"name":"mock-weather","kind":"weather","url":"http://mock-source:8091/weather"},
+  {"name":"mock-work","kind":"work_status","url":"http://mock-source:8091/work_status"}
 ]
