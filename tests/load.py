@@ -42,9 +42,10 @@ def traffic(client,mixed=False):
         if mixed:
             r=call('POST','/api/v1/requests',json={'object_id':1,'title':'LOAD TEST — disposable local request'})
             if r is not None and r.status_code==200:
-                rid=r.json()['id']
+                row=r.json(); rid=row['id']
                 for state in ('in_progress','completed'):
-                    call('PATCH',f'/api/v1/requests/{rid}',json={'status':state})
+                    changed=call('PATCH',f'/api/v1/requests/{rid}',json={'status':state,'expected_updated_at':row['updated_at']})
+                    if changed is not None and changed.status_code==200:row=changed.json()
     return latencies,errors
 
 def profile(name,clients,mixed=False):
