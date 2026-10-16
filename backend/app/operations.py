@@ -25,13 +25,16 @@ def backup_status():
     try:
         root = Path(directory)
         last = (root/'last-success').read_text().strip()
-        success = datetime.fromisoformat(last.replace('Z','+00:00')).isoformat()
+        parsed = datetime.fromisoformat(last.replace('Z','+00:00'))
+        if parsed.tzinfo is None: raise ValueError('Missing timezone')
+        success = parsed.isoformat()
     except (OSError, ValueError):
         success = None
     try:
         path = root/'status.json'
         if path.stat().st_size > 4096: raise ValueError('Oversized status')
         raw = json.loads(path.read_text())
+        if not isinstance(raw, dict): raise ValueError('Status must be an object')
         state = raw.get('state')
         if state not in {'completed','failed','running'}: raise ValueError('Invalid state')
     except (OSError, ValueError):
@@ -47,7 +50,8 @@ def operational_status():
         sources = [{'source':s.source,'last_success':s.last_success,'error_code':s.last_error}
                    for s in db.scalars(select(IntegrationCursor).order_by(IntegrationCursor.source))]
         pool = engine.pool
-        return {'api':'ok', 'database':'connected', 'workers':{name:workers.get(name,{'state':'not_observed'}) for name in ('integrations','ml_scheduler')},
+        return {'api':'ok', 'database':'connected', 'application':{'version':get_settings().app_version,'commit':get_settings().app_commit},
+                'workers':{name:workers.get(name,{'state':'not_observed'}) for name in ('integrations','ml_scheduler')},
                 'last_import':None if not last_import else {'id':last_import.id,'status':last_import.status,'completed_at':last_import.completed_at},
                 'last_prediction_job':None if not last_job else {'id':last_job.id,'state':last_job.state,'finished_at':last_job.finished_at,'error_code':last_job.error_code},
                 'integration_sources':sources, 'integration_failures':sum(bool(s['error_code']) for s in sources),

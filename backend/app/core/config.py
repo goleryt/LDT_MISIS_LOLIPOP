@@ -8,6 +8,7 @@ from sqlalchemy import URL
 class Settings(BaseSettings):
     app_name: str = "LDT MISIS LOLIPOP Backend"
     app_version: str = "0.2.0"
+    app_commit: str = Field(default="unknown", pattern=r"^(unknown|[a-fA-F0-9]{7,40})$")
     environment: Literal["development", "test", "production"] = "development"
     postgres_host: str = "localhost"
     postgres_port: int = 5432
