@@ -1,0 +1,18 @@
+{
+  "/": {
+    "status": 200,
+    "https": true
+  },
+  "/health": {
+    "status": 200,
+    "https": true
+  },
+  "/ready": {
+    "status": 200,
+    "https": true
+  },
+  "/api/v1/events": {
+    "status": 401,
+    "https": true
+  }
+}

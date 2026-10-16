@@ -1,0 +1,49 @@
+
+Running 1 test using 1 worker
+
+(node:32360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation (8.1s)
+
+
+  1) [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation
+
+    Error: expect(locator).not.toHaveAttribute(expected) failed
+
+    Locator:  locator('svg.schematic-map-svg')
+    Expected: not "292.6854757136627 180.37109739553745 461.53846153846155 315.38461538461536"
+    Received: "292.6854757136627 180.37109739553745 461.53846153846155 315.38461538461536"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveAttribute" locator('svg.schematic-map-svg') with timeout 5000ms
+      - waiting for locator('svg.schematic-map-svg')
+        14 × locator resolved to <svg class="schematic-map-svg" aria-label="Схематическая карта Москвы" viewBox="292.6854757136627 180.37109739553745 461.53846153846155 315.38461538461536">…</svg>
+           - unexpected value "292.6854757136627 180.37109739553745 461.53846153846155 315.38461538461536"
+
+
+      144 |   await page.mouse.move(box.x+box.width/2+70,box.y+box.height/2+30,{steps:8});
+      145 |   await page.mouse.up();
+    > 146 |   await expect(map).not.toHaveAttribute("viewBox",zoomed!);
+          |                         ^
+      147 |   await page.getByRole("button", {name:"Показать все",exact:true}).click();
+      148 |   // Selection via the URL is also used by alarms and notifications.
+      149 |   await page.goto("/?objectId=1");
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:146:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation

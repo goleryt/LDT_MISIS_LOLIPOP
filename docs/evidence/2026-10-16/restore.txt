@@ -1,0 +1,13 @@
+ldt-20261016T153327Z-21.dump: OK
+ version_num
+-------------
+ d01602
+(1 row)
+
+ count
+--------
+ 200000
+(1 row)
+
+Restored into ldt_oct_restore. Validate API and switch configuration in the planned maintenance window.
+Restore seconds: 1

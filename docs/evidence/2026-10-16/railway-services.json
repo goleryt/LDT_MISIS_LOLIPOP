@@ -1,0 +1,38 @@
+{
+  "services": [
+    {
+      "name": "ml-demo-job",
+      "deployment": "7a30a912-160e-4def-a75d-79bad20b8fe4",
+      "stopped": true,
+      "instances": [
+        "EXITED"
+      ],
+      "healthcheck": null,
+      "cron": null,
+      "sourceRepo": null
+    },
+    {
+      "name": "Postgres",
+      "deployment": "d000dee4-553e-45b6-8694-e3afd6042463",
+      "stopped": false,
+      "instances": [
+        "RUNNING"
+      ],
+      "healthcheck": null,
+      "cron": null,
+      "sourceRepo": null
+    },
+    {
+      "name": "ldt-demo",
+      "deployment": "599da668-ccde-4eb0-ac65-6734444c8ee6",
+      "stopped": false,
+      "instances": [
+        "RUNNING"
+      ],
+      "healthcheck": "/ready",
+      "cron": null,
+      "sourceRepo": null
+    }
+  ],
+  "checked_at": "2026-10-16T15:38:44.1521095Z"
+}

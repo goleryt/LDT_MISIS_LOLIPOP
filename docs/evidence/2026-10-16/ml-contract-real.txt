@@ -1,0 +1,9 @@
+/work/lct_ml_job_caj3wexy/bundles/gas_cross_v3_bundle/gas_cross_v3_bundle/features_v3/event_panel_v3.py:333: UserWarning: Sortedness of columns cannot be checked when 'by' groups provided
+  panel = panel.join_asof(c, left_on="_cutoff_t", right_on=f"_{name}_t", by="ch", strategy="backward")
+/work/lct_ml_job_caj3wexy/bundles/gas_cross_v3_bundle/gas_cross_v3_bundle/features_v3/event_panel_v3.py:338: UserWarning: Sortedness of columns cannot be checked when 'by' groups provided
+  panel = panel.join_asof(last_on, left_on="_cutoff_t", right_on=f"_{name}_last_onset", by="ch",
+/work/lct_ml_job_caj3wexy/bundles/gas_cross_v3_bundle/gas_cross_v3_bundle/features_v3/event_panel_v3.py:333: UserWarning: Sortedness of columns cannot be checked when 'by' groups provided
+  panel = panel.join_asof(c, left_on="_cutoff_t", right_on=f"_{name}_t", by="ch", strategy="backward")
+/work/lct_ml_job_caj3wexy/bundles/gas_cross_v3_bundle/gas_cross_v3_bundle/features_v3/event_panel_v3.py:338: UserWarning: Sortedness of columns cannot be checked when 'by' groups provided
+  panel = panel.join_asof(last_on, left_on="_cutoff_t", right_on=f"_{name}_last_onset", by="ch",
+{"scenario": "real_model_on_synthetic_inputs", "checks": "inference, provenance, window, recommendation, idempotence, no auto-alert, no stub incident, changed-input rejection", "seconds": 2.391, "rows": 1}

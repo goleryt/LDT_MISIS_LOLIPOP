@@ -1,0 +1,289 @@
+{
+  "date": "2026-10-16",
+  "branch": "final/non-ml-hardening-20261016",
+  "initial_base": "5d64126",
+  "initial_status": "clean new linked worktree; existing user checkout unchanged",
+  "tested_application_commit": "860c15b",
+  "git_remote_main_at_start": "5d6412609b9da08720b1c905041c00333b7cd69c",
+  "top_level": [
+    ".editorconfig",
+    ".env.example",
+    ".gitattributes",
+    ".github",
+    ".gitignore",
+    "AGENTS.md",
+    "backend",
+    "CONTRIBUTING.md",
+    "data",
+    "docs",
+    "frontend",
+    "infra",
+    "ml",
+    "models",
+    "notebooks",
+    "README.md",
+    "tests"
+  ],
+  "migrations": [
+    {
+      "file": "backend/alembic/versions/28199ee15ad1_add_security_prediction_integration_.py",
+      "revision": "28199ee15ad1",
+      "down_revision": "7bb10cf49ac2"
+    },
+    {
+      "file": "backend/alembic/versions/393827181fa5_add_data_imports_registry.py",
+      "revision": "393827181fa5",
+      "down_revision": "e4aa4444977d"
+    },
+    {
+      "file": "backend/alembic/versions/5e192ace0042_logical_storage_views.py",
+      "revision": "5e192ace0042",
+      "down_revision": "28199ee15ad1"
+    },
+    {
+      "file": "backend/alembic/versions/6f8d2ab42c31_add_preventive_requests.py",
+      "revision": "6f8d2ab42c31",
+      "down_revision": "393827181fa5"
+    },
+    {
+      "file": "backend/alembic/versions/7bb10cf49ac2_add_event_query_indexes.py",
+      "revision": "7bb10cf49ac2",
+      "down_revision": "6f8d2ab42c31"
+    },
+    {
+      "file": "backend/alembic/versions/a7c41d09e3b2_add_ml_scores.py",
+      "revision": "a7c41d09e3b2",
+      "down_revision": "5e192ace0042"
+    },
+    {
+      "file": "backend/alembic/versions/b174b31449db_baseline_existing_schema.py",
+      "revision": "b174b31449db",
+      "down_revision": null
+    },
+    {
+      "file": "backend/alembic/versions/b8f3e33c10fb_canonicalize_events_journal.py",
+      "revision": "b8f3e33c10fb",
+      "down_revision": "b174b31449db"
+    },
+    {
+      "file": "backend/alembic/versions/c92601_ml_runs_metadata.py",
+      "revision": "c92601",
+      "down_revision": "a7c41d09e3b2"
+    },
+    {
+      "file": "backend/alembic/versions/d01601_request_changes.py",
+      "revision": "d01601",
+      "down_revision": "c92601"
+    },
+    {
+      "file": "backend/alembic/versions/d01602_audit_heartbeat.py",
+      "revision": "d01602",
+      "down_revision": "d01601"
+    },
+    {
+      "file": "backend/alembic/versions/e4aa4444977d_add_object_id_to_channel_catalogue.py",
+      "revision": "e4aa4444977d",
+      "down_revision": "b8f3e33c10fb"
+    }
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/map/objects"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/objects/{object_id}/sensors"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sensors/{channel_id}/history"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/alarms"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/requests"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/requests"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/requests/{request_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/requests/{request_id}/history"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/imports/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/imports"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/imports/{import_id}"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operations/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/audit"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notifications"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/notifications/{notification_id}/read"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integrations/{kind}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integrations/records/{kind}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integrations/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/predictions/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/predictions/runs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/predictions/reasons"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/predictions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/predictions/inference"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/predictions/{prediction_id}"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/predictions/{prediction_id}/decision"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/predictions/{prediction_id}/request"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/geo/objects/{object_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/geo/objects"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reports/{kind}"
+    },
+    {
+      "method": "GET",
+      "path": "/health"
+    },
+    {
+      "method": "GET",
+      "path": "/ready"
+    }
+  ],
+  "frontend_routes": [
+    "/predictions",
+    "/reports",
+    "/",
+    "/objects",
+    "/alarms",
+    "/events",
+    "/imports",
+    "/requests",
+    "/settings",
+    "*"
+  ],
+  "compose_services": [
+    "postgres",
+    "migrate",
+    "backend",
+    "frontend",
+    "proxy",
+    "backup",
+    "integrations (profile)",
+    "ml (profile)"
+  ],
+  "background_processes": [
+    "app.integration_worker (GET cursors)",
+    "scripts.ml_scheduler (ready marker)",
+    "backup-loop.sh"
+  ],
+  "auth": [
+    "local PBKDF2 sessions/CSRF",
+    "LDAP LDAPS read-only adapter",
+    "integrator 24h Bearer"
+  ],
+  "request_workflow": "draft -> new -> in_progress -> completed/cancelled; cancellation before completion allowed",
+  "review_file": "TZ_FINAL_REVIEW_AND_NON_ML_QUESTIONS_RU.md not found; official PDF and code used",
+  "test_modules": [
+    "test_cache.py",
+    "test_import_acceptance.py",
+    "test_integration_acceptance.py",
+    "test_ldap_contract.py",
+    "test_ml_integrity.py",
+    "test_ml_job.py",
+    "test_ready.py",
+    "test_reports.py",
+    "test_request_drafts.py",
+    "test_security_acceptance.py",
+    "test_worker.py",
+    "test_workflows.py"
+  ],
+  "ci": ".github/workflows/ci.yml: backend, frontend, containers; remote CI not run (no push)",
+  "documents": [
+    "README.md",
+    "ARCHITECTURE.md",
+    "SECURITY.md",
+    "INTEGRATIONS.md",
+    "COMPLIANCE.md",
+    "RUNBOOK.md",
+    "FINAL_ACCEPTANCE_2026-10.md"
+  ]
+}

@@ -1,0 +1,254 @@
+Cloning into 'C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\oct-clean-checkout'...
+done.
+860c15b69dc0e1b72a846dd9d78262344424c9d2
+ Image ldt-oct-clean-backend Building
+ Image ldt-oct-clean-frontend Building
+ Image ldt-oct-clean-migrate Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.76kB 0.0s done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 355B 0.0s done
+#2 DONE 0.0s
+
+#3 [migrate internal] load build definition from Dockerfile
+#3 transferring dockerfile: 413B 0.0s done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for public.ecr.aws/docker/library/python:3.14-slim
+#4 ...
+
+#5 [frontend internal] load metadata for public.ecr.aws/docker/library/nginx:1.28-alpine
+#5 DONE 0.3s
+
+#6 [frontend internal] load metadata for public.ecr.aws/docker/library/node:24-alpine
+#6 DONE 0.3s
+
+#4 [migrate internal] load metadata for public.ecr.aws/docker/library/python:3.14-slim
+#4 DONE 0.3s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 107B 0.0s done
+#7 DONE 0.0s
+
+#8 [backend internal] load .dockerignore
+#8 transferring context: 96B 0.0s done
+#8 DONE 0.0s
+
+#9 [frontend build 1/6] FROM public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+#9 resolve public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 0.0s done
+#9 DONE 0.0s
+
+#10 [frontend stage-1 1/3] FROM public.ecr.aws/docker/library/nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+#10 resolve public.ecr.aws/docker/library/nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236 0.0s done
+#10 DONE 0.0s
+
+#11 [migrate 1/5] FROM public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2
+#11 resolve public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 0.0s done
+#11 DONE 0.0s
+
+#12 [migrate internal] load build context
+#12 ...
+
+#13 [frontend internal] load build context
+#13 transferring context: 552.73kB 0.3s done
+#13 DONE 0.3s
+
+#14 [frontend build 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [frontend build 3/6] COPY package*.json ./
+#15 CACHED
+
+#16 [frontend build 4/6] RUN npm ci --no-audit --no-fund
+#16 CACHED
+
+#12 [migrate internal] load build context
+#12 transferring context: 888.29kB 0.4s done
+#12 DONE 0.4s
+
+#17 [frontend build 5/6] COPY . .
+#17 DONE 0.1s
+
+#18 [migrate 3/5] COPY requirements.txt .
+#18 CACHED
+
+#19 [migrate 2/5] WORKDIR /app
+#19 CACHED
+
+#20 [backend 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#20 CACHED
+
+#21 [migrate 5/5] COPY . .
+#21 DONE 0.0s
+
+#22 [frontend build 6/6] RUN npm run build
+#22 ...
+
+#21 [backend 5/5] COPY . .
+#21 DONE 0.0s
+
+#22 [frontend build 6/6] RUN npm run build
+#22 0.332
+#22 0.332 > frontend@0.0.0 build
+#22 0.332 > tsc -b && vite build
+#22 0.332
+#22 ...
+
+#23 [migrate] exporting to image
+#23 exporting layers 0.1s done
+#23 exporting manifest sha256:89f374ce8f8ba8d31224d17596e6f20d709c705c92f09223e47a1aabd3bdd8f8 0.0s done
+#23 exporting config sha256:af2435190bd5439e006ea3e196eb2c8046a6c598aa6b2a8b8a10bde634dee3b9 0.0s done
+#23 exporting attestation manifest sha256:706411cb715552c87ae5284dacf098761eba197b3d23939ff23a86a7630813bb 0.0s done
+#23 exporting manifest list sha256:8d1525011dd72c2f35004871c45c133d04450d824e5953ed11f854be7bb0c5f5 0.0s done
+#23 naming to docker.io/library/ldt-oct-clean-migrate:latest done
+#23 unpacking to docker.io/library/ldt-oct-clean-migrate:latest 1.0s done
+#23 DONE 1.3s
+
+#24 [backend] exporting to image
+#24 exporting layers 0.1s done
+#24 exporting manifest sha256:b95c2cd7f2dd8b9a05e64d8bb550146f08ab4e5cdc0714551cdb79808273668b 0.0s done
+#24 exporting config sha256:c375db43043decff3b05acbc11c72f38ed4a73f54a809f19c71c9edaa091a385 0.0s done
+#24 exporting attestation manifest sha256:3d862b8d316eefbb17d4fbc559c5130c8cd7dbe0f0adce34e53688a9c2036875 0.0s done
+#24 exporting manifest list sha256:395102a86ab1a57ef65a2f8d68ed1945d345b30f50e34bc2b72d3ce8bec376e6 0.0s done
+#24 naming to docker.io/library/ldt-oct-clean-backend:latest done
+#24 unpacking to docker.io/library/ldt-oct-clean-backend:latest 1.0s done
+#24 DONE 1.3s
+
+#25 [migrate] resolving provenance for metadata file
+#25 DONE 0.0s
+
+#26 [backend] resolving provenance for metadata file
+#26 DONE 0.0s
+
+#22 [frontend build 6/6] RUN npm run build
+#22 4.524 vite v8.3.0 building client environment for production...
+#22 4.542 transforming...
+#22 4.695 ✓ 2491 modules transformed.
+#22 4.813 rendering chunks...
+#22 4.900 computing gzip size...
+#22 4.907 dist/index.html                                 0.60 kB │ gzip:   0.39 kB
+#22 4.907 dist/assets/Nunito-Cyrillic-CTI5J-Gh.woff2     20.78 kB
+#22 4.907 dist/assets/Nunito-Latin-CjueodBP.woff2        39.15 kB
+#22 4.907 dist/assets/SettingsPage-sM3oPCog.css           2.56 kB │ gzip:   0.90 kB
+#22 4.907 dist/assets/index-DvmeX5jj.css                 66.46 kB │ gzip:  12.85 kB
+#22 4.907 dist/assets/clock-3--MfaKmhT.js                 0.19 kB │ gzip:   0.18 kB
+#22 4.907 dist/assets/search-CJrNITin.js                  0.20 kB │ gzip:   0.18 kB
+#22 4.907 dist/assets/map-B-swGjLy.js                     0.21 kB │ gzip:   0.22 kB
+#22 4.907 dist/assets/objects-0TW5bxgy.js                 0.24 kB │ gzip:   0.24 kB
+#22 4.907 dist/assets/circle-question-mark-BWSuBLze.js    0.31 kB │ gzip:   0.24 kB
+#22 4.907 dist/assets/refresh-cw-B1V9HnTL.js              0.35 kB │ gzip:   0.24 kB
+#22 4.907 dist/assets/building-complex-B1_a2JqA.js        0.44 kB │ gzip:   0.27 kB
+#22 4.907 dist/assets/shield-check-C3-ogEP-.js            0.58 kB │ gzip:   0.37 kB
+#22 4.907 dist/assets/SettingsPage-Ny5aY_4Q.js            1.94 kB │ gzip:   0.98 kB
+#22 4.907 dist/assets/ReportsPage-Dj4sEenY.js             2.20 kB │ gzip:   1.13 kB
+#22 4.907 dist/assets/SensorIcon-BS2p0cFs.js              5.19 kB │ gzip:   2.46 kB
+#22 4.907 dist/assets/ObjectsPage-P6iMuS3w.js             6.00 kB │ gzip:   2.06 kB
+#22 4.907 dist/assets/AlarmsPage-DXYOiO5C.js              6.54 kB │ gzip:   2.22 kB
+#22 4.907 dist/assets/PredictionsPage-WN5PwaFr.js         7.06 kB │ gzip:   2.73 kB
+#22 4.907 dist/assets/ImportsPage-Uuy-29v_.js             9.40 kB │ gzip:   3.18 kB
+#22 4.907 dist/assets/EventJournalPage-BGtQgLuG.js       11.11 kB │ gzip:   3.81 kB
+#22 4.907 dist/assets/session-CaK5B-Wp.js                11.13 kB │ gzip:   4.52 kB
+#22 4.907 dist/assets/RequestsPage-D4CLx-De.js           14.70 kB │ gzip:   4.57 kB
+#22 4.907 dist/assets/index-CQVdPlG0.js                 268.25 kB │ gzip:  85.80 kB
+#22 4.907 dist/assets/MapPage-Bc4dMY1u.js               382.55 kB │ gzip: 112.35 kB
+#22 4.907
+#22 4.910 ✓ built in 384ms
+#22 DONE 5.0s
+
+#27 [frontend stage-1 2/3] COPY --from=build /app/dist /usr/share/nginx/html
+#27 CACHED
+
+#28 [frontend stage-1 3/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#28 CACHED
+
+#29 [frontend] exporting to image
+#29 exporting layers done
+#29 exporting manifest sha256:5be649ce9da9c26e5fd5d3e3e3a3030aac7a34fa02c8a68d7fb20229542414ae done
+#29 exporting config sha256:0a339878ec8838c6353ad33dfe505d4cde593507e7f33d72319a35aa6664c3b4 done
+#29 exporting attestation manifest sha256:bdb5ab2d847dcbf27bd481fc5cfe8b3069db4c9153176743baec4ba4577421cc 0.0s done
+#29 exporting manifest list sha256:dc5c57cc7acaa8e9c1fdea6eb8f613e521c01d5065856c1f49d1de5f89c9b5e1 0.0s done
+#29 naming to docker.io/library/ldt-oct-clean-frontend:latest done
+#29 unpacking to docker.io/library/ldt-oct-clean-frontend:latest 0.0s done
+#29 DONE 0.1s
+
+#30 [frontend] resolving provenance for metadata file
+#30 DONE 0.0s
+ Image ldt-oct-clean-backend Built
+ Image ldt-oct-clean-frontend Built
+ Image ldt-oct-clean-migrate Built
+ Volume ldt-oct-clean_postgres_data Creating
+ Volume ldt-oct-clean_postgres_data Creating
+ Volume ldt-oct-clean_backups Creating
+ Volume ldt-oct-clean_backups Creating
+ Network ldt-oct-clean_default Creating
+ Network ldt-oct-clean_default Creating
+ Volume ldt-oct-clean_backups Created
+ Volume ldt-oct-clean_backups Created
+ Volume ldt-oct-clean_postgres_data Created
+ Volume ldt-oct-clean_postgres_data Created
+ Network ldt-oct-clean_default Created
+ Network ldt-oct-clean_default Created
+ Container ldt-oct-clean-frontend-1 Creating
+ Container ldt-oct-clean-postgres-1 Creating
+ Container ldt-oct-clean-frontend-1 Created
+ Container ldt-oct-clean-postgres-1 Created
+ Container ldt-oct-clean-backup-1 Creating
+ Container ldt-oct-clean-migrate-1 Creating
+ Container ldt-oct-clean-migrate-1 Created
+ Container ldt-oct-clean-backend-1 Creating
+ Container ldt-oct-clean-backup-1 Created
+ Container ldt-oct-clean-backend-1 Created
+ Container ldt-oct-clean-proxy-1 Creating
+ Container ldt-oct-clean-proxy-1 Created
+ Container ldt-oct-clean-postgres-1 Starting
+ Container ldt-oct-clean-frontend-1 Starting
+ Container ldt-oct-clean-postgres-1 Started
+ Container ldt-oct-clean-postgres-1 Waiting
+ Container ldt-oct-clean-postgres-1 Waiting
+ Container ldt-oct-clean-frontend-1 Started
+ Container ldt-oct-clean-postgres-1 Healthy
+ Container ldt-oct-clean-postgres-1 Healthy
+ Container ldt-oct-clean-migrate-1 Starting
+ Container ldt-oct-clean-backup-1 Starting
+ Container ldt-oct-clean-migrate-1 Started
+ Container ldt-oct-clean-migrate-1 Waiting
+ Container ldt-oct-clean-backup-1 Started
+ Container ldt-oct-clean-migrate-1 Error service "migrate" didn't complete successfully: exit 1
+service "migrate" didn't complete successfully: exit 1
+ Container ldt-oct-clean-frontend-1 Running
+ Container ldt-oct-clean-postgres-1 Running
+ Container ldt-oct-clean-backup-1 Running
+ Container ldt-oct-clean-migrate-1 Recreate
+ Container ldt-oct-clean-migrate-1 Recreated
+ Container ldt-oct-clean-backend-1 Recreate
+ Container ldt-oct-clean-backend-1 Recreated
+ Container ldt-oct-clean-postgres-1 Waiting
+ Container ldt-oct-clean-postgres-1 Waiting
+ Container ldt-oct-clean-postgres-1 Healthy
+ Container ldt-oct-clean-postgres-1 Healthy
+ Container ldt-oct-clean-migrate-1 Starting
+ Container ldt-oct-clean-migrate-1 Started
+ Container ldt-oct-clean-migrate-1 Waiting
+ Container ldt-oct-clean-migrate-1 Exited
+ Container ldt-oct-clean-backend-1 Starting
+ Container ldt-oct-clean-backend-1 Started
+ Container ldt-oct-clean-backend-1 Waiting
+ Container ldt-oct-clean-backend-1 Healthy
+ Container ldt-oct-clean-proxy-1 Starting
+ Container ldt-oct-clean-proxy-1 Started
+ Container ldt-oct-clean-proxy-1 Waiting
+ Container ldt-oct-clean-backup-1 Waiting
+ Container ldt-oct-clean-backend-1 Waiting
+ Container ldt-oct-clean-frontend-1 Waiting
+ Container ldt-oct-clean-postgres-1 Waiting
+ Container ldt-oct-clean-migrate-1 Waiting
+ Container ldt-oct-clean-migrate-1 Exited
+ Container ldt-oct-clean-proxy-1 Healthy
+ Container ldt-oct-clean-postgres-1 Healthy
+ Container ldt-oct-clean-backup-1 Healthy
+ Container ldt-oct-clean-frontend-1 Healthy
+ Container ldt-oct-clean-backend-1 Healthy
+Synthetic monitoring fixture ready: 50 objects, 1000 sensors, up to 20000 events; no predictions.
+Smoke passed

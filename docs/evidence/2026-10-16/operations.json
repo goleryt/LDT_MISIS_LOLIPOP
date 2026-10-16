@@ -1,0 +1,62 @@
+{
+  "api": "ok",
+  "database": "connected",
+  "workers": {
+    "integrations": {
+      "state": "idle",
+      "last_seen": "2026-10-16 15:38:48.528589+00:00",
+      "last_success": "2026-10-16 15:38:48.528589+00:00",
+      "error_code": null
+    },
+    "ml_scheduler": {
+      "state": "waiting_for_marker",
+      "last_seen": "2026-10-16 15:37:01.822639+00:00",
+      "last_success": null,
+      "error_code": null
+    }
+  },
+  "last_import": null,
+  "last_prediction_job": {
+    "id": 1,
+    "state": "completed",
+    "finished_at": "2026-10-16 15:35:19.153715+00:00",
+    "error_code": null
+  },
+  "integration_sources": [
+    {
+      "source": "mock-equipment",
+      "last_success": "2026-10-16 15:38:48.477731+00:00",
+      "error_code": null
+    },
+    {
+      "source": "mock-ods",
+      "last_success": "2026-10-16 15:38:48.502835+00:00",
+      "error_code": null
+    },
+    {
+      "source": "mock-smvu",
+      "last_success": "2026-10-16 15:38:48.491154+00:00",
+      "error_code": null
+    },
+    {
+      "source": "mock-weather",
+      "last_success": "2026-10-16 15:38:48.513584+00:00",
+      "error_code": null
+    },
+    {
+      "source": "mock-work",
+      "last_success": "2026-10-16 15:38:48.526148+00:00",
+      "error_code": null
+    }
+  ],
+  "integration_failures": 0,
+  "backup": {
+    "state": "not_observed",
+    "last_success": null
+  },
+  "pool": {
+    "size": 5,
+    "checked_out": 1,
+    "overflow": -4
+  }
+}

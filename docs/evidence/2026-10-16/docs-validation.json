@@ -1,0 +1,21 @@
+{
+  "checked_documents": [
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/SECURITY.md",
+    "docs/INTEGRATIONS.md",
+    "docs/COMPLIANCE.md",
+    "docs/RUNBOOK.md",
+    "docs/FINAL_ACCEPTANCE_2026-10.md",
+    "docs/FINAL_SCOPE_DECISIONS_RU.md",
+    "docs/evidence/2026-10-16/README.md",
+    "docs/CHANGE_MANIFEST_2026-10.md",
+    "docs/UI_STATE_AUDIT_2026-10.md"
+  ],
+  "local_links_checked": 52,
+  "missing_local_links": [],
+  "tracked_secret_file_paths": [],
+  "credential_signature_file_hits": [],
+  "official_pdf_sha256": "be4b7ab53628407b5e28fce35cffc07ae0025475dfce653b01cd82ae7da90f2b",
+  "note": "Heuristic credential scan is not a full external security audit; no secrets printed."
+}

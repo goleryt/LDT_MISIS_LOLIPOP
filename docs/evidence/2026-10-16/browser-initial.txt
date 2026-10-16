@@ -1,0 +1,131 @@
+
+Running 3 tests using 1 worker
+
+(node:26332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout (5.8s)
+(node:22760) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [chrome] › e2e\workflows.spec.ts:56:1 › failed prediction request has visible feedback and recovers (5.9s)
+(node:10208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chrome] › e2e\workflows.spec.ts:69:1 › sensor history and preventive request from the map (6.1s)
+
+
+  1) [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.app-shell')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.app-shell') with timeout 5000ms
+      - waiting for locator('.app-shell')
+
+
+       7 |   await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+       8 |   await page.getByRole("button", { name: "Войти", exact: true }).click();
+    >  9 |   await expect(page.locator(".app-shell")).toBeVisible();
+         |                                            ^
+      10 |   await expect(page.locator("svg.schematic-map-svg")).toBeVisible();
+      11 |   for (const [title, path] of [["Объекты","/objects"],["Тревоги","/alarms"],["Журнал событий","/events"],["Заявки","/requests"],["Импорт данных","/imports"],["Прогнозы","/predictions"]]) {
+      12 |     await page.locator(`nav a[href="${path}"]`).click();
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:9:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-login-map-object-e5e25-ts-model-unavailable-logout-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-login-map-object-e5e25-ts-model-unavailable-logout-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-login-map-object-e5e25-ts-model-unavailable-logout-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-login-map-object-e5e25-ts-model-unavailable-logout-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chrome] › e2e\workflows.spec.ts:56:1 › failed prediction request has visible feedback and recovers
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "Сервис временно недоступен"
+    Received string:    "Недостаточно прав или сеанс требует обновления. Войдите снова, если действие разрешено вашей роли."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        13 × locator resolved to <p role="alert" class="auth-error">Недостаточно прав или сеанс требует обновления. В…</p>
+           - unexpected value "Недостаточно прав или сеанс требует обновления. Войдите снова, если действие разрешено вашей роли."
+
+
+      60 |   await page.route("**/api/v1/predictions/status", route => route.fulfill({ status: 503, contentType: "application/json", body: '{"detail":"internal secret debug"}' }));
+      61 |   await page.getByRole("button", { name: "Войти", exact: true }).click();
+    > 62 |   await expect(page.getByRole("alert")).toContainText("Сервис временно недоступен");
+         |                                         ^
+      63 |   await expect(page.locator("main")).not.toContainText("internal secret debug");
+      64 |   await page.unroute("**/api/v1/predictions/status");
+      65 |   await page.getByRole("button", { name: "Повторить загрузку", exact: true }).click();
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:62:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-failed-predictio-6913c-sible-feedback-and-recovers-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-failed-predictio-6913c-sible-feedback-and-recovers-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-failed-predictio-6913c-sible-feedback-and-recovers-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-failed-predictio-6913c-sible-feedback-and-recovers-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chrome] › e2e\workflows.spec.ts:69:1 › sensor history and preventive request from the map ────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Последние события', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Последние события', exact: true }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Последние события', exact: true })
+
+
+      72 |   await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+      73 |   await page.getByRole("button", { name: "Войти", exact: true }).click();
+    > 74 |   await expect(page.getByRole("heading", { name: "Последние события", exact: true })).toBeVisible();
+         |                                                                                       ^
+      75 |   // The telemetry acceptance may already have appended genuine test events.
+      76 |   await expect.poll(async () => Number(await page.locator(".history-count").textContent())).toBeGreaterThanOrEqual(20);
+      77 |   await page.getByRole("button", { name: "Создать профилактическую заявку" }).click();
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:74:87
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-sensor-history-and-preventive-request-from-the-map-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-sensor-history-and-preventive-request-from-the-map-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-sensor-history-and-preventive-request-from-the-map-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-sensor-history-and-preventive-request-from-the-map-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout
+    [chrome] › e2e\workflows.spec.ts:56:1 › failed prediction request has visible feedback and recovers
+    [chrome] › e2e\workflows.spec.ts:69:1 › sensor history and preventive request from the map ─────

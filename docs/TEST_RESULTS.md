@@ -1,3 +1,5 @@
+> **HISTORICAL / SUPERSEDED.** Сентябрьский снимок, не приёмка текущей ветки. Актуальные результаты, ограничения и решения 16.10.2026: [FINAL_ACCEPTANCE_2026-10.md](FINAL_ACCEPTANCE_2026-10.md) и [FINAL_SCOPE_DECISIONS_RU.md](FINAL_SCOPE_DECISIONS_RU.md). Противоречащие им пункты ниже не являются текущим статусом.
+
 > Актуальная интеграция и приёмка от 27.09.2026: [FINAL_ACCEPTANCE.md](FINAL_ACCEPTANCE.md). Ниже сохранён предыдущий отчёт.
 
 # Проверки поставки — 24.09.2026

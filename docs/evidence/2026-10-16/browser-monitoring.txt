@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:18260) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout (2.6s)
+  ok 2 [chrome] › e2e\workflows.spec.ts:56:1 › failed prediction request has visible feedback and recovers (1.4s)
+  ok 3 [chrome] › e2e\workflows.spec.ts:69:1 › sensor history and preventive request from the map (3.3s)
+
+  3 passed (8.1s)

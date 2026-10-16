@@ -559,6 +559,46 @@
         }
       }
     },
+    "/api/v1/requests/{request_id}/history": {
+      "get": {
+        "tags": [
+          "requests"
+        ],
+        "summary": "Request History",
+        "operationId": "request_history_api_v1_requests__request_id__history_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/imports/events": {
       "post": {
         "tags": [
@@ -754,6 +794,25 @@
         ],
         "summary": "Logout",
         "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/operations/status": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Operations Status",
+        "operationId": "operations_status_api_v1_operations_status_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1793,6 +1852,7 @@
               {
                 "type": "string",
                 "enum": [
+                  "draft",
                   "new",
                   "in_progress",
                   "completed",

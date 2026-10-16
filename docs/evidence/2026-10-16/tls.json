@@ -1,0 +1,6 @@
+{
+  "TLSv1_2": "TLSv1.2",
+  "TLSv1_3": "TLSv1.3",
+  "tls_1_1_rejected": "TLSV1_ALERT_PROTOCOL_VERSION",
+  "https_health": 200
+}

@@ -1,0 +1,55 @@
+{
+  "source": "published September demo account from base README; credentials not copied",
+  "base_url": "https://ldt-demo-production.up.railway.app",
+  "checks": [
+    {
+      "path": "/api/v1/auth/me",
+      "status": 200,
+      "response_fields": [
+        "username",
+        "role",
+        "csrf_token"
+      ]
+    },
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "returned_items": 79
+    },
+    {
+      "path": "/api/v1/events?limit=1",
+      "status": 200,
+      "response_fields": [
+        "limit",
+        "offset",
+        "returned",
+        "has_more",
+        "events"
+      ]
+    },
+    {
+      "path": "/api/v1/predictions/status",
+      "status": 200,
+      "response_fields": [
+        "available",
+        "stale",
+        "state",
+        "as_of_date",
+        "model_version",
+        "message"
+      ]
+    },
+    {
+      "path": "/api/v1/integrations/status",
+      "status": 403
+    },
+    {
+      "path": "/api/v1/audit",
+      "status": 403
+    }
+  ],
+  "login_status": 200,
+  "role": "manager",
+  "logout_status": 200,
+  "after_logout": 401
+}
