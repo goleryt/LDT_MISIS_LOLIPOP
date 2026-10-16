@@ -38,13 +38,13 @@ export default function RequestReview({ item, onSaved, onClose }: {
       <label>Приоритет черновика<select value={priority} onChange={e => setPriority(e.target.value as RequestPriority)}>
         <option value="low">Низкий</option><option value="medium">Средний</option><option value="high">Высокий</option><option value="critical">Критический</option>
       </select></label>
-      <button disabled={!title.trim()} onClick={() => void save(false)}>Сохранить черновик</button>
-      <button disabled={!title.trim()} onClick={() => void save(true)}>Подтвердить заявку</button>
+      <button className="requests-secondary-button" disabled={!title.trim()} onClick={() => void save(false)}>Сохранить черновик</button>
+      <button className="requests-primary-button" disabled={!title.trim()} onClick={() => void save(true)}>Подтвердить заявку</button>
     </fieldset>}
     <h3>История изменений</h3>
     {loading ? <p role="status">Загрузка истории…</p> : history.length ? history.map(row => <p key={row.id}>
       {new Date(row.created_at).toLocaleString("ru-RU")} · {row.actor} · {states[row.from_status ?? ""] ?? "Создание"} → {states[row.to_status] ?? row.to_status}
     </p>) : <p>Записей об изменениях нет. История ведётся с обновления октября 2026.</p>}
-    <button onClick={onClose}>Закрыть просмотр заявки</button>
+    <button className="requests-secondary-button" onClick={onClose}>Закрыть просмотр заявки</button>
   </section>;
 }

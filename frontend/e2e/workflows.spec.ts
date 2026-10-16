@@ -42,6 +42,65 @@ test("real gas bundle result, advisory and dispatcher decision", async ({ page }
   await page.getByRole("button", { name: "Сохранить решение", exact: true }).click();
   await expect(page.getByText("История решений", { exact: true })).toBeVisible();
   await expect(page.locator(".prediction-detail")).toContainText("Контрольный прогон интерфейса на тестовой истории");
+  const createDraft = page.getByRole("button", { name: "Создать черновик заявки", exact: true });
+  const freshDraft = await createDraft.isVisible();
+  if (freshDraft) await createDraft.click();
+  await page.getByRole("link", { name: /Открыть заявку · №/ }).click();
+  if (freshDraft) {
+  await expect(page.getByRole("heading", { name: /Черновик заявки №/ })).toBeVisible();
+  await page.getByLabel("Тема черновика", { exact: true }).fill("Проверено диспетчером: тестовая рекомендация");
+  await page.getByRole("button", { name: "Сохранить черновик", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Черновик сохранён");
+  await page.getByRole("button", { name: "Подтвердить заявку", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Черновик подтверждён");
+  }
+  await expect(page.getByRole("heading", { name: "История изменений" })).toBeVisible();
+  await expect(page.locator("main")).not.toContainText(/undefined|NaN/);
+  if (process.env.EVIDENCE_DIR) await page.screenshot({ path: `${process.env.EVIDENCE_DIR}/draft-confirmed-chrome.png` });
+});
+
+test("failed prediction request has visible feedback and recovers", async ({ page }) => {
+  await page.goto("/predictions");
+  await page.getByPlaceholder("Логин", { exact: true }).fill(process.env.TEST_USERNAME ?? "dispatcher");
+  await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+  await page.route("**/api/v1/predictions/status", route => route.fulfill({ status: 503, contentType: "application/json", body: '{"detail":"internal secret debug"}' }));
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Сервис временно недоступен");
+  await expect(page.locator("main")).not.toContainText("internal secret debug");
+  await page.unroute("**/api/v1/predictions/status");
+  await page.getByRole("button", { name: "Повторить загрузку", exact: true }).click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
+test("JSON import is visible in the registry and duplicate upload is identified", async ({ page }) => {
+  await page.goto("/imports");
+  await page.getByPlaceholder("Логин", { exact: true }).fill(process.env.TEST_USERNAME ?? "dispatcher");
+  await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  const name=`acceptance-${Date.now()}.json`;
+  const file={name,mimeType:"application/json",buffer:Buffer.from(JSON.stringify([{
+    ид_события:String(Date.now()),ид_канала_данных:"1",дата:"2026-10-16",время:"10:00:00",тревожное:"false",значение_датчика:"25"
+  }]))};
+  await page.locator('input[type="file"]').setInputFiles(file);
+  await page.getByRole("button", { name: "Начать импорт", exact:true }).click();
+  await expect(page.getByText("Файл успешно обработан и зарегистрирован.")).toBeVisible();
+  await expect(page.locator("tr").filter({hasText:name})).toContainText("Завершён");
+  await page.locator('input[type="file"]').setInputFiles(file);
+  await page.getByRole("button", { name: "Начать импорт", exact:true }).click();
+  await expect(page.getByText("Этот файл уже был успешно импортирован ранее.")).toBeVisible();
+});
+
+test("mock alarm opens the exact sensor and can be marked read", async ({page}) => {
+  test.skip(process.env.RUN_MOCK_E2E !== "true", "Start the five-source mock environment first");
+  await page.goto("/");
+  await page.getByPlaceholder("Логин", { exact: true }).fill(process.env.TEST_USERNAME ?? "dispatcher");
+  await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  await page.locator('.notification-panel summary').click();
+  await page.locator('.notification-panel a[href="/?objectId=900001&channelId=900001"]').first().click();
+  await expect(page).toHaveURL(/objectId=900001&channelId=900001/);
+  await expect(page.getByRole("heading",{name:"Последние события",exact:true})).toBeVisible();
+  await page.getByRole("button",{name:/Прочитано:.*900001/}).first().click();
 });
 
 test("sensor history and preventive request from the map", async ({ page }) => {

@@ -3317,6 +3317,7 @@ button:hover {
 .request-status-select.new { color: #2563eb; }
 .request-status-select.draft { color: #64748b; }
 .request-review { padding: 20px; }
+.requests-feedback { color: #e2edff; background: #183b64; padding: 12px 16px; border-radius: 8px; }
 .request-review fieldset, .request-review label { display: grid; gap: 10px; }
 .request-review input, .request-review textarea, .request-review select { max-width: 100%; padding: 8px; }
 .request-status-select.in_progress { color: #b45309; }

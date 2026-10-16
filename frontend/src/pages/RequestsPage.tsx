@@ -658,7 +658,7 @@ function RequestsPage() {
                 </section>
             )}
 
-            {feedback && <p role="status">{feedback}</p>}
+            {feedback && <p role="status" className="requests-feedback">{feedback}</p>}
             {requests.find(item => item.id === reviewId) && <RequestReview key={reviewId} item={requests.find(item => item.id === reviewId)!}
                 onClose={() => setReviewId(null)} onSaved={updated => { setRequests(current => current.map(item => item.id === updated.id ? updated : item)); setFeedback(updated.status === "new" ? "Черновик подтверждён: заявка создана" : "Черновик сохранён"); }} />}
             <section className="requests-panel">
@@ -790,7 +790,7 @@ function RequestsPage() {
                                                 )}
                                             </td>
                                             <td>
-                                                <button onClick={() => setReviewId(request.id)}>{request.status === "draft" ? "Проверить черновик" : "История"}</button>
+                                                <button className="requests-secondary-button" onClick={() => setReviewId(request.id)}>{request.status === "draft" ? "Проверить черновик" : "История"}</button>
                                                 <button
                                                     type="button"
                                                     className="request-map-button"
