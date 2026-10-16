@@ -3388,9 +3388,15 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .notification-panel { position:relative; padding:10px 24px; background:#172a37; color:#e6eef4; }
 .notification-panel div { display:flex; align-items:center; gap:16px; padding:8px; }
 .notification-panel a { color:#9fd7ed; }
+.notification-panel details { max-height: min(40vh, 360px); overflow-y:auto; }
+.notification-panel div { flex-wrap:wrap; }
+.notification-panel a { min-width:0; overflow-wrap:anywhere; flex:1 1 240px; }
+.notification-panel time { font-size:.8rem; }
 .operations-page { padding:28px; color:#dce9f1; overflow:auto; height:100%; }
 .operations-page table { border-collapse:collapse; width:100%; }
 .operations-page td,.operations-page th { padding:10px; text-align:left; border-bottom:1px solid #334552; }
+.operations-page a { color:var(--page-accent); }
+.operations-page input[type="date"] { color-scheme:dark; }
 .status-notice { padding:14px; border-left:3px solid #5c91a6; background:#162c39; }
 .prediction-detail { max-width:900px; margin-top:24px; }
 .prediction-detail fieldset { display:grid; gap:12px; padding:20px; margin-top:18px; }

@@ -659,7 +659,7 @@ function RequestsPage() {
             )}
 
             {feedback && <p role="status" className="requests-feedback">{feedback}</p>}
-            {requests.find(item => item.id === reviewId) && <RequestReview key={reviewId} item={requests.find(item => item.id === reviewId)!}
+            {requests.find(item => item.id === reviewId) && <RequestReview key={`${reviewId}:${requests.find(item => item.id === reviewId)?.updated_at}`} item={requests.find(item => item.id === reviewId)!}
                 onClose={() => setReviewId(null)} onSaved={updated => { setRequests(current => current.map(item => item.id === updated.id ? updated : item)); setFeedback(updated.status === "new" ? "Черновик подтверждён: заявка создана" : "Черновик сохранён"); }} />}
             <section className="requests-panel">
                 <div className="requests-toolbar">

@@ -427,7 +427,7 @@ function ObjectsPage() {
 
                                             <td>
                                                 <div className="object-table-main">
-                                                    <strong>
+                                                    <strong title={object.name ?? `Объект ${object.object_id}`}>
                                                         {object.name ??
                                                             `Объект ${object.object_id}`}
                                                     </strong>
