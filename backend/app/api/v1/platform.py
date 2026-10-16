@@ -6,6 +6,11 @@ from app.db.session import SessionLocal
 
 router = APIRouter(tags=["operations"])
 
+@router.get("/operations/status")
+def operations_status():
+    from app.operations import operational_status
+    return operational_status()
+
 def serialize(row):
     return {column.name: getattr(row, column.name) for column in row.__table__.columns}
 

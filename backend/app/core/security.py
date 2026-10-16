@@ -63,7 +63,7 @@ def permitted(role: str, method: str, path: str) -> bool:
         return role in {"admin", "integrator"}
     if role == "integrator":
         return path in {"/api/v1/auth/me", "/api/v1/auth/logout"}
-    if path.startswith("/api/v1/admin") or path.startswith("/api/v1/audit"):
+    if path.startswith("/api/v1/admin") or path.startswith("/api/v1/audit") or path.startswith("/api/v1/operations"):
         return role == "admin"
     if method in {"GET", "HEAD"}:
         return role in ROLES
@@ -85,7 +85,8 @@ def authorize(request: Request) -> Principal:
     request.state.principal = principal
     if not permitted(principal.role, request.method, request.url.path):
         raise HTTPException(403, "Insufficient permissions")
-    if request.method not in {"GET", "HEAD", "OPTIONS"} and not request.headers.get("authorization"):
+    machine_token = principal.role == "integrator" and request.headers.get("authorization", "").startswith("Bearer ")
+    if request.method not in {"GET", "HEAD", "OPTIONS"} and not machine_token:
         if not hmac.compare_digest(request.headers.get("x-csrf-token", ""), principal.csrf_token):
             raise HTTPException(403, "Invalid CSRF token")
     return principal

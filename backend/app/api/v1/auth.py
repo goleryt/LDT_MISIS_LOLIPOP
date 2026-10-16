@@ -60,6 +60,8 @@ def login(payload: Credentials, request: Request, response: Response):
         db.execute(delete(LoginSession).where(LoginSession.expires_at < now))
         db.execute(delete(LoginAttempt).where(LoginAttempt.key == key))
         role = user.role
+        request.state.audit_role = role
+        request.state.audit_entity_type, request.state.audit_entity_id = "user", username
     response.set_cookie(COOKIE, token, httponly=True, secure=settings.secure_cookies, samesite="strict",
                         max_age=settings.session_hours * 3600, path="/")
     response.headers["Cache-Control"] = "no-store"

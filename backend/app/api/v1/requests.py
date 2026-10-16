@@ -275,6 +275,7 @@ def create_request(
         record_change(session, request, http_request.state.principal, None, ["created"])
         session.commit()
         session.refresh(request)
+        http_request.state.audit_entity_id = str(request.id)
 
         row = get_request_with_names(
             session,

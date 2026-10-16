@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     ldap_role_groups: dict[str, str] = {}
     integration_sources_file: str = ""
     integration_poll_seconds: int = Field(default=30, ge=5, le=120)
+    backup_status_dir: str = ""
     # ML (пакет LCT_ML_backend_v1): суточный расчёт отдельной задачей, API только читает результат.
     ml_bundles_dir: str = ""
     ml_export_days: int = Field(default=430, ge=401, le=800)

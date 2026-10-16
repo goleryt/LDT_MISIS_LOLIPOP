@@ -30,6 +30,9 @@ class AuditEntry(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     request_id: Mapped[str] = mapped_column(String(36), index=True)
     actor: Mapped[str | None] = mapped_column(String(120), index=True)
+    role: Mapped[str | None] = mapped_column(String(30))
+    entity_type: Mapped[str | None] = mapped_column(String(50))
+    entity_id: Mapped[str | None] = mapped_column(String(120))
     action: Mapped[str] = mapped_column(String(20))
     target: Mapped[str] = mapped_column(String(500))
     outcome: Mapped[int | None] = mapped_column(Integer)
@@ -116,6 +119,14 @@ class IntegrationCursor(Base):
     cursor: Mapped[str | None] = mapped_column(Text)
     last_success: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_error: Mapped[str | None] = mapped_column(String(200))
+
+class WorkerHeartbeat(Base):
+    __tablename__ = "worker_heartbeats"
+    name: Mapped[str] = mapped_column(String(50), primary_key=True)
+    state: Mapped[str] = mapped_column(String(30))
+    last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    last_success: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    error_code: Mapped[str | None] = mapped_column(String(100))
 
 
 class MlScore(Base):

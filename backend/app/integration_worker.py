@@ -13,6 +13,7 @@ from app.core.config import get_settings
 from app.db.platform import IntegrationCursor
 from app.db.session import SessionLocal, engine
 from app.ingestion.integrations import KINDS, Record, ingest
+from app.operations import heartbeat
 
 log = logging.getLogger(__name__)
 
@@ -80,6 +81,8 @@ def main():
         if not leader.scalar(text("SELECT pg_try_advisory_lock(82519783)")):
             raise SystemExit("Another integration worker is active")
         while True:
+            heartbeat("integrations", "polling")
+            failures = 0
             for source in sources:
                 try:
                     import ssl
@@ -88,6 +91,7 @@ def main():
                         result = poll_source(source, client)
                     log.info("source=%s result=%s", source.name, result)
                 except Exception as exc:
+                    failures += 1
                     # Do not log URLs, auth headers, source bodies or credentials.
                     log.error("source=%s failure=%s", source.name, type(exc).__name__)
                     with SessionLocal.begin() as db:
@@ -96,6 +100,8 @@ def main():
                             state = IntegrationCursor(source=source.name)
                             db.add(state)
                         state.last_error = type(exc).__name__
+            heartbeat("integrations", "error" if failures else "idle", success=not failures,
+                      error_code="SOURCE_FAILURE" if failures else None)
             time.sleep(settings.integration_poll_seconds)
 
 if __name__ == "__main__":
