@@ -23,3 +23,20 @@ def test_invalid_version_stamp_rejected_without_write(login,stamp):
     row=c.post('/api/v1/requests',json={'object_id':1,'title':'Version'}).json()
     assert c.patch(f"/api/v1/requests/{row['id']}",json={'title':'Wrong','expected_updated_at':stamp}).status_code==422
     assert c.get('/api/v1/requests').json()[0]['title']=='Version'
+
+
+def test_two_simultaneous_dispatcher_edits_have_one_winner(login):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    c=login()
+    original=c.post('/api/v1/requests',json={'object_id':1,'title':'Concurrent'}).json()
+    barrier=Barrier(2)
+    def edit(title):
+        barrier.wait(timeout=10)
+        return c.patch(f"/api/v1/requests/{original['id']}",json={'title':title,'expected_updated_at':original['updated_at']})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(edit,['Dispatcher A','Dispatcher B']))
+    assert sorted(r.status_code for r in results)==[200,409]
+    winner=next(r.json()['title'] for r in results if r.status_code==200)
+    assert c.get('/api/v1/requests').json()[0]['title']==winner
+    assert len(c.get(f"/api/v1/requests/{original['id']}/history").json())==2
