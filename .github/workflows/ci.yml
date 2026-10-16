@@ -91,6 +91,13 @@ jobs:
           npx playwright test
       - name: Check telemetry delivery without ML
         run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T -e TEST_USERNAME -e TEST_PASSWORD backend python -m scripts.check_stream
+      - name: Real frozen gas runtime contract on labelled synthetic inputs
+        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci run --rm ml python -m scripts.check_ml_bundle
+      - name: Prediction decision to editable request draft
+        working-directory: frontend
+        run: npx playwright test --grep 'real gas bundle'
+        env:
+          RUN_ML_E2E: "true"
       - name: Check backup and restore
         run: |
           docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/backup.sh
