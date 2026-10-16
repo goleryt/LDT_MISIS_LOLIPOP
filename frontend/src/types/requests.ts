@@ -44,6 +44,7 @@ export interface PreventiveRequestCreate {
 
 
 export interface PreventiveRequestUpdate {
+    expected_updated_at?: string;
     title?: string;
     description?: string | null;
     priority?: RequestPriority;

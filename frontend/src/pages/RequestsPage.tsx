@@ -369,7 +369,7 @@ function RequestsPage() {
             const updated =
                 await updateRequest(
                     request.id,
-                    { status },
+                    { status, ...(request.updated_at ? { expected_updated_at: request.updated_at } : {}) },
                 );
 
             setRequests((current) =>

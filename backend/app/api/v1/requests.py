@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import AwareDatetime, BaseModel, Field
 from sqlalchemy import select
 
 from app.db.models import (
@@ -61,6 +61,7 @@ class PreventiveRequestCreate(BaseModel):
 
 
 class PreventiveRequestUpdate(BaseModel):
+    expected_updated_at: AwareDatetime | None = None
     title: str | None = Field(
         default=None,
         min_length=1,
@@ -317,6 +318,12 @@ def update_request(
         changes = payload.model_dump(
             exclude_unset=True
         )
+        if "expected_updated_at" in changes:
+            expected = changes.pop("expected_updated_at")
+            if expected is None:
+                raise HTTPException(422, "Expected update timestamp must not be null")
+            if request.updated_at != expected:
+                raise HTTPException(409, "Request changed; reload before applying your changes")
         previous = request.status
         if not changes:
             raise HTTPException(422, "Specify at least one change")

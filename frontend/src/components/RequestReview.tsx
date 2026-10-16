@@ -24,7 +24,7 @@ export default function RequestReview({ item, onSaved, onClose }: {
   }, [item]);
   async function save(confirm: boolean) {
     setBusy(true); setError("");
-    try { onSaved(await updateRequest(item.id, { title: title.trim(), description: description.trim() || null, priority, ...(confirm ? { status: "new" } : {}) })); }
+    try { onSaved(await updateRequest(item.id, { title: title.trim(), description: description.trim() || null, priority, ...(item.updated_at ? { expected_updated_at: item.updated_at } : {}), ...(confirm ? { status: "new" } : {}) })); }
     catch (e) { setError(e instanceof Error ? e.message : "Не удалось сохранить черновик"); }
     finally { setBusy(false); }
   }
