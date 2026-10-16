@@ -79,8 +79,8 @@ export default function PredictionsPage() {
       <p>Модель: {selected.model_version} · Расчёт: {new Date(selected.calculated_at).toLocaleString("ru-RU")}</p>
       {selected.ml_metadata && <p>Данные на {selected.ml_metadata.as_of_date} · ревизия {selected.ml_metadata.revision} · {selected.ml_metadata.evidence_level}. Контекст: {selected.ml_metadata.maintenance_context === "possible_recent_silence" ? "Возможно, после ТО/поверки; требуется проверка журнала работ" : selected.ml_metadata.maintenance_context === "verified_schedule" ? "Подтверждённое окно ППР" : "Сведения о ТО отсутствуют"}. Горизонт {selected.horizon_hours} ч отсчитывается от завершения суток данных. Автоматические действия отключены.</p>}
       <p>{selected.recommendation ?? "Рекомендация не предоставлена моделью"}</p>
-      {selected.request_id ? <Link to="/requests">Открыть заявки · №{selected.request_id}</Link> :
-        <button disabled={busy || !canWrite("predictions") || !selected.recommendation || ["closed", "false_alarm"].includes(selected.status)} onClick={createRequest}>Создать заявку вручную</button>}
+      {selected.request_id ? <Link to={`/requests?requestId=${selected.request_id}`}>Открыть заявку · №{selected.request_id}</Link> :
+        <button disabled={busy || !canWrite("predictions") || !selected.recommendation || ["closed", "false_alarm"].includes(selected.status)} onClick={createRequest}>Создать черновик заявки</button>}
       <fieldset disabled={busy || !canWrite("predictions") || selected.status === "closed"}><legend>Решение диспетчера</legend>
         <label>Действие<select value={decision} onChange={e => setDecision(e.target.value)}>
           <option value="monitoring">Мониторинг</option><option value="confirmed">Подтверждено</option><option value="false_alarm">Ложное срабатывание</option>

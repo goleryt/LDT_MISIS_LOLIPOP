@@ -60,6 +60,8 @@ test("sensor history and preventive request from the map", async ({ page }) => {
   await page.getByRole("button", { name: "Создать заявку", exact: true }).click();
   const row = page.locator("tr").filter({ hasText: title });
   await expect(row).toBeVisible();
+  await row.locator("select").selectOption("in_progress");
+  await expect(row.locator("select")).toHaveValue("in_progress");
   await row.locator("select").selectOption("completed");
   await expect(row.locator("select")).toHaveValue("completed");
   await page.reload();

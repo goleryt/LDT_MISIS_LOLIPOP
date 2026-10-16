@@ -6,6 +6,7 @@ export type RequestPriority =
 
 
 export type RequestStatus =
+    | "draft"
     | "new"
     | "in_progress"
     | "completed"

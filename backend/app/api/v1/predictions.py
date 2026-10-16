@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from app.api.v1.platform import serialize
-from app.api.v1.requests import validate_target
+from app.api.v1.requests import validate_target, record_change
 from app.db.models import PreventiveRequest
 from app.db.platform import MlRun, MlScore, Notification, Prediction, PredictionDecision
 from app.db.session import SessionLocal
@@ -110,7 +110,7 @@ def decision(prediction_id: int, payload: DecisionInput, request: Request):
         return serialize(row)
 
 @router.post("/{prediction_id}/request")
-def draft_request(prediction_id: int):
+def draft_request(prediction_id: int, request: Request):
     with SessionLocal.begin() as db:
         row = db.scalar(select(Prediction).where(Prediction.id == prediction_id).with_for_update())
         if not row:
@@ -122,9 +122,10 @@ def draft_request(prediction_id: int):
         if not row.recommendation:
             raise HTTPException(409, "The real model supplied no recommendation")
         target = PreventiveRequest(object_id=row.object_id, channel_id=row.channel_id,
-                title=f"Проверка прогноза №{row.id}", description=row.recommendation, priority="medium", status="new")
+                title=f"Проверка прогноза №{row.id}", description=row.recommendation, priority="medium", status="draft")
         db.add(target)
         db.flush()
+        record_change(db, target, request.state.principal, None, ["created_from_recommendation"])
         row.request_id = target.id
         row.revision += 1
         return {"request_id": target.id}

@@ -60,6 +60,7 @@ def test_request_completion_cannot_reopen(login):
     c=login()
     item=c.post("/api/v1/requests",json={"object_id":1,"title":"Проверка"}).json()
     path=f"/api/v1/requests/{item['id']}"
+    assert c.patch(path,json={"status":"in_progress"}).status_code == 200
     assert c.patch(path,json={"status":"completed"}).status_code == 200
     assert c.patch(path,json={"status":"new"}).status_code == 409
 

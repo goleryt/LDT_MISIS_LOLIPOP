@@ -3315,6 +3315,10 @@ button:hover {
 }
 
 .request-status-select.new { color: #2563eb; }
+.request-status-select.draft { color: #64748b; }
+.request-review { padding: 20px; }
+.request-review fieldset, .request-review label { display: grid; gap: 10px; }
+.request-review input, .request-review textarea, .request-review select { max-width: 100%; padding: 8px; }
 .request-status-select.in_progress { color: #b45309; }
 .request-status-select.completed { color: #15803d; }
 .request-status-select.cancelled { color: #64748b; }

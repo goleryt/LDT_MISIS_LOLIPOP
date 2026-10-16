@@ -1,4 +1,5 @@
 import { canWrite } from "../api/session";
+import RequestReview from "../components/RequestReview";
 import {
     useEffect,
     useMemo,
@@ -62,11 +63,14 @@ const STATUS_LABELS: Record<
     RequestStatus,
     string
 > = {
+    draft: "Черновик",
     new: "Новая",
     in_progress: "В работе",
     completed: "Выполнена",
     cancelled: "Отменена",
 };
+
+const TRANSITIONS: Record<RequestStatus, RequestStatus[]> = { draft: ["draft"], new: ["new", "in_progress", "cancelled"], in_progress: ["in_progress", "completed", "cancelled"], completed: ["completed"], cancelled: ["cancelled"] };
 
 
 function formatDateTime(
@@ -89,6 +93,9 @@ function RequestsPage() {
 
     const [requests, setRequests] =
         useState<PreventiveRequest[]>([]);
+    const [reviewId, setReviewId] = useState<number | null>(Number(searchParams.get("requestId")) || null);
+    const [feedback, setFeedback] = useState("");
+    const [updatingId, setUpdatingId] = useState<number | null>(null);
 
     const [objects, setObjects] =
         useState<MapObject[]>([]);
@@ -231,7 +238,7 @@ function RequestsPage() {
                 setSensors(data.sensors);
                 setChannelId(current => current !== null && !data.sensors.some(sensor => sensor.channel_id === current) ? null : current);
             } catch {
-                if (!cancelled) setSensors([]);
+                if (!cancelled) { setSensors([]); setError("Не удалось загрузить датчики. Обновите страницу перед созданием заявки."); }
             }
         }
 
@@ -339,6 +346,7 @@ function RequestsPage() {
             ]);
 
             setShowCreate(false);
+            setFeedback("Заявка создана");
             resetForm();
         } catch (error) {
             setError(
@@ -357,6 +365,7 @@ function RequestsPage() {
         status: RequestStatus,
     ) {
         try {
+            setUpdatingId(request.id); setError(null);
             const updated =
                 await updateRequest(
                     request.id,
@@ -370,13 +379,14 @@ function RequestsPage() {
                         : item,
                 ),
             );
+            setFeedback("Статус заявки сохранён");
         } catch (error) {
             setError(
                 error instanceof Error
                     ? error.message
                     : "Не удалось обновить заявку",
             );
-        }
+        } finally { setUpdatingId(null); }
     }
 
 
@@ -648,6 +658,9 @@ function RequestsPage() {
                 </section>
             )}
 
+            {feedback && <p role="status">{feedback}</p>}
+            {requests.find(item => item.id === reviewId) && <RequestReview key={reviewId} item={requests.find(item => item.id === reviewId)!}
+                onClose={() => setReviewId(null)} onSaved={updated => { setRequests(current => current.map(item => item.id === updated.id ? updated : item)); setFeedback(updated.status === "new" ? "Черновик подтверждён: заявка создана" : "Черновик сохранён"); }} />}
             <section className="requests-panel">
                 <div className="requests-toolbar">
                     <div className="requests-search">
@@ -747,7 +760,8 @@ function RequestsPage() {
                                                         `request-status-select ${request.status}`
                                                     }
                                                     value={request.status}
-                                                    disabled={!canWrite("requests")}
+                                                    aria-label={`Статус заявки ${request.id}`}
+                                                    disabled={!canWrite("requests") || request.status === "draft" || ["completed", "cancelled"].includes(request.status) || updatingId === request.id}
                                                     onChange={(event) =>
                                                         void changeStatus(
                                                             request,
@@ -757,7 +771,7 @@ function RequestsPage() {
                                                 >
                                                     {Object.entries(
                                                         STATUS_LABELS,
-                                                    ).map(([
+                                                    ).filter(([value]) => TRANSITIONS[request.status].includes(value as RequestStatus)).map(([
                                                         value,
                                                         label,
                                                     ]) => (
@@ -776,6 +790,7 @@ function RequestsPage() {
                                                 )}
                                             </td>
                                             <td>
+                                                <button onClick={() => setReviewId(request.id)}>{request.status === "draft" ? "Проверить черновик" : "История"}</button>
                                                 <button
                                                     type="button"
                                                     className="request-map-button"

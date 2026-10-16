@@ -73,6 +73,17 @@ class PredictionDecision(Base):
     actual_outcome: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
+class RequestChange(Base):
+    __tablename__ = "request_changes"
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    request_id: Mapped[int] = mapped_column(ForeignKey("preventive_requests.id"), index=True)
+    actor: Mapped[str] = mapped_column(String(120))
+    role: Mapped[str] = mapped_column(String(30))
+    from_status: Mapped[str | None] = mapped_column(String(20))
+    to_status: Mapped[str] = mapped_column(String(20))
+    changed_fields: Mapped[list] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
 class Notification(Base):
     __tablename__ = "notifications"
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
