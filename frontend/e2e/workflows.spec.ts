@@ -126,3 +126,41 @@ test("sensor history and preventive request from the map", async ({ page }) => {
   await page.reload();
   await expect(page.locator("tr").filter({ hasText: title }).locator("select")).toHaveValue("completed");
 });
+
+test("map zoom, pan, tooltip, object click and compact navigation", async ({ page }) => {
+  await page.goto("/?objectId=1");
+  await page.getByPlaceholder("Логин", { exact: true }).fill(process.env.TEST_USERNAME ?? "dispatcher");
+  await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+  const map=page.locator("svg.schematic-map-svg");
+  await expect(map).toBeVisible();
+  const before=await map.getAttribute("viewBox");
+  await page.getByRole("button", {name:"Приблизить карту",exact:true}).click();
+  await expect(map).not.toHaveAttribute("viewBox",before!);
+  const zoomed=await map.getAttribute("viewBox");
+  const box=(await map.boundingBox())!;
+  // The selected-object panel overlays the right half of the map.
+  await page.mouse.move(box.x+100,box.y+120);
+  await page.mouse.down();
+  await page.mouse.move(box.x+170,box.y+150,{steps:8});
+  await page.mouse.up();
+  await expect(map).not.toHaveAttribute("viewBox",zoomed!);
+  await page.getByRole("button", {name:"Показать все",exact:true}).click();
+  // Selection via the URL is also used by alarms and notifications.
+  await page.goto("/?objectId=1");
+  const marker=map.locator('.schematic-object.selected .schematic-object-point');
+  await expect(marker).toBeVisible();
+  const point=(await marker.boundingBox())!;
+  // Native pointer movement does not wait for the animated SVG halo to stop.
+  await page.mouse.move(point.x+point.width/2,point.y+point.height/2);
+  await expect(page.locator('.map-object-tooltip')).toBeVisible();
+  await page.mouse.click(point.x+point.width/2,point.y+point.height/2);
+  await expect(page.locator('.map-data-badge')).toContainText(/Условное|Демо/);
+  await expect(page.locator('main')).toContainText('Фактическое состояние');
+  await page.setViewportSize({width:390,height:844});
+  await page.locator('nav a[href="/objects"]').click();
+  await expect(page).toHaveURL(/\/objects$/);
+  await expect(page.locator('.objects-table tbody tr').first()).toBeVisible();
+  await expect(page.locator('main')).not.toContainText(/undefined|NaN/);
+  if (process.env.EVIDENCE_DIR) await page.screenshot({path:`${process.env.EVIDENCE_DIR}/compact-chrome.png`});
+});
