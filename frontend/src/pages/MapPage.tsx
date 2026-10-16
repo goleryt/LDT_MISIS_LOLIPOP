@@ -920,9 +920,13 @@ function MapPage() {
                 )}
             </div>
 
+            {!error && objects.length === 0 && <div className="map-state-notice" role="status">
+                {loading ? "Загрузка объектов…" : "Объектов пока нет. Загрузите справочник объектов в разделе «Импорт данных»."}
+            </div>}
             {error && (
-                <div className="map-error">
+                <div className="map-error" role="alert">
                     {error}
+                    <button onClick={() => { setLoading(true); void loadObjects(); }}>Повторить загрузку объектов</button>
                 </div>
             )}
 

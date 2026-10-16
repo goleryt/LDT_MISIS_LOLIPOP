@@ -692,7 +692,7 @@ function RequestsPage() {
                     </div>
                 ) : filteredRequests.length === 0 ? (
                     <div className="requests-message">
-                        Заявок пока нет
+                        {error ? "Список заявок недоступен. Повторите загрузку." : "Заявок пока нет"}
                     </div>
                 ) : (
                     <div className="requests-table-wrap">

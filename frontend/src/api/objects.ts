@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -16,9 +16,7 @@ export async function getObjectSensors(
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить датчики объекта: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();

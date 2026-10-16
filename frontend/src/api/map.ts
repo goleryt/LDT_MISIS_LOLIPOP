@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -12,9 +12,7 @@ export async function getMapObjects(): Promise<MapObject[]> {
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить объекты: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();

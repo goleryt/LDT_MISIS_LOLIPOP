@@ -92,11 +92,14 @@ test("JSON import is visible in the registry and duplicate upload is identified"
 
 test("mock alarm opens the exact sensor and can be marked read", async ({page}) => {
   test.skip(process.env.RUN_MOCK_E2E !== "true", "Start the five-source mock environment first");
+  test.setTimeout(90000);
   await page.goto("/");
   await page.getByPlaceholder("Логин", { exact: true }).fill(process.env.TEST_USERNAME ?? "dispatcher");
   await page.getByLabel("Пароль", { exact: true }).fill(process.env.TEST_PASSWORD ?? "");
   await page.getByRole("button", { name: "Войти", exact: true }).click();
   await page.locator('.notification-panel summary').click();
+  // Keep mock-source/worker running: a repeated acceptance may have read all old alarms.
+  await expect(page.locator('.notification-panel a[href="/?objectId=900001&channelId=900001"]').first()).toBeVisible({timeout:75000});
   await page.locator('.notification-panel a[href="/?objectId=900001&channelId=900001"]').first().click();
   await expect(page).toHaveURL(/objectId=900001&channelId=900001/);
   await expect(page.getByRole("heading",{name:"Последние события",exact:true})).toBeVisible();
@@ -163,4 +166,42 @@ test("map zoom, pan, tooltip, object click and compact navigation", async ({ pag
   await expect(page.locator('.objects-table tbody tr').first()).toBeVisible();
   await expect(page.locator('main')).not.toContainText(/undefined|NaN/);
   if (process.env.EVIDENCE_DIR) await page.screenshot({path:`${process.env.EVIDENCE_DIR}/compact-chrome.png`});
+});
+
+test("map loading and empty state, recovery and report progress", async ({page}) => {
+  let release!:()=>void;
+  const gate=new Promise<void>(resolve=>{release=resolve;});
+  const mapRoute="**/api/v1/map/objects*";
+  await page.route(mapRoute,async route=>{
+    await gate;
+    await route.fulfill({status:200,contentType:"application/json",body:"[]"});
+  });
+  await page.goto("/");
+  await page.getByPlaceholder("Логин", {exact:true}).fill(process.env.TEST_USERNAME ?? "dispatcher");
+  await page.getByLabel("Пароль", {exact:true}).fill(process.env.TEST_PASSWORD ?? "");
+  await page.getByRole("button", {name:"Войти",exact:true}).click();
+  await expect(page.locator(".map-state-notice")).toContainText("Загрузка объектов");
+  release();
+  await expect(page.locator(".map-state-notice")).toContainText("Объектов пока нет");
+  await page.unroute(mapRoute);
+  await page.route(mapRoute,route=>route.fulfill({status:503,contentType:"application/json",body:'{"detail":"private debug details"}'}));
+  await page.reload();
+  await expect(page.getByRole("alert")).toContainText("Сервис временно недоступен");
+  await expect(page.locator("main")).not.toContainText("private debug details");
+  await page.unroute(mapRoute);
+  await page.getByRole("button",{name:"Повторить загрузку объектов",exact:true}).click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.locator(".schematic-object").first()).toBeVisible();
+  await page.locator('nav a[href="/reports"]').click();
+  let releaseReport!:()=>void;
+  const reportGate=new Promise<void>(resolve=>{releaseReport=resolve;});
+  await page.route("**/api/v1/reports/**",async route=>{
+    await reportGate;
+    await route.fulfill({status:503,contentType:"application/json",body:'{"detail":"private debug details"}'});
+  });
+  await page.getByRole("button",{name:"Скачать PDF",exact:true}).click();
+  await expect(page.getByRole("status")).toContainText("Формирование отчёта");
+  releaseReport();
+  await expect(page.getByRole("status")).toContainText("Сервис временно недоступен");
+  await expect(page.getByRole("button",{name:"Скачать PDF",exact:true})).toBeEnabled();
 });

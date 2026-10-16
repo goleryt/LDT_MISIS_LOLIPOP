@@ -15,9 +15,7 @@ export async function getImports(): Promise<DataImport[]> {
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить историю импортов: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();

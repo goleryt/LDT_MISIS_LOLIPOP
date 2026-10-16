@@ -16,9 +16,7 @@ export async function getRequests(): Promise<PreventiveRequest[]> {
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить заявки: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();
