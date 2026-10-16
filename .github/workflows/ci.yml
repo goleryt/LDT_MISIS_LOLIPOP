@@ -79,6 +79,18 @@ jobs:
       - name: Build isolated ML runtime
         run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci --profile ml build ml
       - run: python tests/smoke.py
+      - name: Standalone cloud web packaging and readiness
+        run: |
+          docker build -f infra/Dockerfile.cloud --build-arg APP_COMMIT="$GITHUB_SHA" -t ldt-cloud-ci .
+          docker run -d --name ldt-cloud-ci --network ldt-ci_default --env-file backend/.env -e POSTGRES_HOST=postgres -e ENVIRONMENT=test -e SECURE_COOKIES=false -e CORS_ORIGINS=http://localhost:8081 -p 127.0.0.1:8081:8080 ldt-cloud-ci
+          for attempt in $(seq 1 60); do
+            state=$(docker inspect --format '{{.State.Health.Status}}' ldt-cloud-ci)
+            if [ "$state" = healthy ]; then break; fi
+            if [ "$state" = unhealthy ]; then exit 1; fi
+            sleep 2
+          done
+          test "$state" = healthy
+          BASE_URL=http://localhost:8081 python tests/smoke.py
       - name: Twenty paced dispatcher sessions
         run: python tests/load.py
         env:
@@ -104,14 +116,19 @@ jobs:
           docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/verify-restore.sh ldt_restore_check
       - name: Save logs
         if: always()
-        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci logs --no-color > container-logs.txt
+        run: |
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci logs --no-color > container-logs.txt
+          docker logs ldt-cloud-ci > cloud-logs.txt 2>&1 || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: container-results
           path: |
             container-logs.txt
+            cloud-logs.txt
             frontend/test-results/
             test-results/
       - if: always()
-        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci down
+        run: |
+          docker rm -f ldt-cloud-ci || true
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci down
