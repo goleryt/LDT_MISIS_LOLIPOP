@@ -38,14 +38,21 @@ test("real gas bundle result, advisory and dispatcher decision", async ({ page }
   await expect(page.locator(".status-notice")).toContainText("не вероятность пожара");
   await page.getByRole("button", { name: "Открыть", exact: true }).first().click();
   await expect(page.locator(".prediction-detail")).toContainText("Автоматические действия отключены");
+  // Reproduce a slow detail refresh after save; isVisible() alone never waits.
+  await page.route(/\/api\/v1\/predictions\/\d+$/,async route=>{
+    if(route.request().method()==="GET")await new Promise(resolve=>setTimeout(resolve,300));
+    await route.continue();
+  });
   await page.getByLabel("Комментарий", { exact: true }).fill("Контрольный прогон интерфейса на тестовой истории");
   await page.getByRole("button", { name: "Сохранить решение", exact: true }).click();
   await expect(page.getByText("История решений", { exact: true })).toBeVisible();
   await expect(page.locator(".prediction-detail")).toContainText("Контрольный прогон интерфейса на тестовой истории");
   const createDraft = page.getByRole("button", { name: "Создать черновик заявки", exact: true });
+  const requestLink = page.getByRole("link", { name: /Открыть заявку · №/ });
+  await expect(createDraft.or(requestLink)).toBeVisible();
   const freshDraft = await createDraft.isVisible();
   if (freshDraft) await createDraft.click();
-  await page.getByRole("link", { name: /Открыть заявку · №/ }).click();
+  await requestLink.click();
   if (freshDraft) {
   await expect(page.getByRole("heading", { name: /Черновик заявки №/ })).toBeVisible();
   await page.getByLabel("Тема черновика", { exact: true }).fill("Проверено диспетчером: тестовая рекомендация");
