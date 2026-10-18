@@ -82,6 +82,7 @@ html[data-theme="light"] {
     color-scheme: inherit;
 }
 .app-shell :is(.journal-filter-input,.journal-filter-popover label,.journal-top-nav a) { color: var(--ui-ink); }
+.app-shell :is(.journal-time-sort,.journal-sort-button) { color: var(--ui-ink); }
 .app-shell :is(.request-form-grid label > span,.file-cell span,.journal-footer) { color: var(--ui-muted); }
 .app-shell :is(.alarm-sensor-cell,.journal-cell-inline) .sensor-type-icon { color: var(--ui-ink); }
 .app-shell input::placeholder,.app-shell textarea::placeholder { color: var(--ui-muted); opacity: 1; }
@@ -95,8 +96,13 @@ html[data-theme="light"] {
 .app-shell .selected-file :is(strong,span) { color: var(--ui-ink); }
 .app-shell [role="alert"] { color: var(--ui-error); }
 .app-shell .alarm-value { color: var(--ui-error); }
+.map-page :is(.sensor-detail-grid span,.sensor-detail-row span,.sensor-value-card span,
+    .sensor-risk-disclaimer,.sensors-heading > div > span,.sensor-row-main span,.drawer-eyebrow) {
+    color: var(--design-muted);
+}
 .request-form-actions { flex-wrap: wrap; }
 .request-form-actions p { flex-basis: 100%; margin: 0; }
+.app-shell .request-create-heading > button { color: var(--ui-muted); }
 .app-shell .operations-page { color: var(--page-text); }
 .app-shell .status-notice {
     background: var(--ui-elevated);

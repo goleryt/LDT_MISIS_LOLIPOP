@@ -16,13 +16,17 @@ test("notification read survives an older poll response and recovers from failur
   const gate=new Promise<void>(resolve=>{release=resolve;});
   const secondPoll=new Promise<void>(resolve=>{started=resolve;});
   const oldReturned=new Promise<void>(resolve=>{returned=resolve;});
-  let calls=0,reads=0;
+  let holdNext=false,failNext=false,recovered=false,reads=0;
   await page.route("**/api/v1/notifications?*",async route=>{
-    calls++;
-    if(calls===2) {started();await gate;}
-    if(calls===3) {await route.fulfill({status:503,body:"temporary failure"});return;}
-    await route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(calls<=2?[notice]:[])});
-    if(calls===2)returned();
+    // StrictMode may issue two initial polls. Hold the first *subsequent*
+    // poll after the initial notice is visible, rather than counting calls.
+    if(holdNext) {
+      holdNext=false;started();await gate;
+      await route.fulfill({status:200,contentType:"application/json",body:JSON.stringify([notice])});
+      failNext=true;returned();return;
+    }
+    if(failNext) {failNext=false;recovered=true;await route.fulfill({status:503,body:"temporary failure"});return;}
+    await route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(recovered?[]:[notice])});
   });
   await page.route("**/api/v1/notifications/990001/read",async route=>{
     reads++;await route.fulfill({status:200,contentType:"application/json",body:"{}"});
@@ -30,6 +34,7 @@ test("notification read survives an older poll response and recovers from failur
   await login(page);
   await page.locator(".notification-panel summary").click();
   await expect(page.locator(".notification-panel time")).toHaveAttribute("datetime",notice.created_at);
+  holdNext=true;
   await secondPoll;
   await page.getByRole("button",{name:"Прочитано: "+notice.message,exact:true}).click();
   await expect(page.locator(".notification-panel a")).toHaveCount(0);

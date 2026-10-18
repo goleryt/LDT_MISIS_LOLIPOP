@@ -69,6 +69,7 @@
 .map-page .schematic-map-controls { z-index: 850; bottom: 16px; }
 .map-page .schematic-reset-button { z-index: 850; bottom: 16px; top: auto; }
 .map-page .map-legend { bottom: 16px; left: 16px; }
+.map-page:has(.sensor-detail-panel) .map-place-card { display: none; }
 @container (max-width: 1100px) {
     .map-page .map-place-card { display: none; }
     .map-page .map-summary { width: calc(100% - 32px); }

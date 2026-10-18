@@ -25,6 +25,7 @@ import {
 import "../styles/moscow-map.css";
 import "../styles/ui-readability.css";
 import "../styles/ui-layout.css";
+import "../styles/ui-chrome.css";
 
 
 function AppLayout() {
@@ -57,7 +58,7 @@ function AppLayout() {
                     )}
                 </div>
 
-                <nav className="navigation">
+                <nav className="navigation" id="main-navigation">
                     <NavLink
                         to="/"
                         end
@@ -160,6 +161,8 @@ function AppLayout() {
                     <button
                         type="button"
                         className="nav-item sidebar-toggle"
+                        aria-controls="main-navigation"
+                        aria-expanded={!collapsed}
                         onClick={() =>
                             setCollapsed(
                                 (value) => !value,

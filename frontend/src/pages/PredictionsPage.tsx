@@ -88,24 +88,37 @@ export default function PredictionsPage() {
     } catch (e) { setError(e instanceof Error ? e.message : "Ошибка создания заявки"); }
     finally { setBusy(false); }
   }
-  return <section className="operations-page"><h1>Журнал прогнозов</h1><p className="status-notice">{message}</p>
+  return <section className="operations-page predictions-page"><h1>Журнал прогнозов</h1><p className="status-notice">{message}</p>
     {error && <p role="alert">{error} <button onClick={() => { setError(""); setLoading(true); void refresh().catch(e => setError(e.message)).finally(() => setLoading(false)); }}>Повторить загрузку</button></p>}
     {loading && <p role="status">Загрузка прогнозов…</p>}
     {detailLoading && <p role="status">Загрузка прогноза…</p>}
     {feedback && <p role="status">{feedback}</p>}
     <details><summary>Журнал суточных расчётов</summary>{runs.length ? runs.map(run => <p key={run.id}>{run.as_of_date} · ревизия {run.revision} · {run.state}{run.error_code ? ` · ${run.error_code}` : ""}</p>) : <p>Запусков пока нет. Нужны проверенные исходные данные и отметка завершения суток.</p>}</details>
     {!loading && !error && !rows.length && <p>Прогнозов нет. Текущие срабатывания доступны в разделе «Тревоги».</p>}
-    {rows.length > 0 && <table><thead><tr><th>Объект</th><th>Тип</th><th>Оценка (proxy)</th><th>Окно прогноза</th><th>Статус</th><th>Просмотр</th></tr></thead>
+    {rows.length > 0 && <div className="prediction-table-wrap"><table><thead><tr><th>Объект</th><th>Тип</th><th>Оценка (proxy)</th><th>Окно прогноза</th><th>Статус</th><th>Просмотр</th></tr></thead>
       <tbody>{rows.map(row => <tr key={row.id}><td>{row.object_id}</td><td>{TYPE_LABELS[row.incident_type] ?? row.incident_type}</td><td>{(row.probability * 100).toFixed(1)}%</td>
-        <td>{row.ml_metadata ? `${row.ml_metadata.window_start} — ${row.ml_metadata.window_end_exclusive} (не включая)` : `${row.horizon_hours} ч`}</td><td>{row.status}</td><td><button disabled={busy} onClick={() => select(row)}>Открыть</button></td></tr>)}</tbody></table>}
+        <td>{row.ml_metadata ? `${row.ml_metadata.window_start} — ${row.ml_metadata.window_end_exclusive} (не включая)` : `${row.horizon_hours} ч`}</td><td>{row.status}</td><td><button disabled={busy} onClick={() => select(row)}>Открыть</button></td></tr>)}</tbody></table></div>}
     {hasMore && <button disabled={busy} onClick={loadMore}>Загрузить ещё прогнозы</button>}
-    {selected && <article className="prediction-detail"><h2>Прогноз №{selected.id}</h2>
+    {selected && <article className="prediction-detail"><header className="prediction-heading"><h2>Прогноз №{selected.id}</h2>
       <button disabled={busy} onClick={()=>setParams(current=>{const next=new URLSearchParams(current);next.delete("predictionId");return next;})}>Закрыть прогноз</button>
+      </header>
+      <section className="prediction-card" aria-label="Сводка прогноза"><h3>Сохранённая оценка</h3><dl className="prediction-summary">
+        <div><dt>Объект</dt><dd>№{selected.object_id}</dd></div>
+        <div><dt>Оценка (proxy)</dt><dd>{(selected.probability * 100).toFixed(1)}%</dd></div>
+        <div><dt>Горизонт</dt><dd>{selected.horizon_hours} ч</dd></div>
+        <div><dt>Тип</dt><dd>{TYPE_LABELS[selected.incident_type] ?? selected.incident_type}</dd></div>
+      </dl><p>Shadow/proxy оценка не является подтверждённой вероятностью реального инцидента.</p></section>
+      <section className="prediction-card"><h3>Контекст расчёта</h3>
       <p>Модель: {selected.model_version} · Расчёт: {new Date(selected.calculated_at).toLocaleString("ru-RU")}</p>
       {selected.ml_metadata && <p>Данные на {selected.ml_metadata.as_of_date} · ревизия {selected.ml_metadata.revision} · {selected.ml_metadata.evidence_level}. Контекст: {selected.ml_metadata.maintenance_context === "possible_recent_silence" ? "Возможно, после ТО/поверки; требуется проверка журнала работ" : selected.ml_metadata.maintenance_context === "verified_schedule" ? "Подтверждённое окно ППР" : "Сведения о ТО отсутствуют"}. Горизонт {selected.horizon_hours} ч отсчитывается от завершения суток данных. Автоматические действия отключены.</p>}
+      </section><section className="prediction-card"><h3>Рекомендация для проверки</h3>
       <p>{selected.recommendation ?? "Рекомендация не предоставлена моделью"}</p>
       {selected.request_id ? <Link to={`/requests?requestId=${selected.request_id}`}>Открыть заявку · №{selected.request_id}</Link> :
         <button disabled={busy || !canWrite("predictions") || !selected.recommendation || ["closed", "false_alarm"].includes(selected.status)} onClick={createRequest}>Создать черновик заявки</button>}
+      {!selected.request_id && (!canWrite("predictions") || !selected.recommendation || ["closed","false_alarm"].includes(selected.status)) && <p className="prediction-hint">
+        {!canWrite("predictions") ? "Создание черновика доступно диспетчеру, аналитику или администратору." : !selected.recommendation ? "Без рекомендации создать связанный черновик нельзя." : "Для закрытого или ложного прогноза создание черновика недоступно."}
+      </p>}</section>
+      {selected.status === "closed" && <p className="prediction-hint">Прогноз закрыт: изменение решения недоступно.</p>}
       <fieldset disabled={busy || !canWrite("predictions") || selected.status === "closed"}><legend>Решение диспетчера</legend>
         <label>Действие<select value={decision} onChange={e => setDecision(e.target.value)}>
           <option value="monitoring">Мониторинг</option><option value="confirmed">Подтверждено</option><option value="false_alarm">Ложное срабатывание</option>
@@ -114,7 +127,7 @@ export default function PredictionsPage() {
         <label>Комментарий<textarea maxLength={4000} value={notes} onChange={e => setNotes(e.target.value)} /></label>
         <label>Фактический исход<textarea maxLength={4000} value={outcome} onChange={e => setOutcome(e.target.value)} /></label>
         <button onClick={save}>Сохранить решение</button>
-      </fieldset><h3>История решений</h3>{history.map((entry, index) => <p key={index}>{new Date(entry.created_at).toLocaleString("ru-RU")} · {entry.actor} · {entry.decision} · {reasons[entry.reason] ?? entry.reason} · {entry.notes} · {entry.actual_outcome}</p>)}
+      </fieldset><section className="prediction-card"><h3>История решений</h3>{history.length ? history.map((entry, index) => <p key={index}>{new Date(entry.created_at).toLocaleString("ru-RU")} · {entry.actor} · {entry.decision} · {reasons[entry.reason] ?? entry.reason} · {entry.notes} · {entry.actual_outcome}</p>) : <p>Решений пока нет.</p>}</section>
     </article>}
   </section>;
 }

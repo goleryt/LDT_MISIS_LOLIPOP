@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import type {Page} from '@playwright/test';
+import {mkdir,writeFile} from 'node:fs/promises';
 
 async function login(page:Page,path='/requests') {
   await page.goto(path);
@@ -63,6 +64,10 @@ test('fully filled isolated draft confirms with its current version',async({page
   await page.getByLabel('Тема черновика',{exact:true}).fill('Проверено диспетчером: заполнены все поля');
   await page.getByRole('textbox',{name:'Описание черновика',exact:true}).fill('Техническая проверка формы, без нового ML-результата');
   await page.getByRole('combobox',{name:'Приоритет черновика',exact:true}).selectOption('high');
+  if(process.env.UI_SCREENSHOT_DIR) {
+    await mkdir(process.env.UI_SCREENSHOT_DIR,{recursive:true});
+    await review.screenshot({path:`${process.env.UI_SCREENSHOT_DIR}/draft-filled.png`,animations:'disabled'});
+  }
   const response=page.waitForResponse(r=>r.url().endsWith(`/api/v1/requests/${id}`) && r.request().method()==='PATCH');
   await page.getByRole('button',{name:'Подтвердить заявку',exact:true}).click();
   const changed=await response;expect(changed.status()).toBe(200);
@@ -142,4 +147,107 @@ test('map resize, wheel bursts and pinch preserve finite zoom and viewport panel
   await expect(map).not.toHaveAttribute('viewBox','0 0 1200 820');
   await page.locator('.drawer-close').click();await expect(drawer).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test('prediction cards preserve stored proxy values and contrast in light and dark',async({page})=>{
+  await login(page,'/predictions');
+  const stored=await (await page.request.get('/api/v1/predictions')).json();
+  test.skip(!stored.length,'Needs an existing stored prediction; never creates ML output');
+  for(const theme of ['dark','light']) {
+    await page.evaluate(value=>localStorage.setItem('settings.theme',value),theme);
+    await page.goto(`/predictions?predictionId=${stored[0].id}`);
+    await expect(page.getByRole('heading',{name:`Прогноз №${stored[0].id}`,exact:true})).toBeVisible();
+    await expect(page.locator('.prediction-summary')).toContainText(`${(stored[0].probability*100).toFixed(1)}%`);
+    for(const target of ['.status-notice','.prediction-card p','.prediction-summary dt']) {
+      const contrast=await page.locator(target).first().evaluate(el=>{
+        const rgb=(value:string)=>(value.match(/[\d.]+/g)??[]).slice(0,3).map(Number);
+        const lum=(values:number[])=>values.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;})
+          .reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
+        let surface:Element|null=el;
+        while(surface && ['rgba(0, 0, 0, 0)','transparent'].includes(getComputedStyle(surface).backgroundColor)) surface=surface.parentElement;
+        const a=lum(rgb(getComputedStyle(el).color));const b=lum(rgb(getComputedStyle(surface!).backgroundColor));
+        return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+      });
+      expect(contrast,`${theme} ${target}`).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
+
+test('settings stay centered under notification overlay and sidebar icons align',async({page})=>{
+  await login(page,'/settings');
+  const logo=(await page.locator('.brand-mark').boundingBox())!;
+  const arrow=(await page.locator('.sidebar-toggle svg').boundingBox())!;
+  expect(Math.abs(logo.x+logo.width/2-arrow.x-arrow.width/2)).toBeLessThan(1);
+  const card=page.locator('.settings-card');const before=await card.boundingBox();
+  await page.locator('.notification-panel summary').click();
+  const after=await card.boundingBox();
+  expect(after!.x).toBeCloseTo(before!.x,0);expect(after!.y).toBeCloseTo(before!.y,0);
+  await page.locator('.notification-panel summary').click();
+  await page.getByRole('button',{name:'Свернуть меню',exact:true}).click();
+  await expect(page.locator('.sidebar')).toHaveClass(/sidebar-collapsed/);
+  await expect.poll(async()=>{
+    const icon=(await page.locator('.sidebar-toggle svg').boundingBox())!;
+    const button=(await page.locator('.sidebar-toggle').boundingBox())!;
+    return Math.abs(icon.x+icon.width/2-button.x-button.width/2);
+  }).toBeLessThan(1);
+  const brand=await page.locator('.brand-mark').evaluate(el=>({cursor:getComputedStyle(el).cursor,background:getComputedStyle(el).backgroundImage}));
+  expect(brand).toEqual({cursor:'default',background:'none'});
+  expect(await page.locator('.sidebar-footer').evaluate(el=>parseFloat(getComputedStyle(el).paddingTop))).toBeGreaterThanOrEqual(16);
+  await page.getByRole('button',{name:'Развернуть меню',exact:true}).click();
+});
+
+test('requested visual matrix for both themes and reduced desktop',async({page})=>{
+  test.skip(process.env.RUN_UI_VISUAL!=='true','Opt-in visual evidence on isolated QA');
+  test.setTimeout(180000);
+  const dir=process.env.UI_SCREENSHOT_DIR ?? 'test-results/ui-fixes';await mkdir(dir,{recursive:true});
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  await login(page);
+  const stored=await (await page.request.get('/api/v1/predictions')).json();
+  const routes=[['alarms','/alarms'],['imports','/imports'],['journal','/events'],
+    ['predictions',`/predictions${stored.length?`?predictionId=${stored[0].id}`:''}`],['settings','/settings'],['map','/'],['request','/requests']];
+  const measurements=[];
+  for(const theme of ['dark','light']) for(const [width,height] of [[1280,800],[1440,900]]) {
+    await page.setViewportSize({width,height});
+    await page.evaluate(value=>localStorage.setItem('settings.theme',value),theme);
+    for(const [name,path] of routes) {
+      await page.goto(path);await expect(page.locator('.app-shell')).toBeVisible();
+      if(name==='predictions' && stored.length) await expect(page.locator('.prediction-summary')).toBeVisible();
+      if(name==='alarms') await expect(page.locator('.alarms-table tbody tr').first()).toBeVisible();
+      if(name==='imports') await expect(page.locator('.imports-table tbody tr').first()).toBeVisible();
+      if(name==='settings') await expect(page.locator('.settings-card')).toBeVisible();
+      if(name==='map') await expect(page.locator('.map-summary strong').first()).not.toHaveText('…');
+      if(name==='journal') {
+        await expect(page.locator('.journal-table tbody .event-row-clickable').first()).toBeVisible();
+        await page.locator('.journal-filter-trigger').first().click();
+      }
+      if(name==='request') {
+        await page.getByRole('button',{name:'Новая заявка',exact:true}).click();
+        await page.getByRole('combobox',{name:'Объект',exact:true}).selectOption('1');
+        await page.getByLabel('Тема',{exact:true}).fill('Проверка оборудования');
+        await page.getByLabel('Описание',{exact:true}).fill('Проверить фактическое состояние');
+        await page.getByRole('button',{name:'Создать заявку',exact:true}).scrollIntoViewIfNeeded();
+      }
+      await page.screenshot({path:`${dir}/${theme}-${width}-${name}.png`,animations:'disabled'});
+      if(name==='predictions' && stored.length) {
+        await page.getByRole('heading',{name:'Рекомендация для проверки',exact:true}).scrollIntoViewIfNeeded();
+        await page.screenshot({path:`${dir}/${theme}-${width}-prediction-decision.png`,animations:'disabled'});
+      }
+      const dimensions=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
+      expect(dimensions.document).toBeLessThanOrEqual(width);
+      measurements.push({theme,width,height,path,...dimensions});
+    }
+  }
+  await page.setViewportSize({width:1024,height:700});
+  await page.goto('/?objectId=1&channelId=1');await expect(page.locator('.object-drawer')).toBeVisible();
+  await page.screenshot({path:`${dir}/reduced-1024-map-drawer.png`});
+  await page.setViewportSize({width:1920,height:1080});
+  await page.screenshot({path:`${dir}/wide-1920-map-drawer.png`});
+  await page.goto('/settings');
+  await expect(page.locator('.settings-card')).toBeVisible();
+  await page.screenshot({path:`${dir}/sidebar-expanded.png`,animations:'disabled'});
+  await page.getByRole('button',{name:'Свернуть меню',exact:true}).click();
+  await expect(page.locator('.sidebar')).toHaveClass(/sidebar-collapsed/);
+  await page.screenshot({path:`${dir}/sidebar-collapsed.png`,animations:'disabled'});
+  expect(errors).toEqual([]);
+  await writeFile(`${dir}/matrix.json`,JSON.stringify({measurements,pageerrors:errors},null,2));
 });
