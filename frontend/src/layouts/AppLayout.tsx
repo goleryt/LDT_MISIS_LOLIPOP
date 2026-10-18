@@ -24,6 +24,7 @@ import {
 // apply on every route, not only after visiting the map page.
 import "../styles/moscow-map.css";
 import "../styles/ui-readability.css";
+import "../styles/ui-layout.css";
 
 
 function AppLayout() {

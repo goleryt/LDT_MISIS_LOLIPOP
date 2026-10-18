@@ -1,0 +1,13 @@
+
+Running 4 tests using 2 workers
+
+(node:25420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chrome] › e2e\ui-fixes.spec.ts:99:1 › map resize, wheel bursts and pinch preserve finite zoom and viewport panels (3.6s)
+  ok 2 [chrome] › e2e\workflows.spec.ts:109:1 › sensor history and preventive request from the map (5.2s)
+  ok 3 [chrome] › e2e\workflows.spec.ts:133:1 › map zoom, pan, tooltip, object click and compact navigation (3.7s)
+  ok 4 [chrome] › e2e\workflows.spec.ts:171:1 › map loading and empty state, recovery and report progress (2.8s)
+
+  4 passed (12.7s)

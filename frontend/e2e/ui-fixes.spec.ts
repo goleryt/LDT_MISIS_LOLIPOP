@@ -95,3 +95,51 @@ test('list typography and opaque filters remain readable in both themes',async({
     }
   }
 });
+
+test('map resize, wheel bursts and pinch preserve finite zoom and viewport panels',async({page})=>{
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  await login(page,'/?objectId=1&channelId=1');
+  const map=page.locator('.schematic-map-svg');
+  const drawer=page.locator('.object-drawer');
+  await expect(drawer).toBeVisible();
+  for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1152,768],[1024,700]]) {
+    await page.setViewportSize({width,height});
+    await expect.poll(async()=>await page.locator('.map-page').evaluate(el=>el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(height+1);
+    const bounds=await drawer.boundingBox();expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(width+1);
+    expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(height+1);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await expect(page.locator('.drawer-close')).toBeInViewport();
+    await expect(page.locator('.schematic-map-controls')).toBeInViewport();
+  }
+  await page.setViewportSize({width:1280,height:800});
+  const drawerBefore=await drawer.boundingBox();
+  const captured=await map.evaluate(el=>{
+    const rect=el.getBoundingClientRect();const results=[];
+    for(const deltaMode of [0,1,2]) for(const ctrlKey of [false,true]) {
+      for(let i=0;i<40;i++) {
+        const event=new WheelEvent('wheel',{bubbles:true,cancelable:true,ctrlKey,deltaMode,deltaY:-3,
+          clientX:rect.left+100,clientY:rect.top+100});
+        el.dispatchEvent(event);results.push(event.defaultPrevented);
+      }
+    }
+    for(const value of [NaN,Infinity]) {
+      const invalid=new WheelEvent('wheel',{bubbles:true,cancelable:true});
+      Object.defineProperty(invalid,'deltaY',{value});el.dispatchEvent(invalid);
+    }
+    return results;
+  });
+  expect(captured.every(Boolean)).toBe(true);
+  await expect.poll(async()=>Number((await map.getAttribute('viewBox'))!.split(' ')[2])).toBe(300);
+  expect((await map.getAttribute('viewBox'))!.split(' ').map(Number).every(Number.isFinite)).toBe(true);
+  expect((await drawer.boundingBox())!.width).toBeCloseTo(drawerBefore!.width,0);
+  await expect(page.locator('.schematic-map-controls button').first()).toBeDisabled();
+  await page.locator('.schematic-map-controls button').last().click();
+  await page.locator('.schematic-map-controls button').first().click();
+  await page.locator('.schematic-reset-button').click();
+  await expect(map).toHaveAttribute('viewBox','0 0 1200 820');
+  await map.hover({position:{x:80,y:200}});await page.mouse.wheel(0,-100);
+  await expect(map).not.toHaveAttribute('viewBox','0 0 1200 820');
+  await page.locator('.drawer-close').click();await expect(drawer).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
