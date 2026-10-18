@@ -5,9 +5,9 @@
 | Артефакт | Статус / наличие | Действие перед сдачей |
 |---|---|---|
 | Git repository / RC branch | READY — [repository](https://github.com/goleryt/LDT_MISIS_LOLIPOP/tree/release/final-rc), branch опубликована | Использовать утверждённый RC SHA; main не объединялся |
-| Final commit | READY — git rev-parse origin/release/final-rc; функциональная приёмка на ee16251 | Итоговый documentation/evidence commit проверяется CI и повторно публикуется перед завершением |
+| Final commit | READY — git rev-parse origin/release/final-rc; основной smoke ee16251, правка периода отчёта d4f3e09 проверена удалённо | Итоговый documentation/evidence commit проверяется CI и повторно публикуется перед завершением |
 | Final tag | NOT APPLICABLE | Не создавался по инструкции владельца |
-| GitHub Actions | READY — [PASS run39173000415](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39173000415), ee16251 | Проверить также run окончательного RC HEAD |
+| GitHub Actions | READY — [PASS run39175260469](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39175260469), 6ca2a44, включает report fix | Проверить также run окончательного documentation RC HEAD |
 | Railway/demo | READY в проверенном объёме — [live demo](https://ldt-demo-production.up.railway.app/) | Worker/scheduler/automatic backup отсутствуют; continuous industrial operation не заявляется |
 | Demo credentials | READY — manager/dispatcher/technician/admin/analyst проверены; пароли вне Git | Владелец выдаёт доступ отдельно; не помещать credentials в evidence |
 | Architecture | READY — [ARCHITECTURE](ARCHITECTURE.md) | Point, mock/production и shadow semantics разделены |

@@ -1,10 +1,13 @@
 Baseline: b7e1bc9ccf9c3f87b1fba2bff2b905af741335ef
 README.md
+docs/ARCHITECTURE.md
 docs/BROWSER_ACCEPTANCE_RC.md
+docs/COMPLIANCE.md
 docs/DEPLOYMENT_RC.md
 docs/FINAL_ACCEPTANCE_2026-10.md
 docs/FINAL_ARTIFACTS_RC.md
 docs/REMOTE_RC_ACCEPTANCE_2026-10-19.md
+docs/SECURITY.md
 docs/evidence/release-rc/auto-backup-clean-start.txt
 docs/evidence/release-rc/clean-cloud-startup.txt
 docs/evidence/release-rc/cloud-build-commit.txt
@@ -16,6 +19,7 @@ docs/evidence/release-rc/document-check.json
 docs/evidence/release-rc/remote/api-security.json
 docs/evidence/release-rc/remote/audit-current.json
 docs/evidence/release-rc/remote/audit-failed-login.json
+docs/evidence/release-rc/remote/browser-error-recovery.json
 docs/evidence/release-rc/remote/browser.json
 docs/evidence/release-rc/remote/changed-files.txt
 docs/evidence/release-rc/remote/ci-summary.json
@@ -34,6 +38,7 @@ docs/evidence/release-rc/remote/light-journal.png
 docs/evidence/release-rc/remote/light-map.png
 docs/evidence/release-rc/remote/light-prediction.png
 docs/evidence/release-rc/remote/light-settings.png
+docs/evidence/release-rc/remote/local-chrome-after-report.json
 docs/evidence/release-rc/remote/manual-browser-checks.json
 docs/evidence/release-rc/remote/map-1024.png
 docs/evidence/release-rc/remote/map-1280.png
@@ -45,6 +50,10 @@ docs/evidence/release-rc/remote/premerge.json
 docs/evidence/release-rc/remote/railway-before.json
 docs/evidence/release-rc/remote/railway-deployment.json
 docs/evidence/release-rc/remote/remote-report.pdf
+docs/evidence/release-rc/remote/report-calendar-regression.json
+docs/evidence/release-rc/remote/report-ci.json
+docs/evidence/release-rc/remote/report-deployment.json
+docs/evidence/release-rc/remote/reports-moscow-midnight.png
 docs/evidence/release-rc/remote/reports.json
 docs/evidence/release-rc/remote/request-confirmed.png
 docs/evidence/release-rc/remote/request-create-filled.png
@@ -60,5 +69,6 @@ docs/evidence/release-rc/restored-cloud-startup.txt
 docs/evidence/release-rc/tls-cloud-startup.txt
 frontend/e2e/ui-fixes.spec.ts
 frontend/e2e/workflows.spec.ts
+frontend/src/pages/ReportsPage.tsx
 tests/remote/README.md
 tests/remote/browser.cjs

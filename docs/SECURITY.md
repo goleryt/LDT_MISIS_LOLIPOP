@@ -71,7 +71,10 @@ API не доверяет присланным proxy headers; внешняя п�
 production cookies принудительно Secure. Нативная HTTPS-проверка подтвердила
 CSRF 403, admin 403 для dispatcher, logout 200 → 401 и отсутствие cookie по HTTP:
 [tls-security](evidence/release-rc/tls-security.json). Сертификат локальный тестовый;
-это не проверка сертификата нового Railway deployment.
+публичный сертификат Railway отдельно проверен 19.10.2026: TLS1.3, доверенная цепочка,
+Secure/HttpOnly/SameSite=strict, CSRF/401/403/истечение собственного QA-сеанса/logout,
+прямой backend RBAC пяти ролей и аудит: [remote security](evidence/release-rc/remote/api-security.json).
+Полный объём: [remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
 
 Защита от устаревших правок заявок действует при переданном expected_updated_at;
 актуальный UI всегда передаёт имеющуюся версию. Legacy REST без версии сохраняет

@@ -5,11 +5,15 @@
 
 ## Процессы
 
-Браузер → nginx → React/TypeScript SPA и FastAPI → PostgreSQL 16.
+Браузер → nginx → React/TypeScript SPA и FastAPI → PostgreSQL.
+Локальный Compose использует PostgreSQL16; существующий Railway — PostgreSQL18.
 API: Python 3.14; отдельный ML-runtime: Python 3.12.
 Compose: postgres, migrate, backend, frontend, proxy, backup.
 Профиль `integrations` запускает GET worker; `ml` — scheduler, ожидающий маркер завершённых суток.
-Они не запускаются в базовом профиле. Публичный Railway demo не обновлялся этой веткой.
+Они не запускаются в базовом профиле. Публичный Railway demo обновлён до RC
+19.10.2026; API/DB/миграции и основные flows подтверждены в
+[remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md). Постоянных integration worker,
+scheduler и automatic backup service в Railway пока нет.
 
 API не загружает ML-библиотеки. Scheduler читает маркер полноты, вызывает замороженный runtime,
 сохраняет неизменяемую ревизию и происхождение результата. Повтор с теми же входами идемпотентен;

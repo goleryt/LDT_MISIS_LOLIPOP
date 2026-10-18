@@ -2,6 +2,8 @@
 
 19.10.2026: [native Chrome remote PASS](REMOTE_RC_ACCEPTANCE_2026-10-19.md),
 14 recorded checks, 21 screenshots, public Railway, application `ee16251`.
+Report-only correction `d4f3e09`: Moscow midnight regression and remote PDF/XLSX PASS;
+one additional report screenshot (22 total), local Chrome16 PASS / 4 opt-in skips.
 Yandex executable/App Paths checked again: **NOT TESTED — MANUAL ACTION REQUIRED**.
 Physical touchpad: **MANUAL TOUCHPAD VERIFICATION REQUIRED**, synthetic remote pinch PASS.
 For manual checks use the live demo and record the current admin operations commit;

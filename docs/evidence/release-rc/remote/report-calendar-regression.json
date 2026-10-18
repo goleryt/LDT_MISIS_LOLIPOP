@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "commit": "d4f3e091560b8a1030062ccffaf22bf0d330f80f",
+  "browser": "155.0.8059.84",
+  "timezone": "Europe/Moscow",
+  "controlled_instant": "2026-10-18T22:00:00Z",
+  "before_fix_date": "2026-10-18",
+  "after_fix_date": "2026-10-19",
+  "date_from": "2026-10-01",
+  "local_regression": "FAIL before fix, PASS after fix",
+  "remote_exports": [
+    "PDF",
+    "XLSX"
+  ],
+  "page_errors": [],
+  "logout_status": 401
+}

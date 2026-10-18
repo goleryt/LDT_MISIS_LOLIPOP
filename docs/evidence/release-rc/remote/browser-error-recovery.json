@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "runtime": "d4f3e09",
+  "browser": "155.0.8059.84",
+  "simulation": "HTTP503 replaced only inside the browser; Railway API and data unchanged",
+  "visible_error": true,
+  "raw_backend_detail_hidden": true,
+  "retry_recovers": true,
+  "page_errors": []
+}

@@ -26,14 +26,17 @@
 | §13 read-only/хранение | GET worker, LDAP read-only, SQL operational/archive/analytics views | PASS адаптера; физический архив/сроки хранения/реальные внешние ID требуют инфраструктуры/данных |
 | §8/§13 расширение аналитики | Фактические JSON/XLSX/PDF, локальные заявки, источники/период/дата/лимит | PASS текущего отчётного контракта; новые предметные рекомендации и ML не выдуманы |
 | §14 документация | Архитектура, безопасность, integration/runbook, OpenAPI, официальное ТЗ, актуальная приёмка | PASS Markdown/OpenAPI; актуальный accompanying DOCX/PDF в ветке отсутствует |
-| §19 материалы сдачи | Публичные GitHub/demo доступны анонимно по HTTPS 200 | PARTIAL: новая ветка локальна, presentation и актуальные accompanying DOCX/PDF требуют подготовки |
+| §19 материалы сдачи | RC-ветка опубликована, GitHub/demo доступны по HTTPS, remote flows проверены | PARTIAL: presentation и актуальные accompanying DOCX/PDF требуют подготовки |
 
 ## Не смешивать состояния поставок
 
 Публичный прототип уже опубликован: https://ldt-demo-production.up.railway.app/.
-Это сентябрьская версия. Первые 11 октябрьских commits опубликованы в старой ветке; новые release/final-rc commits не пушились и не выкатывались.
-В Railway API/PG running, ml-demo-job остановлен; постоянных scheduler/integration services нет.
-Облачный manager login/read/logout подтверждён, admin GET возвращает 403; карта отдаёт 79 объектов. Остальные роли/полнота данных не перепроверены.
+19.10.2026 demo обновлён из release/final-rc. Существующая БД сохранена, миграция
+d01602 проверена. Подтверждены пять ролей, основной Chrome flow, заявки, JSON import,
+PDF/XLSX и отдельная правка локального календарного периода отчёта:
+[фактическая remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
+В Railway API/PG running, ml-demo-job остановлен; постоянных scheduler/integration
+и automatic backup services нет. Эти ограничения не названы PASS.
 
 Исследовательские ML-документы и сентябрьские TEST_RESULTS/FINAL_ACCEPTANCE/MAP_TZ_COVERAGE
 сохраняются как история. Текущими claims являются только явно проверенные строки октябрьской приёмки.

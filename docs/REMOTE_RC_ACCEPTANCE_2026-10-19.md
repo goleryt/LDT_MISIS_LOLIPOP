@@ -1,11 +1,14 @@
 # Remote RC acceptance — 19.10.2026, Europe/Moscow
 
-Branch: `release/final-rc`. Verified application/test source:
+Branch: `release/final-rc`. Primary application/test smoke:
 `ee16251a78a00dd496f848e64d9cce9ef12651e9` (includes both CI test fixes).
+Subsequent report-calendar fix and affected remote flow:
+`d4f3e091560b8a1030062ccffaf22bf0d330f80f`.
 No main merge, final tag, history rewrite, model changes, or remote inference was performed.
 
-This is the recorded functional run. Its subsequent documentation/evidence commit does
-not change application code. Final publication is checked again against the branch HEAD;
+This records the primary functional run and the subsequent report-only correction below.
+The final documentation/evidence commit does not change application code.
+Final publication is checked again against the branch HEAD;
 the deployed SHA is available through admin `/api/v1/operations/status`, and the final
 CI result through GitHub Actions. A commit cannot embed its own SHA or later run ID.
 
@@ -40,7 +43,7 @@ Actual log totals: backend **109 PASS**, 4 warnings; frontend lint **0 errors / 
 build PASS; primary CI Chrome **12 PASS / 7 opt-in or data-dependent skips**, then frozen
 bundle-to-draft Chrome **1 PASS**. [Concise totals](evidence/release-rc/remote/ci-summary.json).
 
-Two preceding failures were test-harness defects, not hidden application failures:
+Three CI failures were test-harness defects, distinct from the report-calendar application bug:
 
 1. `b7e1bc9`, run 39160279378: typography test assumed import history already existed.
    Commit `33dc317` supplies a typed visual registry fixture, independent of execution order.
@@ -48,6 +51,33 @@ Two preceding failures were test-harness defects, not hidden application failure
 2. `33dc317`, run 39161554737: unqualified `getByRole('status')` matched successful save
    and concurrently loading history. Commit `ee16251` scopes success feedback and adds
    delayed-history regression coverage. No test was disabled.
+3. `d4f3e09`, run 39174668471: `isVisible()` immediately sampled a draft button during
+   the detail-refresh gap after saving a decision. It incorrectly assumed an existing
+   request link and waited until timeout. Commit `6ca2a44` waits for either loaded request
+   action before choosing the branch, with a deliberate 300ms detail delay. Focused local
+   test PASS; no timeout inflation or test suppression.
+
+One real application defect was found during the final remote review: at 01:00 Moscow
+time the default report end date was still the previous UTC day. `ReportsPage` used
+`toISOString().slice(0,10)`. Commit `d4f3e09` derives the date input from the browser's
+local calendar instead. The regression test first failed with 18 October instead of
+19 October, then passed. The deployed fix and both PDF/XLSX downloads passed in Chrome
+with Europe/Moscow and controlled instant `2026-10-18T22:00:00Z`:
+[remote report proof](evidence/release-rc/remote/report-calendar-regression.json).
+Full local Chrome after the fix: **16 PASS / 4 opt-in skips**, no failures/flaky cases;
+tsc/Vite PASS; lint 0 errors / 10 existing warnings:
+[local results](evidence/release-rc/remote/local-chrome-after-report.json).
+Only `frontend/src/pages/ReportsPage.tsx` changes application behavior after the primary smoke.
+
+After stabilizing the delayed detail-refresh test, CI is fully **PASS** on `6ca2a44`:
+[run39175260469](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39175260469),
+all backend/frontend/containers jobs and steps successful:
+[recorded jobs](evidence/release-rc/remote/report-ci.json).
+The report correction is deployed as
+`dd1043ea-e5c1-4439-a7c9-286ff18269e9` at `d4f3e09`:
+[deployment proof](evidence/release-rc/remote/report-deployment.json).
+`6ca2a44` changes only the test; the final documentation delivery is published again
+as its exact branch HEAD and verified before completion.
 
 Local focused checks: typography 1 PASS; saved prediction/draft 2 PASS; tsc/Vite PASS;
 lint 0 errors / 10 existing warnings. The existing CI additionally tests the unchanged
@@ -69,10 +99,12 @@ frozen bundle contract on isolated labelled synthetic inputs; it does not run ag
 | Filled manual request / concurrency | PASS | browser visible fields + direct REST | Request 4 created, fresh edit 200, stale edit 409; repeated prediction link creates no duplicate | Ordinary manual request starts new |
 | Safe import → registry / duplicate | PASS | one normal row on existing synthetic demo channel | Import 5 completed; repeated file recognised; original journal retained | Remote JSON only; other formats covered by isolated CI/local matrix |
 | PDF / XLSX | PASS | browser downloads + populated September report | Cyrillic, generated date/source; 2-page PDF, XLSX31 rows; [reports](evidence/release-rc/remote/reports.json) | No industrial-size remote export load |
+| Report default calendar day | PASS | explicit Moscow midnight regression before/after, affected remote flow | Local date19 October; exports and logout PASS on d4f3e09; report-calendar-regression.json | Calendar follows browser timezone; report source timezone metadata unchanged |
+| Remote UI API-error recovery | PASS | browser-only simulated503, real retry | Safe visible error without raw backend detail, recovery after route removal; browser-error-recovery.json | Simulated transport failure; server itself was not disrupted |
 | Correct CSS / user UI fixes | PASS | remote CSS matches local RC SHA256, screenshots | [asset identity](evidence/release-rc/remote/frontend-build-identity.json), 21 PNGs; readable themes and ≥14px table cells | Finite desktop sample; not every browser scale |
 | Resize / zoom / object overlay | PASS | 1440×900,1280×800,1024×700; wheel/buttons; synthetic pinch | Finite scale, visible controls/close, unchanged drawer width | Physical touchpad not exercised |
 | Settings / sidebar | PASS | overlay position comparison, icon bounds, screenshots | No settings jump; aligned toggle; noninteractive logo | No global redesign |
-| Chrome remote | PASS | Windows11, native Chrome155.0.8059.84 via Playwright | 14 recorded checks, zero pageerrors / unexpected API5xx | No claim of a human physical-device run |
+| Chrome remote | PASS | Windows11, native Chrome155.0.8059.84 via Playwright | 14 primary recorded checks + report date regression; 22 total PNGs; zero pageerrors / unexpected API5xx | No claim of a human physical-device run |
 | Native Yandex Browser | NOT TESTED | standard executable paths and App Paths checked again | Browser absent | MANUAL ACTION REQUIRED |
 | Physical touchpad | NOT TESTED | synthetic wheel/pinch automated PASS | No physical input available | MANUAL TOUCHPAD VERIFICATION REQUIRED |
 | Integration worker | PARTIAL | actual services/processes and heartbeat inspection | No deployed worker, empty source cursors, not_observed | Existing five-source mock evidence is local/CI only |
