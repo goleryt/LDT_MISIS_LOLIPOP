@@ -23,6 +23,7 @@ import {
 // Global design tokens/chrome (sidebar, nav, gradients) live here so they
 // apply on every route, not only after visiting the map page.
 import "../styles/moscow-map.css";
+import "../styles/ui-readability.css";
 
 
 function AppLayout() {

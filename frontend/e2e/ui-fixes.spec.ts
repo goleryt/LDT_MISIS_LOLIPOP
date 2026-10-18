@@ -72,3 +72,26 @@ test('fully filled isolated draft confirms with its current version',async({page
   const history=await (await page.request.get(`/api/v1/requests/${id}/history`)).json();
   expect(history.at(-1)).toMatchObject({from_status:'draft',to_status:'new'});
 });
+
+test('list typography and opaque filters remain readable in both themes',async({page})=>{
+  await login(page);
+  for(const theme of ['dark','light']) {
+    await page.evaluate(value=>localStorage.setItem('settings.theme',value),theme);
+    for(const path of ['/alarms','/imports','/events']) {
+      await page.goto(path);
+      const cell=page.locator('tbody td').first();await expect(cell).toBeVisible();
+      expect(await cell.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
+      const panel=page.locator('.alarms-panel,.history-card,.journal-board').first();
+      expect(await panel.evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+      if(path==='/events') {
+        await page.locator('.journal-filter-trigger').first().click();
+        const filter=page.locator('.journal-filter-popover');await expect(filter).toBeVisible();
+        expect(await filter.evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+        const text=await filter.locator('button').last().evaluate(el=>{
+          const s=getComputedStyle(el);return {color:s.color,background:s.backgroundColor};
+        });
+        expect(text.color).not.toBe(text.background);
+      }
+    }
+  }
+});
