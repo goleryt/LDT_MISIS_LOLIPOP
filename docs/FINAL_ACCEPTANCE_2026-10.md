@@ -9,6 +9,9 @@
 > после московской полуночи выбирается текущий локальный день; local Chrome 16 PASS / 4 opt-in skips.
 > После стабилизации ожидания detail refresh весь CI также PASS на `6ca2a44`:
 > [run39175260469](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39175260469).
+> Повтор b6c488b выявил оставшуюся гонку теста. Финальная правка берёт request_id из
+> успешного RPC вместо изменчивой видимости DOM; 3 serial delayed-detail repeats PASS.
+> Полный CI и deployed SHA окончательного HEAD фиксируются в итоговом delivery report.
 
 > Это снимок полной приёмки 16.10.2026. Последующий точечный UI-проход,
 > опубликованные commits, свежие Chrome/build результаты и ограничения 18.10.2026:

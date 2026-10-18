@@ -29,6 +29,7 @@ docs/evidence/release-rc/remote/dark-journal.png
 docs/evidence/release-rc/remote/dark-map.png
 docs/evidence/release-rc/remote/dark-prediction.png
 docs/evidence/release-rc/remote/dark-settings.png
+docs/evidence/release-rc/remote/draft-refresh-server-state.json
 docs/evidence/release-rc/remote/frontend-build-identity.json
 docs/evidence/release-rc/remote/github-ci.json
 docs/evidence/release-rc/remote/historical-observations.pdf

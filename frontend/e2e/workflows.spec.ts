@@ -44,13 +44,18 @@ test("real gas bundle result, advisory and dispatcher decision", async ({ page }
     await route.continue();
   });
   await page.getByLabel("Комментарий", { exact: true }).fill("Контрольный прогон интерфейса на тестовой истории");
+  const decisionSaved=page.waitForResponse(response=>response.request().method()==="PATCH" && response.url().endsWith("/decision"));
   await page.getByRole("button", { name: "Сохранить решение", exact: true }).click();
+  const savedResponse=await decisionSaved;
+  expect(savedResponse.status()).toBe(200);
+  const savedPrediction=await savedResponse.json();
   await expect(page.getByText("История решений", { exact: true })).toBeVisible();
   await expect(page.locator(".prediction-detail")).toContainText("Контрольный прогон интерфейса на тестовой истории");
   const createDraft = page.getByRole("button", { name: "Создать черновик заявки", exact: true });
   const requestLink = page.getByRole("link", { name: /Открыть заявку · №/ });
-  await expect(createDraft.or(requestLink)).toBeVisible();
-  const freshDraft = await createDraft.isVisible();
+  // Use the committed server state. A visible old panel can disappear during
+  // refresh, making even a preceding visibility assertion an unsafe branch.
+  const freshDraft = !savedPrediction.request_id;
   if (freshDraft) await createDraft.click();
   await requestLink.click();
   if (freshDraft) {

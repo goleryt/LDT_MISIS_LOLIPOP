@@ -43,7 +43,7 @@ Actual log totals: backend **109 PASS**, 4 warnings; frontend lint **0 errors / 
 build PASS; primary CI Chrome **12 PASS / 7 opt-in or data-dependent skips**, then frozen
 bundle-to-draft Chrome **1 PASS**. [Concise totals](evidence/release-rc/remote/ci-summary.json).
 
-Three CI failures were test-harness defects, distinct from the report-calendar application bug:
+The CI failures below were test-harness defects, distinct from the report-calendar application bug:
 
 1. `b7e1bc9`, run 39160279378: typography test assumed import history already existed.
    Commit `33dc317` supplies a typed visual registry fixture, independent of execution order.
@@ -56,6 +56,13 @@ Three CI failures were test-harness defects, distinct from the report-calendar a
    request link and waited until timeout. Commit `6ca2a44` waits for either loaded request
    action before choosing the branch, with a deliberate 300ms detail delay. Focused local
    test PASS; no timeout inflation or test suppression.
+   The next delivery (`b6c488b`, run39175763549) exposed the remaining gap: the DOM could
+   disappear between that assertion and `isVisible()`. The final correction derives
+   `freshDraft` from `request_id` in the successful decision RPC response and lets locator
+   clicks wait for rendering. Three **serial** local repeats with delayed detail PASS:
+   [regression](evidence/release-rc/remote/draft-refresh-server-state.json).
+   A parallel three-worker control correctly produced revision409 for competing saves on
+   the shared fixture; it is not the serial workflow acceptance. Application code is unchanged.
 
 One real application defect was found during the final remote review: at 01:00 Moscow
 time the default report end date was still the previous UTC day. `ReportsPage` used
@@ -69,15 +76,17 @@ tsc/Vite PASS; lint 0 errors / 10 existing warnings:
 [local results](evidence/release-rc/remote/local-chrome-after-report.json).
 Only `frontend/src/pages/ReportsPage.tsx` changes application behavior after the primary smoke.
 
-After stabilizing the delayed detail-refresh test, CI is fully **PASS** on `6ca2a44`:
+An intermediate full CI **PASS** is recorded on `6ca2a44`:
 [run39175260469](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39175260469),
 all backend/frontend/containers jobs and steps successful:
 [recorded jobs](evidence/release-rc/remote/report-ci.json).
 The report correction is deployed as
 `dd1043ea-e5c1-4439-a7c9-286ff18269e9` at `d4f3e09`:
 [deployment proof](evidence/release-rc/remote/report-deployment.json).
-`6ca2a44` changes only the test; the final documentation delivery is published again
-as its exact branch HEAD and verified before completion.
+The subsequent final test synchronization and evidence delivery are published again as
+their exact branch HEAD and verified before completion. Current run:
+[release/final-rc Actions](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions?query=branch%3Arelease%2Ffinal-rc).
+The delivery report records its exact run ID, deployed commit, and clean Git status.
 
 Local focused checks: typography 1 PASS; saved prediction/draft 2 PASS; tsc/Vite PASS;
 lint 0 errors / 10 existing warnings. The existing CI additionally tests the unchanged
