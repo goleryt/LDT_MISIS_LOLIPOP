@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import type {Page} from '@playwright/test';
 import {mkdir,writeFile} from 'node:fs/promises';
+import type {DataImport} from '../src/types/imports';
 
 async function login(page:Page,path='/requests') {
   await page.goto(path);
@@ -79,6 +80,13 @@ test('fully filled isolated draft confirms with its current version',async({page
 });
 
 test('list typography and opaque filters remain readable in both themes',async({page})=>{
+  // A clean CI database has no import registry yet. Keep this visual fixture
+  // independent of the real upload test, which can run later or in another worker.
+  const imports:DataImport[]=[{id:1,file_name:'visual-fixture.json',file_sha256:'0'.repeat(64),
+    import_type:'events_journal',status:'completed',processed_rows:1,inserted_rows:1,
+    skipped_rows:0,file_size_bytes:150,error_message:null,started_at:'2026-10-18T10:00:00Z',
+    completed_at:'2026-10-18T10:00:01Z'}];
+  await page.route('**/api/v1/imports',route=>route.fulfill({json:imports}));
   await login(page);
   for(const theme of ['dark','light']) {
     await page.evaluate(value=>localStorage.setItem('settings.theme',value),theme);
