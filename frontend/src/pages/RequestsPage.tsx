@@ -138,6 +138,12 @@ function RequestsPage() {
             "medium",
         );
 
+    const creationBlocked = !canWrite("requests")
+        ? "Ваша роль разрешает только просмотр заявок. Для создания войдите как диспетчер, техник или администратор."
+        : objectId === null ? "Выберите объект — это обязательное поле."
+        : !title.trim() ? "Заполните тему заявки — это обязательное поле."
+        : null;
+
 
     async function loadData(
         background = false,
@@ -318,10 +324,11 @@ function RequestsPage() {
 
 
     async function submitRequest() {
+        if (saving) return;
         if (
-            objectId === null ||
-            !title.trim()
+            creationBlocked || objectId === null
         ) {
+            setError(creationBlocked);
             return;
         }
 
@@ -492,8 +499,7 @@ function RequestsPage() {
                                     Новая профилактическая заявка
                                 </h2>
                                 <span>
-                                    ML-риск будет подключён позднее;
-                                    сейчас заявка создаётся по фактическим данным.
+                                    Обязательны объект и тема. Датчик и описание можно не указывать.
                                 </span>
                             </div>
                         </div>
@@ -512,6 +518,7 @@ function RequestsPage() {
                         <label>
                             <span>Объект</span>
                             <select
+                                required
                                 value={
                                     objectId ?? ""
                                 }
@@ -610,6 +617,7 @@ function RequestsPage() {
                         <label className="request-title-field">
                             <span>Тема</span>
                             <input
+                                required
                                 value={title}
                                 maxLength={200}
                                 placeholder="Например: Проверить датчик доступа"
@@ -638,14 +646,15 @@ function RequestsPage() {
                     </div>
 
                     <div className="request-form-actions">
+                        {creationBlocked && <p id="request-create-validation" role="status">{creationBlocked}</p>}
+                        {error && <p role="alert">{error}</p>}
                         <button
                             type="button"
                             className="requests-primary-button"
                             disabled={
-                                !canWrite("requests") || saving ||
-                                objectId === null ||
-                                !title.trim()
+                                saving || !!creationBlocked
                             }
+                            aria-describedby={creationBlocked ? "request-create-validation" : undefined}
                             onClick={() =>
                                 void submitRequest()
                             }
@@ -680,7 +689,7 @@ function RequestsPage() {
                     </span>
                 </div>
 
-                {error && (
+            {error && !showCreate && (
                     <div className="requests-error">
                         {error}
                     </div>

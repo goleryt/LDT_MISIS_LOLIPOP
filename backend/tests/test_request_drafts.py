@@ -49,3 +49,25 @@ def test_new_request_cannot_skip_work_and_cancelled_cannot_reopen(login):
     assert c.patch(f'/api/v1/requests/{rid}', json={'status':'completed'}).status_code == 409
     assert c.patch(f'/api/v1/requests/{rid}', json={'status':'cancelled'}).status_code == 200
     assert c.patch(f'/api/v1/requests/{rid}', json={'status':'new'}).status_code == 409
+
+
+def test_filled_form_and_versioned_draft_confirmation_keep_audit_and_history(login):
+    from app.db.platform import AuditEntry
+    c = login()
+    payload = {'object_id': 1, 'channel_id': 1, 'title': 'Полностью заполненная заявка',
+               'description': 'Проверить оборудование', 'priority': 'high'}
+    created = c.post('/api/v1/requests', json=payload)
+    assert created.status_code == 200
+    assert all(created.json()[key] == value for key, value in payload.items())
+    pid = recommendation()
+    rid = c.post(f'/api/v1/predictions/{pid}/request').json()['request_id']
+    draft = next(row for row in c.get('/api/v1/requests').json() if row['id'] == rid)
+    confirmed = c.patch(f'/api/v1/requests/{rid}', json={
+        'title': 'Проверено диспетчером', 'description': 'Все поля проверены',
+        'priority': 'high', 'status': 'new', 'expected_updated_at': draft['updated_at']})
+    assert confirmed.status_code == 200 and confirmed.json()['status'] == 'new'
+    assert [row['to_status'] for row in c.get(f'/api/v1/requests/{rid}/history').json()] == ['draft', 'new']
+    with SessionLocal() as db:
+        entries = db.scalars(select(AuditEntry).where(AuditEntry.entity_id == str(rid),
+                              AuditEntry.target == f'/api/v1/requests/{rid}', AuditEntry.action == 'PATCH')).all()
+        assert entries and all(row.actor == 'dispatcher' and row.outcome == 200 for row in entries)

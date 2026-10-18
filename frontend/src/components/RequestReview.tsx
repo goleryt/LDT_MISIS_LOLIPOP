@@ -16,6 +16,8 @@ export default function RequestReview({ item, onSaved, onClose }: {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const canReview = item.status === "draft" && ["admin", "dispatcher"].includes(getSession()?.role ?? "");
+  const blocked = !canReview ? "Подтвердить черновик может диспетчер или администратор. Войдите с подходящей ролью."
+    : !title.trim() ? "Заполните тему черновика — это обязательное поле." : null;
   useEffect(() => {
     let active = true;
     jsonRequest<Change[]>(`/api/v1/requests/${item.id}/history`).then(rows => { if (active) setHistory(rows); })
@@ -23,6 +25,7 @@ export default function RequestReview({ item, onSaved, onClose }: {
     return () => { active = false; };
   }, [item]);
   async function save(confirm: boolean) {
+    if (busy || blocked) return;
     setBusy(true); setError("");
     try { onSaved(await updateRequest(item.id, { title: title.trim(), description: description.trim() || null, priority, ...(item.updated_at ? { expected_updated_at: item.updated_at } : {}), ...(confirm ? { status: "new" } : {}) })); }
     catch (e) { setError(e instanceof Error ? e.message : "Не удалось сохранить черновик"); }
@@ -32,8 +35,9 @@ export default function RequestReview({ item, onSaved, onClose }: {
     <h2>{item.status === "draft" ? "Черновик заявки" : "История заявки"} №{item.id}</h2>
     {item.status === "draft" && <p>Проверьте тему, описание и приоритет. Подтверждение переводит черновик в новую заявку.</p>}
     {error && <p role="alert">{error}</p>}
-    {item.status === "draft" && <fieldset disabled={!canReview || busy}>
-      <label>Тема черновика<input value={title} maxLength={200} onChange={e => setTitle(e.target.value)} /></label>
+    {item.status === "draft" && blocked && <p id="request-review-validation" role="status">{blocked}</p>}
+    {item.status === "draft" && <fieldset disabled={!canReview || busy} aria-describedby={blocked ? "request-review-validation" : undefined}>
+      <label>Тема черновика<input required value={title} maxLength={200} onChange={e => setTitle(e.target.value)} /></label>
       <label>Описание черновика<textarea value={description} maxLength={4000} onChange={e => setDescription(e.target.value)} /></label>
       <label>Приоритет черновика<select value={priority} onChange={e => setPriority(e.target.value as RequestPriority)}>
         <option value="low">Низкий</option><option value="medium">Средний</option><option value="high">Высокий</option><option value="critical">Критический</option>
