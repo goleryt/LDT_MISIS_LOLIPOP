@@ -2,6 +2,7 @@ backend/tests/test_request_drafts.py
 docs/evidence/ui-fixes-2026-10-18/before-metrics.json
 docs/evidence/ui-fixes-2026-10-18/changed-files.txt
 docs/evidence/ui-fixes-2026-10-18/chrome-ui.txt
+docs/evidence/ui-fixes-2026-10-18/dark-extras-chrome.txt
 docs/evidence/ui-fixes-2026-10-18/document-links.json
 docs/evidence/ui-fixes-2026-10-18/final-build.txt
 docs/evidence/ui-fixes-2026-10-18/final-chrome.txt

@@ -33,4 +33,4 @@ dist/assets/RequestsPage-B1oz79r3.js           15.88 kB │ gzip:   4.91 kB
 dist/assets/index-D6HxR2WV.js                 268.85 kB │ gzip:  86.01 kB
 dist/assets/MapPage-C2xr4JMs.js               383.36 kB │ gzip: 112.66 kB
 
-✓ built in 674ms
+✓ built in 656ms

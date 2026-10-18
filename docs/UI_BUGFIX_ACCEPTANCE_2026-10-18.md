@@ -48,6 +48,7 @@ Backend test дополнительно проверяет prediction/recommenda
 | Основной npx playwright test --project=chrome | 18PASS,1skip,1.0мин; pageerror/overflow assertions в затронутых тестах | [final-chrome](evidence/ui-fixes-2026-10-18/final-chrome.txt) |
 | После последнего выравнивания logo/grid и контраста Close | 3PASS,37.1с, включая повтор визуальной матрицы; повторные build/lint PASS | [final-layout](evidence/ui-fixes-2026-10-18/final-layout-chrome.txt) |
 | Визуальная матрица | 37PNG: обе темы1280×800/1440×900, drawer1024×700/1920×1080, sidebar states, draft | [matrix](evidence/ui-fixes-2026-10-18/screenshots/matrix.json) |
+| Уточнение dark compact/sidebar evidence | Повтор matrix1PASS,32.2с; runtime-код не менялся | [dark-extras](evidence/ui-fixes-2026-10-18/dark-extras-chrome.txt) |
 | ML freeze | Runtime/bundles/scheduler paths без diff относительно9b8cb86 | [ml-unchanged](evidence/ui-fixes-2026-10-18/ml-unchanged.txt) |
 | Git hygiene | Известные token/private-key signatures, QA password, env/trace paths не найдены в staged text | [repository-check](evidence/ui-fixes-2026-10-18/repository-check.json) |
 
@@ -82,6 +83,8 @@ QA fixture role=manager подменяет только auth/me для пров�
 [expanded sidebar](evidence/ui-fixes-2026-10-18/screenshots/sidebar-expanded.png),
 [collapsed sidebar](evidence/ui-fixes-2026-10-18/screenshots/sidebar-collapsed.png),
 [filled draft](evidence/ui-fixes-2026-10-18/screenshots/draft-filled.png).
+Дополнительные reduced/wide drawer и оба sidebar states сняты именно в dark theme,
+как требует визуальный checklist; light counterparts основных экранов входят в28 сочетаний.
 Избранные снимки просмотрены визуально; все37 сняты автоматически. Overflow проверен
 для28 route/theme/viewport сочетаний, bounds карты — отдельно. Это не попиксельная
 проверка каждой строки каждого экрана.
@@ -94,6 +97,7 @@ QA fixture role=manager подменяет только auth/me для пров�
 | 4eb648b | Typography, shared opaque surfaces и читаемый журнал | PASS origin/release/final-rc |
 | 8f60b81 | Map resize, непассивный нормализованный wheel/pinch, bounds | PASS origin/release/final-rc |
 | 8c39deb | Prediction cards, settings/sidebar, final Chrome/visual evidence | PASS origin/release/final-rc |
+| 54f7ae7 | Итоговый UI-отчёт и проверка ссылок | PASS origin/release/final-rc |
 
 Документационный commit этого отчёта также публикуется обычным push после проверки ссылок.
 Список изменённых файлов: [changed-files](evidence/ui-fixes-2026-10-18/changed-files.txt).

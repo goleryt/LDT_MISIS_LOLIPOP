@@ -237,6 +237,7 @@ test('requested visual matrix for both themes and reduced desktop',async({page})
       measurements.push({theme,width,height,path,...dimensions});
     }
   }
+  await page.evaluate(()=>localStorage.setItem('settings.theme','dark'));
   await page.setViewportSize({width:1024,height:700});
   await page.goto('/?objectId=1&channelId=1');await expect(page.locator('.object-drawer')).toBeVisible();
   await page.screenshot({path:`${dir}/reduced-1024-map-drawer.png`});
