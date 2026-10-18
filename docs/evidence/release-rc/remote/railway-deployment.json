@@ -1,0 +1,49 @@
+{
+  "project_id": "d4c500cc-fab0-4f7f-ad7e-a52db7a5585c",
+  "service_id": "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f",
+  "environment_id": "1dd4e231-b7ab-48b3-879e-b17389d1e911",
+  "deployment_id": "25be6357-bcd7-4281-a249-7e37ffb95eae",
+  "status": "SUCCESS",
+  "created_at": "2026-10-18T22:37:22.243Z",
+  "application_commit": "ee16251a78a00dd496f848e64d9cce9ef12651e9",
+  "image_digest": "sha256:65486d112a72540de966e60be4d233cc4b872339704e405f226012aeb70f3f96",
+  "manifest": {
+    "build": {
+      "buildCommand": null,
+      "buildEnvironment": "V3",
+      "builder": "DOCKERFILE",
+      "dockerfilePath": "infra/Dockerfile.cloud",
+      "nixpacksConfigPath": null,
+      "nixpacksPlan": null,
+      "watchPatterns": []
+    },
+    "deploy": {
+      "cronSchedule": null,
+      "drainingSeconds": null,
+      "healthcheckPath": "/ready",
+      "healthcheckTimeout": null,
+      "ipv6EgressEnabled": false,
+      "limitOverride": null,
+      "multiRegionConfig": {
+        "sfo": {
+          "numReplicas": 1
+        }
+      },
+      "numReplicas": 1,
+      "overlapSeconds": null,
+      "preDeployCommand": [
+        "alembic upgrade head"
+      ],
+      "preDeployTimeoutSeconds": null,
+      "region": null,
+      "registryCredentials": null,
+      "requiredMountPath": null,
+      "restartPolicyMaxRetries": 3,
+      "restartPolicyType": "ON_FAILURE",
+      "runtime": "V2",
+      "sleepApplication": false,
+      "startCommand": null,
+      "useLegacyStacker": false
+    }
+  }
+}

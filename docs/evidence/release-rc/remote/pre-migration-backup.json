@@ -1,0 +1,8 @@
+{
+  "source": "existing Railway PostgreSQL 18, read-only pg_dump",
+  "revision": "c92601",
+  "size_bytes": 9885817,
+  "sha256": "1dddb28a3dff8f62c389cfab713e71eb84ee99649ef6abc34bd951ed3a78f3ae",
+  "off_host_copy": true,
+  "restore_over_remote": false
+}

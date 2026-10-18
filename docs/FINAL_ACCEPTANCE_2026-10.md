@@ -1,4 +1,10 @@
-# Финальная приёмка RC — 16.10.2026
+# Финальная приёмка RC — локальный baseline и удалённая проверка 19.10.2026
+
+> Актуальный remote результат: [REMOTE_RC_ACCEPTANCE_2026-10-19](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
+> GitHub Actions PASS на `ee16251`, RC опубликован на существующем Railway, миграция
+> `d01602`, Chrome/auth/RBAC/заявки/импорт/отчёты PASS. Integration worker, scheduler
+> и автоматический backup в Railway отсутствуют; native Yandex/physical touchpad NOT TESTED.
+> Таблица ниже сохраняет локальные результаты октября с обновлёнными remote строками.
 
 > Это снимок полной приёмки 16.10.2026. Последующий точечный UI-проход,
 > опубликованные commits, свежие Chrome/build результаты и ограничения 18.10.2026:
@@ -6,10 +12,10 @@
 > Старые утверждения ниже о непубликации RC относятся к состоянию на 16.10 до разрешённого push.
 
 Ветка **release/final-rc**. Исходные 11 коммитов до `a5ba6e0` сохранены с теми же
-hashes; переименована только ветка. Application/test commit: **f7d1d05**.
-Последующие commits изменяют документацию/evidence. Итоговый HEAD: `git rev-parse HEAD`.
-Main и пользовательский checkout не менялись. Новые RC-коммиты не пушились;
-первые 11 ранее были опубликованы в старой ветке. RC не развёрнут на Railway.
+hashes; переименована только ветка. Исторический локальный baseline: **f7d1d05**;
+удалённый application/test прогон после UI-исправлений: **ee16251**.
+Итоговый HEAD: `git rev-parse HEAD`. Ветка опубликована, demo обновлён.
+Main и пользовательский checkout не менялись.
 
 Нормативный источник: [8. ДЖКХ.pdf](<8. ДЖКХ.pdf>), 16 страниц.
 [Решения владельца](FINAL_SCOPE_DECISIONS_RU.md) применены без ожидания жюри.
@@ -77,8 +83,8 @@ DB pool endpoint отражает один процесс, не агрегат �
 | Performance ≥20users | PASS | tests/load.py | 1baseline/20read/20mixed | 918req,0errors; load.json | Короткий локальный профиль; не промышленный SLA |
 | Chrome | PASS | Playwright channel=chrome | workflows + release tests | Chrome155,11+3+4 повторных проверки | Локальный QA, не новый remote RC |
 | Яндекс.Браузер | NOT TESTED | playwright YANDEX_BROWSER_PATH | BROWSER_ACCEPTANCE_RC checklist | Исполняемый файл/registry не найдены | Требуется нативный запуск человеком |
-| Remote RC smoke | NOT TESTED | cloud packaging / DEPLOYMENT_RC | полный remote checklist после публикации | RC не опубликован | EXTERNAL MANUAL ACTION REQUIRED; отдельное разрешение на публикацию |
-| Railway конфигурация | PARTIAL | cloud env/nginx, pre-deploy инструкции | local production settings/TLS + Docker | Web/DB/migrate/worker/scheduler/backup описаны | Бесплатный лимит, DNS, private DB и реальные workers проверить в аккаунте |
+| Remote RC smoke | PASS | cloud packaging / DEPLOYMENT_RC | native Chrome + direct REST на Railway | 14 browser checks, 5 ролей, drafts/history, JSON import, PDF/XLSX; [remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md) | Yandex/physical touchpad отдельно NOT TESTED; другие форматы import проверены в isolated QA/CI |
+| Railway конфигурация | PARTIAL | cloud nginx, existing PostgreSQL, pre-deploy upgrade | runtime commit, d01602, TLS, health/ready, off-host backup checksum | Web/DB/миграции PASS; [runtime](evidence/release-rc/remote/runtime.json) | Постоянные worker/scheduler/автоматический backup не развёрнуты; бесплатный trial ограничен |
 | LDAP/LDAPS | EXTERNAL DEPENDENCY | существующий adapter | test_ldap_contract | verified TLS/read_only/no referrals/no fallback | Реальный AD/bind/CA/группы отсутствуют |
 | Промышленная интеграция/архив/география | EXTERNAL DEPENDENCY | GET adapters, Point import | INTEGRATIONS + заказчик | Контракт и mock подтверждены | Нужны endpoints/credentials, реальные данные и координаты |
 | Полное прогнозирование ТЗ | PARTIAL | существующий frozen gas contour | ML_INTEGRATION_RU; unchanged diff | Смысл shadow сохранён; не вероятность аварии | Новые модели/классы/сезонность/retraining вне этапа |
@@ -109,9 +115,9 @@ DB pool endpoint отражает один процесс, не агрегат �
 ## Что осталось проверить человеку / внешние зависимости
 
 1. Нативный Яндекс и оставшиеся сочетания тем/масштабов/ролей: [browser checklist](BROWSER_ACCEPTANCE_RC.md).
-2. После отдельного разрешения публикации — staging с отдельной БД, доступный бесплатный
-   лимит, секреты вне Git, pre-deploy/health/HTTPS, постоянные worker/scheduler/backup,
-   полный remote flow каждой роли. [Точные инструкции](DEPLOYMENT_RC.md).
+2. Разрешённая публикация RC на существующий demo и полный основной remote flow выполнены.
+   Постоянные worker/scheduler/backup остаются отдельной эксплуатационной задачей;
+   неизвестные production secrets и тариф не менялись. [Инструкции](DEPLOYMENT_RC.md).
 3. Данные/координаты/полный архив, AD/CA/группы, промышленный источник, SIEM,
    offsite backup и измерения на целевой инфраструктуре — заказчик.
 4. PPTX/PDF и актуальная accompanying DOCX/PDF, публичные права и зафиксированный
@@ -129,5 +135,7 @@ DB pool endpoint отражает один процесс, не агрегат �
 Evidence не содержит паролей/cookies/токенов; browser traces в Git не добавлялись.
 Локальные ссылки и известные token/private-key signatures проверены автоматически:
 [document-check](evidence/release-rc/document-check.json). Сигнатурный scan не доказывает
-отсутствие всех возможных типов секретов. Cloud CI smoke добавлен, но сам удалённый
-GitHub Actions pipeline ещё **NOT TESTED**, поскольку RC не отправлялся в remote.
+отсутствие всех возможных типов секретов. Удалённый GitHub Actions **PASS**:
+[run 39173000415](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39173000415),
+backend/frontend/containers, commit `ee16251`. Два дефекта тестовых селекторов/данных
+исправлены без отключения полезных проверок; детали в remote acceptance.

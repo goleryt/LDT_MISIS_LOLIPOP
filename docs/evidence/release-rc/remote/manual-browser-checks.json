@@ -1,0 +1,14 @@
+{
+  "date_moscow": "2026-10-19",
+  "os": "Windows 11 Home 10.0.26200",
+  "chrome": "155.0.8059.84",
+  "yandex": {
+    "status": "NOT TESTED",
+    "reason": "No executable in the three standard install paths or HKCU/HKLM App Paths"
+  },
+  "physical_touchpad": {
+    "status": "NOT TESTED",
+    "automated_synthetic_pinch": "PASS",
+    "required_action": "MANUAL TOUCHPAD VERIFICATION REQUIRED"
+  }
+}

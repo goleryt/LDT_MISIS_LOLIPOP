@@ -1,5 +1,12 @@
 # Browser acceptance — release/final-rc
 
+19.10.2026: [native Chrome remote PASS](REMOTE_RC_ACCEPTANCE_2026-10-19.md),
+14 recorded checks, 21 screenshots, public Railway, application `ee16251`.
+Yandex executable/App Paths checked again: **NOT TESTED — MANUAL ACTION REQUIRED**.
+Physical touchpad: **MANUAL TOUCHPAD VERIFICATION REQUIRED**, synthetic remote pinch PASS.
+For manual checks use the live demo and record the current admin operations commit;
+do not run fixture seed scripts, hardcoded object-ID tests or inference against Railway.
+
 16.10.2026, Windows 11 Home 10.0.26200. Chrome 155.0.8059.84 проверен нативно
 через Playwright channel=chrome. Размеры: 1280×800, 1440×900, 1920×1080;
 тёмная/светлая темы. Мобильная версия не является целью RC.

@@ -1,0 +1,18 @@
+{
+  "historical-observations": {
+    "pdf_pages": 2,
+    "cyrillic": true,
+    "generated_at": true,
+    "source": true,
+    "xlsx_rows": 31,
+    "xlsx_title": "Фактические наблюдения · 2026-09-01 — 2026-09-30"
+  },
+  "remote-report": {
+    "pdf_pages": 1,
+    "cyrillic": true,
+    "generated_at": true,
+    "source": true,
+    "xlsx_rows": 4,
+    "xlsx_title": "Фактические наблюдения · 2026-10-01 — 2026-10-18"
+  }
+}

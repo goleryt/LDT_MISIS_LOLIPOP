@@ -1,0 +1,55 @@
+{
+  "revision": "d01602",
+  "counts": {
+    "events_journal": 173864,
+    "predictions": 3,
+    "preventive_requests": 4,
+    "data_imports": 5
+  },
+  "max_audit_id": 3062,
+  "process_counts": {
+    "uvicorn": 1,
+    "nginx": 2,
+    "integration_worker": 0,
+    "ml_scheduler": 0,
+    "backup-loop": 0
+  },
+  "operations": {
+    "api": "ok",
+    "database": "connected",
+    "application": {
+      "version": "0.2.0",
+      "commit": "ee16251a78a00dd496f848e64d9cce9ef12651e9"
+    },
+    "workers": {
+      "integrations": {
+        "state": "not_observed"
+      },
+      "ml_scheduler": {
+        "state": "not_observed"
+      }
+    },
+    "last_import": {
+      "id": 5,
+      "status": "completed",
+      "completed_at": "2026-10-18 22:46:44.996960+00:00"
+    },
+    "last_prediction_job": {
+      "id": 1,
+      "state": "completed",
+      "finished_at": "2026-09-29 11:09:33.488286+00:00",
+      "error_code": null
+    },
+    "integration_sources": [],
+    "integration_failures": 0,
+    "backup": {
+      "state": "not_configured",
+      "last_success": null
+    },
+    "pool": {
+      "size": 5,
+      "checked_out": 2,
+      "overflow": -3
+    }
+  }
+}

@@ -100,7 +100,7 @@
 #9 29.92 Preconfiguring packages ...
 #9 30.09 Fetched 2960 kB in 7s (453 kB/s)
 #9 30.15 Selecting previously unselected package libelf1t64:amd64.
-#9 30.15 (Reading database ... 
+#9 30.15 (Reading database ...
 (Reading database ... 5%
 (Reading database ... 10%
 (Reading database ... 15%
@@ -232,7 +232,7 @@
 #14 ...
 
 #12 [frontend 4/6] RUN npm ci --no-audit --no-fund
-#12 42.77 
+#12 42.77
 #12 42.77 added 74 packages in 42s
 #12 42.78 npm notice
 #12 42.78 npm notice New major version of npm available! 11.19.0 -> 12.2.0
@@ -291,10 +291,10 @@
 #14 ...
 
 #16 [frontend 6/6] RUN npm run build
-#16 0.891 
+#16 0.891
 #16 0.891 > frontend@0.0.0 build
 #16 0.891 > tsc -b && vite build
-#16 0.891 
+#16 0.891
 #16 ...
 
 #14 [stage-1 5/8] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
@@ -349,7 +349,7 @@
 #16 13.42 dist/assets/RequestsPage-k5u0RHbr.js           14.83 kB │ gzip:   4.62 kB
 #16 13.42 dist/assets/index-Bd5_2tVh.js                 268.25 kB │ gzip:  85.80 kB
 #16 13.42 dist/assets/MapPage-CsEZn_1z.js               382.88 kB │ gzip: 112.46 kB
-#16 13.42 
+#16 13.42
 #16 13.43 ✓ built in 962ms
 #16 DONE 13.6s
 
@@ -409,7 +409,7 @@
 #14 117.2 Downloading charset_normalizer-3.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (255 kB)
 #14 117.9 Downloading et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
 #14 118.5 Installing collected packages: websockets, tzdata, typing_extensions, PyYAML, python-multipart, python-dotenv, pyasn1, psycopg-binary, psycopg, pillow, MarkupSafe, idna, httptools, h11, greenlet, et-xmlfile, defusedxml, click, charset-normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, reportlab, pydantic_core, openpyxl, Mako, ldap3, httpcore, anyio, watchfiles, starlette, pydantic, httpx, alembic, pydantic-settings, fastapi
-#14 129.3 
+#14 129.3
 #14 129.3 Successfully installed Mako-1.4.1 MarkupSafe-3.0.3 PyYAML-6.0.3 SQLAlchemy-2.0.53 alembic-1.20.0 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset-normalizer-3.5.2 click-8.5.0 defusedxml-0.7.1 et-xmlfile-2.0.0 fastapi-0.141.1 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.28.1 idna-3.19 ldap3-2.9.1 openpyxl-3.1.5 pillow-12.3.0 psycopg-3.3.5 psycopg-binary-3.3.5 pyasn1-0.6.4 pydantic-2.13.5 pydantic-settings-2.15.0 pydantic_core-2.46.5 python-dotenv-1.2.3 python-multipart-0.0.32 reportlab-5.0.1 starlette-1.6.0 typing-inspection-0.4.4 typing_extensions-4.16.0 tzdata-2026.4 uvicorn-0.53.0 watchfiles-1.2.0 websockets-17.1
 #14 129.3 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
 #14 DONE 130.3s

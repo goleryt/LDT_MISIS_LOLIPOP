@@ -1,0 +1,13 @@
+{
+  "application_head": "ee16251a78a00dd496f848e64d9cce9ef12651e9",
+  "main_head": "5d6412609b9da08720b1c905041c00333b7cd69c",
+  "merge_tree_exit": 0,
+  "conflict_analysis": "6c6e116a764bc3dd1130751d24d113b7df754ecf",
+  "merge_created": false,
+  "historical_whitespace_issues_before": 235,
+  "diff_check_after_normalization": 0,
+  "secret_signature_findings": 0,
+  "unsafe_tracked_artifacts": 0,
+  "ml_diff_from_b7e1bc9": [],
+  "historical_evidence_whitespace_normalized_files": 13
+}

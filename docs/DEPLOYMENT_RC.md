@@ -1,8 +1,22 @@
 # Развёртывание release/final-rc
 
-**EXTERNAL MANUAL ACTION REQUIRED:** публикация RC в Railway не выполнялась.
-Нужны отдельное разрешение владельца и выбранное staging-окружение. Push также
-запрещён текущей задачей. Работающий публичный demo — отдельная сентябрьская поставка.
+19.10.2026: RC опубликован на существующий demo Railway с разрешения владельца.
+Проверены CI, runtime commit, миграция до d01602, HTTPS и основные remote flows:
+[фактическая приёмка](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
+Main не менялся. Платный тариф и неизвестные production secrets не менялись.
+
+Фактический deployment: tracked-only `git archive release/final-rc` → CLI upload в
+существующий ldt-demo / production / fortunate-communication. Существующая PostgreSQL
+сохранена; перед additive upgrade сделан pg_dump18, скачан вне Git, checksum совпал.
+Pre-deploy: `alembic upgrade head`, Dockerfile: `infra/Dockerfile.cloud`, health: `/ready`.
+APP_COMMIT передаётся точным SHA загружаемого archive, с `--skip-deploys` до явного `up`.
+Нельзя повторно загружать старый archive с новым APP_COMMIT: идентификатор должен
+соответствовать реальному исходному коду. Версия подтверждается через admin operations.
+
+**EXTERNAL MANUAL ACTION REQUIRED** остаётся для persistent integration worker,
+scheduler и automatic/offsite backup, которые в текущем Railway не развёрнуты.
+Инструкция отдельного staging ниже — вариант новой изолированной установки, а не
+описание уже созданных сервисов. Не создавать платные сервисы без согласования.
 
 ## Что подготовлено
 
@@ -73,7 +87,8 @@ QA Compose содержит свои именованные volumes; они со
 9. Источник кода — release/final-rc, конкретный утверждённый commit. Чтобы передать
    код без GitHub-интеграции, после разрешения можно использовать CLI:
    `railway up --service ldt-rc-web --environment staging-rc`.
-   До этой команды перепроверить выбранный проект/окружение. Здесь она не запускалась.
+   До этой команды перепроверить выбранный проект/окружение. Для существующего demo
+   CLI upload выполнен; service/DB identifiers и результат записаны в remote acceptance.
 10. После запуска создать отдельные demo-пользователи через `python -m app.admin create-user`
     с ролями manager/dispatcher/technician/admin и передать пароли владельцу вне Git.
     Не создавать их из предсказуемого пароля в deploy script.
@@ -99,8 +114,9 @@ QA Compose содержит свои именованные volumes; они со
 
 ## Remote checklist
 
-Пока новая версия не опубликована: **EXTERNAL MANUAL ACTION REQUIRED**.
-Сценарий должен выполняться именно на staging URL с утверждённым commit:
+Основной remote checklist выполнен 19.10; точный объём и оставшиеся проверки
+разделены в remote acceptance. При повторении использовать утверждённый demo/staging
+URL и commit, не запускать обычный fixture suite против его БД:
 
 Login manager → map → object → sensor → chart/history → refresh/deep link/Back.
 Alarm → точный sensor; notification → entity → read → refresh → другой пользователь.

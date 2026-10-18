@@ -1,21 +1,25 @@
 # Материалы финала — release/final-rc
 
-Состояние 16.10.2026. Этот inventory не утверждает готовность отсутствующих файлов.
+Состояние 19.10.2026, Europe/Moscow. Наличие документа не заменяет evidence.
 
-| Артефакт | Наличие | Действие перед сдачей |
+| Артефакт | Статус / наличие | Действие перед сдачей |
 |---|---|---|
-| Git repository | https://github.com/goleryt/LDT_MISIS_LOLIPOP | RC локален; отдельно разрешить push/merge и проверить публичные права |
-| Final commit | Application `f7d1d05`; итоговый documentation HEAD — `git rev-parse HEAD` | Записать точный утверждённый HEAD в форму; release tag не создан |
-| Live demo | https://ldt-demo-production.up.railway.app/ — старая сентябрьская версия | Публикация RC не выполнялась; EXTERNAL MANUAL ACTION REQUIRED |
-| Demo credentials | Выдаёт владелец вне Git | Проверить нужные роли на утверждённом staging; не помещать пароли в evidence |
-| Presentation PPTX/PDF | **MISSING FINAL ARTIFACT** в текущем репозитории | Предоставить утверждённые слайды и публичную ссылку, проверить доступ без входа |
-| Актуальная accompanying DOCX/PDF | **MISSING FINAL ARTIFACT** в текущем репозитории | Подготовить из проверенной документации; исторический внешний PDF не считать актуальным RC |
-| Architecture | [ARCHITECTURE](ARCHITECTURE.md) | Сверить с утверждённым commit |
-| Security / RBAC | [SECURITY](SECURITY.md) | Корпоративный AD и CA проверяются отдельно |
-| Acceptance evidence | [FINAL_ACCEPTANCE_2026-10](FINAL_ACCEPTANCE_2026-10.md), evidence/release-rc | Сохранить вместе с версией кода |
-| Deployment instructions | [DEPLOYMENT_RC](DEPLOYMENT_RC.md), [RUNBOOK](RUNBOOK.md) | Отдельное staging, новая БД, разрешение публикации и бесплатные лимиты |
-| Demo/browser checklist | [BROWSER_ACCEPTANCE_RC](BROWSER_ACCEPTANCE_RC.md) | Нативный Яндекс + полный remote smoke, зафиксировать версии и дату |
+| Git repository / RC branch | READY — [repository](https://github.com/goleryt/LDT_MISIS_LOLIPOP/tree/release/final-rc), branch опубликована | Использовать утверждённый RC SHA; main не объединялся |
+| Final commit | READY — git rev-parse origin/release/final-rc; функциональная приёмка на ee16251 | Итоговый documentation/evidence commit проверяется CI и повторно публикуется перед завершением |
+| Final tag | NOT APPLICABLE | Не создавался по инструкции владельца |
+| GitHub Actions | READY — [PASS run39173000415](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39173000415), ee16251 | Проверить также run окончательного RC HEAD |
+| Railway/demo | READY в проверенном объёме — [live demo](https://ldt-demo-production.up.railway.app/) | Worker/scheduler/automatic backup отсутствуют; continuous industrial operation не заявляется |
+| Demo credentials | READY — manager/dispatcher/technician/admin/analyst проверены; пароли вне Git | Владелец выдаёт доступ отдельно; не помещать credentials в evidence |
+| Architecture | READY — [ARCHITECTURE](ARCHITECTURE.md) | Point, mock/production и shadow semantics разделены |
+| Deployment instructions | READY — [DEPLOYMENT_RC](DEPLOYMENT_RC.md), [RUNBOOK](RUNBOOK.md) | Учитывать ограниченный trial/free credit и отсутствие фоновых сервисов |
+| Acceptance evidence | READY — [FINAL_ACCEPTANCE](FINAL_ACCEPTANCE_2026-10.md), [remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md) | Фактические SHA/run/deployment IDs и ограничения |
+| Demo/browser checklist | READY — [BROWSER_ACCEPTANCE_RC](BROWSER_ACCEPTANCE_RC.md), [remote probe](../tests/remote/README.md) | Без fixture seed/inference против Railway |
+| Presentation PPTX/PDF | **MISSING FINAL ARTIFACT** | Нужны утверждённые слайды и публичная ссылка |
+| Accompanying DOCX/PDF | **MISSING FINAL ARTIFACT** | Нужен актуальный документ финальной версии; исторический PDF его не заменяет |
+| Native Yandex evidence | **MISSING — NOT TESTED** | Яндекс отсутствует в среде; выполнить native remote checklist |
+| Physical touchpad evidence | **MISSING — MANUAL TOUCHPAD VERIFICATION REQUIRED** | Synthetic remote pinch PASS; физический жест проверить вручную |
 
-Публичная ссылка старого demo не доказывает наличие новых RC-исправлений в облаке.
-После утверждения публикации проверить все ссылки инкогнито. Не менять сданные
-материалы после применимого стоп-кода без разрешённой организаторами процедуры финала.
+AD/CA, реальные внешние источники/полный архив/координаты, SIEM, постоянное offsite-
+хранилище и промышленные нормативы требуют инфраструктуры заказчика. Не менять
+материалы после применимого стоп-кода вне разрешённой процедуры финала.
+Merge main и создание final tag этим этапом не выполнялись.

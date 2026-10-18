@@ -1,10 +1,10 @@
 ldt-20261016T155918Z-167.dump: OK
- version_num 
+ version_num
 -------------
  d01602
 (1 row)
 
- count  
+ count
 --------
  200026
 (1 row)

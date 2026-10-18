@@ -1,0 +1,458 @@
+{
+  "date": "2026-10-18T22:42:21.619226+00:00",
+  "base_url": "https://ldt-demo-production.up.railway.app",
+  "checks": [
+    {
+      "name": "/",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "/health",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "/ready",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "anonymous protected endpoint",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "failed login",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "foreign login origin",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "manager login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "manager /me",
+      "actual": "manager",
+      "expected": "manager",
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher /me",
+      "actual": "dispatcher",
+      "expected": "dispatcher",
+      "status": "PASS"
+    },
+    {
+      "name": "admin login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin /me",
+      "actual": "admin",
+      "expected": "admin",
+      "status": "PASS"
+    },
+    {
+      "name": "technician login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "technician /me",
+      "actual": "technician",
+      "expected": "technician",
+      "status": "PASS"
+    },
+    {
+      "name": "analyst login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst /me",
+      "actual": "analyst",
+      "expected": "analyst",
+      "status": "PASS"
+    },
+    {
+      "name": "manager request write",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "manager forbidden prediction decision",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "manager audit boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "manager diagnostics boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher audit boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher diagnostics boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "admin request write",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin cancel own QA request",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin audit boundary",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin diagnostics boundary",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "technician request write",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "technician cancel own QA request",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "technician forbidden prediction decision",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "technician audit boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "technician diagnostics boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst request write",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst audit boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst diagnostics boundary",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst allowed decision",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "missing CSRF",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "invalid CSRF",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "Secure cookie",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "notification deduplication",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "historical report pdf",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "historical report xlsx",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "stored mathematical outputs unchanged",
+      "actual": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+      "expected": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+      "status": "PASS"
+    },
+    {
+      "name": "expired session",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "admin login",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin /me",
+      "actual": "admin",
+      "expected": "admin",
+      "status": "PASS"
+    },
+    {
+      "name": "manager logout",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "manager post logout",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher logout",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "dispatcher post logout",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "admin logout",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "admin post logout",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "technician logout",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "technician post logout",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst logout",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst post logout",
+      "actual": 401,
+      "expected": 401,
+      "status": "PASS"
+    }
+  ],
+  "roles": {
+    "manager": {
+      "audit": 403,
+      "operations": 403,
+      "read_objects": 200,
+      "create_request": 403
+    },
+    "dispatcher": {
+      "audit": 403,
+      "operations": 403,
+      "read_objects": 200
+    },
+    "admin": {
+      "audit": 200,
+      "operations": 200,
+      "read_objects": 200,
+      "create_request": 200,
+      "request_id": 1
+    },
+    "technician": {
+      "audit": 403,
+      "operations": 403,
+      "read_objects": 200,
+      "create_request": 200,
+      "request_id": 2
+    },
+    "analyst": {
+      "audit": 403,
+      "operations": 403,
+      "read_objects": 200,
+      "create_request": 403
+    }
+  },
+  "timing": [
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "milliseconds": 392.4
+    },
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "milliseconds": 392.5
+    },
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "milliseconds": 283.5
+    },
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "milliseconds": 282.8
+    },
+    {
+      "path": "/api/v1/map/objects",
+      "status": 200,
+      "milliseconds": 274.4
+    }
+  ],
+  "http_redirect": {
+    "status": 301,
+    "location": "https://ldt-demo-production.up.railway.app/"
+  },
+  "tls": {
+    "version": "TLSv1.3",
+    "not_after": "Dec 26 03:01:42 2026 GMT",
+    "verified": true
+  },
+  "operations": {
+    "api": "ok",
+    "database": "connected",
+    "application": {
+      "version": "0.2.0",
+      "commit": "ee16251a78a00dd496f848e64d9cce9ef12651e9"
+    },
+    "workers": {
+      "integrations": {
+        "state": "not_observed"
+      },
+      "ml_scheduler": {
+        "state": "not_observed"
+      }
+    },
+    "last_import": {
+      "id": 4,
+      "status": "completed",
+      "completed_at": "2026-09-29T11:09:32.161533+00:00"
+    },
+    "last_prediction_job": {
+      "id": 1,
+      "state": "completed",
+      "finished_at": "2026-09-29T11:09:33.488286+00:00",
+      "error_code": null
+    },
+    "integration_sources": [],
+    "integration_failures": 0,
+    "backup": {
+      "state": "not_configured",
+      "last_success": null
+    },
+    "pool": {
+      "size": 5,
+      "checked_out": 1,
+      "overflow": -3
+    }
+  },
+  "integration_status_code": 200,
+  "prediction_count_before": 3,
+  "frozen_values_before": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+  "cookie": {
+    "secure": true,
+    "http_only": true,
+    "same_site": "strict"
+  },
+  "notifications": {
+    "count": 0,
+    "unique_ids": 0
+  },
+  "frozen_values_after": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+  "status": "PASS",
+  "audit_evidence": "audit-current.json"
+}
