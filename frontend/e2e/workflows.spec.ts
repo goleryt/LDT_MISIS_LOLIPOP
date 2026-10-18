@@ -50,9 +50,9 @@ test("real gas bundle result, advisory and dispatcher decision", async ({ page }
   await expect(page.getByRole("heading", { name: /Черновик заявки №/ })).toBeVisible();
   await page.getByLabel("Тема черновика", { exact: true }).fill("Проверено диспетчером: тестовая рекомендация");
   await page.getByRole("button", { name: "Сохранить черновик", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Черновик сохранён");
+  await expect(page.locator(".requests-feedback[role='status']")).toHaveText("Черновик сохранён");
   await page.getByRole("button", { name: "Подтвердить заявку", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Черновик подтверждён");
+  await expect(page.locator(".requests-feedback[role='status']")).toContainText("Черновик подтверждён");
   }
   await expect(page.getByRole("heading", { name: "История изменений" })).toBeVisible();
   await expect(page.locator("main")).not.toContainText(/undefined|NaN/);

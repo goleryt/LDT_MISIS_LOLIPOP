@@ -69,6 +69,14 @@ test('fully filled isolated draft confirms with its current version',async({page
     await mkdir(process.env.UI_SCREENSHOT_DIR,{recursive:true});
     await review.screenshot({path:`${process.env.UI_SCREENSHOT_DIR}/draft-filled.png`,animations:'disabled'});
   }
+  // A successful save and a still-loading history are both accessible statuses.
+  // Select the feedback specifically, as the CI prediction-to-draft flow does.
+  await page.route(`**/api/v1/requests/${id}/history`,async route=>{
+    await new Promise(resolve=>setTimeout(resolve,750));
+    await route.continue();
+  });
+  await page.getByRole('button',{name:'Сохранить черновик',exact:true}).click();
+  await expect(page.locator(".requests-feedback[role='status']")).toHaveText('Черновик сохранён');
   const response=page.waitForResponse(r=>r.url().endsWith(`/api/v1/requests/${id}`) && r.request().method()==='PATCH');
   await page.getByRole('button',{name:'Подтвердить заявку',exact:true}).click();
   const changed=await response;expect(changed.status()).toBe(200);
