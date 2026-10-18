@@ -2,7 +2,10 @@ import { useState } from "react";
 import { apiFetch, responseError } from "../api/session";
 import { API_BASE_URL } from "../api/config";
 export default function ReportsPage() {
-  const today = new Date().toISOString().slice(0,10);
+  const now = new Date();
+  // Date controls select a calendar day in the user's browser timezone.
+  // ISO serialization would select yesterday just after Moscow midnight.
+  const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
   const [kind,setKind] = useState("observations");
   const [start,setStart] = useState(today.slice(0,8)+"01");
   const [end,setEnd] = useState(today);

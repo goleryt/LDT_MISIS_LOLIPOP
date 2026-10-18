@@ -11,6 +11,16 @@ async function login(page:Page,path='/requests') {
   await expect(page.locator('.app-shell')).toBeVisible();
 }
 
+test.describe('report calendar dates',()=>{
+  test.use({timezoneId:'Europe/Moscow'});
+  test('report end date follows the local day after Moscow midnight',async({page})=>{
+    await page.clock.setFixedTime(new Date('2026-10-18T22:00:00Z'));
+    await login(page,'/reports');
+    await expect(page.getByLabel('По',{exact:true})).toHaveValue('2026-10-19');
+    await expect(page.getByLabel('С',{exact:true})).toHaveValue('2026-10-01');
+  });
+});
+
 test('fully filled request submits the visible values and records creation history',async({page})=>{
   await login(page);
   await page.getByRole('button',{name:'Новая заявка',exact:true}).click();
