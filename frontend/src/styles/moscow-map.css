@@ -80,7 +80,7 @@
        from the bottom, then straight to flat darkness — nothing else. */
     --page-bg:
         radial-gradient(
-            220px 620px at 50% -6%,
+            286px 620px at 50% -6%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
@@ -88,7 +88,7 @@
             transparent 74%
         ),
         radial-gradient(
-            220px 620px at 50% 106%,
+            286px 620px at 50% 106%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
