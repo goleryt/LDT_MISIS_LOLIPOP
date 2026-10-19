@@ -26,6 +26,7 @@ import "../styles/moscow-map.css";
 import "../styles/ui-readability.css";
 import "../styles/ui-layout.css";
 import "../styles/ui-chrome.css";
+import "../styles/designer-polish.css";
 
 
 function AppLayout() {

@@ -2,10 +2,19 @@
    приходят из токенов moscow-map.css). */
 
 .settings-page {
-    height: 100%;
+    position: fixed;
+    inset: 44px 0 0;
+    z-index: 900;
+    height: auto;
     overflow-y: auto;
     display: flex;
     padding: 28px 16px;
+}
+
+/* Below desktop width, keep the form clear of the navigation and scrollable. */
+@media (max-width: 1000px) {
+    .settings-page { left: 240px; }
+    body:has(.sidebar-collapsed) .settings-page { left: 72px; }
 }
 
 .settings-card {

@@ -1,6 +1,7 @@
 import {
     useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 import {
     getSession,
@@ -67,7 +68,9 @@ function SettingsPage() {
         }
     }
 
-    return (
+    // The workspace has container containment; a portal keeps viewport centering
+    // independent of its changing width when the navigation expands/collapses.
+    return createPortal(
         <div className="settings-page">
             <section
                 className="settings-card"
@@ -145,7 +148,8 @@ function SettingsPage() {
                     Выйти из аккаунта
                 </button>
             </section>
-        </div>
+        </div>,
+        document.body,
     );
 }
 

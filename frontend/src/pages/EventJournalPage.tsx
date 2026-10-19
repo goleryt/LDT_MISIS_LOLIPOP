@@ -263,17 +263,20 @@ function EventJournalPage() {
                                 </th>
                                 <th aria-sort={sort.by === "status" ? (sort.desc ? "descending" : "ascending") : "none"}>
                                     <div className="journal-column-controls">
-                                        <select
-                                            className="journal-status-filter"
-                                            aria-label="Фильтр по типу события"
-                                            value={alarmFilter}
-                                            onChange={(event) => setAlarmFilter(event.target.value as AlarmFilter)}
-                                        >
-                                            <option value="all">Тип события</option>
-                                            <option value="normal">Норма</option>
-                                            <option value="alarm">Тревога</option>
-                                            <option value="unknown">Не определено</option>
-                                        </select>
+                                        <span className="journal-select-control">
+                                            <select
+                                                className="journal-status-filter"
+                                                aria-label="Фильтр по типу события"
+                                                value={alarmFilter}
+                                                onChange={(event) => setAlarmFilter(event.target.value as AlarmFilter)}
+                                            >
+                                                <option value="all">Тип события</option>
+                                                <option value="normal">Норма</option>
+                                                <option value="alarm">Тревога</option>
+                                                <option value="unknown">Не определено</option>
+                                            </select>
+                                            <ChevronDown size={18} aria-hidden="true" />
+                                        </span>
                                         <button
                                             type="button"
                                             className={`journal-sort-button ${sort.by === "status" ? "active" : ""}`}

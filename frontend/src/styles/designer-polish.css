@@ -1,0 +1,70 @@
+/* Designer review: keep controls and disclosure icons consistent with Lucide. */
+.app-shell .journal-period {
+    min-height: 68px;
+}
+
+.app-shell summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+}
+
+.app-shell summary::-webkit-details-marker {
+    display: none;
+}
+
+.app-shell summary::marker {
+    content: "";
+}
+
+.app-shell summary::before {
+    content: "";
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m9 6 6 6-6 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: transform 150ms ease;
+}
+
+.app-shell details[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.journal-select-control {
+    position: relative;
+    display: inline-flex;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.app-shell .journal-select-control .journal-status-filter {
+    appearance: none;
+    padding-right: 40px;
+}
+
+.journal-select-control > svg {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.drop-zone > .import-kind-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.drop-zone > .import-file-button {
+    margin-bottom: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell summary::before { transition: none; }
+}
