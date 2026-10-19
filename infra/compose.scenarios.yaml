@@ -1,0 +1,32 @@
+# Explicit isolated demo opt-in. Never included by the default production stack.
+services:
+  backend:
+    environment:
+      SCENARIO_ENABLED: "true"
+      SCENARIO_SENSOR_ENABLED: "true"
+      SCENARIO_FIRE_ENABLED: "true"
+  scenarios:
+    profiles: ["scenarios-demo"]
+    build:
+      context: ..
+      dockerfile: ml_combined/Dockerfile
+    env_file: ../backend/.env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      SCENARIO_ENABLED: "true"
+      SCENARIO_SENSOR_ENABLED: "true"
+      SCENARIO_FIRE_ENABLED: "true"
+      SCENARIO_READY_DIR: /scenario-ready
+    volumes:
+      - ../data/scenario-ready:/scenario-ready:ro
+    tmpfs: ["/tmp:size=256m", "/work:uid=10001,gid=10001,mode=0700,size=256m"]
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1536m
+    cpus: 2
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped

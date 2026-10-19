@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "archive_sha256": "1afb9615c2526b21f7aa5e9dd0147b82a74777c86b7c5064b6134dcd0366573b",
+  "files_verified": 98,
+  "bounded_validation_status": "completed",
+  "frozen_h2_sensor_fire_hashes": true,
+  "fresh_process_actual_sensor_fire_predictions": true,
+  "fresh_process_combined_cli": true,
+  "gas_records_unchanged": true,
+  "missing_worker_usable": true,
+  "simultaneous_recommendation_checked": true,
+  "raw_h2_replay": "separate actual-model acceptance in examples/acceptance.json",
+  "daily_raw_binding_parity": true,
+  "malformed_worker_isolated": true,
+  "fire_enabled_experimental_manual_review": true,
+  "scope": "technical acceptance on synthetic fixtures; not predictive accuracy"
+}

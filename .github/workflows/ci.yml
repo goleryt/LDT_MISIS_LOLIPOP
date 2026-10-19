@@ -3,6 +3,25 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  combined-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build independent Python 3.12 scenario runtime
+        run: docker build -f ml_combined/Dockerfile -t ldt-combined-ci .
+      - name: Frozen real inference and evidence validation (no network or secrets)
+        run: |
+          mkdir -p test-results/combined
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --user "$(id -u):$(id -g)" --memory 1536m --cpus 2 \
+            --tmpfs /work:mode=1777,size=256m --tmpfs /tmp:mode=1777,size=256m \
+            --mount "type=bind,src=$PWD/test-results/combined,dst=/qa" \
+            ldt-combined-ci python /opt/combined/acceptance.py /qa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: combined-runtime-results
+          path: test-results/combined/runtime-acceptance.json
   backend:
     runs-on: ubuntu-latest
     services:

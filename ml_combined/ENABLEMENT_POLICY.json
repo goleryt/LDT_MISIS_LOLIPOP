@@ -1,0 +1,38 @@
+{
+  "version": "combined-evidence-enablement-v1",
+  "scope": "requested_backend_integration_defaults_not_a_live_deployment",
+  "models": {
+    "gas": {
+      "enabled": true,
+      "visibility": "existing",
+      "handling": "preserve_existing"
+    },
+    "sensor_failure": {
+      "enabled": true,
+      "visibility": "visible_experimental"
+    },
+    "fire": {
+      "enabled": true,
+      "visibility": "visible_experimental",
+      "activation_scope": "experimental_manual_review",
+      "badge_ru": "Экспериментально · синтетическая проверка",
+      "operational_ready": false
+    },
+    "flood": {
+      "enabled": false,
+      "visibility": "disabled"
+    },
+    "intrusion": {
+      "enabled": false,
+      "visibility": "disabled"
+    },
+    "system_failure": {
+      "enabled": false,
+      "visibility": "disabled"
+    }
+  },
+  "automated_action_allowed": false,
+  "combined_incident_probability": null,
+  "missing_result_display": "unavailable_not_zero",
+  "frozen_candidate_manifest": "preserved; historical promotion gate, see README.md"
+}

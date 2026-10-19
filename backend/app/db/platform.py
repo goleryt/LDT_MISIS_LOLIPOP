@@ -76,6 +76,41 @@ class PredictionDecision(Base):
     actual_outcome: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
+
+class ScenarioRun(Base):
+    """Separate experimental ledger; never writes gas scores, alarms or queues."""
+    __tablename__ = "scenario_runs"
+    __table_args__ = (UniqueConstraint("fingerprint"), UniqueConstraint("as_of_date", "revision"))
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    as_of_date: Mapped[date] = mapped_column(Date, index=True)
+    revision: Mapped[int] = mapped_column(Integer)
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    snapshot_version: Mapped[str] = mapped_column(String(120))
+    snapshot: Mapped[dict] = mapped_column(JSON)
+    versions: Mapped[dict] = mapped_column(JSON)
+    state: Mapped[str] = mapped_column(String(30))
+    error_code: Mapped[str | None] = mapped_column(String(100))
+    output: Mapped[dict | None] = mapped_column(JSON)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ScenarioForecast(Base):
+    __tablename__ = "scenario_forecasts"
+    __table_args__ = (UniqueConstraint("run_id", "forecast_ref"),)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    run_id: Mapped[int] = mapped_column(ForeignKey("scenario_runs.id"), index=True)
+    forecast_ref: Mapped[str] = mapped_column(String(300))
+    worker: Mapped[str] = mapped_column(String(30), index=True)
+    object_id: Mapped[int | None] = mapped_column(ForeignKey("object_catalogue.ид_объект"))
+    channel_id: Mapped[int | None] = mapped_column(ForeignKey("channel_catalogue.ид_канала_данных"))
+    payload: Mapped[dict] = mapped_column(JSON)
+    attention: Mapped[bool] = mapped_column(Boolean, default=False)
+    status: Mapped[str] = mapped_column(String(30), default="new")
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    decisions: Mapped[list] = mapped_column(JSON, default=list)
+    request_id: Mapped[int | None] = mapped_column(ForeignKey("preventive_requests.id"))
+
 class RequestChange(Base):
     __tablename__ = "request_changes"
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)

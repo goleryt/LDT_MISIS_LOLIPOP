@@ -1,0 +1,89 @@
+{
+  "scope": "isolated synthetic QA only",
+  "base_url": "http://127.0.0.1:18090",
+  "health": 200,
+  "ready": 200,
+  "anonymous": 401,
+  "roles": {
+    "manager": {
+      "read": 200,
+      "without_csrf": 403,
+      "review": 403
+    },
+    "technician": {
+      "read": 200,
+      "without_csrf": 403,
+      "review": 403
+    },
+    "dispatcher": {
+      "read": 200,
+      "without_csrf": 403,
+      "review": 200
+    },
+    "analyst": {
+      "read": 200,
+      "without_csrf": 403,
+      "review": 200
+    },
+    "admin": {
+      "read": 200,
+      "without_csrf": 403,
+      "review": 200
+    }
+  },
+  "workers": {
+    "integrations": {
+      "state": "idle",
+      "last_seen": "2026-10-19T14:30:13.811604+00:00",
+      "last_success": "2026-10-19T14:30:13.811604+00:00",
+      "error_code": null
+    },
+    "ml_scheduler": {
+      "state": "not_observed"
+    },
+    "scenario_worker": {
+      "state": "waiting_for_marker",
+      "last_seen": "2026-10-19T14:28:28.662240+00:00",
+      "last_success": "2026-10-19T14:19:22.037196+00:00",
+      "error_code": null
+    }
+  },
+  "last_scenario_job": {
+    "id": 1,
+    "state": "completed",
+    "finished_at": "2026-10-19T14:19:22.019325+00:00",
+    "error_code": null
+  },
+  "scenario_workers": {
+    "gas": {
+      "status": "available",
+      "forecasts": 1,
+      "availability_scope": "declared_or_reconstructed"
+    },
+    "sensor_failure": {
+      "status": "available",
+      "forecasts": 2,
+      "availability_scope": "declared_or_reconstructed"
+    },
+    "fire": {
+      "status": "available",
+      "forecasts": 1,
+      "availability_scope": "declared_or_reconstructed"
+    }
+  },
+  "scenario_forecasts": 3,
+  "models": {
+    "sensor_failure": "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5",
+    "fire": "607e63fbc297117c149124913bb51cb8bb5f0e0c247550afdc83873ae830c29e"
+  },
+  "pdf": {
+    "status": 200,
+    "bytes": 17969,
+    "pages_or_rows": 1
+  },
+  "xlsx": {
+    "status": 200,
+    "bytes": 5141,
+    "pages_or_rows": 4
+  }
+}

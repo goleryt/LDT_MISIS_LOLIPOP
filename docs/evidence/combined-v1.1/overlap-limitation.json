@@ -1,0 +1,11 @@
+{
+  "source": "COMBINED_EVIDENCE_V1_1.zip/reports/overlap.json",
+  "synthetic_only": true,
+  "tp": 0,
+  "fn": 30,
+  "recall": 0.0,
+  "events": 30,
+  "matched": 0,
+  "full_archive_protocol": "NOT COMPLETED",
+  "real_incident_accuracy": "NOT ESTABLISHED"
+}

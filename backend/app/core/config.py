@@ -42,11 +42,20 @@ class Settings(BaseSettings):
     ml_export_days: int = Field(default=430, ge=401, le=800)
     ml_top_k_per_day: int = Field(default=25, ge=1, le=500)
     ml_cooldown_days: int = Field(default=3, ge=1, le=14)
+    scenario_enabled: bool = False
+    scenario_sensor_enabled: bool = True
+    scenario_fire_enabled: bool = True
+    scenario_allow_production: bool = False
+    scenario_compute_script: str = "/opt/combined/compute.py"
+    scenario_timeout_seconds: int = Field(default=180, ge=5, le=480)
+    scenario_max_rows: int = Field(default=200000, ge=1, le=1000000)
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")
     def production_safety(self):
         if self.environment == "production":
+            if self.scenario_enabled and not self.scenario_allow_production:
+                raise ValueError("Experimental scenarios require explicit production acceptance")
             if not self.secure_cookies or self.allow_mock_ingestion or "*" in self.allowed_hosts:
                 raise ValueError("Production requires secure cookies, explicit hosts and mock ingestion disabled")
             if len(self.postgres_password) < 16:

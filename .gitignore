@@ -58,3 +58,5 @@ infra/certs/
 *.dump.sha256
 
 .ml-work/
+# Only the original verified supplier ZIP is versioned; extraction is build-local.
+ml_combined/vendor/
