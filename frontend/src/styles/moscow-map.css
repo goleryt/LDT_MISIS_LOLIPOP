@@ -151,24 +151,24 @@ html[data-theme="light"] {
         #3d4132 100%
     );
 
-    /* Same two-tone depth as the dark beam (pale centre fading through a
-       saturated hue at the edge, not just one flat tint growing fainter)
-       — here warm gold/amber instead of blue. */
+    /* A beam should read as light falling on the page, so every stop
+       stays lighter than --page-base (#ece1ca) — never a darker/more
+       saturated tint blended in, only brightness fading out via alpha. */
     --page-bg:
         radial-gradient(
             220px 620px at 50% -6%,
-            rgb(255 250 235 / 98%) 0%,
-            rgb(255 221 150 / 88%) 17%,
-            rgb(238 177 86 / 58%) 36%,
-            rgb(199 132 46 / 26%) 55%,
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
             transparent 78%
         ),
         radial-gradient(
             220px 620px at 50% 106%,
-            rgb(255 250 235 / 98%) 0%,
-            rgb(255 221 150 / 88%) 17%,
-            rgb(238 177 86 / 58%) 36%,
-            rgb(199 132 46 / 26%) 55%,
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
             transparent 78%
         ),
         var(--page-base);
