@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "scope": "local import gate; public deployment allowed only after normal CI and safety backup",
+  "date": "2026-10-20",
+  "branch": "release/final-rc",
+  "parent_commit": "ae43e330732edc7d6f5d7619fada0498fd9ba5b4",
+  "railway_stress": false,
+  "load_phases": [
+    {
+      "name": "limited",
+      "cases": 12,
+      "ordinary_api_requests": 1989,
+      "ordinary_api_errors": 0
+    },
+    {
+      "name": "mixed-v2",
+      "cases": 3,
+      "ordinary_api_requests": 882,
+      "ordinary_api_errors": 0
+    }
+  ],
+  "fault_scenarios": 7,
+  "backend": {
+    "passed": 151,
+    "warnings": 4,
+    "seconds": 195.83,
+    "command": "pytest -q --junitxml=../docs/evidence/import-load-2026-10-20/backend-full.xml; ENVIRONMENT=test POSTGRES_DB=ldt_test"
+  },
+  "frontend": {
+    "build": "PASS TypeScript/Vite",
+    "lint_errors": 0,
+    "lint_warnings": 10,
+    "chrome_passed": 30,
+    "chrome_skipped": 8,
+    "command": "npm run build; npm run lint; playwright test --project=chrome --workers=1"
+  },
+  "docker": "PASS cloud image build and isolated startup, dev/TLS nginx syntax validation",
+  "source_sha256": {
+    "backend/app/ingestion/limits.py": "bc5147c417723cc2c06b8e329c77d46c5ba8b39f7d9f4e4dbcc29057b3b3c1f7",
+    "backend/app/ingestion/csv_loader.py": "1bd6e957737e0eec1aff3a29d4d740025e65a2e1aaebe9e83eefdf2f48803356",
+    "backend/app/ingestion/import_registry.py": "d983c8ecd0d215a58ae6785a881a5bf9dd6a6cab5c676a0375fbadb9df5f954f",
+    "backend/app/ingestion/formats.py": "43b59567144e09676b041b03513130d289c59f2834e941507057cf943f487e64",
+    "backend/app/core/config.py": "d604a056bd688bccfc6a68502db6406982199f1ba4d302d9da9b5420b821f078",
+    "backend/app/api/v1/imports.py": "79c0112c3ded595dae70f4b3496ca6b61a15d4950535d1f94bc301dbba133ab8",
+    "infra/cloud.nginx.conf": "6deb190f7aa1782725cfc8b2ff6ddabd25cf7e4b307764e80d67bca1ce6d94c7",
+    "infra/nginx.dev.conf": "3f86fdbc229f7739e2e8ed945734b0ac1a720cdbc82bfd96f7cf1cf751b4875b",
+    "infra/nginx.tls.conf": "1256e5bd0eaa1614f8026224af4a40baf1970cb386c237f5a6ab1ed2835f1cc9",
+    "frontend/src/api/imports.ts": "247778147f69c9bc2081148f603de94d125af16f1bf1630100236c93ac643e40",
+    "frontend/src/pages/ImportsPage.tsx": "79f1073e06c5926244adcb78721005caf1ef95d46f85a9af5f0a3ab58da90a18"
+  },
+  "limitations": [
+    "10k rows per file, not maximum file or industrial archive capacity",
+    "No durable queue; explicit retry after 409/429",
+    "Process death may leave processing registry until reupload",
+    "CPU v1 peaks approximate; authoritative per-container mixed-v2 counters saved",
+    "Native Yandex and physical touchpad not tested"
+  ]
+}

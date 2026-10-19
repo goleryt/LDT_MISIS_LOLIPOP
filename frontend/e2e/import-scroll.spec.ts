@@ -1,5 +1,24 @@
 import {test,expect} from '@playwright/test';
 
+for(const [status,message] of [[429,'Сервис импорта занят.'],[409,'Этот файл уже обрабатывается.'],[408,'Превышено время обработки.']] as const){
+  test(`import backpressure ${status} explains retry and retains selected file`,async({page})=>{
+    await page.route('**/api/v1/auth/me',r=>r.fulfill({json:{username:'import-review',role:'dispatcher',csrf_token:'layout-fixture'}}));
+    await page.route('**/api/v1/notifications?*',r=>r.fulfill({json:[]}));
+    await page.route('**/api/v1/imports',r=>r.fulfill({json:[]}));
+    let busy=true;
+    await page.route('**/api/v1/imports/events?*',r=>r.fulfill({status:busy?status:200,headers:{'Retry-After':'3'},
+      json:busy?{detail:{code:'IMPORT_CAPACITY_BUSY'}}:{status:'completed',already_imported:false,import_id:1}}));
+    await page.goto('/imports');
+    await page.locator('input[type=file]').setInputFiles({name:'retry.csv',mimeType:'text/csv',buffer:Buffer.from('synthetic fixture')});
+    const submit=page.getByRole('button',{name:'Начать импорт',exact:true});await submit.click();
+    await expect(page.getByRole('alert')).toContainText(message);await expect(submit).toBeEnabled();
+    await expect(page.locator('input[type=file]')).not.toHaveValue('');
+    busy=false;await submit.click();
+    await expect(page.getByText('Файл успешно обработан и зарегистрирован.',{exact:true})).toBeVisible();
+    await expect(page.locator('input[type=file]')).toHaveValue('');
+  });
+}
+
 // Read-only transport fixtures isolate layout from database content and credentials.
 for(const theme of ['dark','light']) for(const [width,height] of [[1024,768],[1280,800],[1440,900],[1920,1080]]) {
   test(`imports user wheel reaches last row ${theme} ${width}x${height}`,async({page})=>{

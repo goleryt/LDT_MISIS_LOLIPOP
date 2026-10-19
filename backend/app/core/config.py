@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     max_upload_bytes: int = Field(default=50 * 1024 * 1024, ge=1024, le=200 * 1024 * 1024)
     max_import_rows: int = Field(default=250000, ge=1)
+    import_max_concurrent: int = Field(default=2, ge=1, le=4)
+    import_retry_after_seconds: int = Field(default=3, ge=1, le=60)
+    import_timeout_seconds: int = Field(default=240, ge=5, le=240)
+    max_xlsx_uncompressed_bytes: int = Field(default=64 * 1024 * 1024, ge=1024, le=200 * 1024 * 1024)
     read_cache_seconds: float = Field(default=2, ge=0, le=5)
     auth_provider: Literal["local", "ldap"] = "local"
     secure_cookies: bool = False

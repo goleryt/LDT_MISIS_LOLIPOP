@@ -1,0 +1,163 @@
+{
+  "format": "xlsx",
+  "offered_concurrent": 10,
+  "mode": "different",
+  "rows_per_file": 10000,
+  "file_bytes": [
+    230016,
+    230019,
+    230015,
+    230011,
+    230014,
+    230015,
+    230015,
+    230017,
+    230016,
+    230014
+  ],
+  "first_attempts": [
+    {
+      "file": "import-load-9-0.xlsx",
+      "status": 200,
+      "seconds": 62.939,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-1.xlsx",
+      "status": 200,
+      "seconds": 27.624,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-2.xlsx",
+      "status": 200,
+      "seconds": 63.273,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-3.xlsx",
+      "status": 200,
+      "seconds": 27.488,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-4.xlsx",
+      "status": 200,
+      "seconds": 27.437,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-5.xlsx",
+      "status": 200,
+      "seconds": 60.372,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-6.xlsx",
+      "status": 200,
+      "seconds": 62.931,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-7.xlsx",
+      "status": 200,
+      "seconds": 61.875,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-8.xlsx",
+      "status": 200,
+      "seconds": 62.405,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-9-9.xlsx",
+      "status": 200,
+      "seconds": 62.333,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    }
+  ],
+  "first_statuses": {
+    "200": 10
+  },
+  "unexpected_error_rate": 0.0,
+  "retries": [],
+  "wall_seconds": 63.35,
+  "processing_seconds": {
+    "p50": 61.88,
+    "p95": 62.94,
+    "max": 63.273
+  },
+  "memory": {
+    "ldt-import-load-web": {
+      "sampled_peak_mib": 553.21,
+      "kernel_peak_mib": 553.21
+    },
+    "ldt-import-load-db": {
+      "sampled_peak_mib": 844.4,
+      "kernel_peak_mib": 849.36
+    }
+  },
+  "cpu": {
+    "ldt-import-load-web": {
+      "sampled_max_pct_one_core": 248.59,
+      "allocation_vcpu": 2
+    },
+    "ldt-import-load-db": {
+      "sampled_max_pct_one_core": 96.25,
+      "allocation_vcpu": 2
+    }
+  },
+  "connections_peak": {
+    "total": 30,
+    "target": 22,
+    "active": 1,
+    "idle_in_transaction": 15
+  },
+  "ordinary_api": {
+    "requests": 195,
+    "failures": 1,
+    "statuses": {
+      "200": 194,
+      "ReadTimeout": 1
+    },
+    "p50_ms": 55.79,
+    "p95_ms": 1253.81,
+    "max_ms": 5019.0
+  },
+  "expected_generated_rows": 100000,
+  "actual_generated_rows": 100000,
+  "rows_match": true,
+  "monitor_samples": 41,
+  "oom_killed": false
+}

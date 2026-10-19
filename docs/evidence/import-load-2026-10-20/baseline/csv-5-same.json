@@ -1,0 +1,109 @@
+{
+  "format": "csv",
+  "offered_concurrent": 5,
+  "mode": "same",
+  "rows_per_file": 10000,
+  "file_bytes": [
+    460123
+  ],
+  "first_attempts": [
+    {
+      "file": "import-load-2-0.csv",
+      "status": 400,
+      "seconds": 0.462,
+      "already_imported": null,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-2-0.csv",
+      "status": 400,
+      "seconds": 0.511,
+      "already_imported": null,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-2-0.csv",
+      "status": 400,
+      "seconds": 0.471,
+      "already_imported": null,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-2-0.csv",
+      "status": 400,
+      "seconds": 0.481,
+      "already_imported": null,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-2-0.csv",
+      "status": 200,
+      "seconds": 6.126,
+      "already_imported": false,
+      "inserted": 10000,
+      "code": null,
+      "retry_after": null
+    }
+  ],
+  "first_statuses": {
+    "400": 4,
+    "200": 1
+  },
+  "unexpected_error_rate": 0.8,
+  "retries": [],
+  "wall_seconds": 6.18,
+  "processing_seconds": {
+    "p50": 0.48,
+    "p95": 0.51,
+    "max": 6.126
+  },
+  "memory": {
+    "ldt-import-load-web": {
+      "sampled_peak_mib": 297.3,
+      "kernel_peak_mib": 297.3
+    },
+    "ldt-import-load-db": {
+      "sampled_peak_mib": 259.25,
+      "kernel_peak_mib": 307.67
+    }
+  },
+  "cpu": {
+    "ldt-import-load-web": {
+      "sampled_max_pct_one_core": 117.6,
+      "allocation_vcpu": 2
+    },
+    "ldt-import-load-db": {
+      "sampled_max_pct_one_core": 46.55,
+      "allocation_vcpu": 2
+    }
+  },
+  "connections_peak": {
+    "total": 16,
+    "target": 8,
+    "active": 2,
+    "idle_in_transaction": 2
+  },
+  "ordinary_api": {
+    "requests": 39,
+    "failures": 0,
+    "statuses": {
+      "200": 39
+    },
+    "p50_ms": 49.36,
+    "p95_ms": 145.06,
+    "max_ms": 293.56
+  },
+  "expected_generated_rows": 10000,
+  "actual_generated_rows": 10000,
+  "rows_match": true,
+  "monitor_samples": 5,
+  "oom_killed": false
+}

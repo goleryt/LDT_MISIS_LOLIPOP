@@ -1,0 +1,198 @@
+{
+  "browser": "Google Chrome 155.0.8059.84",
+  "os": "Windows 11",
+  "target": "isolated local synthetic QA",
+  "config_note": "Initial browser run stopped: QA omitted its CORS_ORIGINS; rerun after local env fix. Product origin enforcement unchanged.",
+  "tests": [
+    {
+      "title": "reviewed map navigation preserves sensor URLs, Back, Forward, refresh and compact focus",
+      "status": "passed",
+      "duration_ms": 8390
+    },
+    {
+      "title": "import backpressure 429 explains retry and retains selected file",
+      "status": "passed",
+      "duration_ms": 1832
+    },
+    {
+      "title": "import backpressure 409 explains retry and retains selected file",
+      "status": "passed",
+      "duration_ms": 2320
+    },
+    {
+      "title": "import backpressure 408 explains retry and retains selected file",
+      "status": "passed",
+      "duration_ms": 2148
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1024x768",
+      "status": "passed",
+      "duration_ms": 3777
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1280x800",
+      "status": "passed",
+      "duration_ms": 3476
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1440x900",
+      "status": "passed",
+      "duration_ms": 3907
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1920x1080",
+      "status": "passed",
+      "duration_ms": 3484
+    },
+    {
+      "title": "imports user wheel reaches last row light 1024x768",
+      "status": "passed",
+      "duration_ms": 4659
+    },
+    {
+      "title": "imports user wheel reaches last row light 1280x800",
+      "status": "passed",
+      "duration_ms": 3606
+    },
+    {
+      "title": "imports user wheel reaches last row light 1440x900",
+      "status": "passed",
+      "duration_ms": 3437
+    },
+    {
+      "title": "imports user wheel reaches last row light 1920x1080",
+      "status": "passed",
+      "duration_ms": 3793
+    },
+    {
+      "title": "import loading and failure remain reachable by wheel and recover",
+      "status": "passed",
+      "duration_ms": 2143
+    },
+    {
+      "title": "late import registry failure cannot overwrite refresh after a successful upload",
+      "status": "passed",
+      "duration_ms": 1826
+    },
+    {
+      "title": "notification read survives an older poll response and recovers from failure",
+      "status": "passed",
+      "duration_ms": 47615
+    },
+    {
+      "title": "stored prediction supports URL, refresh, close and browser Back",
+      "status": "skipped",
+      "duration_ms": 2219
+    },
+    {
+      "title": "desktop visual matrix with actual data and long Russian object names",
+      "status": "skipped",
+      "duration_ms": 481
+    },
+    {
+      "title": "real scenario cards are honest and scrollable dark",
+      "status": "passed",
+      "duration_ms": 6664
+    },
+    {
+      "title": "real scenario cards are honest and scrollable light",
+      "status": "passed",
+      "duration_ms": 6215
+    },
+    {
+      "title": "unavailable scenarios never use rejected raw scores and recover independently",
+      "status": "passed",
+      "duration_ms": 1966
+    },
+    {
+      "title": "real scenario API review creates a separate draft and confirms through existing workflow",
+      "status": "skipped",
+      "duration_ms": 584
+    },
+    {
+      "title": "fully filled request submits the visible values and records creation history",
+      "status": "passed",
+      "duration_ms": 3213
+    },
+    {
+      "title": "read-only role sees why a filled request cannot be submitted",
+      "status": "passed",
+      "duration_ms": 4162
+    },
+    {
+      "title": "fully filled isolated draft confirms with its current version",
+      "status": "skipped",
+      "duration_ms": 532
+    },
+    {
+      "title": "list typography and opaque filters remain readable in both themes",
+      "status": "passed",
+      "duration_ms": 12151
+    },
+    {
+      "title": "map resize, wheel bursts and pinch preserve finite zoom and viewport panels",
+      "status": "passed",
+      "duration_ms": 6970
+    },
+    {
+      "title": "prediction cards preserve stored proxy values and contrast in light and dark",
+      "status": "skipped",
+      "duration_ms": 2586
+    },
+    {
+      "title": "settings stay centered under notification overlay and sidebar icons align",
+      "status": "passed",
+      "duration_ms": 3476
+    },
+    {
+      "title": "requested visual matrix for both themes and reduced desktop",
+      "status": "skipped",
+      "duration_ms": 581
+    },
+    {
+      "title": "report end date follows the local day after Moscow midnight",
+      "status": "passed",
+      "duration_ms": 2659
+    },
+    {
+      "title": "login, map, objects, alarms, events, requests, model unavailable, logout",
+      "status": "passed",
+      "duration_ms": 6498
+    },
+    {
+      "title": "real gas bundle result, advisory and dispatcher decision",
+      "status": "skipped",
+      "duration_ms": 617
+    },
+    {
+      "title": "failed prediction request has visible feedback and recovers",
+      "status": "passed",
+      "duration_ms": 2879
+    },
+    {
+      "title": "JSON import is visible in the registry and duplicate upload is identified",
+      "status": "passed",
+      "duration_ms": 3248
+    },
+    {
+      "title": "mock alarm opens the exact sensor and can be marked read",
+      "status": "skipped",
+      "duration_ms": 706
+    },
+    {
+      "title": "sensor history and preventive request from the map",
+      "status": "passed",
+      "duration_ms": 5621
+    },
+    {
+      "title": "map zoom, pan, tooltip, object click and compact navigation",
+      "status": "passed",
+      "duration_ms": 6099
+    },
+    {
+      "title": "map loading and empty state, recovery and report progress",
+      "status": "passed",
+      "duration_ms": 4310
+    }
+  ]
+}

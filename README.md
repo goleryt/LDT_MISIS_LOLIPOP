@@ -58,6 +58,7 @@ Intrusion и System Failure не запускаются. Качество реа
 - [Контракты данных и интеграций](docs/INTEGRATIONS.md)
 - [Соответствие официальному ТЗ](docs/COMPLIANCE.md)
 - [Актуальная приёмка и доказательства](docs/FINAL_ACCEPTANCE_2026-10.md)
+- [Параллельный импорт: 5/10/20 загрузок, ограничения и повтор](docs/IMPORT_LOAD_ACCEPTANCE_2026-10-20.md)
 - [Подготовка отдельного Railway staging и чистый cloud QA](docs/DEPLOYMENT_RC.md)
 - [Chrome evidence и ручная проверка Яндекс.Браузера](docs/BROWSER_ACCEPTANCE_RC.md)
 - [Инвентаризация материалов финала](docs/FINAL_ARTIFACTS_RC.md)
