@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "./App.css";
 import "./styles/moscow-map.css";
+import "./styles/white-surfaces.css";
 
 import App from "./App";
 import { initTheme } from "./theme";

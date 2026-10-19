@@ -10,6 +10,7 @@ import "../styles/ui-layout.css";
 import "../styles/ui-chrome.css";
 import "../styles/designer-polish.css";
 import "../styles/responsive-polish.css";
+import "../styles/white-surfaces.css";
 
 const NAVIGATION = [
     { to: "/", label: "Карта", icon: Map },
