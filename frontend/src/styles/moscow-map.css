@@ -203,11 +203,22 @@ body {
 
 /* App-wide chrome goes dark + vivid glow, matching the reference sites.
    The Карта page (.map-page, below) is deliberately left out of this and
-   keeps the original light Figma palette — it is not touched. */
-.app-shell,
-.app-workspace {
+   keeps the original light Figma palette — it is not touched.
+
+   The beam gradient lives on .app-shell ONLY: that box is always
+   100vw (see App.css), so its 50% centre never moves. .app-workspace's
+   own width shrinks/grows with the sidebar, so painting the same
+   gradient there too made the beam re-centre on its narrower box and
+   drift sideways whenever the sidebar was expanded/collapsed. Leaving
+   it transparent lets the shell's beam show through, always centred
+   on the full viewport. */
+.app-shell {
     background: var(--page-bg);
     background-attachment: fixed;
+}
+
+.app-workspace {
+    background: transparent;
 }
 
 .sidebar {
