@@ -87,3 +87,46 @@ html .journal-page {
 html .journal-page .journal-filter-popover {
     box-shadow: 0 12px 32px rgb(0 0 0 / 22%) !important;
 }
+
+/* ----- "Liquid glass" (iOS 26 style) on secondary/utility buttons -----
+   ui-readability.css deliberately flattens these to an opaque surface
+   for contrast; that stays the default everywhere else, but on request
+   these specific controls get the same translucent, blurred, specular
+   glass look the panels already use (--design-glass-* tokens), in both
+   themes. Text colour (--ui-ink) is untouched, so contrast is the same
+   as it already is on the glass panels/cards.
+   Scoped to buttons that sit on the dark/beige glow background (Объекты,
+   Тревоги, Заявки, журнал toolbar, …) — the journal TABLE's own filter
+   pills and footer buttons are left out: they sit inside the deliberately
+   flat white panel (see above), where the same white-tinted glass would
+   just look washed out. */
+html .app-shell :is(
+    .secondary-button,
+    .alarms-refresh-button,
+    .objects-refresh-button,
+    .events-refresh-button,
+    .requests-secondary-button,
+    .request-map-button,
+    .object-map-button,
+    .request-status-select,
+    .journal-icon-button
+) {
+    background: var(--design-glass-bg) !important;
+    border-color: var(--design-glass-border) !important;
+    box-shadow: var(--design-glass-shadow) !important;
+    backdrop-filter: var(--design-glass-blur) !important;
+    -webkit-backdrop-filter: var(--design-glass-blur) !important;
+}
+
+html .app-shell :is(
+    .secondary-button,
+    .alarms-refresh-button,
+    .objects-refresh-button,
+    .events-refresh-button,
+    .requests-secondary-button,
+    .request-map-button,
+    .object-map-button,
+    .journal-icon-button
+):hover:not(:disabled) {
+    background: var(--design-glass-bg-strong) !important;
+}
