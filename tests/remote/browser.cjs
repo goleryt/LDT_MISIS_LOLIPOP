@@ -99,10 +99,10 @@ const record=(name,details={})=>{result.checks.push({name,status:'PASS',...detai
    await expect(page.locator('.requests-feedback')).toContainText('Черновик подтверждён');
    await save('request-confirmed');
    await page.getByRole('region',{name:`Проверка заявки ${row.id}`}).getByRole('button',{name:'Закрыть просмотр заявки',exact:true}).click();
-   const requestRow=page.locator('tbody tr').filter({hasText:'REMOTE RC DEMO — проверка рекомендации диспетчером'});
+   const statusControl=page.getByRole('combobox',{name:`Статус заявки ${row.id}`,exact:true});
    for(const status of ['in_progress','completed']){
     const updated=page.waitForResponse(r=>r.request().method()==='PATCH' && r.url().endsWith(`/api/v1/requests/${row.id}`));
-    await requestRow.locator('select').selectOption(status);expect((await updated).status()).toBe(200);
+    await statusControl.selectOption(status);expect((await updated).status()).toBe(200);
    }
    const changes=await get(`/api/v1/requests/${row.id}/history`);expect(changes.map(c=>c.to_status)).toEqual(['draft','draft','new','in_progress','completed']);
    record('stored prediction decision recommendation draft review confirmation completion',{request_id:row.id,history:changes.map(c=>c.to_status)});
