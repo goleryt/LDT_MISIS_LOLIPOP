@@ -87,3 +87,50 @@ html .journal-page {
 html .journal-page .journal-filter-popover {
     box-shadow: 0 12px 32px rgb(0 0 0 / 22%) !important;
 }
+
+/* ----- Отчёты: карточка параметров была узкой (grid без колонок,
+   инпуты auto-width) и прижата к левому краю — центрируем её и даём
+   полям раскладку в строку, как на остальных операционных страницах. */
+html .reports-page .reports-detail {
+    width: min(720px, 100%);
+    max-width: none;
+    margin: 32px auto 0;
+}
+
+html .reports-page .reports-detail fieldset {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    padding: 28px;
+    border: 1px solid var(--ui-border);
+    border-radius: 16px;
+    background: var(--ui-surface);
+    box-shadow: 0 10px 28px rgb(0 0 0 / 12%);
+}
+
+html .reports-page .reports-detail legend {
+    padding: 0 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ui-ink);
+}
+
+html .reports-page .reports-detail :is(input, select) {
+    width: 100%;
+}
+
+html .reports-page .reports-field-wide {
+    grid-column: 1 / -1;
+}
+
+html .reports-page .reports-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+html .reports-page .reports-actions button {
+    flex: 1 1 200px;
+}
