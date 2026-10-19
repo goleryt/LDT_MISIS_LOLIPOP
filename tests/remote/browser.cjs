@@ -139,7 +139,8 @@ const record=(name,details={})=>{result.checks.push({name,status:'PASS',...detai
     if(name==='map')await expect(page.locator('.object-drawer')).toBeVisible();
     if(name==='journal')await page.locator('.journal-filter-trigger').first().click();
     if(['alerts','imports','journal'].includes(name)){
-     const td=page.locator('tbody td').first();await expect(td).toBeVisible();expect(await td.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
+     const td=page.locator('tbody td:not([colspan])').first();await expect(td).toBeVisible();
+     await expect.poll(()=>td.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
     }
     if(name==='settings'){
      const before=await page.locator('.settings-card').boundingBox();await page.locator('.notification-panel summary').click();

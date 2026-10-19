@@ -129,3 +129,37 @@ worker outputs через этот endpoint не выдаются. Ограни�
 Compose ограничивает новый контейнер1.5GiB/2CPU. Для бесплатного Railway безопаснее
 отдельный пакетный worker после подтверждения ресурсов, а не установка новых ML
 библиотек внутрь web или газового процесса. Промышленная ёмкость/RTO не доказаны.
+
+## Публичная синтетическая демонстрация без изменения фактического журнала
+
+Для однократного operator batch предусмотрен
+`scripts.publish_synthetic_scenario_demo`. Это не industrial ETL/scheduler и не
+новый расчёт модели: вызываются прежние invoke_runtime/store_validated и точные
+артефакты поставки. Требуются явные PUBLISH_SYNTHETIC_SCENARIO_DEMO=synthetic-input-only,
+фиксированные Railway project/environment, master=true и production guard=true.
+Обычный startup API/worker этот инструмент не запускает.
+
+Инструмент читает проверенные examples из неизменного ZIP, одинаково переводит
+все даты к последним закрытым суткам и сохраняет810 искусственных входов только
+в snapshot отдельного run с provenance/package/fixture hashes. **events_journal
+не заполняется**. Добавляются только зарезервированный demo object91000000001 и
+демо-каналы91000000100/101; совпадение с чужими ID вызывает отказ, данные не обновляются.
+Названия явно показывают синтетическую демонстрацию; координаты не выдумываются.
+Gas payload для этого изолированного снимка отсутствует: старый газовый результат
+с другой датой не выдаётся за актуальное подтверждение и очередь не изменяется.
+
+Результаты получают фактический issued_at, проверяются общим контрактом и доступны
+через обычный API; никакие scores вручную не присваиваются. Повтор fingerprint
+идемпотентен. Ошибка inference происходит до транзакции новых сущностей; добавление
+каталога/forecasts/audit атомарно. Дочерний процесс не получает DB credentials.
+Batch заканчивается, не создаёт бесконечный scheduler и не заявляет continuous ingest.
+Проверка на восстановленной копии: completed, repeat reused=true, около216MiB
+child peakRSS, старые173864events и3gas predictions сохранены.
+
+В Railway использовать существующий остановленный ml-demo-job только как отдельный
+одноразовый Python3.12 runtime: Dockerfile ml_combined/Dockerfile, start command
+python -m scripts.publish_synthetic_scenario_demo, restart NEVER. Старые deployment
+и газовые артефакты сохраняются, тарификация/платные сервисы не создаются. Перед
+запуском проверить лимит/кредит и complete StageA smoke. Постоянные integration,
+scheduler и offsite-backup этим batch не подменяются. Полный публичный результат
+фиксируется в RAILWAY_RELEASE_ACCEPTANCE_2026-10.md после выполнения.
