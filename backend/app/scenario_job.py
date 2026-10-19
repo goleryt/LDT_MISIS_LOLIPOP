@@ -190,7 +190,9 @@ def run_scenarios(marker_path, *, settings=None, now=None, retry=False):
             with engine.connect().execution_options(isolation_level='REPEATABLE READ') as conn:
                 with Session(bind=conn) as db:
                     snapshot = snapshot_database(db,marker,settings.scenario_max_rows)
-            versions = {'package':PACKAGE_SHA,'registry':digest(REGISTRY),'adapter':'scenario-adapter-v1',
+            compute_script=Path(settings.scenario_compute_script)
+            versions = {'package':PACKAGE_SHA,'registry':digest(REGISTRY),'adapter':'scenario-adapter-v1.1',
+                'compute_sha256':hashlib.sha256(compute_script.read_bytes()).hexdigest() if compute_script.is_file() else 'unavailable',
                 'enabled':configuration(settings)}
             fingerprint = digest({'snapshot':snapshot,'versions':versions})
             with SessionLocal.begin() as db:

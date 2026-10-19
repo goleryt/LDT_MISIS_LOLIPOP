@@ -15,6 +15,13 @@ from pathlib import Path
 HOME = Path(__file__).resolve().parent
 
 
+def daily_json(frame):
+    """Lossless float transport; pandas.to_json defaults to rounding at10 digits."""
+    import pandas as pd
+    records=frame.astype(object).where(pd.notna(frame),None).to_dict(orient='records')
+    return json.dumps(records,ensure_ascii=False,allow_nan=False,default=str)
+
+
 def compute(snapshot, *, issued_at, sensor=True, fire=True):
     sys.path.insert(0, str(HOME / 'vendor'))
     import pandas as pd
@@ -43,7 +50,7 @@ def compute(snapshot, *, issued_at, sensor=True, fire=True):
                     tmp = Path(tmp)
                     daily = raw_to_daily(journal, catalogue)
                     daily['d_cutoff_date'] = daily['d_cutoff_date'].map(str)
-                    (tmp/'daily.json').write_text(daily.to_json(orient='records'), encoding='utf8')
+                    (tmp/'daily.json').write_text(daily_json(daily), encoding='utf8')
                     catalogue.to_csv(tmp/'catalogue.csv', index=False)
                     (tmp/'coverage.json').write_text(json.dumps(snapshot['coverage']))
                     argv = sys.argv

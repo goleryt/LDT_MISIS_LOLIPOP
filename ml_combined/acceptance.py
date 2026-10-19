@@ -10,11 +10,14 @@ from pathlib import Path
 import resource
 import sys
 import time
-from compute import HOME, compute
+from compute import HOME, compute, daily_json
 
 
 def main():
     started=time.monotonic();root=HOME/'vendor'
+    import pandas as pd
+    precision_value=0.12345678901234567
+    assert json.loads(daily_json(pd.DataFrame({'num_mean':[precision_value],'missing':[float('nan')]})))[0]=={'num_mean':precision_value,'missing':None}
     if Path('/app/app/scenario_registry.json').is_file():
         assert json.loads(Path('/app/app/scenario_registry.json').read_text())==json.loads((root/'examples/registry.json').read_text())
     catalogue=list(csv.DictReader((root/'examples/catalogue.csv').open(encoding='utf8')))
@@ -68,6 +71,7 @@ def main():
         'sensor_forecasts':2,'fire_forecasts':1,'score_parity_supplier':True,'row_order_invariant':True,
         'future_observations_excluded':True,'insufficient_history_unavailable':True,
         'independent_flags':True,'invalid_worker_isolated':True,'gas_unchanged':True,
+        'daily_float_transport_lossless':True,
         'elapsed_seconds':round(time.monotonic()-started,2),'peak_rss_mib':round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024,1)}
     output=Path(sys.argv[1]);output.mkdir(parents=True,exist_ok=True)
     (output/'runtime-acceptance.json').write_text(json.dumps(result,indent=2)+'\n')

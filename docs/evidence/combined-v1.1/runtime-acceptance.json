@@ -10,6 +10,7 @@
   "independent_flags": true,
   "invalid_worker_isolated": true,
   "gas_unchanged": true,
-  "elapsed_seconds": 10.57,
-  "peak_rss_mib": 217.1
+  "daily_float_transport_lossless": true,
+  "elapsed_seconds": 10.31,
+  "peak_rss_mib": 218.1
 }
