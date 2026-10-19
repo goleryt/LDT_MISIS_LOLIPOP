@@ -18,7 +18,11 @@ Main, designer branch и опубликованная история не изм
 | 548955a523d46933efea81b6b2c4520834cbb0e4 | Точная передача float/null без округления pandas JSON; fingerprint версии адаптера |
 | 69afb1635577d9dc8d6aeefff6d0edcd71e581eb | Карточки, ручная review/draft, исправление гонки истории импорта, evidence |
 
-Последний test/docs commit следует за ними. Все4jobs реального CI на69afb16
+Заключительный test/docs commit7c4b1cc опубликован; следующий точечный test-only
+блок устраняет выявленную CI-гонку чтения стиля временной строки (5локальных
+повторов PASS, build PASS). Ни приложение, ни требование >=14px не менялись.
+Подробности и неудачный run сохранены в ci-typography-race.json.
+Все4jobs реального CI на69afb16
 **PASS**: backend, frontend, containers, combined-runtime.
 [Run39271828046](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39271828046),
 [точные jobs/steps](evidence/combined-v1.1/github-ci.json).

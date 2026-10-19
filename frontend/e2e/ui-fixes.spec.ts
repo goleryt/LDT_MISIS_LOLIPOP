@@ -110,8 +110,11 @@ test('list typography and opaque filters remain readable in both themes',async({
     await page.evaluate(value=>localStorage.setItem('settings.theme',value),theme);
     for(const path of ['/alarms','/imports','/events']) {
       await page.goto(path);
-      const cell=page.locator('tbody td').first();await expect(cell).toBeVisible();
-      expect(await cell.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
+      // Loading placeholders can be replaced between visibility and style reads.
+      // Reacquire a data cell until its rendered font satisfies the same limit.
+      const cell=page.locator('tbody td:not([colspan])').first();await expect(cell).toBeVisible();
+      await expect.poll(()=>cell.evaluate(el=>parseFloat(getComputedStyle(el).fontSize)),
+        {message:`${path} ${theme}: data rows must render at least 14px`}).toBeGreaterThanOrEqual(14);
       const panel=page.locator('.alarms-panel,.history-card,.journal-board').first();
       expect(await panel.evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
       if(path==='/events') {

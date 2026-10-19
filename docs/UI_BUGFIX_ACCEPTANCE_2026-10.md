@@ -66,3 +66,14 @@ bundle не задаёт отдельного химического контр�
 URL, закрытие, Back/Forward, reload, переход к объекту из компактной панели,
 возврат фокуса по Escape и закрытие меню при расширении viewport.
 Это реальный браузерный тест; Yandex/физический touchpad не проверены.
+
+## Выявленная CI-гонка самого visual test
+
+Run39274329802 на7c4b1cc: backend/frontend/combined-runtime PASS,
+containers остановился на typography test (26PASS/8skips/1failure). Однократное
+чтение fontSize временной строки таблицы вернуло пустое значение/NaN при смене
+loading→data. Тест теперь исключает colspan-placeholder и повторно получает
+актуальную ячейку до прежней проверки >=14px; ограничение не ослаблено.
+Локально5повторов в2workers PASS, build PASS, lint0errors/10warnings.
+Новый navigation test в этом CI прошёл. Полезные тесты не отключались.
+См. `evidence/combined-v1.1/ci-typography-race.json`; новый tip получает отдельный CI.

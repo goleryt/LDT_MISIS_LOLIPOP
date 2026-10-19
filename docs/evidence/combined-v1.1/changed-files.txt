@@ -26,6 +26,7 @@ docs/UI_BUGFIX_ACCEPTANCE_2026-10.md
 docs/evidence/combined-v1.1/backend.xml
 docs/evidence/combined-v1.1/backup-restore.json
 docs/evidence/combined-v1.1/changed-files.txt
+docs/evidence/combined-v1.1/ci-typography-race.json
 docs/evidence/combined-v1.1/docker-summary.json
 docs/evidence/combined-v1.1/frontend-checks.json
 docs/evidence/combined-v1.1/github-ci.json
@@ -90,6 +91,7 @@ docs/evidence/combined-v1.1/ui/wide-1920-map-drawer.png
 frontend/e2e/designer-navigation.spec.ts
 frontend/e2e/import-scroll.spec.ts
 frontend/e2e/scenarios.spec.ts
+frontend/e2e/ui-fixes.spec.ts
 frontend/e2e/workflows.spec.ts
 frontend/src/components/ScenarioForecasts.tsx
 frontend/src/hooks/useMediaQuery.ts
