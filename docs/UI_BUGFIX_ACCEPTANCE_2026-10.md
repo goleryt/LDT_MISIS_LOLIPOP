@@ -58,3 +58,11 @@ bundle не задаёт отдельного химического контр�
 
 Нативный Яндекс, физический touchpad и настоящие browser zoom125/150% остаются
 ручной проверкой. Их не подменяем CSS zoom/device-scale-factor.
+
+## Заключительная проверка навигации
+
+`frontend/e2e/designer-navigation.spec.ts`: Chrome155.0.8059.84, Windows,
+19.10.2026 — **1PASS**, повторно на текущем cloud UI. Проверены object/channel
+URL, закрытие, Back/Forward, reload, переход к объекту из компактной панели,
+возврат фокуса по Escape и закрытие меню при расширении viewport.
+Это реальный браузерный тест; Yandex/физический touchpad не проверены.

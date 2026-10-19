@@ -26,7 +26,7 @@
 | Ручные заявки | PASS | Реальный browser/API, отдельная карточка каждого типа | Явный draft→new, idempotent request_id, история/аудит | Автоматических заявок/критических тревог нет |
 | Отчёты/импорт/старый UI | PASS в проверенных сценариях | Chrome request/import/history/report flows, direct PDF/XLSX | PDF1страница с кириллицей, XLSX открывается; основной Chrome suite | Новых модельных метрик в factual reports нет |
 | Resource sample | PASS как измерение | Ограниченный контейнер1536MiB/2CPU,810rawrows | Около218MiB peakRSS;7–11сек для acceptance с повторными моделями | Не capacity/RTO полного12-летнего архива |
-| GitHub CI | См. отдельный CI evidence | Новый job combined-runtime + прежние backend/frontend/containers | UI commit d3e0c24: [run39266296163](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39266296163)PASS | Новый integration commit проверяется отдельным run |
+| GitHub CI | PASS | Полный код69afb16: backend/frontend/containers/combined-runtime | Все4jobs success; [run39271828046](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39271828046), `github-ci.json` | Итоговый documentation/test-only tip проверяется отдельно; Railway не обновлён |
 | Railway новые модели | NOT TESTED / NOT ENABLED | `SCENARIO_ENABLED=false`, production требует отдельного разрешения конфигурации | Не менялся; опубликованная версия предыдущего этапа14aad86 | Это намеренная граница, не завершённый production rollout |
 | Native Yandex / physical touchpad | NOT TESTED | Предыдущий manual browser checklist | Нет нативного запуска/физического ввода | Synthetic wheel/pinch не заменяет физический тест |
 

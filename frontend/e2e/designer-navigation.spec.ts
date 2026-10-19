@@ -1,0 +1,30 @@
+import {test,expect} from '@playwright/test';
+
+test('reviewed map navigation preserves sensor URLs, Back, Forward, refresh and compact focus',async({page})=>{
+  await page.setViewportSize({width:1280,height:800});
+  await page.goto('/?objectId=1&channelId=1');
+  await page.getByPlaceholder('Логин',{exact:true}).fill(process.env.TEST_USERNAME??'dispatcher');
+  await page.getByLabel('Пароль',{exact:true}).fill(process.env.TEST_PASSWORD??'');
+  await page.getByRole('button',{name:'Войти',exact:true}).click();
+  const drawer=page.locator('.object-drawer'),sensor=page.getByRole('complementary',{name:'Подробности датчика'});
+  await expect(drawer).toBeVisible();await expect(sensor).toBeVisible();
+  await page.getByRole('button',{name:'Закрыть датчик',exact:true}).click();
+  await expect(page).not.toHaveURL(/channelId=/);await expect(sensor).not.toBeVisible();
+  await page.goBack();await expect(page).toHaveURL(/channelId=1/);await expect(sensor).toBeVisible();
+  await page.locator('.drawer-close').click();await expect(drawer).not.toBeVisible();await expect(sensor).not.toBeVisible();
+  await expect(page).not.toHaveURL(/objectId=/);
+  await page.goBack();await expect(drawer).toBeVisible();await expect(sensor).toBeVisible();
+  await page.goForward();await expect(drawer).not.toBeVisible();
+  await page.goBack();await page.reload();await expect(sensor).toBeVisible();
+  await page.setViewportSize({width:800,height:800});
+  await expect(drawer).not.toBeVisible();await expect(sensor).toBeVisible();
+  await page.getByRole('button',{name:'Назад к объекту',exact:true}).click();
+  await expect(drawer).toBeVisible();await expect(drawer).toBeFocused();
+  await page.getByRole('button',{name:'Открыть меню',exact:true}).click();
+  const menu=page.getByRole('dialog',{name:'Главное меню'});await expect(menu).toBeVisible();
+  await page.keyboard.press('Escape');await expect(menu).not.toBeVisible();
+  await expect(page.getByRole('button',{name:'Открыть меню',exact:true})).toBeFocused();
+  await page.getByRole('button',{name:'Открыть меню',exact:true}).click();
+  await page.setViewportSize({width:1280,height:800});await expect(menu).not.toBeVisible();
+  await expect(drawer).toBeVisible();
+});

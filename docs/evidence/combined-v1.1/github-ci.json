@@ -1,0 +1,297 @@
+{
+  "sha": "69afb1635577d9dc8d6aeefff6d0edcd71e581eb",
+  "run_id": 39271828046,
+  "url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39271828046",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "backend",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run pip install -r requirements-dev.txt",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run alembic upgrade head",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run alembic check",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run pytest -q --junitxml=../test-results/backend.xml",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run alembic downgrade 7bb10cf49ac2 && alembic upgrade head && alembic check",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "containers",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run cp backend/.env.example backend/.env",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run pip install httpx==0.28.1",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build isolated ML runtime",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python tests/smoke.py",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Standalone cloud web packaging and readiness",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Twenty paced dispatcher sessions",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run cd frontend",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check telemetry delivery without ML",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Real frozen gas runtime contract on labelled synthetic inputs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prediction decision to editable request draft",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check backup and restore",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Save logs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run docker rm -f ldt-cloud-ci || true",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "combined-runtime",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build independent Python 3.12 scenario runtime",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Frozen real inference and evidence validation (no network or secrets)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}
