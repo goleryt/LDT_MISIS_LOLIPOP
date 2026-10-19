@@ -1,5 +1,13 @@
 # Финальная приёмка RC — локальный baseline и удалённая проверка 19.10.2026
 
+> Новое дополнение19.10: [дизайнерская ветка](DESIGN_BRANCH_REVIEW_2026-10.md),
+> [прокрутка импорта/UI](UI_BUGFIX_ACCEPTANCE_2026-10.md),
+> [техническая приёмка новых сценарных модулей](ML_COMBINED_ACCEPTANCE_RU.md).
+> Свежий локальный backend129PASS, новый head d01901. Публичный Railway остаётся
+> на предыдущей версии14aad86; новые сценарные модули production не включены.
+> Remote результаты ниже относятся к предыдущей опубликованной версии и не
+> доказывают remote-приёмку COMBINED_EVIDENCE_V1_1. Реальное качество аварий не установлено.
+
 > Актуальный remote результат: [REMOTE_RC_ACCEPTANCE_2026-10-19](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
 > GitHub Actions PASS на `ee16251`, RC опубликован на существующем Railway, миграция
 > `d01602`, Chrome/auth/RBAC/заявки/импорт/отчёты PASS. Integration worker, scheduler

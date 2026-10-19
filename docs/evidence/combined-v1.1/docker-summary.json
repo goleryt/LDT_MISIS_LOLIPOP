@@ -1,0 +1,23 @@
+{
+  "isolated_new_database": true,
+  "production_migration": false,
+  "clean_schema_head": "d01901",
+  "rollback_verified_in_disposable_ldt_test": "d01901 -> d01602 -> d01901; schema check PASS",
+  "containers": {
+    "ldt-combined-acceptance-web": {
+      "image": "sha256:c00459da75d991f0dcd39f08d0426371587dd4c1165b9a18576ed22bcd2a4d5c",
+      "state": "running",
+      "health": "healthy"
+    },
+    "ldt-combined-acceptance-worker": {
+      "image": "sha256:be8e97769c3eeaa8610d445cfea7455a32607f4c16a95af8aec08b768467f5d0",
+      "state": "running",
+      "health": null
+    },
+    "ldt-combined-acceptance-db": {
+      "image": "sha256:cf78e76683b9ca8c5733cbbdce6c9262b45b6767934dd0a95e671f9a0fc20685",
+      "state": "running",
+      "health": null
+    }
+  }
+}

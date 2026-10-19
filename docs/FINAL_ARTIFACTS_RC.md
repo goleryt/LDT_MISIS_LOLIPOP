@@ -2,6 +2,13 @@
 
 Состояние 19.10.2026, Europe/Moscow. Наличие документа не заменяет evidence.
 
+Дополнение к RC: [team UI review](DESIGN_BRANCH_REVIEW_2026-10.md),
+[UI/import acceptance](UI_BUGFIX_ACCEPTANCE_2026-10.md),
+[scenario integration](ML_COMBINED_INTEGRATION_RU.md),
+[scenario acceptance](ML_COMBINED_ACCEPTANCE_RU.md). Новые модули проверены в
+изолированном QA; публичный Railway пока остаётся14aad86, flags новых моделей
+не включались. Актуальность ветки не означает актуальность публичного deployment.
+
 | Артефакт | Статус / наличие | Действие перед сдачей |
 |---|---|---|
 | Git repository / RC branch | READY — [repository](https://github.com/goleryt/LDT_MISIS_LOLIPOP/tree/release/final-rc), branch опубликована | Использовать утверждённый RC SHA; main не объединялся |

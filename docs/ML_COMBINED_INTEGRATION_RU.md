@@ -68,6 +68,9 @@ snapshot_version и создаёт ревизию. Cooldown3суток прим�
 
 Дочерний `compute.py` получает только JSON-файлы и очищенное окружение без DB/LDAP/
 Railway credentials. Есть180сек таймаут, отдельный heartbeat и sanitized error codes.
+Передача дневных фактов сохраняет точные finite float и null, без стандартного
+округления pandas.to_json до10 знаков. Исправление transport `548955a` не меняет
+формулы или артефакты модели; fingerprint включает adapter v1.1 и SHA compute.py.
 Используются доставленные `score_journal`, fire wrapper и `combine_evidence`
 (`evidence-combination-v1.1`), без усреднения оценок. Газовый payload передаётся
 неизменным из существующего MlRun/MlScore, с фактическим finished_at; дата выпуска
@@ -122,7 +125,7 @@ worker outputs через этот endpoint не выдаются. Ограни�
 Новый worker не пишет реальные тревоги, Notification, газовую очередь или показания.
 Диагностика: admin `/api/v1/operations/status`, `scenario_worker`, `last_scenario_job`.
 
-На810 исходных строках runtime занял около217MiB RSS; это не замер полного архива.
+На810 исходных строках runtime занял около218MiB RSS; это не замер полного архива.
 Compose ограничивает новый контейнер1.5GiB/2CPU. Для бесплатного Railway безопаснее
 отдельный пакетный worker после подтверждения ресурсов, а не установка новых ML
 библиотек внутрь web или газового процесса. Промышленная ёмкость/RTO не доказаны.

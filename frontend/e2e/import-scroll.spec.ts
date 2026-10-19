@@ -28,3 +28,47 @@ for(const theme of ['dark','light']) for(const [width,height] of [[1024,768],[12
     if(process.env.UI_SCREENSHOT_DIR) await page.screenshot({path:`${process.env.UI_SCREENSHOT_DIR}/imports-scroll-${theme}-${width}.png`});
   });
 }
+
+test('import loading and failure remain reachable by wheel and recover',async({page})=>{
+  await page.setViewportSize({width:1024,height:768});
+  await page.route('**/api/v1/auth/me',r=>r.fulfill({json:{username:'layout-review',role:'dispatcher',csrf_token:'layout-fixture'}}));
+  await page.route('**/api/v1/notifications?*',r=>r.fulfill({json:[]}));
+  let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>{release=resolve;});let fail=true;
+  await page.route('**/api/v1/imports',async r=>{
+    if(fail){await pending;await r.fulfill({status:500,json:{detail:'deliberately unavailable transport'}});}
+    else await r.fulfill({json:[]});
+  });
+  await page.goto('/imports');
+  await expect(page.locator('.imports-page')).toBeVisible();
+  await page.mouse.move(900,650);await page.mouse.wheel(0,1300);
+  await expect(page.getByText('Загрузка истории...',{exact:true})).toBeInViewport();
+  release();
+  const notice=page.locator('.notice.error');await expect(notice).toBeInViewport();
+  await expect(notice).not.toContainText('deliberately unavailable transport');
+  fail=false;
+  await page.mouse.wheel(0,-3000);
+  await page.getByRole('button',{name:'Обновить',exact:true}).click();
+  await page.mouse.wheel(0,1500);
+  await expect(page.getByText('Импортов пока нет',{exact:true})).toBeInViewport();
+});
+
+test('late import registry failure cannot overwrite refresh after a successful upload',async({page})=>{
+  await page.route('**/api/v1/auth/me',r=>r.fulfill({json:{username:'layout-review',role:'dispatcher',csrf_token:'layout-fixture'}}));
+  await page.route('**/api/v1/notifications?*',r=>r.fulfill({json:[]}));
+  let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>{release=resolve;});let uploaded=false;
+  await page.route('**/api/v1/imports',async r=>{
+    if(!uploaded){await pending;await r.fulfill({status:500,json:{detail:'old request failed'}});}
+    else await r.fulfill({json:[]});
+  });
+  await page.route('**/api/v1/imports/events?*',r=>{uploaded=true;return r.fulfill({json:{import_id:1,status:'completed',already_imported:true,file_sha256:'0'.repeat(64)}});});
+  await page.goto('/imports');
+  await page.locator('input[type=file]').setInputFiles({name:'layout-only.json',mimeType:'application/json',buffer:Buffer.from('[]')});
+  await page.getByRole('button',{name:'Начать импорт',exact:true}).click();
+  await expect(page.getByText('Импортов пока нет',{exact:true})).toBeVisible();
+  const oldResponse=page.waitForResponse(r=>r.url().endsWith('/api/v1/imports')&&r.status()===500);
+  release();
+  await (await oldResponse).finished();
+  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>resolve())));
+  await expect(page.locator('.notice.success')).toContainText('Этот файл уже был успешно импортирован ранее.');
+  await expect(page.locator('.notice.error')).toHaveCount(0);
+});

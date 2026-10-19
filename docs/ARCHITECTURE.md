@@ -5,6 +5,13 @@
 
 ## Процессы
 
+Дополнение19.10: [COMBINED_EVIDENCE_V1_1](ML_COMBINED_INTEGRATION_RU.md)
+добавляет отдельный opt-in Python3.12 scenario worker и таблицы
+`scenario_runs/scenario_forecasts` (head d01901). Старый газовый контур не изменён.
+Sensor/Fire используются только как экспериментальные синтетические оценки с
+ручными решениями; по умолчанию master flag выключен. На Railway они не включались.
+Сценарные API-карточки читают валидированные forecasts, не raw worker outputs.
+
 Браузер → nginx → React/TypeScript SPA и FastAPI → PostgreSQL.
 Локальный Compose использует PostgreSQL16; существующий Railway — PostgreSQL18.
 API: Python 3.14; отдельный ML-runtime: Python 3.12.

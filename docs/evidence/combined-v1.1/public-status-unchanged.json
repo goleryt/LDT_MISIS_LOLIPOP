@@ -1,0 +1,22 @@
+{
+  "new_deployment_performed": false,
+  "experimental_production_enablement": false,
+  "last_verified_deployed_commit_prior_stage": "14aad86414826c59857cbc2766d10f48a0b43ba4",
+  "https_probe": [
+    {
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html"
+    },
+    {
+      "path": "/health",
+      "status": 200,
+      "content_type": "application/json"
+    },
+    {
+      "path": "/ready",
+      "status": 200,
+      "content_type": "application/json"
+    }
+  ]
+}

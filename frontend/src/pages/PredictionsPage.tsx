@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { canWrite, jsonRequest } from "../api/session";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import ScenarioForecasts from "../components/ScenarioForecasts";
 type Prediction = { id: number; object_id: number; channel_id?: number | null; incident_type: string; probability: number;
   horizon_hours: number; calculated_at: string; model_version: string; recommendation: string | null;
   ml_metadata?: { window_start: string; window_end_exclusive: string; as_of_date: string; reference_at: string;
@@ -9,7 +10,7 @@ type Prediction = { id: number; object_id: number; channel_id?: number | null; i
   status: string; revision: number; actual_outcome: string | null; request_id: number | null };
 type Decision = { actor: string; decision: string; reason: string; notes: string | null; actual_outcome: string | null; created_at: string };
 // Тип из ответа ML-пакета — наблюдаемое событие в журнале, а не пожар.
-const TYPE_LABELS: Record<string, string> = { gas_threshold_cross: "Пересечение газом 1 % CH4 (proxy)" };
+const TYPE_LABELS: Record<string, string> = { gas_threshold_cross: "Пересечение газового порога 1 % (proxy)" };
 const STATUS_LABELS: Record<string, string> = { new: "Новый", monitoring: "Мониторинг", confirmed: "Подтверждено", false_alarm: "Ложное срабатывание", dispatch: "Выезд бригады", closed: "Закрыт", pending: "Ожидает", running: "Выполняется", completed: "Завершён", failed: "Ошибка" };
 function scoreLabel(value: number) { return typeof value === "number" && Number.isFinite(value) ? `${(value * 100).toFixed(1)}%` : "Нет оценки"; }
 function moscowTime(value: string) {
@@ -169,5 +170,6 @@ export default function PredictionsPage() {
         <button onClick={save}>Сохранить решение</button>
       </fieldset><section className="prediction-card"><h3>История решений</h3>{history.length ? history.map((entry, index) => <p key={index}>{moscowTime(entry.created_at)} · {entry.actor} · {STATUS_LABELS[entry.decision] ?? entry.decision} · {reasons[entry.reason] ?? entry.reason} · {entry.notes} · {entry.actual_outcome}</p>) : <p>Решений пока нет.</p>}</section>
     </article>}
+    <ScenarioForecasts />
   </section>;
 }

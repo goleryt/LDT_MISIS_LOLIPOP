@@ -60,4 +60,20 @@
 .sidebar-collapsed .nav-item { grid-template-columns: 1fr; place-items: center; }
 .sidebar-footer { border-top: 1px solid var(--page-line); padding-top: 16px; gap: 8px; }
 .sidebar .navigation { min-height: 0; overflow-y: auto; }
+.scenario-section { margin-top: 32px; border-top: 1px solid var(--ui-border); padding-top: 20px; }
+.scenario-controls { display: flex; flex-wrap: wrap; gap: 16px; margin-block: 20px; }
+.scenario-controls label { display: grid; gap: 6px; min-width: 0; max-width: 100%; }
+.scenario-controls select { max-width: 100%; }
+.scenario-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,350px),1fr)); gap: 20px; }
+.scenario-group { min-width: 0; }
+.scenario-forecast-card { background: var(--ui-surface); color: var(--ui-ink); border: 1px solid var(--ui-border); border-radius: 14px; padding: 20px; margin-block: 16px; overflow-wrap: anywhere; box-shadow: 0 6px 18px #0002; }
+.scenario-forecast-card h4 { margin: 0 0 12px; font-size: 18px; }
+.scenario-forecast-card p { line-height: 1.55; }
+.scenario-badge { display: inline-block; border: 1px solid var(--ui-border); border-radius: 8px; padding: 4px 8px; background: var(--ui-elevated); font-size: 13px; }
+.scenario-score { font-size: 20px; font-weight: 700; }
+.scenario-historical,.scenario-forecast-card small { color: var(--ui-muted); }
+.scenario-forecast-card fieldset { min-width: 0; padding: 12px; border: 1px solid var(--ui-border); margin-block: 16px; display: grid; gap: 12px; }
+.scenario-forecast-card fieldset label { display: grid; gap: 6px; }
+.scenario-forecast-card textarea { min-height: 88px; width: 100%; resize: vertical; }
+.scenario-quality { margin-block: 20px; }
 @container (max-width: 1000px) { .prediction-summary { grid-template-columns: repeat(2,minmax(0,1fr)); } }

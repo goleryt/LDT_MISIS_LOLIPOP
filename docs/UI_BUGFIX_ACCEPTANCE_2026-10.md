@@ -25,7 +25,7 @@ scrollTop exceeds500. It repeats after Settings→Imports navigation.
 | Compact map/navigation after adapting test to the designer's menu button | PASS | Same production UI, test opens menu and checks it closes after navigation |
 | Desktop visual matrix,7 pages,both themes,1280/1440 plus reduced map/sidebar | PASS | `docs/evidence/combined-v1.1/ui/matrix.json` and PNGs |
 | TypeScript/Vite | PASS | `npm run build` |
-| Lint |0errors,9warnings | `npm run lint`; effect warnings retained, no warning suppression |
+| Lint |0errors,10warnings | `npm run lint`; existing effect warnings retained, no warning suppression |
 | Native Yandex / physical touchpad | NOT TESTED | Native input/browser unavailable in this environment |
 
 The screenshot matrix initially encountered an artifact-directory collision when
@@ -37,3 +37,24 @@ Screenshots contain isolated synthetic QA data. No credentials/cookies/traces
 are committed. The old gas output, chart/history, notification polling, requests,
 report date handling, opaque filters and native map wheel behavior remain intact.
 Viewport tests do not establish native browser zoom/touchpad acceptance.
+
+## Дополнительный импорт и новые карточки
+
+В этом же проходе подтверждена гонка загрузок истории импорта: старый ответ мог
+перекрыть результат refresh после завершения upload. Добавлен счётчик поколений
+запроса и cleanup при уходе; только последний load меняет состояние. Refresh
+показывает loading и не допускает повторного нажатия. Сообщения получили
+доступные роли status/alert. Негативный тест ждёт фактическое завершение старого
+HTTP500 и следующий animation frame; ошибка старого запроса не появляется.
+
+Свежий focused suite:13PASS (10import wheel/loading/error/race и3scenario
+dark/light/unavailable). Новые карточки получают реальные recorded scores
+поставленных моделей на синтетических входах; raw JSON не показывается.
+Реальный browser flow отдельно подтвердил scenario→review→draft→new.
+Основной Chrome suite на новом изолированном cloud:26PASS/5optional skips;
+после него отдельно gas→draft и mock alarm→sensor2PASS.
+Семантика газового названия уточнена до общего газового порога1%: проверенный
+bundle не задаёт отдельного химического контракта H₂/CH4, математика не менялась.
+
+Нативный Яндекс, физический touchpad и настоящие browser zoom125/150% остаются
+ручной проверкой. Их не подменяем CSS zoom/device-scale-factor.

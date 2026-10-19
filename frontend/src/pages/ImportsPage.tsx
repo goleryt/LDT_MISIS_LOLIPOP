@@ -101,29 +101,33 @@ function ImportsPage() {
 
     const [message, setMessage] =
         useState<string | null>(null);
+    const loadVersion = useRef(0);
 
 
     async function loadImports() {
+        const version = ++loadVersion.current;
         try {
+            setLoading(true);
             setError(null);
 
             const data = await getImports();
 
-            setImports(data);
+            if (version === loadVersion.current) setImports(data);
         } catch (error) {
-            setError(
+            if (version === loadVersion.current) setError(
                 error instanceof Error
                     ? error.message
                     : "Не удалось получить историю импортов",
             );
         } finally {
-            setLoading(false);
+            if (version === loadVersion.current) setLoading(false);
         }
     }
 
 
     useEffect(() => {
         void loadImports();
+        return () => { loadVersion.current += 1; };
     }, []);
 
 
@@ -245,6 +249,7 @@ function ImportsPage() {
                 <button
                     type="button"
                     className="secondary-button"
+                    disabled={loading}
                     onClick={() =>
                         void loadImports()
                     }
@@ -451,14 +456,14 @@ function ImportsPage() {
                 </div>
 
                 {message && (
-                    <div className="notice success">
+                    <div className="notice success" role="status">
                         <CheckCircle2 size={18} />
                         {message}
                     </div>
                 )}
 
                 {error && (
-                    <div className="notice error">
+                    <div className="notice error" role="alert">
                         <TriangleAlert size={18} />
                         {error}
                     </div>
@@ -478,7 +483,7 @@ function ImportsPage() {
                 </div>
 
                 {loading ? (
-                    <div className="history-empty">
+                    <div className="history-empty" role="status">
                         Загрузка истории...
                     </div>
                 ) : imports.length === 0 ? (
