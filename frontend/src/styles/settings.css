@@ -17,6 +17,14 @@
     body:has(.sidebar-collapsed) .settings-page { left: 72px; }
 }
 
+@media (max-width: 800px) {
+    .settings-page, body:has(.sidebar-collapsed) .settings-page {
+        top: 92px;
+        left: 0;
+        padding: 16px;
+    }
+}
+
 .settings-card {
     width: min(520px, 100%);
     margin: auto;
