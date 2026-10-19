@@ -1,0 +1,174 @@
+{
+  "date": "2026-10-19T23:10:36.346677+00:00",
+  "commit": "237ff93d01fdcbfae7b58538946d0f02c267a369",
+  "railway_stress": false,
+  "roles": {
+    "admin": {
+      "login": 200,
+      "allowed_read": 200,
+      "admin_endpoint": 200,
+      "missing_csrf": 403,
+      "cookie_secure": true,
+      "cookie_httponly": true,
+      "cookie_samesite": "strict",
+      "logout_invalidation": 401
+    },
+    "dispatcher": {
+      "login": 200,
+      "allowed_read": 200,
+      "admin_endpoint": 403,
+      "missing_csrf": 403,
+      "cookie_secure": true,
+      "cookie_httponly": true,
+      "cookie_samesite": "strict",
+      "logout_invalidation": 401
+    },
+    "manager": {
+      "login": 200,
+      "allowed_read": 200,
+      "admin_endpoint": 403,
+      "missing_csrf": 403,
+      "cookie_secure": true,
+      "cookie_httponly": true,
+      "cookie_samesite": "strict",
+      "forbidden_import": 403,
+      "logout_invalidation": 401
+    },
+    "technician": {
+      "login": 200,
+      "allowed_read": 200,
+      "admin_endpoint": 403,
+      "missing_csrf": 403,
+      "cookie_secure": true,
+      "cookie_httponly": true,
+      "cookie_samesite": "strict",
+      "forbidden_import": 403,
+      "logout_invalidation": 401
+    },
+    "analyst": {
+      "login": 200,
+      "allowed_read": 200,
+      "admin_endpoint": 403,
+      "missing_csrf": 403,
+      "cookie_secure": true,
+      "cookie_httponly": true,
+      "cookie_samesite": "strict",
+      "forbidden_import": 403,
+      "logout_invalidation": 401
+    }
+  },
+  "deployment": {
+    "id": "e932826d-91ef-4ee1-acf8-6f148a53ceb7",
+    "status": "SUCCESS",
+    "createdAt": "2026-10-19T23:08:56.383Z"
+  },
+  "https": {
+    "/": 200,
+    "/health": 200,
+    "/ready": 200
+  },
+  "anonymous": 401,
+  "http_redirect": {
+    "status": 301,
+    "location": "https://ldt-demo-production.up.railway.app/"
+  },
+  "tls": {
+    "version": "TLSv1.3",
+    "verified": true,
+    "not_after": "Dec 26 03:01:42 2026 GMT"
+  },
+  "operations": {
+    "api": "ok",
+    "database": "connected",
+    "application": {
+      "version": "0.2.0",
+      "commit": "237ff93d01fdcbfae7b58538946d0f02c267a369"
+    },
+    "workers": {
+      "integrations": {
+        "state": "not_observed"
+      },
+      "ml_scheduler": {
+        "state": "not_observed"
+      },
+      "scenario_worker": {
+        "state": "completed",
+        "last_seen": "2026-10-19T15:53:50.589654+00:00",
+        "last_success": "2026-10-19T15:53:50.589654+00:00",
+        "error_code": null
+      }
+    },
+    "last_scenario_job": {
+      "id": 1,
+      "state": "completed",
+      "finished_at": "2026-10-19T15:53:50.576302+00:00",
+      "error_code": null
+    },
+    "last_import": {
+      "id": 6,
+      "status": "completed",
+      "completed_at": "2026-10-19T15:45:37.726426+00:00"
+    },
+    "last_prediction_job": {
+      "id": 1,
+      "state": "completed",
+      "finished_at": "2026-09-29T11:09:33.488286+00:00",
+      "error_code": null
+    },
+    "integration_sources": [],
+    "integration_failures": 0,
+    "backup": {
+      "state": "not_configured",
+      "last_success": null
+    },
+    "pool": {
+      "size": 5,
+      "checked_out": 1,
+      "overflow": -4
+    }
+  },
+  "gas_prediction_count": 3,
+  "scenario": {
+    "run_id": 1,
+    "forecasts": 3,
+    "configuration": {
+      "enabled": true,
+      "sensor_failure": true,
+      "fire": true,
+      "flood": false,
+      "intrusion": false,
+      "system_failure": false,
+      "operational_ready": false,
+      "automated_action_allowed": false
+    }
+  },
+  "imports": {
+    "scope": "sequential one-row labelled demo, no concurrency/stress",
+    "csv_status": 200,
+    "csv_inserted": 1,
+    "csv_duplicate_already_imported": true,
+    "xlsx_status": 200,
+    "xlsx_duplicate_inserted": 0,
+    "registry_ids": [
+      7,
+      8
+    ]
+  },
+  "gas_mathematical_output_unchanged": true,
+  "runtime": {
+    "import_max_concurrent": 2,
+    "retry_after_seconds": 3,
+    "timeout_seconds": 240,
+    "xlsx_uncompressed_limit": 67108864,
+    "limits_source_sha256": "bc5147c417723cc2c06b8e329c77d46c5ba8b39f7d9f4e4dbcc29057b3b3c1f7",
+    "revision": "d01901",
+    "gas_records_sha256": "aee92bc6dd826d83850d553ef6fcdeab78bb3a2777a20d17c0e50f00ea4a127d",
+    "events_journal": 173866,
+    "ml_runs": 1,
+    "ml_scores": 3,
+    "predictions": 3,
+    "scenario_runs": 1,
+    "scenario_forecasts": 3
+  },
+  "status": "PASS"
+}

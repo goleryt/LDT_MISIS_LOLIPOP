@@ -87,7 +87,10 @@ Partial/недостаточная история автоматически н�
 включены (`SCENARIO_SENSOR_ENABLED=true`, `SCENARIO_FIRE_ENABLED=true`); остальные
 головы недоступны. `operational_ready=false`, `automated_action_allowed=false`.
 Для production дополнительно требуется `SCENARIO_ALLOW_PRODUCTION=true` после
-отдельной приёмки. На существующем Railway новые flags не включались.
+отдельной приёмки. На существующем Railway flags явно включены после Stage A;
+конечный batch выполнил реальный inference на помеченном synthetic snapshot,
+не добавляя операционные события и не меняя старый gas queue.
+[Публичные результаты и ограничения](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
 
 Изолированный demo: к `infra/compose.yaml` явно добавить
 `infra/compose.scenarios.yaml`, профиль `scenarios-demo`, использовать отдельную

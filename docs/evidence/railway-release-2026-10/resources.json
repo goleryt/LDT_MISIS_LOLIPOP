@@ -1,0 +1,44 @@
+{
+  "environment": "production",
+  "project": "fortunate-communication",
+  "services": [
+    {
+      "cpu": {
+        "current": 0.07304630000000001,
+        "limit": 2.0,
+        "unit": "vCPU",
+        "utilization_pct": 3.7
+      },
+      "id": "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f",
+      "memory": {
+        "current_mb": 297.904635904,
+        "limit_mb": 1023.99737856,
+        "utilization_pct": 29.1
+      },
+      "name": "ldt-demo"
+    },
+    {
+      "cpu": {
+        "current": 0.016010333333333335,
+        "limit": 2.0,
+        "unit": "vCPU",
+        "utilization_pct": 0.8
+      },
+      "id": "7eee6a09-108b-4ea6-ad4a-efe3b5fc93ef",
+      "memory": {
+        "current_mb": 183.492411392,
+        "limit_mb": 1023.99737856,
+        "utilization_pct": 17.9
+      },
+      "name": "Postgres"
+    },
+    {
+      "id": "5dbc29ab-fc53-4845-92a9-2cbb2dbe40ca",
+      "name": "ml-demo-job"
+    }
+  ],
+  "window": {
+    "since": "2026-10-19T15:28:47.522506500+00:00",
+    "until": "2026-10-19T15:58:49.394633700+00:00"
+  }
+}

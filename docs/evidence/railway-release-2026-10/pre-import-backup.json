@@ -1,0 +1,11 @@
+{
+  "created_at": "2026-10-19T22:54:35.005839+00:00",
+  "sha256": "19aacf13394ff7281d9dbc875dba7f933a0128b2f249067f51f5838055965671",
+  "size_bytes": 10065652,
+  "download_checksum_verified": true,
+  "persistent_volume_copy": "/var/lib/postgresql/data/ldt-demo-backups/rc-pre-import-20261020.dump",
+  "workstation_copy": "outside Git",
+  "schema_changes_in_import_fix": false,
+  "prior_d01901_restore_evidence": "post-backup.json; new PG18 DB restore and API smoke PASS",
+  "note": "Fresh safety backup only; no restore onto Railway, no stress traffic"
+}

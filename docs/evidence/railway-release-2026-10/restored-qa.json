@@ -1,0 +1,20 @@
+{
+  "ldt-railway-release-qaweb": {
+    "ready": "PASS",
+    "login": "PASS",
+    "predictions": "PASS",
+    "revision": "d01901",
+    "events": 173864,
+    "channels": 11488,
+    "gas_predictions": 3
+  },
+  "ldt-railway-release-rollbackweb": {
+    "ready": "PASS",
+    "login": "PASS",
+    "predictions": "PASS",
+    "revision": "d01901",
+    "events": 173864,
+    "channels": 11488,
+    "gas_predictions": 3
+  }
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "id": 39280306517,
+    "name": "Validate service",
+    "head_sha": "8cf457387a6d343fb1de9cbe538a9403a6b5fcb3",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39280306517",
+    "updated_at": "2026-10-19T16:14:54Z",
+    "jobs": [
+      {
+        "name": "containers",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "frontend",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "combined-runtime",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "backend",
+        "conclusion": "success",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "id": 39280532451,
+    "name": "Validate service",
+    "head_sha": "ae43e330732edc7d6f5d7619fada0498fd9ba5b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39280532451",
+    "updated_at": "2026-10-19T16:16:14Z",
+    "jobs": [
+      {
+        "name": "backend",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "frontend",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "combined-runtime",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "containers",
+        "conclusion": "success",
+        "status": "completed"
+      }
+    ]
+  }
+]

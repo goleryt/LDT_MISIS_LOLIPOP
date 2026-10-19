@@ -1,0 +1,454 @@
+{
+  "id": 39338321060,
+  "head_sha": "237ff93d01fdcbfae7b58538946d0f02c267a369",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39338321060",
+  "updated_at": "2026-10-19T23:02:10Z",
+  "jobs": [
+    {
+      "name": "combined-runtime",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T22:56:07Z",
+          "completed_at": "2026-10-19T22:56:08Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T22:56:08Z",
+          "completed_at": "2026-10-19T22:56:11Z"
+        },
+        {
+          "name": "Build independent Python 3.12 scenario runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T22:56:11Z",
+          "completed_at": "2026-10-19T22:56:57Z"
+        },
+        {
+          "name": "Frozen real inference and evidence validation (no network or secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T22:56:57Z",
+          "completed_at": "2026-10-19T22:57:04Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T22:57:04Z",
+          "completed_at": "2026-10-19T22:57:05Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T22:57:05Z",
+          "completed_at": "2026-10-19T22:57:05Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T22:57:05Z",
+          "completed_at": "2026-10-19T22:57:05Z"
+        }
+      ]
+    },
+    {
+      "name": "backend",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T22:56:07Z",
+          "completed_at": "2026-10-19T22:56:08Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T22:56:08Z",
+          "completed_at": "2026-10-19T22:56:22Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T22:56:22Z",
+          "completed_at": "2026-10-19T22:56:25Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T22:56:25Z",
+          "completed_at": "2026-10-19T22:56:25Z"
+        },
+        {
+          "name": "Run pip install -r requirements-dev.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T22:56:25Z",
+          "completed_at": "2026-10-19T22:56:36Z"
+        },
+        {
+          "name": "Run alembic upgrade head",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T22:56:36Z",
+          "completed_at": "2026-10-19T22:56:37Z"
+        },
+        {
+          "name": "Run alembic check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T22:56:37Z",
+          "completed_at": "2026-10-19T22:56:37Z"
+        },
+        {
+          "name": "Run pytest -q --junitxml=../test-results/backend.xml",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T22:56:37Z",
+          "completed_at": "2026-10-19T22:57:06Z"
+        },
+        {
+          "name": "Run alembic downgrade 7bb10cf49ac2 && alembic upgrade head && alembic check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T22:57:06Z",
+          "completed_at": "2026-10-19T22:57:08Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T22:57:08Z",
+          "completed_at": "2026-10-19T22:57:08Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-19T22:57:08Z",
+          "completed_at": "2026-10-19T22:57:09Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T22:57:09Z",
+          "completed_at": "2026-10-19T22:57:09Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-19T22:57:09Z",
+          "completed_at": "2026-10-19T22:57:09Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-19T22:57:09Z",
+          "completed_at": "2026-10-19T22:57:09Z"
+        }
+      ]
+    },
+    {
+      "name": "containers",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T22:56:07Z",
+          "completed_at": "2026-10-19T22:56:08Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T22:56:08Z",
+          "completed_at": "2026-10-19T22:56:11Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T22:56:11Z",
+          "completed_at": "2026-10-19T22:56:12Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T22:56:12Z",
+          "completed_at": "2026-10-19T22:56:12Z"
+        },
+        {
+          "name": "Run cp backend/.env.example backend/.env",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T22:56:12Z",
+          "completed_at": "2026-10-19T22:57:20Z"
+        },
+        {
+          "name": "Run pip install httpx==0.28.1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T22:57:20Z",
+          "completed_at": "2026-10-19T22:57:22Z"
+        },
+        {
+          "name": "Build isolated ML runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T22:57:22Z",
+          "completed_at": "2026-10-19T22:58:27Z"
+        },
+        {
+          "name": "Run python tests/smoke.py",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T22:58:27Z",
+          "completed_at": "2026-10-19T22:58:28Z"
+        },
+        {
+          "name": "Standalone cloud web packaging and readiness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T22:58:28Z",
+          "completed_at": "2026-10-19T22:59:03Z"
+        },
+        {
+          "name": "Twenty paced dispatcher sessions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T22:59:03Z",
+          "completed_at": "2026-10-19T23:00:09Z"
+        },
+        {
+          "name": "Run cd frontend",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T23:00:09Z",
+          "completed_at": "2026-10-19T23:01:43Z"
+        },
+        {
+          "name": "Check telemetry delivery without ML",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T23:01:43Z",
+          "completed_at": "2026-10-19T23:01:45Z"
+        },
+        {
+          "name": "Real frozen gas runtime contract on labelled synthetic inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T23:01:45Z",
+          "completed_at": "2026-10-19T23:01:49Z"
+        },
+        {
+          "name": "Prediction decision to editable request draft",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T23:01:49Z",
+          "completed_at": "2026-10-19T23:01:54Z"
+        },
+        {
+          "name": "Check backup and restore",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T23:01:54Z",
+          "completed_at": "2026-10-19T23:01:55Z"
+        },
+        {
+          "name": "Save logs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T23:01:55Z",
+          "completed_at": "2026-10-19T23:01:55Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T23:01:55Z",
+          "completed_at": "2026-10-19T23:01:56Z"
+        },
+        {
+          "name": "Run docker rm -f ldt-cloud-ci || true",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-19T23:01:56Z",
+          "completed_at": "2026-10-19T23:02:07Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2026-10-19T23:02:07Z",
+          "completed_at": "2026-10-19T23:02:07Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T23:02:07Z",
+          "completed_at": "2026-10-19T23:02:07Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T23:02:07Z",
+          "completed_at": "2026-10-19T23:02:08Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T23:02:08Z",
+          "completed_at": "2026-10-19T23:02:08Z"
+        }
+      ]
+    },
+    {
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T22:56:07Z",
+          "completed_at": "2026-10-19T22:56:07Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T22:56:07Z",
+          "completed_at": "2026-10-19T22:56:10Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T22:56:10Z",
+          "completed_at": "2026-10-19T22:56:15Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T22:56:15Z",
+          "completed_at": "2026-10-19T22:56:19Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T22:56:19Z",
+          "completed_at": "2026-10-19T22:56:20Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T22:56:20Z",
+          "completed_at": "2026-10-19T22:56:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T22:56:24Z",
+          "completed_at": "2026-10-19T22:56:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T22:56:24Z",
+          "completed_at": "2026-10-19T22:56:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T22:56:25Z",
+          "completed_at": "2026-10-19T22:56:25Z"
+        }
+      ]
+    }
+  ]
+}

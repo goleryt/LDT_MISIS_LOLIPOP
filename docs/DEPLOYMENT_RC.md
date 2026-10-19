@@ -1,8 +1,9 @@
 # Развёртывание release/final-rc
 
-19.10.2026: RC опубликован на существующий demo Railway с разрешения владельца.
-Проверены CI, runtime commit, миграция до d01602, HTTPS и основные remote flows:
-[фактическая приёмка](REMOTE_RC_ACCEPTANCE_2026-10-19.md).
+19–20.10.2026: RC опубликован на существующий demo Railway с разрешения владельца.
+Проверены CI, runtime commit, additive миграция до d01901, HTTPS и remote flows;
+SF/Fire отдельно включены как синтетический demo, не production incident probability:
+[фактическая приёмка](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
 Main не менялся. Платный тариф и неизвестные production secrets не менялись.
 
 Фактический deployment: tracked-only `git archive release/final-rc` → CLI upload в
@@ -12,6 +13,15 @@ Pre-deploy: `alembic upgrade head`, Dockerfile: `infra/Dockerfile.cloud`, health
 APP_COMMIT передаётся точным SHA загружаемого archive, с `--skip-deploys` до явного `up`.
 Нельзя повторно загружать старый archive с новым APP_COMMIT: идентификатор должен
 соответствовать реальному исходному коду. Версия подтверждается через admin operations.
+
+Перед следующим rollout выполнен отдельный [import load gate](IMPORT_LOAD_ACCEPTANCE_2026-10-20.md).
+IMPORT_MAX_CONCURRENT=2 одинаков для всех реплик общей БД, IMPORT_RETRY_AFTER_SECONDS=3,
+IMPORT_TIMEOUT_SECONDS=240, MAX_XLSX_UNCOMPRESSED_BYTES=67108864.
+nginx ограничивает четыре upload на instance, PostgreSQL slots — два активных
+import на общую БД. 429/409 + Retry-After означают повторить позже, не очередь.
+Не увеличивать эти значения без повторной приёмки. Стресс-тесты только на новой
+локальной synthetic QA: tests/import_load.py и tests/import_faults.py никогда
+не запускать против Railway или рабочего database tunnel.
 
 **EXTERNAL MANUAL ACTION REQUIRED** остаётся для persistent integration worker,
 scheduler и automatic/offsite backup, которые в текущем Railway не развёрнуты.

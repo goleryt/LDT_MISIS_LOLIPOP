@@ -1,0 +1,15 @@
+{
+  "revision": "d01602",
+  "server": "18.6 (Debian 18.6-1.pgdg13+2)",
+  "database": "railway",
+  "counts": {
+    "object_catalogue": 96,
+    "channel_catalogue": 11488,
+    "events_journal": 173864,
+    "preventive_requests": 4,
+    "predictions": 3,
+    "ml_runs": 1,
+    "users": 5,
+    "data_imports": 5
+  }
+}

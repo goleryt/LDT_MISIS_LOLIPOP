@@ -1,0 +1,19 @@
+{
+  "cpu": {
+    "average": 0.0,
+    "current": 0.0,
+    "max": 0.0,
+    "unit": "vCPU"
+  },
+  "environment": "production",
+  "memory": {
+    "average_mb": 0.0,
+    "current_mb": 0.0,
+    "max_mb": 0.0
+  },
+  "service": "ml-demo-job",
+  "window": {
+    "since": "2026-10-19T15:31:47.532718400+00:00",
+    "until": "2026-10-19T16:01:49.710235700+00:00"
+  }
+}

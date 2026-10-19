@@ -1,0 +1,91 @@
+{
+  "counts": {
+    "events_journal": 173865,
+    "predictions": 3,
+    "ml_scores": 3,
+    "ml_runs": 1,
+    "notifications": 1,
+    "scenario_runs": 1,
+    "scenario_forecasts": 3
+  },
+  "gas_score_payload_sha256": "c6586aae2a5c256f2feb8e7773dddd9f8da0f2a151d7842f20a7acef065b54c1",
+  "run": {
+    "id": 1,
+    "state": "completed",
+    "as_of_date": "2026-10-18",
+    "finished_at": "2026-10-19 15:53:50.576302+00:00",
+    "versions": {
+      "package": "1afb9615c2526b21f7aa5e9dd0147b82a74777c86b7c5064b6134dcd0366573b",
+      "registry": "be80003f75a85a5d3b32a4a3c7f6f56dd62982a26aa9579d799cc0c0963cf021",
+      "adapter": "public-synthetic-demo-v1",
+      "compute_sha256": "96f5ce0445e0efb475da8f60d7c2dd1f806aab93fbfdef9fdaf1c499c8182d00",
+      "enabled": {
+        "enabled": true,
+        "sensor_failure": true,
+        "fire": true,
+        "flood": false,
+        "intrusion": false,
+        "system_failure": false,
+        "operational_ready": false,
+        "automated_action_allowed": false
+      }
+    },
+    "source": {
+      "kind": "supplier_synthetic_demo",
+      "package_sha256": "1afb9615c2526b21f7aa5e9dd0147b82a74777c86b7c5064b6134dcd0366573b",
+      "fixture_sha256": "94736f34695699c38a46a5b86a439de0139435a8eb6ad3a6880253751c606f80",
+      "date_translation_days": 429,
+      "operational_observations_written": false,
+      "actual_gas_queue_changed": false
+    },
+    "raw_rows": 810,
+    "context": {
+      "gas": {
+        "status": "unavailable",
+        "reason": "WORKER_UNAVAILABLE"
+      },
+      "sensor_failure": {
+        "status": "available",
+        "forecasts": 2,
+        "availability_scope": "declared_or_reconstructed"
+      },
+      "fire": {
+        "status": "available",
+        "forecasts": 1,
+        "availability_scope": "declared_or_reconstructed"
+      }
+    }
+  },
+  "forecasts": [
+    {
+      "id": 1,
+      "worker": "sensor_failure",
+      "score": 0.002341049925894857,
+      "eligible": true,
+      "model_version": "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5",
+      "issued_at": "2026-10-19T18:53:48.308924+03:00",
+      "window_start": "2026-10-21T00:00:00+03:00",
+      "window_end_exclusive": "2026-10-22T00:00:00+03:00"
+    },
+    {
+      "id": 2,
+      "worker": "sensor_failure",
+      "score": 0.002341049925894857,
+      "eligible": true,
+      "model_version": "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5",
+      "issued_at": "2026-10-19T18:53:48.308924+03:00",
+      "window_start": "2026-10-21T00:00:00+03:00",
+      "window_end_exclusive": "2026-10-22T00:00:00+03:00"
+    },
+    {
+      "id": 3,
+      "worker": "fire",
+      "score": 0.002992514760574736,
+      "eligible": true,
+      "model_version": "607e63fbc297117c149124913bb51cb8bb5f0e0c247550afdc83873ae830c29e",
+      "issued_at": "2026-10-19T18:53:48.308924+03:00",
+      "window_start": "2026-10-21T00:00:00+03:00",
+      "window_end_exclusive": "2026-10-22T00:00:00+03:00"
+    }
+  ]
+}

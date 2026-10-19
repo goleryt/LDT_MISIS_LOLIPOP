@@ -1,11 +1,33 @@
-# Финальная приёмка RC — локальный baseline и удалённая проверка 19.10.2026
+# Финальная приёмка RC — актуальное дополнение 20.10.2026
+
+## Текущий проверенный объём
+
+Ветка `release/final-rc`; main не объединялся. Полные фактические public ID,
+SHA, backup/restore и ограничения: [Railway acceptance](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
+Проверки до 19.10 ниже сохранены как исторические снимки, не результаты нового HEAD.
+
+| Requirement | Status | Implementation / Verification / Actual result | Evidence / limitation |
+|---|---|---|---|
+| CSV/XLSX 5/10/20 concurrent | PASS | PostgreSQL-wide admission2 + nginx uploads4; same/different/mixed, 10k rows/file, 4188 ordinary API/0errors, 0unexpected upload errors, all unique rows after retry; final per-container CPU matrix saved | [Load acceptance](IMPORT_LOAD_ACCEPTANCE_2026-10-20.md), [gate](evidence/import-load-2026-10-20/gate.json); 409/429 are explicit backpressure, not queued success; not full industrial capacity |
+| Atomicity / interruption | PASS | Invalid last row CSV/XLSX, actual deadlock, cancel blocked INSERT, SIGKILL after uncommitted write, multipart disconnect, compressed workbook bound; rollback/retry verified | [Faults](evidence/import-load-2026-10-20/faults.json); process death can leave processing until safe reupload |
+| Backend regression | PASS | pytest only dedicated ldt_test: 151PASS, 4warnings, 195.83s | [JUnit](evidence/import-load-2026-10-20/backend-full.xml) |
+| Frontend / Chrome regression | PASS | TypeScript/Vite PASS, lint0errors/10warnings; Chrome30PASS/8explicit skips, including import429/409/408 recovery | [Chrome](evidence/import-load-2026-10-20/chrome.json); opt-in/model fixture skips are not PASS |
+| Public Stage A/B | PASS in tested scope | edb9a15 masterOFF → ae43e33 opt-in SF/Fire; HTTPS/root/health/ready, five roles, map/sensor/history, requests, imports, PDF/XLSX, light/dark cards | [Public acceptance](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md); next import-fix runtime recorded there after CI |
+| Real SF/Fire on supplied synthetic input | PASS technical contract | Separate Python3.12 finite job, 2SF+1Fire, honest low scores, stored provenance, repeated job reuses existing run | [Actual outputs](evidence/railway-release-2026-10/public-inference.json); not proof of real incident accuracy; no altered math or new inference for import tests |
+| Public backup and additive migration | PASS | PG18 dump downloaded/checksummed, restored into NEW local DB, d01602→d01901/check/ready/auth PASS; second post-batch dump also restored with scenario data | [Pre](evidence/railway-release-2026-10/backup.json), [post](evidence/railway-release-2026-10/post-backup.json); no restore over working DB |
+| Public notification entity navigation | PARTIAL | Existing read/unread persistence verified for technician/analyst; current dispatcher has no unread linked notification | [Auth/RBAC](evidence/railway-release-2026-10/auth-rbac-timings.json); no fabricated notice to obtain PASS |
+| Persistent public workers / scheduler | NOT TESTED | Not deployed; finite scenario job completed normally, operations not_observed for persistent processes | Public configuration limitation; no unexpected inference |
+| Automatic offsite backup | EXTERNAL DEPENDENCY | Verified manual copies on persistent PG-volume and workstation, automatic service not configured | Storage/schedule/operator infrastructure required |
+| Native Yandex / physical touchpad | NOT TESTED | Not available in this environment; Chrome/synthetic pinch does not replace native/device test | Manual browser/device checklist remains required |
+
+## Исторические снимки до текущего дополнения
 
 > Новое дополнение19.10: [дизайнерская ветка](DESIGN_BRANCH_REVIEW_2026-10.md),
 > [прокрутка импорта/UI](UI_BUGFIX_ACCEPTANCE_2026-10.md),
 > [техническая приёмка новых сценарных модулей](ML_COMBINED_ACCEPTANCE_RU.md).
 > Полный код69afb16: [CI39271828046](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39271828046)PASS, все4jobs.
 > Итоговые изменения: [delivery report](DELIVERY_COMBINED_2026-10-19.md).
-> Свежий локальный backend129PASS, новый head d01901. Публичный Railway остаётся
+> На момент этого исторического снимка локальный backend129PASS, новый head d01901. Публичный Railway оставался
 > на предыдущей версии14aad86; новые сценарные модули production не включены.
 > Remote результаты ниже относятся к предыдущей опубликованной версии и не
 > доказывают remote-приёмку COMBINED_EVIDENCE_V1_1. Реальное качество аварий не установлено.
@@ -37,10 +59,13 @@ Main и пользовательский checkout не менялись.
 
 Нормативный источник: [8. ДЖКХ.pdf](<8. ДЖКХ.pdf>), 16 страниц.
 [Решения владельца](FINAL_SCOPE_DECISIONS_RU.md) применены без ожидания жюри.
-ML полностью заморожен: предметная математика, признаки, target, thresholds,
-calibration, shadow/abstain, scheduler и бандлы не менялись.
-[Проверка diff](evidence/release-rc/ml-frozen.txt). Нового inference на этапе RC не было;
-UI использовал настоящий ранее сохранённый результат из восстановленного snapshot.
+На исходном этапе16–18.10 ML был полностью заморожен: предметная математика,
+признаки, target, thresholds, calibration, shadow/abstain и бандлы не менялись.
+[Историческая проверка diff](evidence/release-rc/ml-frozen.txt). Тогда нового inference
+не было; UI использовал настоящий ранее сохранённый результат из snapshot.
+Позже по отдельной задаче интегрирована неизменная поставка SF/Fire; её фактический
+конечный public batch19.10 отделён в актуальном дополнении выше. Во время import
+load gate20.10 модельная математика/артефакты/scheduler не менялись и inference не запускался.
 Fixture unit tests не считаются результатами inference или оценкой качества модели.
 
 Статусы: PASS — подтверждено в указанном объёме; PARTIAL — подтверждено частично;
@@ -48,7 +73,7 @@ NOT TESTED — не проверено; EXTERNAL DEPENDENCY — нужна вн�
 NOT APPLICABLE — исключено зафиксированным решением этого этапа.
 PASS контракта не является промышленной сертификацией или общим выполнением ТЗ.
 
-## Свежие результаты RC
+## Исторические результаты полного RC 16.10
 
 | Проверка | Actual result | Evidence |
 |---|---|---|

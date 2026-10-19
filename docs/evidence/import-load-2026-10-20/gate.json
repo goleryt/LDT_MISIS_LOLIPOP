@@ -17,6 +17,14 @@
       "cases": 3,
       "ordinary_api_requests": 882,
       "ordinary_api_errors": 0
+    },
+    {
+      "name": "limited-v2",
+      "cases": 12,
+      "ordinary_api_requests": 1317,
+      "ordinary_api_errors": 0,
+      "cpu_method": "per-container timestamps; raw samples saved",
+      "all_pass": true
     }
   ],
   "fault_scenarios": 7,
@@ -54,5 +62,11 @@
     "Process death may leave processing registry until reupload",
     "CPU v1 peaks approximate; authoritative per-container mixed-v2 counters saved",
     "Native Yandex and physical touchpad not tested"
-  ]
+  ],
+  "ci": {
+    "id": 39338321060,
+    "commit": "237ff93d01fdcbfae7b58538946d0f02c267a369",
+    "conclusion": "success",
+    "jobs": 4
+  }
 }

@@ -1,25 +1,27 @@
 # Материалы финала — release/final-rc
 
-Состояние 19.10.2026, Europe/Moscow. Наличие документа не заменяет evidence.
+Состояние 20.10.2026, Europe/Moscow. Наличие документа не заменяет evidence.
 
 Дополнение к RC: [team UI review](DESIGN_BRANCH_REVIEW_2026-10.md),
 [UI/import acceptance](UI_BUGFIX_ACCEPTANCE_2026-10.md),
 [scenario integration](ML_COMBINED_INTEGRATION_RU.md),
 [scenario acceptance](ML_COMBINED_ACCEPTANCE_RU.md). Новые модули проверены в
-изолированном QA; публичный Railway пока остаётся14aad86, flags новых моделей
-не включались. Актуальность ветки не означает актуальность публичного deployment.
+изолированном QA и опубликованы отдельными Stage A/B; SF/Fire явно включены в
+demo на помеченной синтетике. [Public evidence](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
+Затем отдельно проверен [CSV/XLSX load gate](IMPORT_LOAD_ACCEPTANCE_2026-10-20.md).
+Актуальность ветки не заменяет проверку фактического deployment SHA.
 
 | Артефакт | Статус / наличие | Действие перед сдачей |
 |---|---|---|
 | Git repository / RC branch | READY — [repository](https://github.com/goleryt/LDT_MISIS_LOLIPOP/tree/release/final-rc), branch опубликована | Использовать утверждённый RC SHA; main не объединялся |
-| Final commit | READY — git rev-parse origin/release/final-rc; полный интеграционный код69afb16 | Итоговый documentation/test-only tip публикуется отдельно; публичный Railway14aad86 |
+| RC commit | READY — git rev-parse origin/release/final-rc; import fix237ff93 | Public runtime идентифицируется в Railway evidence; final tag не создаётся |
 | Final tag | NOT APPLICABLE | Не создавался по инструкции владельца |
-| GitHub Actions | READY — [PASS run39271828046](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39271828046),69afb16, все4jobs включая combined-runtime | Проверить run окончательного documentation/test-only RC HEAD |
+| GitHub Actions | READY — [PASS run39338321060](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39338321060),237ff93, все4jobs | Documentation-only tip проверяется отдельно; не считать workflow-файл результатом CI |
 | Railway/demo | READY в проверенном объёме — [live demo](https://ldt-demo-production.up.railway.app/) | Worker/scheduler/automatic backup отсутствуют; continuous industrial operation не заявляется |
 | Demo credentials | READY — manager/dispatcher/technician/admin/analyst проверены; пароли вне Git | Владелец выдаёт доступ отдельно; не помещать credentials в evidence |
 | Architecture | READY — [ARCHITECTURE](ARCHITECTURE.md) | Point, mock/production и shadow semantics разделены |
 | Deployment instructions | READY — [DEPLOYMENT_RC](DEPLOYMENT_RC.md), [RUNBOOK](RUNBOOK.md) | Учитывать ограниченный trial/free credit и отсутствие фоновых сервисов |
-| Acceptance evidence | READY — [FINAL_ACCEPTANCE](FINAL_ACCEPTANCE_2026-10.md), [remote acceptance](REMOTE_RC_ACCEPTANCE_2026-10-19.md) | Фактические SHA/run/deployment IDs и ограничения |
+| Acceptance evidence | READY — [FINAL_ACCEPTANCE](FINAL_ACCEPTANCE_2026-10.md), [public acceptance](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md), [import gate](IMPORT_LOAD_ACCEPTANCE_2026-10-20.md) | Фактические SHA/run/deployment IDs и ограничения |
 | Demo/browser checklist | READY — [BROWSER_ACCEPTANCE_RC](BROWSER_ACCEPTANCE_RC.md), [remote probe](../tests/remote/README.md) | Без fixture seed/inference против Railway |
 | Presentation PPTX/PDF | **MISSING FINAL ARTIFACT** | Нужны утверждённые слайды и публичная ссылка |
 | Accompanying DOCX/PDF | **MISSING FINAL ARTIFACT** | Нужен актуальный документ финальной версии; исторический PDF его не заменяет |

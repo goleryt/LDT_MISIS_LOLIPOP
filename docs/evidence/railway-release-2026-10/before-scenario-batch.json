@@ -1,0 +1,13 @@
+{
+  "counts": {
+    "events_journal": 173865,
+    "predictions": 3,
+    "ml_scores": 3,
+    "ml_runs": 1,
+    "notifications": 1,
+    "scenario_runs": 0,
+    "scenario_forecasts": 0
+  },
+  "gas_score_payload_sha256": "c6586aae2a5c256f2feb8e7773dddd9f8da0f2a151d7842f20a7acef065b54c1",
+  "revision": "d01901"
+}

@@ -1,5 +1,11 @@
 # Итог интеграции UI и COMBINED v1.1 — 19.10.2026
 
+> Исторический снимок ДО разрешённого публичного обновления 19.10.
+> Утверждения ниже о старой версии Railway относятся к этому снимку.
+> Актуальные public deployment, flags, backup/restore, реальные batch outputs:
+> [Railway release acceptance](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
+> Отдельный новый gate 20.10: [CSV/XLSX import load](IMPORT_LOAD_ACCEPTANCE_2026-10-20.md).
+
 Ветка **release/final-rc**. Исходное фактическое состояние14aad86 (указанный
 в запросе b7e1bc9 уже был предком). Полный проверенный интеграционный код:
 **69afb1635577d9dc8d6aeefff6d0edcd71e581eb**. Заключительный commit содержит
