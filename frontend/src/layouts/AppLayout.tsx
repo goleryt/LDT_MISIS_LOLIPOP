@@ -1,215 +1,103 @@
+import { useEffect, useRef, useState } from "react";
+import { AlertTriangle, Bell, ChevronLeft, ChevronRight, Database, List, Map, Menu, Settings, Upload, X } from "lucide-react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import Notifications from "../components/Notifications";
-import {
-    useState,
-} from "react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
-import {
-    AlertTriangle,
-    Bell,
-    ChevronLeft,
-    ChevronRight,
-    Database,
-    List,
-    Map,
-    Settings,
-    Upload,
-} from "lucide-react";
-
-import {
-    NavLink,
-    Outlet,
-} from "react-router-dom";
-
-// Global design tokens/chrome (sidebar, nav, gradients) live here so they
-// apply on every route, not only after visiting the map page.
 import "../styles/moscow-map.css";
 import "../styles/ui-readability.css";
 import "../styles/ui-layout.css";
 import "../styles/ui-chrome.css";
+import "../styles/designer-polish.css";
+import "../styles/responsive-polish.css";
 
+const NAVIGATION = [
+    { to: "/", label: "Карта", icon: Map },
+    { to: "/objects", label: "Объекты", icon: Database },
+    { to: "/alarms", label: "Тревоги", icon: AlertTriangle },
+    { to: "/events", label: "Журнал событий", icon: List },
+    { to: "/imports", label: "Импорт данных", icon: Upload },
+    { to: "/requests", label: "Заявки", icon: Bell },
+    { to: "/predictions", label: "Прогнозы", icon: List },
+    { to: "/reports", label: "Отчёты", icon: List },
+];
 
-function AppLayout() {
-    const [collapsed, setCollapsed] =
-        useState(false);
+export default function AppLayout() {
+    const [collapsed, setCollapsed] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const isMobile = useMediaQuery("(max-width: 800px)");
+    const dialog = useRef<HTMLDialogElement>(null);
+    const location = useLocation();
+    const showLabels = isMobile || !collapsed;
 
-    return (
-        <div className="app-shell">
-            <aside
-                className={
-                    collapsed
-                        ? "sidebar sidebar-collapsed"
-                        : "sidebar"
-                }
-            >
-                <div className="sidebar-header">
-                    <div className="brand-mark">
-                        МК
-                    </div>
+    useEffect(() => {
+        const element = dialog.current;
+        if (isMobile && menuOpen && element && !element.open) element.showModal();
+        else if (element?.open) element.close();
+    }, [isMobile, menuOpen]);
+    // Close for browser Back/Forward as well as navigation link clicks.
+    useEffect(() => { dialog.current?.close(); }, [location.key]);
+    useEffect(() => {
+        const media = window.matchMedia("(max-width: 800px)");
+        const resetMenu = () => setMenuOpen(false);
+        media.addEventListener("change", resetMenu);
+        return () => media.removeEventListener("change", resetMenu);
+    }, []);
 
-                    {!collapsed && (
-                        <div className="brand-text">
-                            <strong>
-                                Москоллектор
-                            </strong>
-                            <span>
-                                Мониторинг
-                            </span>
-                        </div>
-                    )}
-                </div>
+    function closeMenu() { setMenuOpen(false); }
 
-                <nav className="navigation" id="main-navigation">
-                    <NavLink
-                        to="/"
-                        end
-                        title="Карта"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <Map size={21} />
-                        {!collapsed && (
-                            <span>Карта</span>
-                        )}
-                    </NavLink>
-
-                    <NavLink
-                        to="/objects"
-                        title="Объекты"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <Database size={21} />
-                        {!collapsed && (
-                            <span>Объекты</span>
-                        )}
-                    </NavLink>
-
-                    <NavLink
-                        to="/alarms"
-                        title="Тревоги"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <AlertTriangle size={21} />
-                        {!collapsed && (
-                            <span>Тревоги</span>
-                        )}
-                    </NavLink>
-
-                    <NavLink
-                        to="/events"
-                        title="Журнал событий"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <List size={21} />
-                        {!collapsed && (
-                            <span>
-                                Журнал событий
-                            </span>
-                        )}
-                    </NavLink>
-
-                    <NavLink
-                        to="/imports"
-                        title="Импорт данных"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <Upload size={21} />
-                        {!collapsed && (
-                            <span>
-                                Импорт данных
-                            </span>
-                        )}
-                    </NavLink>
-
-                    <NavLink
-                        to="/requests"
-                        title="Заявки"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item active"
-                                : "nav-item"
-                        }
-                    >
-                        <Bell size={21} />
-                        {!collapsed && (
-                            <span>Заявки</span>
-                        )}
-                    </NavLink>
-                    <NavLink to="/predictions" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"} title="Прогнозы"><List size={21} />{!collapsed && <span>Прогнозы</span>}</NavLink>
-                    <NavLink to="/reports" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"} title="Отчёты"><List size={21} />{!collapsed && <span>Отчёты</span>}</NavLink>
-                </nav>
-
-                <div className="sidebar-footer">
-                    <button
-                        type="button"
-                        className="nav-item sidebar-toggle"
-                        aria-controls="main-navigation"
-                        aria-expanded={!collapsed}
-                        onClick={() =>
-                            setCollapsed(
-                                (value) => !value,
-                            )
-                        }
-                        title={
-                            collapsed
-                                ? "Развернуть меню"
-                                : "Свернуть меню"
-                        }
-                    >
-                        {collapsed ? (
-                            <ChevronRight size={21} />
-                        ) : (
-                            <ChevronLeft size={21} />
-                        )}
-
-                        {!collapsed && (
-                            <span>
-                                Свернуть меню
-                            </span>
-                        )}
-                    </button>
-
-                    <NavLink
-                        to="/settings"
-                        title="Настройки"
-                        className={({ isActive }) =>
-                            isActive
-                                ? "nav-item settings-item active"
-                                : "nav-item settings-item"
-                        }
-                    >
-                        <Settings size={21} />
-                        {!collapsed && (
-                            <span>Настройки</span>
-                        )}
-                    </NavLink>
-                </div>
-            </aside>
-
-            <main className="app-workspace">
-                <Notifications /><Outlet />
-            </main>
+    const sidebar = <aside className={!isMobile && collapsed ? "sidebar sidebar-collapsed" : "sidebar"}>
+        <div className="sidebar-header">
+            <div className="brand-mark">МК</div>
+            {showLabels && <div className="brand-text"><strong>Москоллектор</strong><span>Мониторинг</span></div>}
         </div>
-    );
+        {isMobile && <button type="button" className="mobile-nav-close" onClick={closeMenu} aria-label="Закрыть меню"><X size={22} /></button>}
+        <nav className="navigation" id="main-navigation">
+            {NAVIGATION.map(({ to, label, icon: Icon }) => <NavLink key={to} to={to} end={to === "/"} title={label}
+                onClick={closeMenu} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+                <Icon size={21} />{showLabels && <span>{label}</span>}
+            </NavLink>)}
+        </nav>
+        <div className="sidebar-footer">
+            {!isMobile && <button type="button" className="nav-item sidebar-toggle" aria-controls="main-navigation"
+                aria-expanded={!collapsed} onClick={() => setCollapsed(value => !value)}
+                title={collapsed ? "Развернуть меню" : "Свернуть меню"}>
+                {collapsed ? <ChevronRight size={21} /> : <ChevronLeft size={21} />}
+                {!collapsed && <span>Свернуть меню</span>}
+            </button>}
+            <NavLink to="/settings" title="Настройки" onClick={closeMenu}
+                className={({ isActive }) => isActive ? "nav-item settings-item active" : "nav-item settings-item"}>
+                <Settings size={21} />{showLabels && <span>Настройки</span>}
+            </NavLink>
+        </div>
+    </aside>;
+
+    return <div className="app-shell">
+        {isMobile ? <dialog ref={dialog} className="mobile-nav-dialog" aria-label="Главное меню"
+            onKeyDown={event => {
+                if (event.key !== "Tab") return;
+                const items = event.currentTarget.querySelectorAll<HTMLElement>("button:not([disabled]), a[href]");
+                const first = items[0], last = items[items.length - 1];
+                const active = document.activeElement;
+                if (event.shiftKey && (active === first || active === event.currentTarget)) {
+                    event.preventDefault(); last?.focus();
+                } else if (!event.shiftKey && (active === last || active === event.currentTarget)) {
+                    event.preventDefault(); first?.focus();
+                }
+            }}
+            onClose={closeMenu} onClick={event => {
+                const box = event.currentTarget.getBoundingClientRect();
+                if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeMenu();
+            }}>{sidebar}</dialog> : sidebar}
+        <main className="app-workspace">
+            {isMobile && <header className="mobile-topbar">
+                <button type="button" onClick={() => setMenuOpen(true)} aria-label="Открыть меню"
+                    aria-haspopup="dialog" aria-controls="main-navigation" aria-expanded={menuOpen}>
+                    <Menu size={22} /><span>Меню</span>
+                </button>
+                <strong>Москоллектор</strong>
+            </header>}
+            <Notifications /><Outlet />
+        </main>
+    </div>;
 }
-
-
-export default AppLayout;

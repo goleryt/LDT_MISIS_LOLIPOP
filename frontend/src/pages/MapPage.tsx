@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useEffectEvent,
     useMemo,
     useState,
     useRef,
@@ -18,7 +19,9 @@ import {
     X,
     Activity,
     Search,
+    ChevronLeft,
 } from "lucide-react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 import { getMapObjects } from "../api/map";
 
@@ -163,8 +166,12 @@ function sortSensorsForDisplay(
 
 function MapPage() {
     const navigate = useNavigate();
-    const [searchParams] =
+    const [searchParams, setSearchParams] =
         useSearchParams();
+    const compactPanels = useMediaQuery("(max-width: 900px)");
+    const objectDrawerRef = useRef<HTMLElement>(null);
+    const sensorPanelRef = useRef<HTMLElement>(null);
+    const previousSensorId = useRef<number | undefined>(undefined);
 
     const [objects, setObjects] =
         useState<MapObject[]>([]);
@@ -228,12 +235,33 @@ function MapPage() {
         useState<string | null>(null);
 
 
+    function updateMapUrl(objectId: number | null, channelId: number | null = null, replace = false) {
+        const next = new URLSearchParams(searchParams);
+        if (objectId === null) next.delete("objectId");
+        else next.set("objectId", String(objectId));
+        if (channelId === null) next.delete("channelId");
+        else next.set("channelId", String(channelId));
+        handledMapNavigationRef.current = objectId === null ? null : `${objectId}:${channelId ?? "-"}`;
+        if (next.toString() !== searchParams.toString()) setSearchParams(next, { replace });
+    }
+
+    function closeSensor() {
+        setSelectedSensor(null);
+        updateMapUrl(selectedObject?.object_id ?? null);
+    }
+
+    function selectSensor(sensor: ObjectSensor) {
+        setSelectedSensor(sensor);
+        updateMapUrl(selectedObject?.object_id ?? null, sensor.channel_id);
+    }
+
     function selectMapObject(
         object: MapObject,
         preferredSensorStatus:
             SensorStatus | null = null,
         preferredSensorChannelId:
             number | null = null,
+        updateUrl = true,
     ) {
         preferredSensorStatusRef.current =
             preferredSensorStatus;
@@ -245,7 +273,11 @@ function MapPage() {
         setSensorSearch("");
         setVisibleSensorCount(SENSOR_PAGE_SIZE);
         setSelectedObject(object);
+        if (updateUrl) updateMapUrl(object.object_id, preferredSensorChannelId);
     }
+
+    const syncAutomaticSensor = useEffectEvent((objectId: number, channelId: number) => updateMapUrl(objectId, channelId, true));
+    const selectFromUrl = useEffectEvent((object: MapObject, channelId: number | null) => selectMapObject(object, null, channelId, false));
 
     async function loadObjects() {
         try {
@@ -296,6 +328,12 @@ function MapPage() {
 
     const selectedObjectId = selectedObject?.object_id;
     const selectedSensorId = selectedSensor?.channel_id;
+
+    useEffect(() => {
+        if (compactPanels && selectedSensorId) sensorPanelRef.current?.focus({ preventScroll: true });
+        else if (compactPanels && previousSensorId.current) objectDrawerRef.current?.focus({ preventScroll: true });
+        previousSensorId.current = selectedSensorId;
+    }, [compactPanels, selectedSensorId]);
 
     useEffect(() => {
         let cancelled = false;
@@ -367,6 +405,7 @@ function MapPage() {
                     setSelectedSensor(
                         preferredSensor,
                     );
+                    if (preferredSensor) syncAutomaticSensor(objectId, preferredSensor.channel_id);
                 }
 
 
@@ -444,10 +483,13 @@ function MapPage() {
                 "channelId",
             );
 
-        if (
-            !objectIdRaw ||
-            objects.length === 0
-        ) {
+        if (!objectIdRaw) {
+            handledMapNavigationRef.current = null;
+            setSelectedObject(null);
+            setSelectedSensor(null);
+            return;
+        }
+        if (objects.length === 0) {
             return;
         }
 
@@ -500,14 +542,18 @@ function MapPage() {
         handledMapNavigationRef.current =
             navigationKey;
 
-        selectMapObject(
-            object,
-            null,
-            channelId,
-        );
+        if (selectedObjectId === objectId) {
+            preferredSensorChannelIdRef.current = channelId;
+            setSelectedSensor(channelId === null ? null : sensors.find(sensor => sensor.channel_id === channelId) ?? null);
+            return;
+        }
+
+        selectFromUrl(object, channelId);
     }, [
         objects,
         searchParams,
+        selectedObjectId,
+        sensors,
     ]);
 
     const statistics = useMemo(() => {
@@ -931,7 +977,8 @@ function MapPage() {
             )}
 
             {selectedObject && (
-                <aside className="object-drawer">
+                <aside className="object-drawer" ref={objectDrawerRef} tabIndex={-1}
+                    hidden={compactPanels && !!selectedSensor} inert={compactPanels && !!selectedSensor}>
                     <div className="drawer-header">
                         <div>
                             <span className="drawer-eyebrow">
@@ -947,9 +994,11 @@ function MapPage() {
                         <button
                             type="button"
                             className="drawer-close"
-                            onClick={() =>
-                                setSelectedObject(null)
-                            }
+                            onClick={() => {
+                                setSelectedObject(null);
+                                setSelectedSensor(null);
+                                updateMapUrl(null);
+                            }}
                             aria-label="Закрыть"
                         >
                             <X size={20} />
@@ -1100,7 +1149,7 @@ function MapPage() {
                                                 : "sensor-row"
                                         }
                                         onClick={() =>
-                                            setSelectedSensor(sensor)
+                                            selectSensor(sensor)
                                         }
                                     >
                                         <span
@@ -1165,7 +1214,10 @@ function MapPage() {
                 </aside>
             )}
             {selectedSensor && (
-                <aside className="sensor-detail-panel">
+                <aside className="sensor-detail-panel" ref={sensorPanelRef} tabIndex={-1} aria-label="Подробности датчика">
+                    {compactPanels && <button type="button" className="sensor-back-button" onClick={closeSensor}>
+                        <ChevronLeft size={18} />Назад к объекту
+                    </button>}
                     <div className="sensor-detail-header">
                         <div>
                             <span className="drawer-eyebrow">
@@ -1181,9 +1233,8 @@ function MapPage() {
                         <button
                             type="button"
                             className="sensor-detail-close"
-                            onClick={() =>
-                                setSelectedSensor(null)
-                            }
+                            onClick={closeSensor}
+                            aria-label="Закрыть датчик"
                         >
                             <X size={17} />
                         </button>

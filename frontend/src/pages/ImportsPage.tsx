@@ -357,10 +357,10 @@ function ImportsPage() {
                         if (!(event.target as HTMLElement).closest("select,option,label,input,button")) fileInputRef.current?.click();
                     }}
                 >
-                    <label>Тип данных <select value={kind} disabled={uploading || !canWrite("imports")} onChange={e => setKind(e.target.value)}>
+                    <label className="import-kind-control">Тип данных <select value={kind} disabled={uploading || !canWrite("imports")} onChange={e => setKind(e.target.value)}>
 <option value="events_journal">События датчиков</option><option value="objects">Объекты</option><option value="channels">Каналы датчиков</option>
 </select></label>
-                    <button type="button" className="secondary-button" disabled={uploading || !canWrite("imports")} onClick={() => fileInputRef.current?.click()}>Выбрать файл</button>
+                    <button type="button" className="secondary-button import-file-button" disabled={uploading || !canWrite("imports")} onClick={() => fileInputRef.current?.click()}>Выбрать файл</button>
                         <input
                         ref={fileInputRef}
                         type="file"

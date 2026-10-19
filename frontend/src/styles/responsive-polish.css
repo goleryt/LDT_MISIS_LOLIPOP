@@ -1,0 +1,105 @@
+/* The page owns vertical scrolling; its wide table only owns horizontal scrolling. */
+.app-shell .imports-page { overflow-y: auto; overscroll-behavior-y: contain; }
+
+.mobile-nav-dialog {
+    position: fixed;
+    inset: 0 auto 0 0;
+    margin: 0;
+    padding: 0;
+    width: min(320px, calc(100vw - 48px));
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    border: 0;
+    color: var(--ui-ink);
+    background: var(--ui-surface);
+}
+.mobile-nav-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.mobile-nav-dialog .sidebar { width: 100%; height: 100%; flex-basis: auto; padding: 18px 12px; }
+.mobile-nav-dialog .sidebar-header { padding: 0 34px 0 8px; grid-template-columns: 36px minmax(0, 1fr); }
+.mobile-nav-dialog .brand-text { display: flex; flex-direction: column; }
+.mobile-nav-dialog .sidebar .nav-item span { display: block; }
+.mobile-nav-dialog .sidebar .nav-item { padding: 10px 12px; min-height: 44px; gap: 12px; }
+.mobile-nav-close { position: absolute; top: 14px; right: 8px; }
+.mobile-nav-close, .mobile-topbar button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    gap: 8px;
+    border: 1px solid var(--ui-border);
+    border-radius: 12px;
+    color: var(--ui-ink);
+    background: var(--ui-elevated);
+    font: inherit;
+    cursor: pointer;
+}
+.mobile-nav-close:focus-visible, .mobile-topbar button:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+.app-workspace > .mobile-topbar {
+    flex: 0 0 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    gap: 12px;
+    background: var(--ui-surface);
+    color: var(--ui-ink);
+    border-bottom: 1px solid var(--ui-border);
+}
+.mobile-topbar button { padding-inline: 8px; border: 0; background: transparent; }
+.prediction-mobile-list, .sensor-back-button { display: none; }
+
+@media (max-width: 900px) {
+    /* Drill down through one panel at a time, without squeezing two drawers together. */
+    .map-page:has(.sensor-detail-panel) .object-drawer { display: none; }
+    .map-page .sensor-detail-panel {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        box-sizing: border-box;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+    .map-page .sensor-back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border: 1px solid var(--ui-border);
+        border-radius: 12px;
+        background: var(--ui-elevated);
+        color: var(--ui-ink);
+        font: inherit;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 800px) {
+    .app-shell .app-workspace { width: 100%; }
+    .notification-panel details[open] { top: 48px; }
+    .app-shell .operations-page, .app-shell .imports-page { padding: 18px 14px 28px; }
+    .app-shell .imports-header { gap: 12px; flex-wrap: wrap; }
+    .app-shell .upload-card, .app-shell .history-card { padding: 16px; }
+    .app-shell .drop-zone { padding: 22px 12px; }
+    .prediction-table-wrap { display: none; }
+    .prediction-mobile-list { display: grid; gap: 14px; margin-block: 18px; }
+    .prediction-mobile-card { padding: 16px; border: 1px solid var(--ui-border); border-radius: 16px; background: var(--ui-surface); overflow-wrap: anywhere; }
+    .prediction-mobile-card h2 { font-size: 18px; margin: 0 0 12px; }
+    .prediction-mobile-card dl { display: grid; gap: 10px; margin: 0 0 14px; }
+    .prediction-mobile-card dt { font-size: 14px; color: var(--ui-muted); }
+    .prediction-mobile-card dd { margin: 4px 0 0; }
+    .prediction-mobile-card button { min-height: 44px; width: 100%; }
+    .prediction-mobile-card .prediction-score { font-size: 24px; font-weight: 700; }
+    .predictions-page .prediction-card, .predictions-page .prediction-detail fieldset { padding: 16px; }
+    .predictions-page .prediction-summary { grid-template-columns: 1fr; }
+    .map-page .map-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .map-page .summary-card { width: auto; min-height: 60px; }
+    .map-page .map-data-badge { top: 158px; }
+    .map-page .map-legend { max-width: calc(100% - 88px); }
+}

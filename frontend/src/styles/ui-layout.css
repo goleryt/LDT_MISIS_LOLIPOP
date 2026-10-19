@@ -6,7 +6,7 @@
     overflow: hidden;
     container-type: inline-size;
 }
-.app-workspace > :not(.notification-panel) {
+.app-workspace > :not(.notification-panel):not(.mobile-topbar) {
     flex: 1 1 auto;
     min-height: 0;
     min-width: 0;

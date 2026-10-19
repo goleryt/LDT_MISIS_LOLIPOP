@@ -173,7 +173,10 @@ test("map zoom, pan, tooltip, object click and compact navigation", async ({ pag
   await expect(page.locator('.map-data-badge')).toContainText(/Условное|Демо/);
   await expect(page.locator('main')).toContainText('Фактическое состояние');
   await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'Открыть меню',exact:true}).click();
+  await expect(page.getByRole('dialog',{name:'Главное меню'})).toBeVisible();
   await page.locator('nav a[href="/objects"]').click();
+  await expect(page.getByRole('dialog',{name:'Главное меню'})).not.toBeVisible();
   await expect(page).toHaveURL(/\/objects$/);
   await expect(page.locator('.objects-table tbody tr').first()).toBeVisible();
   await expect(page.locator('main')).not.toContainText(/undefined|NaN/);
