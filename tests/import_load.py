@@ -8,6 +8,7 @@ Only generated rows in the dedicated ldt_import_load_qa database are cleaned.
 import argparse
 import asyncio
 from collections import Counter
+from contextlib import AsyncExitStack
 import csv
 import json
 import os
@@ -94,15 +95,24 @@ async def run_case(args,format,concurrent,mode,number):
     docker('restart',WEB);await wait_ready(args.base_url)
     sql('DELETE FROM events_journal WHERE "ид_события">=1000000000000; DELETE FROM data_imports;')
     directory=Path(args.work_dir);directory.mkdir(exist_ok=True,parents=True)
+    if args.invalid_index is not None and (mode=='same' or not 0 <= args.invalid_index < concurrent):
+        raise ValueError('Invalid-file probe requires a valid index in different-file mode')
     paths=[]
     for i in range(1 if mode=='same' else concurrent):
         suffix=('csv' if i%2==0 else 'xlsx') if format=='mixed' else format
-        path=directory/f'import-load-{number}-{i}.{suffix}';fixture(path,args.rows,number*100+i);paths.append(path)
+        path=directory/f'import-load-{number}-{i}.{suffix}';fixture(path,args.rows,number*100+i,invalid=i==args.invalid_index);paths.append(path)
     files=[paths[0] if mode=='same' else paths[i] for i in range(concurrent)]
     samples=[];api=[];stop=asyncio.Event()
-    async with httpx.AsyncClient(base_url=args.base_url,timeout=httpx.Timeout(125,connect=5),limits=httpx.Limits(max_connections=50)) as client:
+    async with AsyncExitStack() as stack:
+        client=await stack.enter_async_context(httpx.AsyncClient(base_url=args.base_url,timeout=httpx.Timeout(125,connect=5),limits=httpx.Limits(max_connections=50)))
+        clients=[client]
         login=await client.post('/api/v1/auth/login',json={'username':os.environ['TEST_USERNAME'],'password':os.environ['TEST_PASSWORD']});login.raise_for_status()
         client.headers['X-CSRF-Token']=login.json()['csrf_token']
+        if args.distinct_users:
+            for i in range(1,concurrent):
+                other=await stack.enter_async_context(httpx.AsyncClient(base_url=args.base_url,timeout=httpx.Timeout(125,connect=5)))
+                login=await other.post('/api/v1/auth/login',json={'username':f'qa-import-{i:02d}','password':os.environ['TEST_PASSWORD']});login.raise_for_status()
+                other.headers['X-CSRF-Token']=login.json()['csrf_token'];clients.append(other)
         async def ordinary():
             while not stop.is_set():
                 for path in ['/health','/api/v1/map/objects','/api/v1/imports']:
@@ -116,26 +126,27 @@ async def run_case(args,format,concurrent,mode,number):
                 try:samples.append(await asyncio.to_thread(sample))
                 except RuntimeError:pass
                 await asyncio.sleep(.5)
-        async def upload(path):
+        async def upload(path,index=0):
             started=time.monotonic()
             try:
-                with path.open('rb') as f:r=await client.post('/api/v1/imports/events',files={'file':(path.name,f)})
+                with path.open('rb') as f:r=await clients[index].post('/api/v1/imports/events',files={'file':(path.name,f)})
                 try:body=r.json()
                 except ValueError:body={}
                 detail=body.get('detail') if isinstance(body.get('detail'),dict) else {}
                 return {'file':path.name,'status':r.status_code,'seconds':round(time.monotonic()-started,3),
+                    'invalid_fixture':args.invalid_index is not None and path==paths[args.invalid_index],
                     'already_imported':body.get('already_imported'),'inserted':body.get('inserted_rows'),
                     'code':body.get('code') or detail.get('code'),'retry_after':r.headers.get('retry-after')}
             except httpx.HTTPError as exc:
                 return {'file':path.name,'status':type(exc).__name__,'seconds':round(time.monotonic()-started,3)}
         background=[asyncio.create_task(ordinary()),asyncio.create_task(monitor())]
-        started=time.monotonic();first=await asyncio.gather(*(upload(p) for p in files));retries=[]
+        started=time.monotonic();first=await asyncio.gather(*(upload(p,i if args.distinct_users else 0) for i,p in enumerate(files)));retries=[]
         # Expected 429/409 are backpressure, not successful imports. Prove safe retries.
-        pending=[files[i] for i,r in enumerate(first) if r['status'] in (409,429)]
+        pending=[(files[i],i if args.distinct_users else 0) for i,r in enumerate(first) if r['status'] in (409,429)]
         for offset in range(0,len(pending),2):
-            retries.extend(await asyncio.gather(*(upload(p) for p in pending[offset:offset+2])))
+            retries.extend(await asyncio.gather(*(upload(*pair) for pair in pending[offset:offset+2])))
         elapsed=time.monotonic()-started;stop.set();await asyncio.gather(*background)
-        await client.post('/api/v1/auth/logout')
+        for c in clients:await c.post('/api/v1/auth/logout')
     try:end=await asyncio.to_thread(sample);samples.append(end)
     except RuntimeError:
         if not samples:raise
@@ -151,10 +162,11 @@ async def run_case(args,format,concurrent,mode,number):
         cpu[name]={'sampled_max_pct_one_core':round(max(rates),2) if rates else None,'allocation_vcpu':2}
         interval=end[name]['cpu_at']-samples[0][name]['cpu_at']
         cpu[name]['interval_average_pct_one_core']=round((end[name]['cpu_usec']-samples[0][name]['cpu_usec'])/1e6/interval*100,2) if interval>0 else None
-    expected=args.rows*(1 if mode=='same' else concurrent)
+    expected=args.rows*(1 if mode=='same' else concurrent-(1 if args.invalid_index is not None else 0))
     actual=int(sql('SELECT count(*) FROM events_journal WHERE "ид_события">=1000000000000'))
-    counts=dict(Counter(str(r['status']) for r in first));unexpected=sum(r['status'] not in (200,409,429) for r in first)
+    counts=dict(Counter(str(r['status']) for r in first));unexpected=sum(r['status'] not in (200,409,429) and not (r.get('invalid_fixture') and r['status']==400) for r in first)
     result={'format':format,'offered_concurrent':concurrent,'mode':mode,'rows_per_file':args.rows,
+        'authenticated_users':len(clients),'invalid_file_index':args.invalid_index,
         'file_bytes':[p.stat().st_size for p in paths],'first_attempts':first,'first_statuses':counts,
         'unexpected_error_rate':unexpected/concurrent,'retries':retries,'wall_seconds':round(elapsed,2),
         'processing_seconds':{'p50':percentile([r['seconds'] for r in first],.5),'p95':percentile([r['seconds'] for r in first],.95),'max':max(r['seconds'] for r in first)},
@@ -163,6 +175,7 @@ async def run_case(args,format,concurrent,mode,number):
             'per_path':{p:{'requests':sum(r['path']==p for r in api),'failures':sum(r['path']==p and r['status']!=200 for r in api)} for p in {r['path'] for r in api}},
             'p50_ms':percentile([r['ms'] for r in api],.5),'p95_ms':percentile([r['ms'] for r in api],.95),'max_ms':round(max(r['ms'] for r in api),2)},
         'expected_generated_rows':expected,'actual_generated_rows':actual,'rows_match':actual==expected,
+        'registry_statuses':json.loads(sql("SELECT coalesce(json_object_agg(status,n),'{}'::json) FROM (SELECT status,count(*) n FROM data_imports GROUP BY status) s")),
         'monitor_samples':len(samples),'oom_killed':json.loads(docker('inspect','--format','{{json .State.OOMKilled}}',WEB))}
     accepted=[r['seconds'] for r in first+retries if r['status']==200 and not r.get('already_imported')]
     result['accepted_processing_seconds']={'p50':percentile(accepted,.5),'p95':percentile(accepted,.95),'max':max(accepted) if accepted else None}
@@ -182,9 +195,10 @@ async def main(args):
                 results.append(await run_case(args,format,n,mode,number));number+=1
     Path(args.output,'summary.json').write_text(json.dumps(results,indent=2)+'\n')
     if args.require_pass and not all(
-        r['rows_match'] and not r['oom_killed'] and r['ordinary_api']['failures']==0
+        r['rows_match'] and not r['oom_killed'] and not r['registry_statuses'].get('processing',0)
+        and (r['invalid_file_index'] is None or any(x['status']==400 and x.get('invalid_fixture') for x in r['first_attempts']+r['retries'])) and r['ordinary_api']['failures']==0
         and r['connections_peak']['import_slots']<=2
-        and all(x['status'] in (200,409,429) for x in r['first_attempts']+r['retries'])
+        and all(x['status'] in (200,409,429) or (x.get('invalid_fixture') and x['status']==400) for x in r['first_attempts']+r['retries'])
         and all(m.get('oom_kill',0)==0 and m.get('oom_events',0)==0 for m in r['memory'].values())
         for r in results
     ):
@@ -194,5 +208,7 @@ async def main(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--base-url',default='http://127.0.0.1:18094');p.add_argument('--rows',type=int,default=10000)
     p.add_argument('--users',default='5,10,20');p.add_argument('--formats',default='csv,xlsx');p.add_argument('--modes',default='different,same')
+    p.add_argument('--distinct-users',action='store_true',help='Pre-create qa-import-01..19 in the owned QA database; use separate authenticated sessions')
+    p.add_argument('--invalid-index',type=int,help='One malformed final row among valid concurrent files; expect HTTP400 and atomic rollback')
     p.add_argument('--require-pass',action='store_true',help='Fail after saving evidence if availability, atomicity, OOM or backpressure checks fail')
     p.add_argument('--output',required=True);p.add_argument('--work-dir',required=True);asyncio.run(main(p.parse_args()))

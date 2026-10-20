@@ -38,7 +38,7 @@ const pass=(name,data={})=>{result.checks.push({name,status:'PASS',...data});con
   }pass('real public scenario cards both themes and three desktop widths');
   await page.setViewportSize({width:1280,height:800});result.requests=[];
   for(const worker of ['sensor_failure','fire']){
-   const row=data.forecasts.find(f=>f.worker===worker);await page.goto(`/predictions?scenarioRun=${data.run.id}&scenarioId=${row.id}`);
+   const row=data.forecasts.find(f=>f.worker===worker&&!f.request_id)??data.forecasts.find(f=>f.worker===worker);await page.goto(`/predictions?scenarioRun=${data.run.id}&scenarioId=${row.id}`);
    const card=section.locator(`article[aria-label$="№${row.id}"]`);
    await expect(card.getByText(/Версия модели:/)).toContainText(row.payload.model_version);
    await card.getByLabel('Комментарий проверки',{exact:true}).fill('REMOTE DEMO: ручная техническая проверка синтетического сценария; не реальный инцидент.');
@@ -56,7 +56,7 @@ const pass=(name,data={})=>{result.checks.push({name,status:'PASS',...data});con
    }
    const history=await (await page.request.get(`/api/v1/requests/${id}/history`)).json();expect(history.some(h=>h.to_status==='draft')).toBe(true);expect(history.some(h=>h.from_status==='draft'&&h.to_status==='new')).toBe(true);
    const me=await (await page.request.get('/api/v1/auth/me')).json();const duplicate=await page.request.post(`/api/v1/predictions/scenarios/${row.id}/request`,{headers:{'X-CSRF-Token':me.csrf_token}});expect(duplicate.status()).toBe(200);expect((await duplicate.json()).request_id).toBe(id);
-   result.requests.push({worker,forecast_id:row.id,request_id:id,history:history.map(h=>h.to_status)});await save('request-'+worker);
+   result.requests.push({worker,forecast_id:row.id,request_id:id,created_now:!row.request_id,confirmed_now:current.status==='draft',history:history.map(h=>h.to_status)});await save('request-'+worker);
   }expect(result.requests[0].request_id).not.toBe(result.requests[1].request_id);pass('separate manual review draft confirmation history and idempotency');
   for(const theme of ['dark','light'])for(const width of [1024,1280,1440]){
    await page.evaluate(v=>localStorage.setItem('settings.theme',v),theme);await page.setViewportSize({width,height:800});await page.goto('/imports');

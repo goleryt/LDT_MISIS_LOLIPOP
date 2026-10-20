@@ -39,6 +39,12 @@ const record=(name,details={})=>{result.checks.push({name,status:'PASS',...detai
   const history=await get(`/api/v1/sensors/${target.channel_id}/history`);
   record('map to object to exact sensor and history',{events:history.events?.length});
   await page.reload();await expect(page.locator('.object-drawer')).toBeVisible();record('object sensor deep link refresh');
+  for(let i=0;i<3;i++){
+   await page.getByRole('button',{name:'Закрыть датчик',exact:true}).click();
+   await expect(page).not.toHaveURL(/channelId=/);
+   await page.goBack();await expect(page).toHaveURL(new RegExp('channelId='+target.channel_id));
+   await expect(page.getByRole('complementary',{name:'Подробности датчика'})).toBeVisible();
+  }record('fast browser Back restores the exact sensor three times');
   const svg=page.locator('.schematic-map-svg');
   for(const [width,height] of [[1440,900],[1280,800],[1024,700]]){
    await page.setViewportSize({width,height});

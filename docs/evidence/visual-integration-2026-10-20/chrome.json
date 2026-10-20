@@ -1,0 +1,424 @@
+{
+  "stats": {
+    "startTime": "2026-10-20T09:53:50.557Z",
+    "duration": 166610.553,
+    "expected": 33,
+    "skipped": 8,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checks": [
+    {
+      "title": "reviewed map navigation preserves sensor URLs, Back, Forward, refresh and compact focus",
+      "file": "designer-navigation.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 6437
+        }
+      ]
+    },
+    {
+      "title": "import backpressure 429 explains retry and retains selected file",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1638
+        }
+      ]
+    },
+    {
+      "title": "import backpressure 409 explains retry and retains selected file",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1713
+        }
+      ]
+    },
+    {
+      "title": "import backpressure 408 explains retry and retains selected file",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1871
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1024x768",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2155
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1280x800",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2372
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1440x900",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2651
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row dark 1920x1080",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2109
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row light 1024x768",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2581
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row light 1280x800",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2230
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row light 1440x900",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2591
+        }
+      ]
+    },
+    {
+      "title": "imports user wheel reaches last row light 1920x1080",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2332
+        }
+      ]
+    },
+    {
+      "title": "import loading and failure remain reachable by wheel and recover",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1557
+        }
+      ]
+    },
+    {
+      "title": "late import registry failure cannot overwrite refresh after a successful upload",
+      "file": "import-scroll.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1606
+        }
+      ]
+    },
+    {
+      "title": "notification read survives an older poll response and recovers from failure",
+      "file": "release.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 47454
+        }
+      ]
+    },
+    {
+      "title": "stored prediction supports URL, refresh, close and browser Back",
+      "file": "release.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 1713
+        }
+      ]
+    },
+    {
+      "title": "desktop visual matrix with actual data and long Russian object names",
+      "file": "release.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 443
+        }
+      ]
+    },
+    {
+      "title": "real scenario cards are honest and scrollable dark",
+      "file": "scenarios.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 5940
+        }
+      ]
+    },
+    {
+      "title": "real scenario cards are honest and scrollable light",
+      "file": "scenarios.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 5803
+        }
+      ]
+    },
+    {
+      "title": "unavailable scenarios never use rejected raw scores and recover independently",
+      "file": "scenarios.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 1376
+        }
+      ]
+    },
+    {
+      "title": "real scenario API review creates a separate draft and confirms through existing workflow",
+      "file": "scenarios.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 436
+        }
+      ]
+    },
+    {
+      "title": "dark: white utility cards preserve native controls, focus and lazy navigation",
+      "file": "team-visual.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 4282
+        }
+      ]
+    },
+    {
+      "title": "light: white utility cards preserve native controls, focus and lazy navigation",
+      "file": "team-visual.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 3933
+        }
+      ]
+    },
+    {
+      "title": "reports keep two balanced date columns and explain every disabled download",
+      "file": "team-visual.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2216
+        }
+      ]
+    },
+    {
+      "title": "fully filled request submits the visible values and records creation history",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2936
+        }
+      ]
+    },
+    {
+      "title": "read-only role sees why a filled request cannot be submitted",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 3387
+        }
+      ]
+    },
+    {
+      "title": "fully filled isolated draft confirms with its current version",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 417
+        }
+      ]
+    },
+    {
+      "title": "list typography and opaque filters remain readable in both themes",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 10176
+        }
+      ]
+    },
+    {
+      "title": "map resize, wheel bursts and pinch preserve finite zoom and viewport panels",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 4688
+        }
+      ]
+    },
+    {
+      "title": "prediction cards preserve stored proxy values and contrast in light and dark",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 2003
+        }
+      ]
+    },
+    {
+      "title": "settings stay centered under notification overlay and sidebar icons align",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2716
+        }
+      ]
+    },
+    {
+      "title": "requested visual matrix for both themes and reduced desktop",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 385
+        }
+      ]
+    },
+    {
+      "title": "report end date follows the local day after Moscow midnight",
+      "file": "ui-fixes.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2045
+        }
+      ]
+    },
+    {
+      "title": "login, map, objects, alarms, events, requests, model unavailable, logout",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 5820
+        }
+      ]
+    },
+    {
+      "title": "real gas bundle result, advisory and dispatcher decision",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 452
+        }
+      ]
+    },
+    {
+      "title": "failed prediction request has visible feedback and recovers",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2164
+        }
+      ]
+    },
+    {
+      "title": "JSON import is visible in the registry and duplicate upload is identified",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 2731
+        }
+      ]
+    },
+    {
+      "title": "mock alarm opens the exact sensor and can be marked read",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 389
+        }
+      ]
+    },
+    {
+      "title": "sensor history and preventive request from the map",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 4759
+        }
+      ]
+    },
+    {
+      "title": "map zoom, pan, tooltip, object click and compact navigation",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 4532
+        }
+      ]
+    },
+    {
+      "title": "map loading and empty state, recovery and report progress",
+      "file": "workflows.spec.ts",
+      "results": [
+        {
+          "status": "expected",
+          "duration_ms": 3773
+        }
+      ]
+    }
+  ],
+  "trace_saved": false,
+  "credential_snapshots_published": false
+}

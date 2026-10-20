@@ -1,0 +1,11 @@
+{
+  "baseline": "237ff93d01fdcbfae7b58538946d0f02c267a369",
+  "domains": {
+    "backend": "IDENTICAL to 237ff93",
+    "infra": "IDENTICAL to 237ff93",
+    "ml": "IDENTICAL to 237ff93",
+    "ml_combined": "IDENTICAL to 237ff93",
+    "models": "IDENTICAL to 237ff93"
+  },
+  "implication": "Previous import/fault acceptance reused only for byte-identical backend/infra; new multi-user/file-size/browser scenarios measured separately."
+}

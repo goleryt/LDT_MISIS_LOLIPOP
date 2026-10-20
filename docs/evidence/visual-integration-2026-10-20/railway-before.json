@@ -1,0 +1,202 @@
+{
+  "observed_at": "2026-10-20T09:37:59.532165+00:00",
+  "project": "d4c500cc-fab0-4f7f-ad7e-a52db7a5585c",
+  "environment": "1dd4e231-b7ab-48b3-879e-b17389d1e911",
+  "web_service": "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f",
+  "pg_service": "7eee6a09-108b-4ea6-ad4a-efe3b5fc93ef",
+  "services": [
+    {
+      "id": "5dbc29ab-fc53-4845-92a9-2cbb2dbe40ca",
+      "name": "ml-demo-job",
+      "deployment": "3848dc43-2524-47ab-a423-5e3a238889ec",
+      "status": "SUCCESS",
+      "stopped": true,
+      "source": {
+        "image": null,
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "ml_combined/Dockerfile",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": null,
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": null,
+          "restartPolicyType": "NEVER",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": "python -m scripts.publish_synthetic_scenario_demo",
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": []
+    },
+    {
+      "id": "7eee6a09-108b-4ea6-ad4a-efe3b5fc93ef",
+      "name": "Postgres",
+      "deployment": "d000dee4-553e-45b6-8694-e3afd6042463",
+      "status": "SUCCESS",
+      "stopped": false,
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:18",
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "RAILPACK",
+          "dockerfilePath": null,
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": null,
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": "/var/lib/postgresql/data",
+          "restartPolicyMaxRetries": 10,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": [
+        "/var/lib/postgresql/data"
+      ]
+    },
+    {
+      "id": "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f",
+      "name": "ldt-demo",
+      "deployment": "8006b5a4-ae40-442b-8c23-5b122ad4b91a",
+      "status": "SUCCESS",
+      "stopped": false,
+      "source": {
+        "image": null,
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "infra/Dockerfile.cloud",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": "/ready",
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": [
+            "alembic upgrade head"
+          ],
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": 3,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": []
+    }
+  ],
+  "safe_config": {
+    "APP_COMMIT": "5f274217cc566ee34b1eac26017041966452643e",
+    "ENVIRONMENT": "production",
+    "SECURE_COOKIES": "true",
+    "ALLOW_MOCK_INGESTION": "false",
+    "SCENARIO_ENABLED": "true",
+    "SCENARIO_ALLOW_PRODUCTION": "true",
+    "SCENARIO_SENSOR_ENABLED": "true",
+    "SCENARIO_FIRE_ENABLED": "true",
+    "IMPORT_MAX_CONCURRENT": "2",
+    "RAILWAY_DOCKERFILE_PATH": "infra/Dockerfile.cloud"
+  },
+  "secrets_changed": false,
+  "runtime": {
+    "commit": "5f274217cc566ee34b1eac26017041966452643e",
+    "revision": "d01901",
+    "events_journal": 173867,
+    "object_catalogue": 97,
+    "channel_catalogue": 11490,
+    "predictions": 3,
+    "ml_scores": 3,
+    "ml_runs": 1,
+    "scenario_runs": 1,
+    "scenario_forecasts": 3,
+    "preventive_requests": 10,
+    "ml_scores_sha256": "aee92bc6dd826d83850d553ef6fcdeab78bb3a2777a20d17c0e50f00ea4a127d",
+    "scenario_forecasts_sha256": "c215075feabdfdf4622f95575017d2014a637d988753a6fbbb251caa63f1a354"
+  },
+  "/health": {
+    "status": "ok"
+  },
+  "/ready": {
+    "status": "ready"
+  },
+  "backup": {
+    "filename": "rc-pre-visual-20261020T093804Z.dump",
+    "bytes": 10095982,
+    "sha256": "73a3fc634d33cb5bc15a71db63a199cc029b520928fb973efcf14ada3336e5fd",
+    "remote_retained": true,
+    "private_local_copy": true,
+    "restore": "pending separate NEW database"
+  }
+}

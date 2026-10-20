@@ -58,3 +58,32 @@ contrast, focus, lazy navigation, Settings center, opaque Journal popup и Repor
 не приравнивается к эмуляции viewport/DPR; для него остаётся ручной checklist.
 
 Итоговые CI/deployment/remote результаты: см. обновлённую Railway acceptance и evidence.
+
+## Локальный gate интеграции
+
+- Backend151 PASS,4 dependency warnings; TypeScript/Vite PASS; lint0 errors /10 existing warnings.
+- Chrome33 PASS /8 optional skips на чистой БД с scenario master OFF; отдельные136
+  снимков сохранённых реальных model results на восстановленной QA-копии, master ON.
+- Before40 / after136 снимков: обе темы × четыре desktop-размера;32 оригинала
+  изменённых экранов опубликованы в evidence/screens. Визуально просмотрены сравнения
+  Login/Settings/Journal/Reports и contact sheets с картой/сценариями/таблицами.
+- Новый production Docker build, новая clean DB, upgrade/check d01901 и startup PASS.
+- Свежий safety dump173867 событий восстановлен в ещё одну НОВУЮ БД; schema/API/login PASS.
+- UI commit aa197ef: actual CI39404465821 PASS, backend/frontend/containers/combined-runtime.
+- [Дополнительная конкурентная серия](IMPORT_VISUAL_SUPPLEMENT_2026-10-20.md): восемь кейсов,
+  включая живую карту;1962 ordinary API /0 errors; model source unchanged.
+
+Evidence: [local gate](evidence/visual-integration-2026-10-20/local-gate.json),
+[Chrome cases](evidence/visual-integration-2026-10-20/chrome.json),
+[before](evidence/visual-integration-2026-10-20/visual-before.json),
+[after](evidence/visual-integration-2026-10-20/visual-after.json),
+[CI](evidence/visual-integration-2026-10-20/ci-ui.json).
+
+Ручные проверки, которые автоматизация не подменяет:
+
+1. Native Yandex: выполнить BROWSER_ACCEPTANCE_RC.md на опубликованном release SHA.
+2. Физический touchpad: открыть объект+датчик, pinch в центре карты до обоих clamp,
+   проверить +/-/reset, неизменный размер drawer, закрытие/Back и отсутствие page zoom.
+3. Chrome native menu Zoom125%/150% на desktop: Login→Map→drawer→Journal filter→
+   Reports→Settings; controls и close доступны, нет горизонтального scroll страницы.
+   Затем вернуть100%. Эмуляция viewport/DPR не считается этой проверкой.

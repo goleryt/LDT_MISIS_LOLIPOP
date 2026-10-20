@@ -1,0 +1,56 @@
+{
+  "functional_commit": "aa197ef1d865190b6303ea1b9cee7dbc8f8f59bf",
+  "backend": {
+    "passed": 151,
+    "warnings": 4
+  },
+  "frontend": {
+    "typescript": "PASS",
+    "vite": "PASS",
+    "lint_errors": 0,
+    "lint_existing_warnings": 10
+  },
+  "chrome": {
+    "passed": 33,
+    "skipped": 8,
+    "failed": 0,
+    "fast_back_regression": "PASS after reproducing and correcting coalesced route updates"
+  },
+  "docker": {
+    "image": "sha256:3610bfa9ab7b3063eb3f4449a1687abf88b1181ada788204e32d4259dd3a11d7",
+    "build": "PASS",
+    "clean_database": "ldt_visual_clean",
+    "startup": "PASS",
+    "schema_revision": "d01901",
+    "alembic_check": "PASS",
+    "experimental_master_off": "PASS"
+  },
+  "visual": {
+    "before": 40,
+    "after": 136,
+    "themes": 2,
+    "viewports": [
+      [
+        1024,
+        768
+      ],
+      [
+        1280,
+        800
+      ],
+      [
+        1440,
+        900
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "page_errors": 0,
+    "math_hash_unchanged": true
+  },
+  "native_yandex": "NOT TESTED - not installed",
+  "physical_touchpad": "MANUAL VERIFICATION REQUIRED",
+  "browser_zoom_125_150": "NOT TESTED - viewport/DPR emulation is not native browser zoom"
+}

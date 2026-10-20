@@ -1,0 +1,20 @@
+{
+  "commit": "5f274217cc566ee34b1eac26017041966452643e",
+  "assets": [
+    {
+      "path": "/assets/index-CjTTCFGQ.js",
+      "bytes": 269915,
+      "sha256": "1ef21e447648ee2302ec167eaa8cdfdb0816e11a42435d4fb7329dfaae823f6f"
+    },
+    {
+      "path": "/assets/session-CaK5B-Wp.js",
+      "bytes": 11139,
+      "sha256": "f6a83781a4eaa02fe76b13a84b00c4ac842ce7b5cf24017c809e1dd0ed616440"
+    },
+    {
+      "path": "/assets/index-CvxAXTZp.css",
+      "bytes": 85572,
+      "sha256": "0b5f84c71e8343cc1e88d24d50760afbaa9ced22e8daef087f3232c8d5b6356c"
+    }
+  ]
+}
