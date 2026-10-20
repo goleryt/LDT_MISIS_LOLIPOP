@@ -24,6 +24,7 @@ import MoscowBaseMap from "./MoscowBaseMap";
 interface SchematicMapProps {
     objects: MapObject[];
     selectedObject: MapObject | null;
+    forecastMarkers?: Record<number, string>;
 
     onSelectObject: (
         object: MapObject,
@@ -237,6 +238,7 @@ function SchematicMap({
     objects,
     selectedObject,
     onSelectObject,
+    forecastMarkers,
 }: SchematicMapProps) {
     const [zoom, setZoom] =
         useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches ? 1.8 : MIN_ZOOM);
@@ -787,7 +789,7 @@ function SchematicMap({
                                     }
                                 }}
                             >
-                                <title>{`${clusterLabels(group.length).points} · приблизить`}</title>
+                                <title>{`${clusterLabels(group.length).points} · приблизить${forecastMarkers ? ' · ' + [...new Set(group.flatMap(p => (forecastMarkers[p.object.object_id] ?? '').split('/')))].join('/') : ''}`}</title>
                                 <circle r={21 / zoom} className="schematic-cluster-point" strokeWidth={2 / zoom} />
                                 <text textAnchor="middle" dominantBaseline="central" fontSize={15 / zoom}>{group.length}</text>
                                 {alarmCount > 0 && (
@@ -889,6 +891,10 @@ function SchematicMap({
                                     }
                                     filter="url(#point-shadow)"
                                 />
+                                {forecastMarkers?.[object.object_id] && <g aria-label={`Модели: ${forecastMarkers[object.object_id]}`}>
+                                    <rect x={-25 / zoom} y={-31 / zoom} width={50 / zoom} height={19 / zoom} rx={5 / zoom} className="map-forecast-marker" strokeWidth={1 / zoom}/>
+                                    <text y={-18 / zoom} textAnchor="middle" fontSize={12 / zoom} className="map-forecast-marker-label">{forecastMarkers[object.object_id]}</text>
+                                </g>}
                             </g>
                         );
                     }

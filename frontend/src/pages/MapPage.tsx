@@ -31,6 +31,8 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
+import {MapForecastControls, ObjectForecasts} from "../components/MapForecasts";
+import {useMapForecasts, FORECAST_SYMBOLS} from "../api/mapForecasts";
 import SensorIcon from "../components/SensorIcon";
 import "../styles/moscow-map.css";
 
@@ -169,6 +171,23 @@ function MapPage() {
     const [searchParams, setSearchParams] =
         useSearchParams();
     const compactPanels = useMediaQuery("(max-width: 900px)");
+    const forecastMode = searchParams.get('mapMode') === 'forecasts';
+    const forecastResult = useMapForecasts(forecastMode || searchParams.has('objectId'));
+    const forecastKind = searchParams.get('forecastType') ?? 'all';
+    const forecastAvailability = searchParams.get('forecastAvailability') ?? 'all';
+    const forecastWindow = searchParams.get('forecastWindow') ?? 'all';
+    const allForecasts = forecastResult.data?.forecasts ?? [];
+    const visibleForecasts = allForecasts.filter(row => {
+        const multiple = new Set(allForecasts.filter(r => r.bound && r.object_id === row.object_id).map(r => r.worker)).size > 1;
+        return (forecastKind === 'all' || forecastKind === row.worker || (forecastKind === 'multiple' && multiple))
+            && (forecastAvailability === 'all' || row.available === (forecastAvailability === 'available'))
+            && (forecastWindow === 'all' || row.window_start === forecastWindow);
+    });
+    const forecastMarkers = Object.fromEntries([...new Set(visibleForecasts.filter(r => r.bound).map(r => r.object_id))]
+        .map(id => [id, [...new Set(visibleForecasts.filter(r => r.bound && r.object_id === id).map(r => FORECAST_SYMBOLS[r.worker]))].join('/') ]));
+    function changeForecastFilter(key:string, value:string) {
+        setSearchParams(current => {const next = new URLSearchParams(current); next.set(key,value); return next;});
+    }
     const objectDrawerRef = useRef<HTMLElement>(null);
     const sensorPanelRef = useRef<HTMLElement>(null);
     const previousSensorId = useRef<number | undefined>(undefined);
@@ -698,12 +717,19 @@ function MapPage() {
     }, [sensorHistory]);
 
     return (
-        <div className={selectedObject ? "map-page has-object-drawer" : "map-page"}>
+        <div className={`map-page${selectedObject ? ' has-object-drawer' : ''}${forecastMode ? ' forecast-mode' : ''}`}>
             <SchematicMap
-                objects={objects}
+                objects={forecastMode ? objects.filter(o => forecastMarkers[o.object_id]) : objects}
                 selectedObject={selectedObject}
                 onSelectObject={selectMapObject}
+                forecastMarkers={forecastMode ? forecastMarkers : undefined}
             />
+            <div className="map-mode-switch" role="group" aria-label="Режим карты">
+                <button aria-pressed={!forecastMode} onClick={() => changeForecastFilter('mapMode','actual')}>Фактическое состояние</button>
+                <button aria-pressed={forecastMode} onClick={() => changeForecastFilter('mapMode','forecasts')}>Прогнозы</button>
+            </div>
+            {forecastMode && <MapForecastControls {...forecastResult} kind={forecastKind} availability={forecastAvailability}
+                window={forecastWindow} change={changeForecastFilter} objects={objects} filtered={visibleForecasts} onSelect={selectMapObject}/>}
 
             <div className="map-place-card" aria-label="Схема Москвы">
                 <span className="map-place-eyebrow">Обзор инфраструктуры</span>
@@ -1032,6 +1058,9 @@ function MapPage() {
                         }
                     </div>
 
+                    {forecastResult.loading && <p role="status">Загрузка прогнозов объекта…</p>}
+                    {forecastResult.error && <p role="alert">{forecastResult.error} <button onClick={forecastResult.retry}>Повторить</button></p>}
+                    {forecastResult.data && <ObjectForecasts rows={allForecasts.filter(row => row.object_id === selectedObject.object_id)}/>}
                     <div className="object-info-grid">
                         <div>
                             <span>Тип объекта</span>

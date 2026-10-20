@@ -1,4 +1,5 @@
 import hashlib
+import math
 
 from fastapi import APIRouter
 from sqlalchemy import case, func, select
@@ -9,7 +10,8 @@ from app.db.models import (
     ObjectCatalogue,
 )
 from app.db.session import SessionLocal
-from app.db.platform import ObjectLocation
+from app.db.platform import ObjectLocation, MlScore, Prediction, ScenarioForecast, ScenarioRun
+from app.scenario_job import configuration
 from app.core.read_cache import cached_snapshot
 
 
@@ -254,3 +256,73 @@ def get_map_objects() -> list[dict[str, object]]:
         )
 
     return result
+
+
+@router.get("/forecasts")
+def get_map_forecasts():
+    """Read saved evidence only. Never run inference or derive an incident score.
+
+    Gas includes non-selected/abstained rows from the latest day; Top-K remains
+    the work queue policy, not a visibility threshold. Scenario rows belong to
+    the latest snapshot, including failed/partial snapshots, never an older
+    successful run silently substituted for a failed calculation.
+    """
+    rows = []
+    limit = 500
+    def finite(value):
+        return isinstance(value, (int, float)) and math.isfinite(value)
+
+    with SessionLocal() as db:
+        objects = set(db.scalars(select(ObjectCatalogue.ид_объект).join(ChannelCatalogue,
+            ChannelCatalogue.ид_объект == ObjectCatalogue.ид_объект).distinct()))
+        bindings = dict(db.execute(select(ChannelCatalogue.ид_канала_данных, ChannelCatalogue.ид_объект)).all())
+        def bound(oid, cid):
+            return oid in objects and (cid is None or bindings.get(cid) == oid)
+
+        day = db.scalar(select(func.max(MlScore.as_of_date)).where(MlScore.kind == 'gas'))
+        gas = db.scalars(select(MlScore).where(MlScore.kind == 'gas', MlScore.as_of_date == day)
+            .order_by(MlScore.id.desc()).limit(limit + 1)).all() if day else []
+        # A journal link must refer to this saved score, never another model/day.
+        linked = {(p.channel_id, (p.ml_metadata or {}).get('as_of_date'), p.model_version, p.probability): p for p in db.scalars(
+            select(Prediction).where(Prediction.channel_id.in_([g.channel_id for g in gas if g.channel_id is not None]))
+            .order_by(Prediction.id))}
+        seen = set()
+        for g in gas[:limit]:
+            key = (g.object_id, g.channel_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            binding = bound(g.object_id, g.channel_id)
+            p = linked.get((g.channel_id, str(g.as_of_date), g.model_version, g.score))
+            available = binding and finite(g.score) and g.decision_status == 'experimental_shadow'
+            rows.append({'key': f'gas-{g.id}', 'worker': 'gas', 'object_id': g.object_id,
+                'channel_id': g.channel_id, 'bound': binding, 'available': available,
+                'score': g.score if available else None, 'score_kind': g.score_kind,
+                'warning': None, 'queue_selected': g.selected, 'reason': g.reason_codes,
+                'cutoff': str(g.as_of_date), 'issued_at': g.created_at,
+                'window_start': g.window_start, 'window_end_exclusive': g.window_end_exclusive,
+                'model_version': g.model_version, 'source': 'Сохранённый газовый shadow-расчёт; источник указан в снимке',
+                'snapshot_version': g.run_id, 'detail_url': f'/predictions?predictionId={p.id}' if p else '/predictions',
+                'recommendations': [(g.payload.get('recommendation') or {}).get('text_ru')] if (g.payload.get('recommendation') or {}).get('text_ru') else []})
+        run = db.scalar(select(ScenarioRun).order_by(ScenarioRun.id.desc()).limit(1))
+        scenarios = db.scalars(select(ScenarioForecast).where(ScenarioForecast.run_id == run.id)
+            .order_by(ScenarioForecast.id).limit(limit + 1)).all() if run else []
+        config = configuration()
+        for s in scenarios[:limit]:
+            p = s.payload
+            binding = bound(s.object_id, s.channel_id)
+            available = binding and p.get('eligible') is True and finite(p.get('score')) and config['enabled'] and config.get(s.worker, False)
+            recommendations = (run.output or {}).get('evidence_context', {}).get('recommendations', [])
+            rows.append({'key': f'{s.worker}-{s.id}', 'worker': s.worker, 'object_id': s.object_id,
+                'channel_id': s.channel_id, 'bound': binding, 'available': available,
+                'score': p.get('score') if available else None, 'score_kind': p.get('score_kind'),
+                'warning': p.get('warning') if available else None, 'reason': p.get('reason'),
+                'cutoff': p.get('cutoff'), 'issued_at': p.get('issued_at'), 'window_start': p.get('window_start'),
+                'window_end_exclusive': p.get('window_end_exclusive'), 'model_version': p.get('model_version'),
+                'source': 'Синтетический сценарий · экспериментальная модель', 'snapshot_version': run.snapshot_version,
+                'detail_url': f'/predictions?scenarioRun={run.id}&scenarioId={s.id}&scenarioType={s.worker}',
+                'recommendations': [r['text_ru'] for r in recommendations if s.forecast_ref in r.get('forecast_refs', [])]})
+        return {'forecasts': rows, 'configuration': config,
+            'scenario_run': {'id': run.id, 'state': run.state, 'error_code': run.error_code} if run else None,
+            'gas_as_of_date': day, 'truncated': len(gas) > limit or len(scenarios) > limit,
+            'operational_ready': False, 'automated_action_allowed': False}
