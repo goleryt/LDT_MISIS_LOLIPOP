@@ -11,6 +11,7 @@ export default function ReportsPage() {
   const [end,setEnd] = useState(today);
   const [busy,setBusy] = useState(false);
   const [message,setMessage] = useState("");
+  const invalidPeriod = !start || !end ? "Укажите начало и конец периода." : start > end ? "Начало периода не может быть позже конца." : "";
   async function download(format: "xlsx" | "pdf") {
     setBusy(true); setMessage("");
     try {
@@ -24,14 +25,17 @@ export default function ReportsPage() {
     } catch (error) { setMessage(error instanceof Error ? error.message : "Ошибка отчёта"); }
     finally { setBusy(false); }
   }
-  return <section className="operations-page"><h1>Фактические отчёты</h1>
+  return <section className="operations-page reports-page"><h1>Фактические отчёты</h1>
     <p>Наблюдения и история заявок. Прогнозные показатели не рассчитываются.</p>
-    <div className="prediction-detail"><fieldset disabled={busy}><legend>Параметры отчёта</legend>
-      <label>Данные<select value={kind} onChange={e=>setKind(e.target.value)}><option value="observations">Наблюдения датчиков</option><option value="repairs">История локальных заявок</option></select></label>
-      <label>С<input type="date" value={start} onChange={e=>setStart(e.target.value)} /></label>
-      <label>По<input type="date" value={end} onChange={e=>setEnd(e.target.value)} /></label>
-      <button disabled={!start || !end || start>end} onClick={()=>download("xlsx")}>Скачать XLSX</button>
-      <button disabled={!start || !end || start>end} onClick={()=>download("pdf")}>Скачать PDF</button>
+    <div className="prediction-detail reports-detail"><fieldset disabled={busy}><legend>Параметры отчёта</legend>
+      <label className="reports-field-wide">Данные<select value={kind} onChange={e=>setKind(e.target.value)}><option value="observations">Наблюдения датчиков</option><option value="repairs">История локальных заявок</option></select></label>
+      <label>С<input type="date" aria-invalid={!!invalidPeriod} aria-describedby={invalidPeriod ? "report-period-error" : undefined} value={start} onChange={e=>setStart(e.target.value)} /></label>
+      <label>По<input type="date" aria-invalid={!!invalidPeriod} aria-describedby={invalidPeriod ? "report-period-error" : undefined} value={end} onChange={e=>setEnd(e.target.value)} /></label>
+      {invalidPeriod && <p id="report-period-error" className="reports-field-wide" role="alert">{invalidPeriod}</p>}
+      <div className="reports-actions">
+        <button className="primary-button" disabled={!!invalidPeriod} onClick={()=>download("xlsx")}>Скачать XLSX</button>
+        <button className="primary-button" disabled={!!invalidPeriod} onClick={()=>download("pdf")}>Скачать PDF</button>
+      </div>
     </fieldset></div>{busy && <p role="status">Формирование отчёта…</p>}{message && <p role="status">{message}</p>}
   </section>;
 }

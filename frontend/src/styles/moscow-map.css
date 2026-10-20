@@ -80,7 +80,7 @@
        from the bottom, then straight to flat darkness — nothing else. */
     --page-bg:
         radial-gradient(
-            220px 620px at 50% -6%,
+            286px 620px at 50% -6%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
@@ -88,7 +88,7 @@
             transparent 74%
         ),
         radial-gradient(
-            220px 620px at 50% 106%,
+            286px 620px at 50% 106%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
@@ -151,22 +151,25 @@ html[data-theme="light"] {
         #3d4132 100%
     );
 
+    /* A beam should read as light falling on the page, so every stop
+       stays lighter than --page-base (#ece1ca) — never a darker/more
+       saturated tint blended in, only brightness fading out via alpha. */
     --page-bg:
         radial-gradient(
             220px 620px at 50% -6%,
-            rgb(255 254 249 / 98%) 0%,
-            rgb(255 248 230 / 85%) 17%,
-            rgb(247 233 199 / 52%) 36%,
-            rgb(234 214 172 / 22%) 55%,
-            transparent 74%
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
+            transparent 78%
         ),
         radial-gradient(
             220px 620px at 50% 106%,
-            rgb(255 254 249 / 98%) 0%,
-            rgb(255 248 230 / 85%) 17%,
-            rgb(247 233 199 / 52%) 36%,
-            rgb(234 214 172 / 22%) 55%,
-            transparent 74%
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
+            transparent 78%
         ),
         var(--page-base);
 
@@ -203,11 +206,22 @@ body {
 
 /* App-wide chrome goes dark + vivid glow, matching the reference sites.
    The Карта page (.map-page, below) is deliberately left out of this and
-   keeps the original light Figma palette — it is not touched. */
-.app-shell,
-.app-workspace {
+   keeps the original light Figma palette — it is not touched.
+
+   The beam gradient lives on .app-shell ONLY: that box is always
+   100vw (see App.css), so its 50% centre never moves. .app-workspace's
+   own width shrinks/grows with the sidebar, so painting the same
+   gradient there too made the beam re-centre on its narrower box and
+   drift sideways whenever the sidebar was expanded/collapsed. Leaving
+   it transparent lets the shell's beam show through, always centred
+   on the full viewport. */
+.app-shell {
     background: var(--page-bg);
     background-attachment: fixed;
+}
+
+.app-workspace {
+    background: transparent;
 }
 
 .sidebar {

@@ -8,9 +8,13 @@ test('reviewed map navigation preserves sensor URLs, Back, Forward, refresh and 
   await page.getByRole('button',{name:'Войти',exact:true}).click();
   const drawer=page.locator('.object-drawer'),sensor=page.getByRole('complementary',{name:'Подробности датчика'});
   await expect(drawer).toBeVisible();await expect(sensor).toBeVisible();
-  await page.getByRole('button',{name:'Закрыть датчик',exact:true}).click();
-  await expect(page).not.toHaveURL(/channelId=/);await expect(sensor).not.toBeVisible();
-  await page.goBack();await expect(page).toHaveURL(/channelId=1/);await expect(sensor).toBeVisible();
+  // Fast browser Back can coalesce router updates into the original URL.
+  // Selection still has to recover even if the intermediate URL never renders.
+  for(let i=0;i<3;i++){
+    await page.getByRole('button',{name:'Закрыть датчик',exact:true}).click();
+    await expect(page).not.toHaveURL(/channelId=/);await expect(sensor).not.toBeVisible();
+    await page.goBack();await expect(page).toHaveURL(/channelId=1/);await expect(sensor).toBeVisible();
+  }
   await page.locator('.drawer-close').click();await expect(drawer).not.toBeVisible();await expect(sensor).not.toBeVisible();
   await expect(page).not.toHaveURL(/objectId=/);
   await page.goBack();await expect(drawer).toBeVisible();await expect(sensor).toBeVisible();

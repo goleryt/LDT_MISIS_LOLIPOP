@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertTriangle, Bell, ChevronLeft, ChevronRight, Database, List, Map, Menu, Settings, Upload, X } from "lucide-react";
+import { AlertTriangle, Bell, ChevronLeft, ChevronRight, Database, FileBarChart, Map, Menu, ScrollText, Settings, TrendingUp, Upload, X } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import Notifications from "../components/Notifications";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -15,11 +15,11 @@ const NAVIGATION = [
     { to: "/", label: "Карта", icon: Map },
     { to: "/objects", label: "Объекты", icon: Database },
     { to: "/alarms", label: "Тревоги", icon: AlertTriangle },
-    { to: "/events", label: "Журнал событий", icon: List },
+    { to: "/events", label: "Журнал событий", icon: ScrollText },
     { to: "/imports", label: "Импорт данных", icon: Upload },
     { to: "/requests", label: "Заявки", icon: Bell },
-    { to: "/predictions", label: "Прогнозы", icon: List },
-    { to: "/reports", label: "Отчёты", icon: List },
+    { to: "/predictions", label: "Прогнозы", icon: TrendingUp },
+    { to: "/reports", label: "Отчёты", icon: FileBarChart },
 ];
 
 export default function AppLayout() {

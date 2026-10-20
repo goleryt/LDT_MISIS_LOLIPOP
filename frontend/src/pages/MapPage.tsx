@@ -521,9 +521,13 @@ function MapPage() {
         const navigationKey =
             `${objectId}:${channelId ?? "-"}`;
 
+        // A fast Back can restore the same URL before the intermediate route renders.
+        // Skip only when the actual selection also matches that URL.
         if (
             handledMapNavigationRef.current ===
-            navigationKey
+            navigationKey &&
+            selectedObjectId === objectId &&
+            (channelId === null ? selectedSensorId === undefined : selectedSensorId === channelId)
         ) {
             return;
         }
@@ -553,6 +557,7 @@ function MapPage() {
         objects,
         searchParams,
         selectedObjectId,
+        selectedSensorId,
         sensors,
     ]);
 
