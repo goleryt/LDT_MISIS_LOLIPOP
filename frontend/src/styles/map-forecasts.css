@@ -12,6 +12,7 @@
 .map-mode-switch button:focus-visible,.map-forecast-controls :focus-visible,.object-forecasts :focus-visible {outline:3px solid #3157d5;outline-offset:2px;}
 .object-forecasts {margin:16px 0;font-size:14px;line-height:1.5;}
 .object-forecasts h3 {font-size:17px;}
+.map-object-state-label {margin:12px 0 6px;color:#46556d;font-size:14px;}
 .map-forecast-card {padding:12px;margin:12px 0;border:1px solid #c4cddd;border-left:4px solid #3157d5;border-radius:10px;background:#f8faff;color:#18181b;overflow-wrap:anywhere;}
 .map-forecast-card.sensor_failure {border-left-color:#7252a7;}
 .map-forecast-card.fire {border-left-color:#b45d26;}
@@ -24,4 +25,9 @@
 .forecast-mode .schematic-object-point {fill:#4a6596;}
 .forecast-mode .schematic-cluster-alarm {display:none;}
 @media (max-width:1200px) {.has-object-drawer .map-forecast-controls {width:260px;}.map-forecast-controls {width:320px;}}
+@media (min-width:901px) and (max-width:1200px) {
+  .has-object-drawer .map-mode-switch {flex-direction:column;width:210px;}
+  .has-object-drawer .map-forecast-controls {max-height:calc(100% - 210px);}
+  .has-object-drawer .map-legend {bottom:128px;}
+}
 @media (max-width:900px) {.has-object-drawer .map-forecast-controls {display:none;}.map-mode-switch {left:10px;bottom:10px;}}

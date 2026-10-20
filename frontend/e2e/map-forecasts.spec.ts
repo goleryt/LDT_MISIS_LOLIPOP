@@ -32,11 +32,18 @@ for(const theme of ['dark','light'])test(`map displays every saved model without
     await page.locator('.schematic-map-svg').dispatchEvent('wheel',{deltaY:-10000,ctrlKey:true,clientX:600,clientY:450,bubbles:true,cancelable:true});
     const view=await page.locator('.schematic-map-svg').getAttribute('viewBox');expect(view).not.toMatch(/NaN|Infinity/);
     await expect(drawer.locator('.drawer-close')).toBeInViewport();
+    const toggle=(await page.getByRole('group',{name:'Режим карты'}).boundingBox())!;
+    const reset=(await page.getByRole('button',{name:'Показать все',exact:true}).boundingBox())!;
+    expect(toggle.x<reset.x+reset.width&&toggle.x+toggle.width>reset.x&&toggle.y<reset.y+reset.height&&toggle.y+toggle.height>reset.y).toBe(false);
   }
   await drawer.locator('.drawer-close').click();await expect(drawer).not.toBeVisible();
   await controls.getByLabel('Модель',{exact:true}).selectOption('fire');await expect(controls).toContainText('1 результат');
   await expect(page.locator('.map-forecast-marker-label')).toHaveText('F');
   await page.goBack();await expect(controls.getByLabel('Модель',{exact:true})).toHaveValue('all');
+  await controls.getByLabel('Модель',{exact:true}).selectOption('fire');
+  await controls.locator('.map-forecast-object-links button').first().click();
+  await expect(drawer.locator('.map-forecast-card').first()).toHaveClass(/fire/);
+  await drawer.locator('.drawer-close').click();
   await controls.getByLabel('Модель',{exact:true}).selectOption('gas');await expect(page).toHaveURL(/forecastType=gas/);await expect(page.locator('.map-forecast-marker-label')).toHaveCount(1);await expect(page.locator('.map-forecast-marker-label')).toHaveText('G');
   await controls.getByLabel('Модель',{exact:true}).selectOption('multiple');await expect(controls).toContainText('3 результата');
   await controls.getByLabel('Доступность',{exact:true}).selectOption('unavailable');await expect(controls).toContainText('По выбранным фильтрам результатов нет');

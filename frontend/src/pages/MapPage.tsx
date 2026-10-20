@@ -1044,6 +1044,7 @@ function MapPage() {
                         </p>
                     )}
 
+                    <p className="map-object-state-label">Фактическое состояние</p>
                     <div
                         className={
                             `object-status object-status-${selectedObject.status}`
@@ -1060,7 +1061,8 @@ function MapPage() {
 
                     {forecastResult.loading && <p role="status">Загрузка прогнозов объекта…</p>}
                     {forecastResult.error && <p role="alert">{forecastResult.error} <button onClick={forecastResult.retry}>Повторить</button></p>}
-                    {forecastResult.data && <ObjectForecasts rows={allForecasts.filter(row => row.object_id === selectedObject.object_id)}/>}
+                    {forecastResult.data && <ObjectForecasts rows={allForecasts.filter(row => row.object_id === selectedObject.object_id)
+                        .sort((a,b) => Number(b.worker === forecastKind) - Number(a.worker === forecastKind))}/>}
                     <div className="object-info-grid">
                         <div>
                             <span>Тип объекта</span>

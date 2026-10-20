@@ -52,11 +52,13 @@ def test_unbound_and_disabled_never_leak_a_numeric_score(client, login, monkeypa
     scenario(); login()
     rows = client.get('/api/v1/map/forecasts').json()['forecasts']
     assert all(not r['available'] and r['score'] is None for r in rows)
+    assert all(r['availability_reason']=='MODULE_DISABLED' for r in rows)
     monkeypatch.setattr(get_settings(), 'scenario_enabled', True)
     with SessionLocal.begin() as db:
         row = db.scalar(select(ScenarioForecast).limit(1)); row.object_id = None
     unbound = next(r for r in client.get('/api/v1/map/forecasts').json()['forecasts'] if not r['bound'])
     assert not unbound['available'] and unbound['score'] is None
+    assert unbound['availability_reason']=='UNBOUND_CHANNEL'
 
 
 def test_latest_failed_snapshot_does_not_show_previous_success(client, login):

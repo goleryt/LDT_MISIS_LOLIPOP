@@ -297,6 +297,7 @@ def get_map_forecasts():
             available = binding and finite(g.score) and g.decision_status == 'experimental_shadow'
             rows.append({'key': f'gas-{g.id}', 'worker': 'gas', 'object_id': g.object_id,
                 'channel_id': g.channel_id, 'bound': binding, 'available': available,
+                'availability_reason': None if available else ('UNBOUND_CHANNEL' if not binding else 'SCORE_UNAVAILABLE'),
                 'score': g.score if available else None, 'score_kind': g.score_kind,
                 'warning': None, 'queue_selected': g.selected, 'reason': g.reason_codes,
                 'cutoff': str(g.as_of_date), 'issued_at': g.created_at,
@@ -315,6 +316,8 @@ def get_map_forecasts():
             recommendations = (run.output or {}).get('evidence_context', {}).get('recommendations', [])
             rows.append({'key': f'{s.worker}-{s.id}', 'worker': s.worker, 'object_id': s.object_id,
                 'channel_id': s.channel_id, 'bound': binding, 'available': available,
+                'availability_reason': None if available else ('UNBOUND_CHANNEL' if not binding else
+                    'MODULE_DISABLED' if not config['enabled'] or not config.get(s.worker, False) else 'RESULT_UNAVAILABLE'),
                 'score': p.get('score') if available else None, 'score_kind': p.get('score_kind'),
                 'warning': p.get('warning') if available else None, 'reason': p.get('reason'),
                 'cutoff': p.get('cutoff'), 'issued_at': p.get('issued_at'), 'window_start': p.get('window_start'),

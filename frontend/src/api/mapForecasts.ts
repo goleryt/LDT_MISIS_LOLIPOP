@@ -4,6 +4,7 @@ export type ForecastKind = 'gas' | 'sensor_failure' | 'fire';
 export type MapForecast = {
   key:string; worker:ForecastKind; object_id:number|null; channel_id:number|null;
   bound:boolean; available:boolean; score:number|null; score_kind:string|null;
+  availability_reason?:string|null;
   warning:boolean|null; queue_selected?:boolean; reason:string|string[]|null;
   cutoff:string|null; issued_at:string|null; window_start:string|null; window_end_exclusive:string|null;
   model_version:string|null; source:string; snapshot_version:string; detail_url:string; recommendations:string[];

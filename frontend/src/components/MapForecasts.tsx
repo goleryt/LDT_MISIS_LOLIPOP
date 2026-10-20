@@ -18,11 +18,14 @@ function count(value:number, forms:[string,string,string]) {
   return `${value} ${forms[form==='one'?0:form==='few'?1:2]}`;
 }
 
+const AVAILABILITY:Record<string,string>={UNBOUND_CHANNEL:'Привязка не подтверждена',MODULE_DISABLED:'Модель отключена административной конфигурацией',SCORE_UNAVAILABLE:'Нет пригодной численной оценки',RESULT_UNAVAILABLE:'Расчёт не предоставил пригодный результат'};
+
 export function ObjectForecasts({rows}:{rows:MapForecast[]}) {
   const [now,setNow]=useState(()=>Date.now());
   useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),60000);return()=>clearInterval(timer);},[]);
   return <section className="object-forecasts" aria-label="Сохранённые прогнозы объекта">
     <h3>Сохранённые прогнозы</h3>
+    <p>Все модели объекта; выбранный тип показан первым.</p>
     <p>Отдельные оценки моделей. Общая вероятность аварии не рассчитывается.</p>
     {!rows.length&&<p>У объекта нет результатов в доступном снимке. Это не означает нулевой риск.</p>}
     {rows.map(row=><article className={`map-forecast-card ${row.worker}`} key={row.key} aria-label={FORECAST_LABELS[row.worker]}>
@@ -31,6 +34,7 @@ export function ObjectForecasts({rows}:{rows:MapForecast[]}) {
       <p>{row.source}. Требуется проверка специалистом.</p>
       {row.available&&<p>{row.worker==='gas'?(row.queue_selected?'Выбран в газовую очередь проверки':'Вне газовой очереди Top-K / cooldown'):(row.warning?'Превышен сценарный порог ручной проверки':'Порог сценарного предупреждения не превышен')}</p>}
       {!row.bound&&<p>Привязка не подтверждена. Результат не размещён на карте.</p>}
+      {!row.available&&row.availability_reason&&<p>{AVAILABILITY[row.availability_reason]??'Результат недоступен'}. Исходная причина модели сохранена в подробностях.</p>}
       <p>Окно: {time(row.window_start)} — {time(row.window_end_exclusive)} МСК, конец не включается.</p>
       {row.window_start&&Date.parse(row.window_start.length===10?`${row.window_start}T00:00:00+03:00`:row.window_start)<=now&&<p>Исторический результат: окно уже началось. Это не актуальное предупреждение.</p>}
       <p>Данные по {row.cutoff??'неизвестную дату'} · Рассчитано {time(row.issued_at)} МСК</p>
