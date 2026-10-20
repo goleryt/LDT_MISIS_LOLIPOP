@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -17,9 +17,7 @@ export async function getSensorHistory(
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить историю датчика: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();

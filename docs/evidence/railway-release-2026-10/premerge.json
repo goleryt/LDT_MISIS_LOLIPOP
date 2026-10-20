@@ -1,0 +1,27 @@
+{
+  "scope": "read-only merge-tree analysis; no branch or commit merge performed",
+  "diff_check": 0,
+  "merge_analysis": 0,
+  "main_unchanged": true,
+  "refs": [
+    "origin 5d6412609b9da08720b1c905041c00333b7cd69c",
+    "origin/archive/pre-submission-2026-09-28 5b60501da17bae4faf476fc588ac80b5834ed298",
+    "origin/backend 5ba295ce7fe9d8d6f1d90c96bb8c15f6de074049",
+    "origin/claude/sync-ml-work 9566163bd9f303336b09d1f55f9466b0a677f8de",
+    "origin/codex/designer-ui-fixes f4e06d7bcf81d921212b686407b9ee1d452b7d84",
+    "origin/codex/gas-triage-21 363d64a412e8e288d5bba82ffd4983ec9cb13f12",
+    "origin/codex/gas-v4-stage19 f1927cc87a02a91ab4a64ba43aa02007668e6427",
+    "origin/codex/gas-v4-stage19-memory d7ea4bbaf45dbef67e808aa28b083fbb63963e8d",
+    "origin/codex/ml-daily-advisories 90bb0d07e90afc20ec3dc72a9dc34c8f55d4320a",
+    "origin/db-schema 0f63b3fe16b5780188eb882721e93961d92c066c",
+    "origin/docs/repository-guide 4dc97b4fed1dcce8ae30babaf855f35a3c95d035",
+    "origin/feature/data-canonical-contract 0391a87026d9af7606b89bd9ab43e2c7ba40c9b4",
+    "origin/final/non-ml-hardening-20261016 a5ba6e0b95b5e4152a753a92decd92d92a141f36",
+    "origin/integration/final-20260926 4cc6d39ebd3a0c7194a489c37b3440d66c5ee527",
+    "origin/main 5d6412609b9da08720b1c905041c00333b7cd69c",
+    "origin/map-web-design cb9ae263561b8f5e6af6c16f9fb657406bbab3d7",
+    "origin/ml-models 29acc0d3994cdb6604faef5be22439444d85e009",
+    "origin/release/final-rc 237ff93d01fdcbfae7b58538946d0f02c267a369",
+    "origin/ui/rc-visual-fixes-20261019 aec7953c994a83df12cbefd9d1dbee06946a3fa6"
+  ]
+}

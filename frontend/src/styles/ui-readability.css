@@ -1,0 +1,111 @@
+/* Opaque versions of the existing panel/control patterns, shared by both themes. */
+:root {
+    --ui-surface: #142238;
+    --ui-elevated: #1c2e47;
+    --ui-border: #4b607b;
+    --ui-ink: #f0f4fb;
+    --ui-muted: #b9c6d9;
+    --ui-hover: #243a57;
+    --ui-error: #ffc0b8;
+    --ui-button-ink: #fff;
+    color-scheme: dark;
+}
+html[data-theme="light"] {
+    --ui-surface: #fffcf5;
+    --ui-elevated: #f4eddc;
+    --ui-border: #b8aa90;
+    --ui-ink: #2e2618;
+    --ui-muted: #665b48;
+    --ui-hover: #ebe3d0;
+    --ui-error: #9b2424;
+    color-scheme: light;
+}
+.app-shell :is(input, select, textarea, button) { font-size: var(--font-control); }
+.app-shell :is(input, select, textarea) { min-width: 0; }
+.app-shell table { font-size: var(--font-row); }
+.app-shell table :is(td, th) { font-size: var(--font-row); }
+.app-shell table :is(span, strong, small, time) { font-size: 14px; }
+.app-shell :is(button, a, input, select, textarea, summary):focus-visible {
+    outline: 3px solid var(--page-active-bar);
+    outline-offset: 3px;
+}
+.app-shell button:disabled { opacity: .75; }
+.app-shell :is(.stat-card,.alarm-stat-card,.object-stat-card,.request-stat-card,
+    .upload-card,.history-card,.alarms-panel,.objects-panel,.events-panel,
+    .requests-panel,.request-create-panel,.journal-board) {
+    background: var(--ui-surface) !important;
+    border-color: var(--ui-border) !important;
+    color: var(--ui-ink);
+    backdrop-filter: none;
+}
+.app-shell :is(.stat-card,.alarm-stat-card,.object-stat-card,.request-stat-card,
+    .upload-card,.history-card,.alarms-panel,.objects-panel,.requests-panel,.request-create-panel)
+    :is(h2,h3,strong,label),
+.app-shell :is(.alarms-table,.imports-table,.objects-table,.requests-table,.journal-table) td,
+.app-shell :is(.alarm-table-main,.object-table-main,.request-table-main) strong,
+.app-shell .file-cell strong { color: var(--ui-ink); }
+.app-shell :is(.stat-card,.alarm-stat-card,.object-stat-card,.request-stat-card) span,
+.app-shell :is(.alarm-table-main,.object-table-main,.request-table-main) span,
+.app-shell :is(.section-heading,.alarms-panel-header) span,
+.app-shell :is(.upload-card,.history-card) :is(p,small),
+.app-shell :is(.alarm-time,.upload-hint,.request-create-heading span) { color: var(--ui-muted); }
+.app-shell :is(.alarms-table,.imports-table,.objects-table,.requests-table,.journal-table) th {
+    background: var(--ui-elevated);
+    color: var(--ui-ink);
+    border-color: var(--ui-border);
+}
+.app-shell :is(.alarms-table,.imports-table,.objects-table,.requests-table,.journal-table) td {
+    border-color: var(--ui-border);
+}
+.app-shell :is(.alarms-table,.imports-table,.objects-table,.requests-table,.journal-table) tbody tr:hover {
+    background: var(--ui-hover);
+}
+.app-shell :is(.secondary-button,.alarms-refresh-button,.objects-refresh-button,
+    .events-refresh-button,.requests-secondary-button,.request-map-button,.object-map-button,
+    .request-status-select,.journal-icon-button,.journal-top-nav,.journal-period,
+    .journal-filter-trigger,.journal-status-filter,.journal-filter-popover,
+    .journal-filter-actions button,.journal-footer button) {
+    background: var(--ui-elevated) !important;
+    color: var(--ui-ink);
+    border-color: var(--ui-border) !important;
+    backdrop-filter: none;
+}
+.app-shell :is(.journal-filter-actions button:last-child,.requests-primary-button,.primary-button) {
+    background: var(--design-gradient-primary) !important;
+    color: var(--ui-button-ink);
+}
+.app-shell :is(.journal-period,.journal-filter-popover,.journal-filter-input,.request-form-grid,.request-review,.upload-card,.operations-page)
+    :is(input,select,textarea) {
+    background: var(--ui-surface);
+    border-color: var(--ui-border);
+    color: var(--ui-ink);
+    color-scheme: inherit;
+}
+.app-shell :is(.journal-filter-input,.journal-filter-popover label,.journal-top-nav a) { color: var(--ui-ink); }
+.app-shell :is(.journal-time-sort,.journal-sort-button) { color: var(--ui-ink); }
+.app-shell :is(.request-form-grid label > span,.file-cell span,.journal-footer) { color: var(--ui-muted); }
+.app-shell :is(.alarm-sensor-cell,.journal-cell-inline) .sensor-type-icon { color: var(--ui-ink); }
+.app-shell input::placeholder,.app-shell textarea::placeholder { color: var(--ui-muted); opacity: 1; }
+.app-shell .journal-filter-input { border-color: var(--ui-border); background: var(--ui-surface); }
+.app-shell .journal-filter-popover { box-shadow: 0 12px 32px #0005 !important; }
+.app-shell .journal-filter-popover input { min-height: 40px; }
+.app-shell :is(.journal-period,.journal-filter-trigger,.journal-status-filter) { min-height: 40px; }
+.app-shell .drop-zone { background: var(--ui-elevated); border-color: var(--ui-border); color: var(--ui-ink); }
+.app-shell .drop-zone :is(strong,span) { color: var(--ui-ink); }
+.app-shell .selected-file { background: var(--ui-elevated); border-color: var(--ui-border); }
+.app-shell .selected-file :is(strong,span) { color: var(--ui-ink); }
+.app-shell [role="alert"] { color: var(--ui-error); }
+.app-shell .alarm-value { color: var(--ui-error); }
+.map-page :is(.sensor-detail-grid span,.sensor-detail-row span,.sensor-value-card span,
+    .sensor-risk-disclaimer,.sensors-heading > div > span,.sensor-row-main span,.drawer-eyebrow) {
+    color: var(--design-muted);
+}
+.request-form-actions { flex-wrap: wrap; }
+.request-form-actions p { flex-basis: 100%; margin: 0; }
+.app-shell .request-create-heading > button { color: var(--ui-muted); }
+.app-shell .operations-page { color: var(--page-text); }
+.app-shell .status-notice {
+    background: var(--ui-elevated);
+    color: var(--ui-ink);
+    border-color: var(--page-accent);
+}

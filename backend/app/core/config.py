@@ -8,6 +8,7 @@ from sqlalchemy import URL
 class Settings(BaseSettings):
     app_name: str = "LDT MISIS LOLIPOP Backend"
     app_version: str = "0.2.0"
+    app_commit: str = Field(default="unknown", pattern=r"^(unknown|[a-fA-F0-9]{7,40})$")
     environment: Literal["development", "test", "production"] = "development"
     postgres_host: str = "localhost"
     postgres_port: int = 5432
@@ -18,6 +19,10 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     max_upload_bytes: int = Field(default=50 * 1024 * 1024, ge=1024, le=200 * 1024 * 1024)
     max_import_rows: int = Field(default=250000, ge=1)
+    import_max_concurrent: int = Field(default=2, ge=1, le=4)
+    import_retry_after_seconds: int = Field(default=3, ge=1, le=60)
+    import_timeout_seconds: int = Field(default=240, ge=5, le=240)
+    max_xlsx_uncompressed_bytes: int = Field(default=64 * 1024 * 1024, ge=1024, le=200 * 1024 * 1024)
     read_cache_seconds: float = Field(default=2, ge=0, le=5)
     auth_provider: Literal["local", "ldap"] = "local"
     secure_cookies: bool = False
@@ -35,16 +40,26 @@ class Settings(BaseSettings):
     ldap_role_groups: dict[str, str] = {}
     integration_sources_file: str = ""
     integration_poll_seconds: int = Field(default=30, ge=5, le=120)
+    backup_status_dir: str = ""
     # ML (пакет LCT_ML_backend_v1): суточный расчёт отдельной задачей, API только читает результат.
     ml_bundles_dir: str = ""
     ml_export_days: int = Field(default=430, ge=401, le=800)
     ml_top_k_per_day: int = Field(default=25, ge=1, le=500)
     ml_cooldown_days: int = Field(default=3, ge=1, le=14)
+    scenario_enabled: bool = False
+    scenario_sensor_enabled: bool = True
+    scenario_fire_enabled: bool = True
+    scenario_allow_production: bool = False
+    scenario_compute_script: str = "/opt/combined/compute.py"
+    scenario_timeout_seconds: int = Field(default=180, ge=5, le=480)
+    scenario_max_rows: int = Field(default=200000, ge=1, le=1000000)
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @model_validator(mode="after")
     def production_safety(self):
         if self.environment == "production":
+            if self.scenario_enabled and not self.scenario_allow_production:
+                raise ValueError("Experimental scenarios require explicit production acceptance")
             if not self.secure_cookies or self.allow_mock_ingestion or "*" in self.allowed_hosts:
                 raise ValueError("Production requires secure cookies, explicit hosts and mock ingestion disabled")
             if len(self.postgres_password) < 16:

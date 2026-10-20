@@ -1,0 +1,512 @@
+[
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 266186752,
+      "peak_bytes": 282124288,
+      "cpu_usec": 10880659,
+      "cpu_at": 500515.7093859,
+      "anon_bytes": 260898816,
+      "working_set_bytes": 266158080,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1015308288,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 626635789,
+      "cpu_at": 500516.08482,
+      "anon_bytes": 22892544,
+      "working_set_bytes": 238669824,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 2
+    },
+    "at": 500516.4831842
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 281829376,
+      "peak_bytes": 282124288,
+      "cpu_usec": 14032431,
+      "cpu_at": 500517.3394957,
+      "anon_bytes": 274075648,
+      "working_set_bytes": 281079808,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1016176640,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 626835664,
+      "cpu_at": 500517.61562,
+      "anon_bytes": 23916544,
+      "working_set_bytes": 239538176,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 2
+    },
+    "at": 500517.8917342
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 318021632,
+      "peak_bytes": 318021632,
+      "cpu_usec": 16730635,
+      "cpu_at": 500518.6762254,
+      "anon_bytes": 310652928,
+      "working_set_bytes": 316600320,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1054646272,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 627212540,
+      "cpu_at": 500518.966326,
+      "anon_bytes": 61329408,
+      "working_set_bytes": 278007808,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 2,
+      "import_slots": 2
+    },
+    "at": 500519.2843638
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 330223616,
+      "peak_bytes": 345419776,
+      "cpu_usec": 18895249,
+      "cpu_at": 500520.0636114,
+      "anon_bytes": 322363392,
+      "working_set_bytes": 328802304,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1017368576,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 627750651,
+      "cpu_at": 500520.4472246,
+      "anon_bytes": 24526848,
+      "working_set_bytes": 240730112,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 2,
+      "import_slots": 2
+    },
+    "at": 500520.7274294
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 337334272,
+      "peak_bytes": 345419776,
+      "cpu_usec": 21678272,
+      "cpu_at": 500521.5487813,
+      "anon_bytes": 330018816,
+      "working_set_bytes": 335912960,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1018413056,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 628200790,
+      "cpu_at": 500521.9831319,
+      "anon_bytes": 24858624,
+      "working_set_bytes": 241774592,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 2,
+      "import_slots": 2
+    },
+    "at": 500522.2851185
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 344748032,
+      "peak_bytes": 345419776,
+      "cpu_usec": 24187485,
+      "cpu_at": 500523.0814957,
+      "anon_bytes": 338358272,
+      "working_set_bytes": 344023040,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1018376192,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 628992166,
+      "cpu_at": 500523.4324003,
+      "anon_bytes": 25038848,
+      "working_set_bytes": 241737728,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 2
+    },
+    "at": 500523.8215443
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 347537408,
+      "peak_bytes": 351842304,
+      "cpu_usec": 27293352,
+      "cpu_at": 500524.7361016,
+      "anon_bytes": 340500480,
+      "working_set_bytes": 346914816,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1018011648,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 629192346,
+      "cpu_at": 500525.0319719,
+      "anon_bytes": 25104384,
+      "working_set_bytes": 241373184,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 2
+    },
+    "at": 500525.4313642
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 338010112,
+      "peak_bytes": 351842304,
+      "cpu_usec": 30381532,
+      "cpu_at": 500526.2627679,
+      "anon_bytes": 326443008,
+      "working_set_bytes": 336592896,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1018810368,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 629395626,
+      "cpu_at": 500526.5947635,
+      "anon_bytes": 25763840,
+      "working_set_bytes": 242171904,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 2,
+      "idle_in_transaction": 1,
+      "import_slots": 2
+    },
+    "at": 500526.8898503
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 344817664,
+      "peak_bytes": 351842304,
+      "cpu_usec": 33028988,
+      "cpu_at": 500527.7603717,
+      "anon_bytes": 337420288,
+      "working_set_bytes": 343396352,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1056915456,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 630099593,
+      "cpu_at": 500528.0297396,
+      "anon_bytes": 62656512,
+      "working_set_bytes": 280276992,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 3,
+      "import_slots": 2
+    },
+    "at": 500528.318851
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 348532736,
+      "peak_bytes": 351842304,
+      "cpu_usec": 35140936,
+      "cpu_at": 500529.1206315,
+      "anon_bytes": 341200896,
+      "working_set_bytes": 347111424,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1019871232,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 630704032,
+      "cpu_at": 500529.4131927,
+      "anon_bytes": 26062848,
+      "working_set_bytes": 243232768,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 1,
+      "idle_in_transaction": 2,
+      "import_slots": 2
+    },
+    "at": 500529.6840333
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 349696000,
+      "peak_bytes": 351842304,
+      "cpu_usec": 37591687,
+      "cpu_at": 500530.4786768,
+      "anon_bytes": 341508096,
+      "working_set_bytes": 348274688,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1019346944,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 631173893,
+      "cpu_at": 500530.7416055,
+      "anon_bytes": 25702400,
+      "working_set_bytes": 242708480,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 1
+    },
+    "at": 500531.0553434
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 347889664,
+      "peak_bytes": 351842304,
+      "cpu_usec": 39266313,
+      "cpu_at": 500531.884997,
+      "anon_bytes": 341557248,
+      "working_set_bytes": 347627520,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1019666432,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 631773347,
+      "cpu_at": 500532.1581488,
+      "anon_bytes": 26144768,
+      "working_set_bytes": 243027968,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 1
+    },
+    "at": 500532.5407296
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 348942336,
+      "peak_bytes": 351842304,
+      "cpu_usec": 40908999,
+      "cpu_at": 500533.3923808,
+      "anon_bytes": 341532672,
+      "working_set_bytes": 348221440,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1019785216,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 632110626,
+      "cpu_at": 500533.7946926,
+      "anon_bytes": 26230784,
+      "working_set_bytes": 243146752,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 1,
+      "idle_in_transaction": 0,
+      "import_slots": 1
+    },
+    "at": 500534.1187072
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 356716544,
+      "peak_bytes": 357023744,
+      "cpu_usec": 42913172,
+      "cpu_at": 500535.065271,
+      "anon_bytes": 349573120,
+      "working_set_bytes": 355987456,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1035386880,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 632979664,
+      "cpu_at": 500535.4960339,
+      "anon_bytes": 41578496,
+      "working_set_bytes": 258748416,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 1,
+      "import_slots": 1
+    },
+    "at": 500535.9377209
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 348348416,
+      "peak_bytes": 359485440,
+      "cpu_usec": 44832666,
+      "cpu_at": 500536.7932505,
+      "anon_bytes": 341544960,
+      "working_set_bytes": 347623424,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1025073152,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 633744964,
+      "cpu_at": 500537.1059606,
+      "anon_bytes": 31141888,
+      "working_set_bytes": 248434688,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 1,
+      "idle_in_transaction": 0,
+      "import_slots": 1
+    },
+    "at": 500537.4189453
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 347070464,
+      "peak_bytes": 359485440,
+      "cpu_usec": 46214719,
+      "cpu_at": 500538.200749,
+      "anon_bytes": 341180416,
+      "working_set_bytes": 346345472,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1038548992,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 634293440,
+      "cpu_at": 500538.5228823,
+      "anon_bytes": 44752896,
+      "working_set_bytes": 261910528,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 0
+    },
+    "at": 500538.8375242
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 346103808,
+      "peak_bytes": 359485440,
+      "cpu_usec": 46565156,
+      "cpu_at": 500539.6859086,
+      "anon_bytes": 341164032,
+      "working_set_bytes": 346075136,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 1018712064,
+      "peak_bytes": 1065963520,
+      "cpu_usec": 634509367,
+      "cpu_at": 500539.9655633,
+      "anon_bytes": 26390528,
+      "working_set_bytes": 242073600,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 0
+    },
+    "at": 500540.2822219
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "stats": {
+    "startTime": "2026-10-20T16:16:53.885Z",
+    "duration": 157423.41999999998,
+    "expected": 35,
+    "skipped": 8,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "initial_attempt": {
+    "result": "FAIL before readiness",
+    "cause": "QA harness started browser before Uvicorn listened; nginx connection refused at 16:11:45–47 UTC",
+    "resolution": "Wait for /ready=200, then full suite:35PASS/8optionalSKIP; no test disabled"
+  }
+}

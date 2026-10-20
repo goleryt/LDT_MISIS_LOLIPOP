@@ -1,0 +1,21 @@
+{
+  "failed_run": 39274329802,
+  "sha": "7c4b1cc730dcfde0118e5ce77894168037bc0b33",
+  "passed_jobs": [
+    "backend",
+    "frontend",
+    "combined-runtime"
+  ],
+  "failed_job": "containers",
+  "failure": "one-shot computed fontSize was empty/NaN while a transient table cell was replaced",
+  "browser_result": {
+    "passed": 26,
+    "skipped": 8,
+    "failed": 1,
+    "new_navigation": "PASS"
+  },
+  "fix": "wait for data cell (exclude colspan loading placeholder), reacquire and poll same >=14px requirement; no application/threshold change",
+  "local_repeat": "5 PASS using 2 workers, both themes and all 3 pages per repeat",
+  "typescript_vite": "PASS",
+  "lint": "0 errors / 10 existing warnings"
+}

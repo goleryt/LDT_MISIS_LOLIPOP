@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
 from typing import Literal
 
-from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, HTTPException, Query, Request
+from pydantic import AwareDatetime, BaseModel, Field
 from sqlalchemy import select
 
 from app.db.models import (
@@ -11,6 +11,7 @@ from app.db.models import (
     PreventiveRequest,
 )
 from app.db.session import SessionLocal
+from app.db.platform import RequestChange
 
 
 router = APIRouter(
@@ -27,11 +28,19 @@ RequestPriority = Literal[
 ]
 
 RequestStatus = Literal[
+    "draft",
     "new",
     "in_progress",
     "completed",
     "cancelled",
 ]
+
+TRANSITIONS = {"draft": {"new", "cancelled"}, "new": {"in_progress", "cancelled"},
+               "in_progress": {"completed", "cancelled"}, "completed": set(), "cancelled": set()}
+
+def record_change(db, row, principal, previous, fields):
+    db.add(RequestChange(request_id=row.id, actor=principal.username, role=principal.role,
+                         from_status=previous, to_status=row.status, changed_fields=sorted(fields)))
 
 
 class PreventiveRequestCreate(BaseModel):
@@ -52,6 +61,7 @@ class PreventiveRequestCreate(BaseModel):
 
 
 class PreventiveRequestUpdate(BaseModel):
+    expected_updated_at: AwareDatetime | None = None
     title: str | None = Field(
         default=None,
         min_length=1,
@@ -231,6 +241,7 @@ def get_requests(
 @router.post("")
 def create_request(
     payload: PreventiveRequestCreate,
+    http_request: Request,
 ) -> dict[str, object]:
     title = payload.title.strip()
 
@@ -261,8 +272,11 @@ def create_request(
         )
 
         session.add(request)
+        session.flush()
+        record_change(session, request, http_request.state.principal, None, ["created"])
         session.commit()
         session.refresh(request)
+        http_request.state.audit_entity_id = str(request.id)
 
         row = get_request_with_names(
             session,
@@ -286,6 +300,7 @@ def create_request(
 def update_request(
     request_id: int,
     payload: PreventiveRequestUpdate,
+    http_request: Request,
 ) -> dict[str, object]:
     with SessionLocal() as session:
         request = session.get(
@@ -303,6 +318,21 @@ def update_request(
         changes = payload.model_dump(
             exclude_unset=True
         )
+        if "expected_updated_at" in changes:
+            expected = changes.pop("expected_updated_at")
+            if expected is None:
+                raise HTTPException(422, "Expected update timestamp must not be null")
+            if request.updated_at != expected:
+                raise HTTPException(409, "Request changed; reload before applying your changes")
+        previous = request.status
+        if not changes:
+            raise HTTPException(422, "Specify at least one change")
+        if previous in {"completed", "cancelled"}:
+            raise HTTPException(409, "A closed request cannot be edited")
+        if previous == "draft" and http_request.state.principal.role not in {"admin", "dispatcher"}:
+            raise HTTPException(403, "Only a dispatcher can review a draft")
+        if changes.get("status") is not None and changes["status"] != previous and changes["status"] not in TRANSITIONS.get(previous, set()):
+            raise HTTPException(409, "Invalid request status transition")
 
         for required in ("title", "priority", "status"):
             if required in changes and changes[required] is None:
@@ -353,6 +383,8 @@ def update_request(
             timezone.utc
         )
 
+        record_change(session, request, http_request.state.principal, previous, changes.keys())
+
         session.commit()
 
         row = get_request_with_names(
@@ -371,3 +403,13 @@ def update_request(
             object_name=row.object_name,
             sensor_name=row.sensor_name,
         )
+
+
+@router.get("/{request_id}/history")
+def request_history(request_id: int):
+    with SessionLocal() as db:
+        if db.get(PreventiveRequest, request_id) is None:
+            raise HTTPException(404, "Request not found")
+        return [{column.name: getattr(row, column.name) for column in row.__table__.columns}
+                for row in db.scalars(select(RequestChange).where(RequestChange.request_id == request_id)
+                                      .order_by(RequestChange.id))]

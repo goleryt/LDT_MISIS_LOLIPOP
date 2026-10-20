@@ -1,0 +1,741 @@
+{
+  "phase": "before",
+  "base": "http://127.0.0.1:18095",
+  "date": "2026-10-20T09:24:54.619Z",
+  "screens": [
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "login",
+      "file": "before-dark-1024-login.png",
+      "geometry": {
+        "x": 292,
+        "y": 183.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "settings",
+      "file": "before-dark-1024-settings.png",
+      "geometry": {
+        "x": 372,
+        "y": 182.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "journal",
+      "file": "before-dark-1024-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 211,
+        "width": 756,
+        "height": 4424.34375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "reports",
+      "file": "before-dark-1024-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 728,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "imports",
+      "file": "before-dark-1024-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 127.15625,
+        "width": 716,
+        "height": 572.796875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "login",
+      "file": "before-dark-1280-login.png",
+      "geometry": {
+        "x": 420,
+        "y": 199.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "settings",
+      "file": "before-dark-1280-settings.png",
+      "geometry": {
+        "x": 500,
+        "y": 198.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "journal",
+      "file": "before-dark-1280-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1012,
+        "height": 4424.34375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "reports",
+      "file": "before-dark-1280-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "imports",
+      "file": "before-dark-1280-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 158.859375,
+        "width": 972,
+        "height": 572.796875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "login",
+      "file": "before-dark-1440-login.png",
+      "geometry": {
+        "x": 500,
+        "y": 249.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "settings",
+      "file": "before-dark-1440-settings.png",
+      "geometry": {
+        "x": 580,
+        "y": 248.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "journal",
+      "file": "before-dark-1440-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1172,
+        "height": 3840.75,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "reports",
+      "file": "before-dark-1440-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "imports",
+      "file": "before-dark-1440-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 258.859375,
+        "width": 1132,
+        "height": 572.796875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "login",
+      "file": "before-dark-1920-login.png",
+      "geometry": {
+        "x": 740,
+        "y": 339.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "settings",
+      "file": "before-dark-1920-settings.png",
+      "geometry": {
+        "x": 820,
+        "y": 338.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "journal",
+      "file": "before-dark-1920-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1652,
+        "height": 3840.75,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "reports",
+      "file": "before-dark-1920-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "imports",
+      "file": "before-dark-1920-imports.png",
+      "geometry": {
+        "x": 330,
+        "y": 439.5625,
+        "width": 1500,
+        "height": 572.796875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "login",
+      "file": "before-light-1024-login.png",
+      "geometry": {
+        "x": 292,
+        "y": 183.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "settings",
+      "file": "before-light-1024-settings.png",
+      "geometry": {
+        "x": 372,
+        "y": 182.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "journal",
+      "file": "before-light-1024-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 211,
+        "width": 756,
+        "height": 4424.34375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "reports",
+      "file": "before-light-1024-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 728,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "imports",
+      "file": "before-light-1024-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 127.15625,
+        "width": 716,
+        "height": 572.796875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "login",
+      "file": "before-light-1280-login.png",
+      "geometry": {
+        "x": 420,
+        "y": 199.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "settings",
+      "file": "before-light-1280-settings.png",
+      "geometry": {
+        "x": 500,
+        "y": 198.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "journal",
+      "file": "before-light-1280-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1012,
+        "height": 4424.34375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "reports",
+      "file": "before-light-1280-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "imports",
+      "file": "before-light-1280-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 158.859375,
+        "width": 972,
+        "height": 572.796875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "login",
+      "file": "before-light-1440-login.png",
+      "geometry": {
+        "x": 500,
+        "y": 249.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "settings",
+      "file": "before-light-1440-settings.png",
+      "geometry": {
+        "x": 580,
+        "y": 248.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "journal",
+      "file": "before-light-1440-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1172,
+        "height": 3840.75,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "reports",
+      "file": "before-light-1440-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "imports",
+      "file": "before-light-1440-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 258.859375,
+        "width": 1132,
+        "height": 572.796875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "login",
+      "file": "before-light-1920-login.png",
+      "geometry": {
+        "x": 740,
+        "y": 339.21875,
+        "width": 440,
+        "height": 401.5625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "settings",
+      "file": "before-light-1920-settings.png",
+      "geometry": {
+        "x": 820,
+        "y": 338.484375,
+        "width": 520,
+        "height": 447.015625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "journal",
+      "file": "before-light-1920-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1652,
+        "height": 3840.75,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "reports",
+      "file": "before-light-1920-reports.png",
+      "geometry": {
+        "x": 268,
+        "y": 208.453125,
+        "width": 900,
+        "height": 415.75,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 416,
+        "clientHeight": 416
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "imports",
+      "file": "before-light-1920-imports.png",
+      "geometry": {
+        "x": 330,
+        "y": 439.5625,
+        "width": 1500,
+        "height": 572.796875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 571,
+        "clientHeight": 571
+      }
+    }
+  ],
+  "page_errors": [],
+  "checks": [
+    {
+      "name": "real data desktop matrix without page overflow or runtime errors",
+      "status": "PASS"
+    }
+  ],
+  "browser": "155.0.8059.84",
+  "math_sha256": "c5b559bb5951f52528a01a3085f4415340d532e24484139772119805287fb361",
+  "model_counts": {
+    "gas": 3,
+    "scenario": 3
+  },
+  "status": "PASS"
+}

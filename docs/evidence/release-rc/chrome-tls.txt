@@ -1,0 +1,13 @@
+
+Running 4 tests using 2 workers
+
+(node:26104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [chrome] › e2e\release.spec.ts:43:1 › stored prediction supports URL, refresh, close and browser Back (5.1s)
+  ok 1 [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout (7.7s)
+  ok 3 [chrome] › e2e\workflows.spec.ts:32:1 › real gas bundle result, advisory and dispatcher decision (3.4s)
+  ok 4 [chrome] › e2e\workflows.spec.ts:109:1 › sensor history and preventive request from the map (8.2s)
+
+  4 passed (23.7s)

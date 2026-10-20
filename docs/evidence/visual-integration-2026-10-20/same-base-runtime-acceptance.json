@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "real frozen inference on 810 synthetic raw observations; not incident accuracy",
+  "sensor_forecasts": 2,
+  "fire_forecasts": 1,
+  "score_parity_supplier": true,
+  "row_order_invariant": true,
+  "future_observations_excluded": true,
+  "insufficient_history_unavailable": true,
+  "independent_flags": true,
+  "invalid_worker_isolated": true,
+  "gas_unchanged": true,
+  "daily_float_transport_lossless": true,
+  "elapsed_seconds": 3.4,
+  "peak_rss_mib": 217.4
+}

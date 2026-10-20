@@ -6,6 +6,7 @@ export type RequestPriority =
 
 
 export type RequestStatus =
+    | "draft"
     | "new"
     | "in_progress"
     | "completed"
@@ -43,6 +44,7 @@ export interface PreventiveRequestCreate {
 
 
 export interface PreventiveRequestUpdate {
+    expected_updated_at?: string;
     title?: string;
     description?: string | null;
     priority?: RequestPriority;

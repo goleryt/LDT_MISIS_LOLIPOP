@@ -1,0 +1,52 @@
+{
+  "commit": "18af8fa339c8da54db5337fb6592cb0a87a0dcad",
+  "previous": "5f274217cc566ee34b1eac26017041966452643e",
+  "deployment_id": "b1bd6fee-0e94-46b9-8d76-11b555c8e06f",
+  "ci": {
+    "id": 39408268560,
+    "head_sha": "18af8fa339c8da54db5337fb6592cb0a87a0dcad",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39408268560",
+    "run_attempt": 1,
+    "jobs": [
+      {
+        "id": 118579431521,
+        "name": "frontend",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 118579431632,
+        "name": "backend",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 118579431726,
+        "name": "combined-runtime",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 118579431735,
+        "name": "containers",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "archive_sha256": "6e74eb2b27a931807c78619eae71120e8e803169d962959b220bf263d4f2edac",
+  "database_reset": false,
+  "secrets_changed": false,
+  "model_sources_changed": false,
+  "stress_on_railway": false,
+  "railway_status": "SUCCESS",
+  "runtime_commit": "18af8fa339c8da54db5337fb6592cb0a87a0dcad",
+  "/health": {
+    "status": "ok"
+  },
+  "/ready": {
+    "status": "ready"
+  }
+}

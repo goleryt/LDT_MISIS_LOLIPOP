@@ -1,0 +1,30 @@
+{
+  "sha256": "0eac41ba5edc66fc1c8c1c1bf7c9879c9e8dd4397058bf841652238d93cefc61",
+  "size_bytes": 10033861,
+  "created_at": "2026-10-19T15:59:52.199974+00:00",
+  "revision": "d01901",
+  "download_checksum_verified": true,
+  "persistent_volume_copy": "/var/lib/postgresql/data/ldt-demo-backups/rc-post-20261019-155941.dump",
+  "workstation_copy": "outside Git, independent of deployment",
+  "automatic_backup": false,
+  "restore_verified": true,
+  "restore_database": "NEW isolated local release_post_20261019",
+  "smoke": {
+    "restore_ready": "PASS",
+    "restore_login": "PASS",
+    "restored_scenario_api": "PASS",
+    "revision": "d01901",
+    "counts": {
+      "events_journal": 173865,
+      "users": 5,
+      "object_catalogue": 97,
+      "channel_catalogue": 11490,
+      "ml_runs": 1,
+      "ml_scores": 3,
+      "predictions": 3,
+      "scenario_runs": 1,
+      "scenario_forecasts": 3,
+      "preventive_requests": 9
+    }
+  }
+}

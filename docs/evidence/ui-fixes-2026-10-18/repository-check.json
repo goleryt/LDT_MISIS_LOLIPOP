@@ -1,0 +1,6 @@
+{
+  "staged_paths_checked": 13,
+  "forbidden_paths_or_secret_signatures": [],
+  "checks": "Known token/private-key signatures, actual QA password, env/trace/test-result paths",
+  "limitation": "Signature scan and screenshot review do not constitute a comprehensive secret audit."
+}

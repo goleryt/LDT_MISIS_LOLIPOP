@@ -1,0 +1,16 @@
+{
+  "application_commit": "d4f3e091560b8a1030062ccffaf22bf0d330f80f",
+  "command": "playwright test --project=chrome; existing stored-result UI enabled, no inference",
+  "stats": {
+    "startTime": "2026-10-18T23:01:05.703Z",
+    "duration": 55866.189,
+    "expected": 16,
+    "skipped": 4,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "focused_report_boundary": "FAIL before fix, PASS after fix",
+  "build": "TypeScript/Vite PASS",
+  "lint_errors": 0,
+  "lint_warnings": 10
+}

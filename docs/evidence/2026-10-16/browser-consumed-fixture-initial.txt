@@ -1,0 +1,52 @@
+
+Running 8 tests using 1 worker
+
+(node:21384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout (2.5s)
+  ok 2 [chrome] › e2e\workflows.spec.ts:32:1 › real gas bundle result, advisory and dispatcher decision (1.8s)
+  ok 3 [chrome] › e2e\workflows.spec.ts:62:1 › failed prediction request has visible feedback and recovers (1.4s)
+  ok 4 [chrome] › e2e\workflows.spec.ts:75:1 › JSON import is visible in the registry and duplicate upload is identified (1.7s)
+  x  5 [chrome] › e2e\workflows.spec.ts:93:1 › mock alarm opens the exact sensor and can be marked read (30.2s)
+(node:30192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 6 [chrome] › e2e\workflows.spec.ts:106:1 › sensor history and preventive request from the map (3.1s)
+  ok 7 [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation (3.2s)
+  ok 8 [chrome] › e2e\workflows.spec.ts:168:1 › map loading and empty state, recovery and report progress (2.6s)
+
+
+  1) [chrome] › e2e\workflows.spec.ts:93:1 › mock alarm opens the exact sensor and can be marked read
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('.notification-panel a[href="/?objectId=900001&channelId=900001"]').first()
+
+
+       98 |   await page.getByRole("button", { name: "Войти", exact: true }).click();
+       99 |   await page.locator('.notification-panel summary').click();
+    > 100 |   await page.locator('.notification-panel a[href="/?objectId=900001&channelId=900001"]').first().click();
+          |                                                                                                  ^
+      101 |   await expect(page).toHaveURL(/objectId=900001&channelId=900001/);
+      102 |   await expect(page.getByRole("heading",{name:"Последние события",exact:true})).toBeVisible();
+      103 |   await page.getByRole("button",{name:/Прочитано:.*900001/}).first().click();
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:100:98
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-mock-alarm-opens-8004f-nsor-and-can-be-marked-read-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-mock-alarm-opens-8004f-nsor-and-can-be-marked-read-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-mock-alarm-opens-8004f-nsor-and-can-be-marked-read-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-mock-alarm-opens-8004f-nsor-and-can-be-marked-read-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chrome] › e2e\workflows.spec.ts:93:1 › mock alarm opens the exact sensor and can be marked read
+  7 passed (48.3s)

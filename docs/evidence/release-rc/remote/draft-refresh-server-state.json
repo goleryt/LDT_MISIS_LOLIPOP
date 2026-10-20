@@ -1,0 +1,16 @@
+{
+  "root_cause": "Visibility can change between action assertion and instantaneous branch; use request_id from successful decision response",
+  "delayed_detail_ms": 300,
+  "repeat_command": "playwright test e2e/workflows.spec.ts --grep 'real gas bundle' --repeat-each=3 --workers=1",
+  "serial_repetitions": {
+    "startTime": "2026-10-18T23:24:10.769Z",
+    "duration": 20195.545000000002,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "isolated_existing_prediction": true,
+  "new_inference": false,
+  "parallel_control": "A separate three-worker attempt hit expected revision409 on the shared stored fixture; serial repetition is the valid workflow check."
+}

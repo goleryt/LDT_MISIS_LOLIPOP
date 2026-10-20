@@ -1,0 +1,491 @@
+{
+  "format": "csv",
+  "offered_concurrent": 20,
+  "mode": "same",
+  "rows_per_file": 1000,
+  "authenticated_users": 20,
+  "invalid_file_index": null,
+  "file_bytes": [
+    46123
+  ],
+  "first_attempts": [
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.237,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.248,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.912,
+      "invalid_fixture": false,
+      "already_imported": false,
+      "inserted": 1000,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.235,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.243,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.168,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.166,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.165,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.163,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.162,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.162,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.165,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.165,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 429,
+      "seconds": 0.164,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_UPLOAD_CAPACITY_BUSY",
+      "retry_after": "3"
+    }
+  ],
+  "first_statuses": {
+    "429": 16,
+    "409": 3,
+    "200": 1
+  },
+  "unexpected_error_rate": 0.0,
+  "retries": [
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.086,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.072,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.053,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.053,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.047,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.04,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.037,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.037,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.037,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.03,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.033,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.035,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.038,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.04,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.051,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.039,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.066,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 409,
+      "seconds": 0.048,
+      "invalid_fixture": false,
+      "already_imported": null,
+      "inserted": null,
+      "code": "IMPORT_ALREADY_PROCESSING",
+      "retry_after": "3"
+    },
+    {
+      "file": "import-load-83-0.csv",
+      "status": 200,
+      "seconds": 0.072,
+      "invalid_fixture": false,
+      "already_imported": true,
+      "inserted": null,
+      "code": null,
+      "retry_after": null
+    }
+  ],
+  "wall_seconds": 1.48,
+  "processing_seconds": {
+    "p50": 0.16,
+    "p95": 0.25,
+    "max": 0.912
+  },
+  "memory": {
+    "ldt-import-load-web": {
+      "sampled_peak_mib": 272.3,
+      "kernel_peak_mib": 272.3,
+      "working_set_peak_mib": 272.28,
+      "anon_peak_mib": 266.45,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "sampled_peak_mib": 239.14,
+      "kernel_peak_mib": 259.46,
+      "working_set_peak_mib": 135.89,
+      "anon_peak_mib": 21.89,
+      "oom_kill": 0,
+      "oom_events": 0
+    }
+  },
+  "cpu": {
+    "ldt-import-load-web": {
+      "sampled_max_pct_one_core": 86.05,
+      "allocation_vcpu": 2,
+      "interval_average_pct_one_core": 46.07
+    },
+    "ldt-import-load-db": {
+      "sampled_max_pct_one_core": 23.84,
+      "allocation_vcpu": 2,
+      "interval_average_pct_one_core": 15.57
+    }
+  },
+  "connections_peak": {
+    "total": 15,
+    "target": 7,
+    "active": 0,
+    "idle_in_transaction": 1,
+    "import_slots": 1
+  },
+  "ordinary_api": {
+    "requests": 9,
+    "failures": 0,
+    "statuses": {
+      "200": 9
+    },
+    "per_path": {
+      "/api/v1/map/objects": {
+        "requests": 3,
+        "failures": 0
+      },
+      "/health": {
+        "requests": 3,
+        "failures": 0
+      },
+      "/api/v1/imports": {
+        "requests": 3,
+        "failures": 0
+      }
+    },
+    "p50_ms": 32.44,
+    "p95_ms": 89.75,
+    "max_ms": 235.39
+  },
+  "expected_generated_rows": 1000,
+  "actual_generated_rows": 1000,
+  "rows_match": true,
+  "registry_statuses": {
+    "completed": 1
+  },
+  "monitor_samples": 3,
+  "oom_killed": false,
+  "accepted_processing_seconds": {
+    "p50": 0.91,
+    "p95": 0.91,
+    "max": 0.912
+  }
+}

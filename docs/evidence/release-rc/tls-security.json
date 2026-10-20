@@ -1,0 +1,13 @@
+{
+  "environment": "isolated local TLS edge + production settings; self-signed fixture certificate",
+  "checks": {
+    "/health": 200,
+    "/ready": 200
+  },
+  "secure_cookie": true,
+  "cookie_not_sent_over_http": true,
+  "csrf_denied": 403,
+  "admin_denied": 403,
+  "logout": 200,
+  "expired": 401
+}

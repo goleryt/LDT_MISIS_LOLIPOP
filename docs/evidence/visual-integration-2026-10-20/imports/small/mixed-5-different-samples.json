@@ -1,0 +1,92 @@
+[
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 267661312,
+      "peak_bytes": 282124288,
+      "cpu_usec": 10296479,
+      "cpu_at": 539677.8931801,
+      "anon_bytes": 261492736,
+      "working_set_bytes": 267427840,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 108511232,
+      "peak_bytes": 108560384,
+      "cpu_usec": 2251048,
+      "cpu_at": 539678.2521025,
+      "anon_bytes": 23175168,
+      "working_set_bytes": 87867392,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 1,
+      "idle_in_transaction": 2,
+      "import_slots": 2
+    },
+    "at": 539678.6689503
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 300625920,
+      "peak_bytes": 300892160,
+      "cpu_usec": 12661761,
+      "cpu_at": 539679.4932951,
+      "anon_bytes": 294858752,
+      "working_set_bytes": 300441600,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 161796096,
+      "peak_bytes": 161796096,
+      "cpu_usec": 2962290,
+      "cpu_at": 539679.7569813,
+      "anon_bytes": 34054144,
+      "working_set_bytes": 125071360,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 0
+    },
+    "at": 539680.0380835
+  },
+  {
+    "ldt-import-load-web": {
+      "memory_bytes": 306483200,
+      "peak_bytes": 306483200,
+      "cpu_usec": 13705459,
+      "cpu_at": 539681.1647564,
+      "anon_bytes": 300736512,
+      "working_set_bytes": 306450432,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "ldt-import-load-db": {
+      "memory_bytes": 182841344,
+      "peak_bytes": 186863616,
+      "cpu_usec": 3419824,
+      "cpu_at": 539681.46707,
+      "anon_bytes": 24973312,
+      "working_set_bytes": 126316544,
+      "oom_kill": 0,
+      "oom_events": 0
+    },
+    "connections": {
+      "total": 16,
+      "target": 8,
+      "active": 0,
+      "idle_in_transaction": 0,
+      "import_slots": 0
+    },
+    "at": 539681.828179
+  }
+]

@@ -1,0 +1,326 @@
+ Image ldt-oct-final-backend Building
+ Image ldt-oct-final-frontend Building
+ Image ldt-oct-final-migrate Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.74kB 0.1s done
+#1 DONE 0.1s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 355B 0.0s done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 413B 0.0s done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for public.ecr.aws/docker/library/python:3.14-slim
+#4 ...
+
+#5 [frontend internal] load metadata for public.ecr.aws/docker/library/nginx:1.28-alpine
+#5 DONE 0.4s
+
+#6 [frontend internal] load metadata for public.ecr.aws/docker/library/node:24-alpine
+#6 DONE 0.4s
+
+#4 [migrate internal] load metadata for public.ecr.aws/docker/library/python:3.14-slim
+#4 DONE 0.4s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 99B done
+#7 DONE 0.0s
+
+#8 [migrate internal] load .dockerignore
+#8 transferring context: 88B done
+#8 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 transferring context: 6.41kB 0.0s done
+#9 DONE 0.1s
+
+#10 [migrate internal] load build context
+#10 transferring context: 10.38kB 0.1s done
+#10 DONE 0.1s
+
+#11 [frontend build 1/6] FROM public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+#11 resolve public.ecr.aws/docker/library/node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 0.1s done
+#11 DONE 0.1s
+
+#12 [frontend stage-1 1/3] FROM public.ecr.aws/docker/library/nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+#12 resolve public.ecr.aws/docker/library/nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236 0.1s done
+#12 DONE 0.1s
+
+#13 [migrate 1/5] FROM public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2
+#13 resolve public.ecr.aws/docker/library/python:3.14-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 0.1s done
+#13 DONE 0.1s
+
+#14 [frontend build 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [frontend build 3/6] COPY package*.json ./
+#15 CACHED
+
+#16 [frontend build 4/6] RUN npm ci --no-audit --no-fund
+#16 CACHED
+
+#17 [backend 2/5] WORKDIR /app
+#17 CACHED
+
+#18 [migrate 3/5] COPY requirements.txt .
+#18 CACHED
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 ...
+
+#20 [frontend build 5/6] COPY . .
+#20 DONE 0.2s
+
+#21 [frontend build 6/6] RUN npm run build
+#21 0.472
+#21 0.472 > frontend@0.0.0 build
+#21 0.472 > tsc -b && vite build
+#21 0.472
+#21 ...
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 3.879 Collecting alembic==1.20.0 (from -r requirements.txt (line 1))
+#19 4.741   Downloading alembic-1.20.0-py3-none-any.whl.metadata (7.3 kB)
+#19 5.008 Collecting annotated-doc==0.0.5 (from -r requirements.txt (line 2))
+#19 5.190   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#19 5.419 Collecting annotated-types==0.8.0 (from -r requirements.txt (line 3))
+#19 5.551   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#19 5.771 Collecting anyio==4.15.1 (from -r requirements.txt (line 4))
+#19 5.913   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#19 6.090 Collecting click==8.5.0 (from -r requirements.txt (line 5))
+#19 6.344   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#19 6.720 Collecting fastapi==0.141.1 (from -r requirements.txt (line 6))
+#19 6.951   Downloading fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+#19 ...
+
+#21 [frontend build 6/6] RUN npm run build
+#21 6.754 vite v8.3.0 building client environment for production...
+#21 6.777 transforming...
+#21 6.996 ✓ 2490 modules transformed.
+#21 7.217 rendering chunks...
+#21 7.356 computing gzip size...
+#21 7.366 dist/index.html                                 0.60 kB │ gzip:   0.39 kB
+#21 7.366 dist/assets/Nunito-Cyrillic-CTI5J-Gh.woff2     20.78 kB
+#21 7.366 dist/assets/Nunito-Latin-CjueodBP.woff2        39.15 kB
+#21 7.366 dist/assets/SettingsPage-sM3oPCog.css           2.56 kB │ gzip:   0.90 kB
+#21 7.366 dist/assets/index-CAF0R4FC.css                 66.37 kB │ gzip:  12.82 kB
+#21 7.366 dist/assets/clock-3-BVmfEaiC.js                 0.19 kB │ gzip:   0.18 kB
+#21 7.366 dist/assets/search-OmEHNp8Y.js                  0.20 kB │ gzip:   0.18 kB
+#21 7.366 dist/assets/map-B-swGjLy.js                     0.21 kB │ gzip:   0.22 kB
+#21 7.366 dist/assets/objects-0TW5bxgy.js                 0.24 kB │ gzip:   0.24 kB
+#21 7.366 dist/assets/circle-question-mark-CMXRaipo.js    0.31 kB │ gzip:   0.24 kB
+#21 7.366 dist/assets/refresh-cw-BM5_jfOV.js              0.35 kB │ gzip:   0.24 kB
+#21 7.366 dist/assets/building-complex-BO2eDPwp.js        0.44 kB │ gzip:   0.27 kB
+#21 7.366 dist/assets/shield-check-DXYscG3m.js            0.58 kB │ gzip:   0.37 kB
+#21 7.366 dist/assets/SettingsPage-DGX_6GjG.js            1.94 kB │ gzip:   0.98 kB
+#21 7.366 dist/assets/ReportsPage-Dj4sEenY.js             2.20 kB │ gzip:   1.13 kB
+#21 7.366 dist/assets/SensorIcon-DMSM83LT.js              5.19 kB │ gzip:   2.46 kB
+#21 7.366 dist/assets/ObjectsPage-CM-Fk8Gg.js             6.00 kB │ gzip:   2.06 kB
+#21 7.366 dist/assets/AlarmsPage-B5tDMd__.js              6.54 kB │ gzip:   2.22 kB
+#21 7.366 dist/assets/PredictionsPage-B_NnYMC9.js         7.06 kB │ gzip:   2.73 kB
+#21 7.366 dist/assets/ImportsPage-_QN3ZKaU.js             9.02 kB │ gzip:   3.08 kB
+#21 7.366 dist/assets/EventJournalPage-C29GUTNF.js       11.11 kB │ gzip:   3.81 kB
+#21 7.366 dist/assets/session-CaK5B-Wp.js                11.13 kB │ gzip:   4.52 kB
+#21 7.366 dist/assets/RequestsPage-BF5UmvmW.js           14.52 kB │ gzip:   4.56 kB
+#21 7.366 dist/assets/index-CBxM5TgW.js                 267.66 kB │ gzip:  85.64 kB
+#21 7.366 dist/assets/MapPage-icjg82VC.js               382.55 kB │ gzip: 112.35 kB
+#21 7.366
+#21 7.371 ✓ built in 614ms
+#21 DONE 7.5s
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 ...
+
+#12 [frontend stage-1 1/3] FROM public.ecr.aws/docker/library/nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+#12 CACHED
+
+#22 [frontend stage-1 2/3] COPY --from=build /app/dist /usr/share/nginx/html
+#22 DONE 0.0s
+
+#23 [frontend stage-1 3/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#23 DONE 0.1s
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 7.854 Collecting greenlet==3.5.6 (from -r requirements.txt (line 7))
+#19 7.982   Downloading greenlet-3.5.6-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+#19 8.114 Collecting h11==0.16.0 (from -r requirements.txt (line 8))
+#19 8.224   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#19 ...
+
+#24 [frontend] exporting to image
+#24 exporting layers 0.2s done
+#24 exporting manifest sha256:0733291489547a9f818fc16a80b2958fe96f40b8e6e927d342d73a2e00a1cadc 0.0s done
+#24 exporting config sha256:b276cacfad4cc130a8b7bc80a30fbc5ff7da44edc19b09fb6c468ef1732f14e9 0.0s done
+#24 exporting attestation manifest sha256:6faf7039c6b5efb53522a6e3012d4f8aa12afde10aa06ef894b29972b2c544eb 0.0s done
+#24 exporting manifest list sha256:0e958ae2acee6eb748a2fea5bf95f509832146fef92739a691127e234be88e44 0.0s done
+#24 naming to docker.io/library/ldt-oct-final-frontend:latest done
+#24 unpacking to docker.io/library/ldt-oct-final-frontend:latest 0.1s done
+#24 DONE 0.5s
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 8.504 Collecting httptools==0.8.0 (from -r requirements.txt (line 9))
+#19 8.632   Downloading httptools-0.8.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#19 ...
+
+#25 [frontend] resolving provenance for metadata file
+#25 DONE 0.0s
+
+#19 [migrate 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 8.783 Collecting idna==3.19 (from -r requirements.txt (line 10))
+#19 8.910   Downloading idna-3.19-py3-none-any.whl.metadata (9.2 kB)
+#19 9.108 Collecting Mako==1.4.1 (from -r requirements.txt (line 11))
+#19 9.309   Downloading mako-1.4.1-py3-none-any.whl.metadata (2.9 kB)
+#19 9.665 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 12))
+#19 9.823   Downloading markupsafe-3.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#19 10.02 Collecting psycopg==3.3.5 (from -r requirements.txt (line 13))
+#19 10.22   Downloading psycopg-3.3.5-py3-none-any.whl.metadata (4.3 kB)
+#19 11.02 Collecting psycopg-binary==3.3.5 (from -r requirements.txt (line 14))
+#19 11.18   Downloading psycopg_binary-3.3.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+#19 11.70 Collecting pydantic==2.13.5 (from -r requirements.txt (line 15))
+#19 11.81   Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+#19 12.24 Collecting pydantic-settings==2.15.0 (from -r requirements.txt (line 16))
+#19 12.38   Downloading pydantic_settings-2.15.0-py3-none-any.whl.metadata (3.9 kB)
+#19 14.69 Collecting pydantic_core==2.46.5 (from -r requirements.txt (line 17))
+#19 14.94   Downloading pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#19 15.14 Collecting python-dotenv==1.2.3 (from -r requirements.txt (line 18))
+#19 15.29   Downloading python_dotenv-1.2.3-py3-none-any.whl.metadata (29 kB)
+#19 15.46 Collecting python-multipart==0.0.32 (from -r requirements.txt (line 19))
+#19 15.65   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#19 15.86 Collecting PyYAML==6.0.3 (from -r requirements.txt (line 20))
+#19 15.99   Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#19 16.88 Collecting SQLAlchemy==2.0.53 (from -r requirements.txt (line 21))
+#19 17.02   Downloading sqlalchemy-2.0.53-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.7 kB)
+#19 17.23 Collecting starlette==1.6.0 (from -r requirements.txt (line 22))
+#19 17.35   Downloading starlette-1.6.0-py3-none-any.whl.metadata (6.4 kB)
+#19 17.49 Collecting typing-inspection==0.4.4 (from -r requirements.txt (line 23))
+#19 17.66   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#19 17.80 Collecting typing_extensions==4.16.0 (from -r requirements.txt (line 24))
+#19 18.01   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#19 18.17 Collecting tzdata==2026.4 (from -r requirements.txt (line 25))
+#19 18.32   Downloading tzdata-2026.4-py2.py3-none-any.whl.metadata (1.4 kB)
+#19 18.53 Collecting uvicorn==0.53.0 (from -r requirements.txt (line 26))
+#19 18.74   Downloading uvicorn-0.53.0-py3-none-any.whl.metadata (6.6 kB)
+#19 19.04 Collecting watchfiles==1.2.0 (from -r requirements.txt (line 27))
+#19 19.23   Downloading watchfiles-1.2.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#19 19.63 Collecting websockets==17.1 (from -r requirements.txt (line 28))
+#19 19.75   Downloading websockets-17.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.3 kB)
+#19 19.98 Collecting openpyxl==3.1.5 (from -r requirements.txt (line 29))
+#19 20.16   Downloading openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+#19 20.30 Collecting defusedxml==0.7.1 (from -r requirements.txt (line 30))
+#19 20.45   Downloading defusedxml-0.7.1-py2.py3-none-any.whl.metadata (32 kB)
+#19 20.80 Collecting ldap3==2.9.1 (from -r requirements.txt (line 31))
+#19 20.91   Downloading ldap3-2.9.1-py2.py3-none-any.whl.metadata (5.4 kB)
+#19 21.06 Collecting httpx==0.28.1 (from -r requirements.txt (line 32))
+#19 21.18   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#19 21.65 Collecting reportlab==5.0.1 (from -r requirements.txt (line 33))
+#19 22.01   Downloading reportlab-5.0.1-py3-none-any.whl.metadata (1.6 kB)
+#19 22.23 Collecting et-xmlfile (from openpyxl==3.1.5->-r requirements.txt (line 29))
+#19 22.35   Downloading et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+#19 22.57 Collecting pyasn1>=0.4.6 (from ldap3==2.9.1->-r requirements.txt (line 31))
+#19 22.69   Downloading pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+#19 22.95 Collecting certifi (from httpx==0.28.1->-r requirements.txt (line 32))
+#19 23.10   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+#19 23.25 Collecting httpcore==1.* (from httpx==0.28.1->-r requirements.txt (line 32))
+#19 23.41   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#19 24.03 Collecting pillow>=9.0.0 (from reportlab==5.0.1->-r requirements.txt (line 33))
+#19 24.26   Downloading pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#19 24.85 Collecting charset-normalizer (from reportlab==5.0.1->-r requirements.txt (line 33))
+#19 25.05   Downloading charset_normalizer-3.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+#19 25.31 Downloading alembic-1.20.0-py3-none-any.whl (268 kB)
+#19 26.00 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#19 26.18 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#19 26.30 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#19 26.72 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#19 27.06 Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+#19 27.42 Downloading greenlet-3.5.6-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (670 kB)
+#19 28.33    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 670.8/670.8 kB 811.2 kB/s  0:00:00
+#19 28.56 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#19 28.72 Downloading httptools-0.8.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (481 kB)
+#19 29.38 Downloading idna-3.19-py3-none-any.whl (68 kB)
+#19 29.57 Downloading mako-1.4.1-py3-none-any.whl (80 kB)
+#19 29.89 Downloading markupsafe-3.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (23 kB)
+#19 30.06 Downloading psycopg-3.3.5-py3-none-any.whl (213 kB)
+#19 30.52 Downloading psycopg_binary-3.3.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+#19 35.92    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 964.9 kB/s  0:00:05
+#19 36.04 Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+#19 36.49 Downloading pydantic_settings-2.15.0-py3-none-any.whl (69 kB)
+#19 36.94 Downloading pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#19 38.60    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 1.3 MB/s  0:00:01
+#19 38.80 Downloading python_dotenv-1.2.3-py3-none-any.whl (22 kB)
+#19 39.02 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#19 39.21 Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (794 kB)
+#19 39.91    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 794.2/794.2 kB 1.7 MB/s  0:00:00
+#19 40.05 Downloading sqlalchemy-2.0.53-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.4 MB)
+#19 42.10    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 1.7 MB/s  0:00:02
+#19 42.24 Downloading starlette-1.6.0-py3-none-any.whl (75 kB)
+#19 42.49 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#19 42.70 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#19 42.91 Downloading tzdata-2026.4-py2.py3-none-any.whl (347 kB)
+#19 43.34 Downloading uvicorn-0.53.0-py3-none-any.whl (87 kB)
+#19 43.49 Downloading watchfiles-1.2.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (453 kB)
+#19 43.92 Downloading websockets-17.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (224 kB)
+#19 44.15 Downloading openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+#19 44.41 Downloading defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+#19 44.54 Downloading ldap3-2.9.1-py2.py3-none-any.whl (432 kB)
+#19 45.10 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#19 45.26 Downloading reportlab-5.0.1-py3-none-any.whl (2.0 MB)
+#19 46.44    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 1.9 MB/s  0:00:01
+#19 46.63 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#19 46.85 Downloading pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+#19 51.26    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 1.6 MB/s  0:00:04
+#19 51.41 Downloading pyasn1-0.6.4-py3-none-any.whl (84 kB)
+#19 51.57 Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#19 51.77 Downloading charset_normalizer-3.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (255 kB)
+#19 52.05 Downloading et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+#19 52.45 Installing collected packages: websockets, tzdata, typing_extensions, PyYAML, python-multipart, python-dotenv, pyasn1, psycopg-binary, psycopg, pillow, MarkupSafe, idna, httptools, h11, greenlet, et-xmlfile, defusedxml, click, charset-normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, reportlab, pydantic_core, openpyxl, Mako, ldap3, httpcore, anyio, watchfiles, starlette, pydantic, httpx, alembic, pydantic-settings, fastapi
+#19 61.58
+#19 61.59 Successfully installed Mako-1.4.1 MarkupSafe-3.0.3 PyYAML-6.0.3 SQLAlchemy-2.0.53 alembic-1.20.0 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset-normalizer-3.5.2 click-8.5.0 defusedxml-0.7.1 et-xmlfile-2.0.0 fastapi-0.141.1 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.28.1 idna-3.19 ldap3-2.9.1 openpyxl-3.1.5 pillow-12.3.0 psycopg-3.3.5 psycopg-binary-3.3.5 pyasn1-0.6.4 pydantic-2.13.5 pydantic-settings-2.15.0 pydantic_core-2.46.5 python-dotenv-1.2.3 python-multipart-0.0.32 reportlab-5.0.1 starlette-1.6.0 typing-inspection-0.4.4 typing_extensions-4.16.0 tzdata-2026.4 uvicorn-0.53.0 watchfiles-1.2.0 websockets-17.1
+#19 61.59 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#19 DONE 62.6s
+
+#19 [backend 4/5] RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+#19 DONE 62.6s
+
+#26 [migrate 5/5] COPY . .
+#26 DONE 0.2s
+
+#26 [backend 5/5] COPY . .
+#26 DONE 0.2s
+
+#27 [backend] exporting to image
+#27 exporting layers
+#27 exporting layers 7.9s done
+#27 exporting manifest sha256:e040679b5300d0e7deb3748a74098167325b7cdd922b68b17de5225450d4eae1 0.0s done
+#27 exporting config sha256:ecba584fdaf293851767597bf6b1fac7b66a3f5e612562009c79f33953ea3e8b 0.0s done
+#27 exporting attestation manifest sha256:50657445f9b02a6eeb0b0094d221351c582ec4bbaab8ac8bb54e10b490d141f7 0.0s done
+#27 exporting manifest list sha256:d6a995422985f9e1f7a2029596dc59a1ea121f9723a8893c98e03dde4027a2f5
+#27 exporting manifest list sha256:d6a995422985f9e1f7a2029596dc59a1ea121f9723a8893c98e03dde4027a2f5 0.0s done
+#27 naming to docker.io/library/ldt-oct-final-backend:latest done
+#27 unpacking to docker.io/library/ldt-oct-final-backend:latest
+#27 ...
+
+#28 [migrate] exporting to image
+#28 exporting layers 7.9s done
+#28 exporting manifest sha256:943d4d9f020c4cf39691394a143d497edf213913d39cd2e9fe46eace3317cb21 0.0s done
+#28 exporting config sha256:8dd1dff0ed58413f613592b03be8b2f3ef1305894909b34e5b17abba8d889e37 0.0s done
+#28 exporting attestation manifest sha256:41cf8f3ec9d54f7a0c29256d97038439c1c66b430a52c8cfc82a05c5af79f17a 0.0s done
+#28 exporting manifest list sha256:7b16160e9531f759446c1e6a7727cbbbc9a5b278b76c1b2b09abaeb600340ae4 0.0s done
+#28 naming to docker.io/library/ldt-oct-final-migrate:latest done
+#28 unpacking to docker.io/library/ldt-oct-final-migrate:latest 1.5s done
+#28 DONE 9.7s
+
+#27 [backend] exporting to image
+#27 unpacking to docker.io/library/ldt-oct-final-backend:latest 1.5s done
+#27 DONE 9.7s
+
+#29 [migrate] resolving provenance for metadata file
+#29 DONE 0.1s
+
+#30 [backend] resolving provenance for metadata file
+#30 DONE 0.1s
+ Image ldt-oct-final-migrate Built
+ Image ldt-oct-final-backend Built
+ Image ldt-oct-final-frontend Built

@@ -1,0 +1,7 @@
+{
+  "idle_in_transaction": 0,
+  "import_slots": 0,
+  "registry_processing": 0,
+  "audit_import_actors": 20,
+  "events_generated": 500000
+}

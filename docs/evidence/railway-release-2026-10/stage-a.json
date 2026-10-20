@@ -1,0 +1,19 @@
+{
+  "deployment": "8a78168d-6636-4563-a975-5677be46f68b",
+  "application": {
+    "version": "0.2.0",
+    "commit": "edb9a15eb0598bd9e321797baa15f3cb84e57da3"
+  },
+  "health": 200,
+  "ready": 200,
+  "scenarios": {
+    "enabled": false,
+    "sensor_failure": false,
+    "fire": false,
+    "flood": false,
+    "intrusion": false,
+    "system_failure": false,
+    "operational_ready": false,
+    "automated_action_allowed": false
+  }
+}

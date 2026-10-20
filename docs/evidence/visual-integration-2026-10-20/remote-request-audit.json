@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "scope": "new persisted SF forecast2 to request12, manual dispatcher review/update/confirm",
+  "entries": [
+    {
+      "action": "POST",
+      "role": "dispatcher",
+      "entity_type": "predictions",
+      "entity_id": null,
+      "outcome": 200,
+      "created_at": "2026-10-20 10:42:14.368062+00:00"
+    },
+    {
+      "action": "PATCH",
+      "role": "dispatcher",
+      "entity_type": "requests",
+      "entity_id": "12",
+      "outcome": 200,
+      "created_at": "2026-10-20 10:42:13.522144+00:00"
+    },
+    {
+      "action": "PATCH",
+      "role": "dispatcher",
+      "entity_type": "requests",
+      "entity_id": "12",
+      "outcome": 200,
+      "created_at": "2026-10-20 10:42:13.122830+00:00"
+    },
+    {
+      "action": "POST",
+      "role": "dispatcher",
+      "entity_type": "scenario_forecast",
+      "entity_id": "2",
+      "outcome": 200,
+      "created_at": "2026-10-20 10:42:11.062690+00:00"
+    },
+    {
+      "action": "PATCH",
+      "role": "dispatcher",
+      "entity_type": "scenario_forecast",
+      "entity_id": "2",
+      "outcome": 200,
+      "created_at": "2026-10-20 10:42:10.703468+00:00"
+    }
+  ]
+}

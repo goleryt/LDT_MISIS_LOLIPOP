@@ -1,0 +1,102 @@
+# Интеграция командной UI-ветки — 20.10.2026
+
+Рабочая ветка: `release/final-rc`. Исходный RC: `5f274217cc566ee34b1eac26017041966452643e`.
+Командная ветка: `origin/ui/rc-visual-fixes-20261019`, tip `aec7953c994a83df12cbefd9d1dbee06946a3fa6`.
+Merge-base: `ae43e330732edc7d6f5d7619fada0498fd9ba5b4`.
+Автор исходных визуальных решений: Мария Мягкова. Перенос конечного diff вручную;
+история обеих веток сохранена, main и командная ветка не изменяются.
+
+## Ревизия всех коммитов
+
+| Коммит | Решение |
+|---|---|
+| 6131139 | Приняты белые непрозрачные панели Login/Settings/Journal. Повторный CSS import отклонён. |
+| 88cb77e | Приняты отдельные иконки журнала, прогнозов, отчётов. Удалён оставшийся неиспользуемый List. |
+| 2938f3b | Принята ширина фонового луча 286 px в тёмной теме. |
+| 68e18b0 | Принят единственный фон app-shell, прозрачный workspace: луч не прыгает с меню. |
+| 6a0bb2f | Промежуточные правки светлого луча учтены в конечном diff. |
+| 1b5d5fd | Промежуточные правки светлого луча учтены в конечном diff. |
+| 9ed0e48 | Промежуточные правки светлого луча учтены в конечном diff. |
+| b54b76b | Приняты окончательные цвета и градиент светлого луча. |
+| 07ca45b | Liquid-glass кнопки не перенесены: автор отменил их следующим коммитом. |
+| 5c774ed | Авторский revert соблюдён; не воскрешаем отменённые кнопки. |
+| aec7953 | Приняты центральная широкая карточка Reports, отдельная строка типа данных, блок кнопок. |
+
+Полный конечный diff командной ветки: пять frontend-файлов, 178 добавлений / 24 удаления.
+Два более новых RC-коммита с ограничением импорта и его доказательствами сохранены.
+
+## Минимальная адаптация
+
+- `white-surfaces.css` подключён один раз в main.tsx, включая экран до входа.
+- Белые utility-панели имеют локальные семантические цвета и `color-scheme: light`:
+  нативные поля/checkbox не наследуют тёмные цвета страницы.
+- Placeholder #6b7280 на белом проверяется на контраст >= 4.5:1; сохранён видимый keyboard focus.
+- В Reports ровно две равные колонки дат: auto-fit из ветки мог оставлять третью пустую колонку.
+- Использованы существующие primary-button, без нового стиля кнопок.
+- Исправлен однозначный UX-дефект: неполный/перевёрнутый период теперь объясняет disabled
+  download текстом и aria-invalid/aria-describedby.
+- Дополнительно воспроизведена гонка быстрого Back после закрытия датчика: URL мог
+  вернуться к прежнему значению до commit промежуточного router state. Effect не зависел
+  от выбранного датчика и пропускал восстановление. Guard теперь проверяет реальный
+  selection, dependency включает selectedSensorId; regression повторяет быстрый Back трижды.
+- Карта, импорт, маршруты, auth, заявки, prediction contracts и математическая логика ML
+  не переписывались. Backend/infra/model source совпадает с проверенным импортным RC.
+
+## Проверка
+
+Воспроизводимая read-only матрица: `tests/visual_branch_review.cjs` (opt-in,
+credentials только вне Git), Chrome, обе темы, 1024×768 / 1280×800 / 1440×900 / 1920×1080.
+Before снят из неизменяемого Git archive 5f27421, after — production Docker image новых файлов.
+Локальная БД восстановлена в отдельную новую PostgreSQL18; реальные сохранённые результаты
+трёх контуров читаются без нового inference. Generated QA fixtures не загружаются в Railway.
+
+Целевые регрессии: `frontend/e2e/team-visual.spec.ts`: local native scheme, placeholder
+contrast, focus, lazy navigation, Settings center, opaque Journal popup и Reports validation.
+Остальные проверки и измерения публикуются в `evidence/visual-integration-2026-10-20/`.
+
+Нативный Яндекс.Браузер и физический touchpad недоступны. Нативный Chrome zoom 125/150%
+не приравнивается к эмуляции viewport/DPR; для него остаётся ручной checklist.
+
+Итоговые CI/deployment/remote результаты: см. обновлённую Railway acceptance и evidence.
+
+## Локальный gate интеграции
+
+- Backend151 PASS,4 dependency warnings; TypeScript/Vite PASS; lint0 errors /10 existing warnings.
+- Chrome33 PASS /8 optional skips на чистой БД с scenario master OFF; отдельные136
+  снимков сохранённых реальных model results на восстановленной QA-копии, master ON.
+- Before40 / after136 снимков: обе темы × четыре desktop-размера;32 оригинала
+  изменённых экранов опубликованы в evidence/screens. Визуально просмотрены сравнения
+  Login/Settings/Journal/Reports и contact sheets с картой/сценариями/таблицами.
+- Новый production Docker build, новая clean DB, upgrade/check d01901 и startup PASS.
+- Свежий safety dump173867 событий восстановлен в ещё одну НОВУЮ БД; schema/API/login PASS.
+- UI commit aa197ef: actual CI39404465821 PASS, backend/frontend/containers/combined-runtime.
+- [Дополнительная конкурентная серия](IMPORT_VISUAL_SUPPLEMENT_2026-10-20.md): восемь кейсов,
+  включая живую карту;1962 ordinary API /0 errors; model source unchanged.
+
+Evidence: [local gate](evidence/visual-integration-2026-10-20/local-gate.json),
+[Chrome cases](evidence/visual-integration-2026-10-20/chrome.json),
+[before](evidence/visual-integration-2026-10-20/visual-before.json),
+[after](evidence/visual-integration-2026-10-20/visual-after.json),
+[CI](evidence/visual-integration-2026-10-20/ci-ui.json).
+
+Ручные проверки, которые автоматизация не подменяет:
+
+1. Native Yandex: выполнить BROWSER_ACCEPTANCE_RC.md на опубликованном release SHA.
+2. Физический touchpad: открыть объект+датчик, pinch в центре карты до обоих clamp,
+   проверить +/-/reset, неизменный размер drawer, закрытие/Back и отсутствие page zoom.
+3. Chrome native menu Zoom125%/150% на desktop: Login→Map→drawer→Journal filter→
+   Reports→Settings; controls и close доступны, нет горизонтального scroll страницы.
+   Затем вернуть100%. Эмуляция viewport/DPR не считается этой проверкой.
+
+## Фактический публичный результат
+
+Release18af8fa / deploymentb1bd6fee-0e94-46b9-8d76-11b555c8e06f: HTTPS136 screenshots, primary14 PASS +
+notification entity NOT TESTED (empty unread list), scenarios4 PASS, forms4 PASS;
+0 runtime/server errors. Новый SF draft12 подтверждён вручную; Fire9 проверен по
+сохранённой истории и idempotency. Исходные169993 события CSV сохранены, model hashes
+совпадают. [Remote matrix](evidence/visual-integration-2026-10-20/visual-remote.json), [browser](evidence/visual-integration-2026-10-20/remote-browser.json),
+[forms](evidence/visual-integration-2026-10-20/remote-forms.json), [identity](evidence/visual-integration-2026-10-20/remote-build-identity.json).
+
+CI39406555181 до нового tip остановился дважды на ECR429 до inference; CI18af8fa
+использует официальный Docker Hub image с тем же immutable digest, без изменения ML.
+Локальный numeric contract и CI39408268560 всех4 jobs PASS. [Resolution](evidence/visual-integration-2026-10-20/ci-registry-resolution.json).

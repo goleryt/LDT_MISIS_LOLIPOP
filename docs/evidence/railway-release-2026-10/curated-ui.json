@@ -1,0 +1,21 @@
+{
+  "note": "Original full screenshot lists in browser reports refer to private QA output; only selected noncredential UI images are published in ui/. No traces/login screenshots included.",
+  "files": [
+    "a-dark-map.png",
+    "a-dark-settings.png",
+    "a-light-map.png",
+    "a-light-settings.png",
+    "a-sidebar-collapsed.png",
+    "a-sidebar-expanded.png",
+    "b-import-wheel-dark-1024.png",
+    "b-import-wheel-light-1280.png",
+    "b-request-fire.png",
+    "b-request-sensor_failure.png",
+    "b-scenario-dark-1024.png",
+    "b-scenario-dark-1280.png",
+    "b-scenario-light-1280.png",
+    "b-scenario-light-1440.png",
+    "c-import-wheel-dark-1024.png",
+    "c-scenario-light-1280.png"
+  ]
+}

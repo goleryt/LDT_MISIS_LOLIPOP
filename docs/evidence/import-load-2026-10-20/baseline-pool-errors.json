@@ -1,0 +1,7 @@
+{
+  "pool_timeout_messages": [
+    "TimeoutError: QueuePool limit of size 5 overflow 10 reached, connection timed out, timeout 30.00 (Background on this error at: https://sqlalche.me/e/20/3o7r)"
+  ],
+  "pool_timeout_occurrences": 13,
+  "scope": "only isolated synthetic import QA; no Railway traffic"
+}

@@ -3,8 +3,14 @@ from sqlalchemy import exists, select
 from sqlalchemy.dialects.postgresql import insert
 from app.db.platform import AuditEntry, Notification, NotificationRead
 from app.db.session import SessionLocal
+from app.db.models import EventsJournal
 
 router = APIRouter(tags=["operations"])
+
+@router.get("/operations/status")
+def operations_status():
+    from app.operations import operational_status
+    return operational_status()
 
 def serialize(row):
     return {column.name: getattr(row, column.name) for column in row.__table__.columns}
@@ -19,7 +25,10 @@ def notifications(request: Request, limit: int = Query(100, ge=1, le=500)):
     with SessionLocal() as db:
         read = exists().where(NotificationRead.notification_id == Notification.id,
                               NotificationRead.username == request.state.principal.username)
-        return [serialize(x) for x in db.scalars(select(Notification).where(~read).order_by(Notification.id.desc()).limit(limit))]
+        rows = db.execute(select(Notification, EventsJournal.ид_канала_данных).outerjoin(EventsJournal,
+            (Notification.kind == "observed_alarm") & (Notification.reference_id == EventsJournal.id))
+            .where(~read).order_by(Notification.id.desc()).limit(limit)).all()
+        return [{**serialize(notice), "channel_id":channel} for notice,channel in rows]
 
 @router.post("/notifications/{notification_id}/read")
 def mark_read(notification_id: int, request: Request):

@@ -1,0 +1,12 @@
+{
+  "typescript_vite": "PASS",
+  "lint_exit_code": 0,
+  "errors": 0,
+  "warnings": 10,
+  "focused_chrome": "13 PASS",
+  "primary_chrome": "26 PASS / 5 opt-in skips",
+  "additional_gas_and_mock": "2 PASS",
+  "real_scenario_to_draft": "PASS",
+  "designer_navigation": "1 PASS (repeated on final isolated cloud UI)",
+  "typography_regression": "5 repeats PASS (2 workers), wait for rendered data cell, same >=14px"
+}

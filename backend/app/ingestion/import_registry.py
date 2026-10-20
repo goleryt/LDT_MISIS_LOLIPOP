@@ -1,14 +1,19 @@
+from contextlib import nullcontext
 import hashlib
+import time
 from pathlib import Path
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from sqlalchemy import select
+from sqlalchemy.exc import DBAPIError
 
 from app.ingestion.csv_loader import load_events_journal
 from app.db.models import DataImport
 from app.db.session import SessionLocal
+from app.ingestion.limits import (import_admission, processing_budget, check_import_budget,
+    ImportDeadlineExceeded, ImportBusy)
 
 
 FILE_HASH_CHUNK_SIZE = 1024 * 1024
@@ -139,8 +144,9 @@ def complete_file_import(
     processed_rows: int,
     inserted_rows: int,
     skipped_rows: int,
+    db=None,
 ) -> None:
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         data_import = session.get(
             DataImport,
             import_id,
@@ -160,7 +166,7 @@ def complete_file_import(
             timezone.utc
         )
 
-        session.commit()
+        if db is None: session.commit()
 
 
 def fail_file_import(
@@ -215,35 +221,41 @@ def _import_file(
         from app.ingestion.formats import normalize_to_csv
         columns = {"events_journal": EVENT_REQUIRED_COLUMNS, "channels": CHANNEL_REQUIRED_COLUMNS,
                    "objects": OBJECT_REQUIRED_COLUMNS}[import_type]
-        with tempfile.TemporaryDirectory() as directory:
-            normalized = Path(directory) / "normalized.csv"
-            normalize_to_csv(Path(file_path), normalized, columns)
-            if import_type == "events_journal":
-                stats = load_events_journal(normalized)
-            else:
-                count = (load_channel_catalogue if import_type == "channels" else load_object_catalogue)(normalized)
-                stats = {"processed_rows": count, "inserted_rows": count, "repeated_headers": 0, "skipped_duplicates": 0}
+        # Data and successful registry status commit together, including process interruption.
+        with SessionLocal.begin() as session:
+            with tempfile.TemporaryDirectory() as directory:
+                normalized = Path(directory) / "normalized.csv"
+                normalize_to_csv(Path(file_path), normalized, columns)
+                if import_type == "events_journal":
+                    stats = load_events_journal(normalized, db=session)
+                else:
+                    stats = (load_channel_catalogue if import_type == "channels" else load_object_catalogue)(normalized, db=session, return_stats=True)
 
-        skipped_rows = (
-            stats["repeated_headers"]
-            + stats["skipped_duplicates"]
-        )
+            skipped_rows = (
+                stats["repeated_headers"]
+                + stats["skipped_duplicates"]
+            )
 
-        complete_file_import(
-            registration.import_id,
-            processed_rows=stats["processed_rows"],
-            inserted_rows=stats["inserted_rows"],
-            skipped_rows=skipped_rows,
-        )
+            check_import_budget()
+            complete_file_import(
+                registration.import_id,
+                db=session,
+                processed_rows=stats["processed_rows"],
+                inserted_rows=stats["inserted_rows"],
+                skipped_rows=skipped_rows,
+            )
 
     except Exception as exc:
+        if getattr(getattr(exc,'orig',None),'sqlstate',None)=='57014':
+            exc=ImportDeadlineExceeded('Обработка файла прервана по таймауту; данные не сохранены. Повторите загрузку меньшего файла.')
         fail_file_import(
             registration.import_id,
             error_message=(
-                "Invalid input file" if isinstance(exc, ValueError) else "Import failed; inspect server logs"
+                "Processing deadline exceeded; no records saved" if isinstance(exc,ImportDeadlineExceeded)
+                else "Invalid input file" if isinstance(exc, ValueError) else "Import failed; inspect server logs"
             ),
         )
-        raise
+        raise exc
 
     return {
         "import_id": registration.import_id,
@@ -253,15 +265,15 @@ def _import_file(
         **stats,
     }
 def import_events_file(file_path, *, original_file_name=None, import_type="events_journal"):
-    from sqlalchemy import text
-    from app.db.session import engine
-    # Session-scoped advisory lock covers registration and all separately committed registry operations.
+    # Both the per-file and database-wide slot locks use one connection.
     key = int.from_bytes(hashlib.sha256((import_type + calculate_file_sha256(file_path)).encode()).digest()[:8], "big", signed=True)
-    with engine.connect() as lock:
-        acquired = lock.scalar(text("SELECT pg_try_advisory_lock(:key)"), {"key": key})
-        if not acquired:
-            raise ValueError("This file is already being imported; retry later")
-        try:
-            return _import_file(file_path, original_file_name=original_file_name, import_type=import_type)
-        finally:
-            lock.execute(text("SELECT pg_advisory_unlock(:key)"), {"key": key})
+    with import_admission(key), processing_budget():
+        for attempt in range(2):
+            try:
+                return _import_file(file_path, original_file_name=original_file_name, import_type=import_type)
+            except DBAPIError as exc:
+                if getattr(exc.orig,'sqlstate',None) not in {'40P01','40001'}:raise
+                # Concurrent different files may contain the same rows in opposite
+                # order. The failed transaction has rolled back in full; retry once.
+                if attempt:raise ImportBusy() from None
+                check_import_budget();time.sleep(.25)

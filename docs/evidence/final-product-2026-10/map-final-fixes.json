@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "browser": {
+    "startTime": "2026-10-20T18:34:30.741Z",
+    "duration": 12836.808,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "fixes": [
+    "1024px controls do not overlap reset",
+    "selected Fire model first; other models retained",
+    "actual state explicitly labelled",
+    "disabled model and unbound channel shown separately without changing model reason"
+  ],
+  "backend_relevant": "17 PASS",
+  "ml_math_changed": false
+}

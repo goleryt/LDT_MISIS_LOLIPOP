@@ -1,0 +1,32 @@
+{
+  "failed_commit": "1bdb8f21bc3fa22ac4c00bad2478626a88c4b5d4",
+  "failed_run": 39406555181,
+  "attempts": [
+    {
+      "run": 39406555181,
+      "head_sha": "1bdb8f21bc3fa22ac4c00bad2478626a88c4b5d4",
+      "initial_failed_job": 118573782195,
+      "reason": "External public.ecr.aws Python3.12 base-image download HTTP429; inference step was not started",
+      "rerun_http": 201,
+      "requested_at": "2026-10-20T10:23:22.016883+00:00",
+      "tests_disabled": false,
+      "source_changed": false
+    },
+    {
+      "run": 39406555181,
+      "attempt": 2,
+      "job": 118577158668,
+      "category": "external registry HTTP429",
+      "inference_started": false,
+      "same_base_digest_dockerhub_verified": true
+    }
+  ],
+  "classification": "external image-registry anonymous HTTP429 before inference",
+  "fix": "CI build-arg uses Docker Hub for the same official OCI digest",
+  "official_base_digest": "sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1",
+  "digest_verified_via_registry": true,
+  "ml_sources_or_dependencies_changed": false,
+  "tests_disabled": false,
+  "local_exact_ci_build": "PASS",
+  "read_only_network_none_acceptance": "PASS"
+}

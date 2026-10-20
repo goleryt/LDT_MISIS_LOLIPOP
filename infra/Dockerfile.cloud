@@ -1,0 +1,25 @@
+ARG NODE_IMAGE=node:24-alpine
+ARG PYTHON_IMAGE=python:3.14-slim
+FROM ${NODE_IMAGE} AS frontend
+WORKDIR /ui
+COPY frontend/package*.json ./
+RUN npm ci --no-audit --no-fund
+COPY frontend/ ./
+RUN npm run build
+
+FROM ${PYTHON_IMAGE}
+ARG APP_COMMIT=unknown
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 APP_COMMIT=${APP_COMMIT}
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends nginx && rm -rf /var/lib/apt/lists/*
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt && useradd --uid 10001 --create-home app
+RUN apt-get update && apt-get install -y --no-install-recommends tini && rm -rf /var/lib/apt/lists/*
+COPY backend/ ./
+COPY --from=frontend /ui/dist /site
+COPY infra/cloud.nginx.conf /app/cloud.nginx.conf
+USER app
+EXPOSE 8080
+ENTRYPOINT ["/usr/bin/tini", "--"]
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=6 CMD python -c "import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','8080')+'/ready',timeout=3)"
+CMD ["python", "-m", "scripts.start_cloud"]

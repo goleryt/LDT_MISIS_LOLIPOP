@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -16,9 +16,7 @@ export async function getRequests(): Promise<PreventiveRequest[]> {
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить заявки: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();
@@ -40,14 +38,7 @@ export async function createRequest(
     );
 
     if (!response.ok) {
-        const detail = await response
-            .json()
-            .catch(() => null);
-
-        throw new Error(
-            detail?.detail ??
-            `Не удалось создать заявку: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();
@@ -70,14 +61,7 @@ export async function updateRequest(
     );
 
     if (!response.ok) {
-        const detail = await response
-            .json()
-            .catch(() => null);
-
-        throw new Error(
-            detail?.detail ??
-            `Не удалось обновить заявку: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();

@@ -101,29 +101,33 @@ function ImportsPage() {
 
     const [message, setMessage] =
         useState<string | null>(null);
+    const loadVersion = useRef(0);
 
 
     async function loadImports() {
+        const version = ++loadVersion.current;
         try {
+            setLoading(true);
             setError(null);
 
             const data = await getImports();
 
-            setImports(data);
+            if (version === loadVersion.current) setImports(data);
         } catch (error) {
-            setError(
+            if (version === loadVersion.current) setError(
                 error instanceof Error
                     ? error.message
                     : "Не удалось получить историю импортов",
             );
         } finally {
-            setLoading(false);
+            if (version === loadVersion.current) setLoading(false);
         }
     }
 
 
     useEffect(() => {
         void loadImports();
+        return () => { loadVersion.current += 1; };
     }, []);
 
 
@@ -240,11 +244,14 @@ function ImportsPage() {
                         Загрузка журналов событий в
                         диспетчерскую систему
                     </p>
+                    <p>При занятости сервиса файл не ставится в очередь — повторите загрузку позже.
+                        При обрыве соединения сначала проверьте историю: повторная загрузка того же файла безопасна.</p>
                 </div>
 
                 <button
                     type="button"
                     className="secondary-button"
+                    disabled={loading}
                     onClick={() =>
                         void loadImports()
                     }
@@ -353,17 +360,19 @@ function ImportsPage() {
                                 .files?.[0] ?? null,
                         );
                     }}
-                    onClick={() =>
-                        fileInputRef.current?.click()
-                    }
+                    onClick={(event) => {
+                        if (!(event.target as HTMLElement).closest("select,option,label,input,button")) fileInputRef.current?.click();
+                    }}
                 >
-                    <label>Тип данных <select value={kind} disabled={uploading || !canWrite("imports")} onChange={e => setKind(e.target.value)}>
+                    <label className="import-kind-control">Тип данных <select value={kind} disabled={uploading || !canWrite("imports")} onChange={e => setKind(e.target.value)}>
 <option value="events_journal">События датчиков</option><option value="objects">Объекты</option><option value="channels">Каналы датчиков</option>
 </select></label>
+                    <button type="button" className="secondary-button import-file-button" disabled={uploading || !canWrite("imports")} onClick={() => fileInputRef.current?.click()}>Выбрать файл</button>
                         <input
                         ref={fileInputRef}
                         type="file"
-                        accept=".csv,text/csv"
+                        accept=".csv,.xlsx,.json,.xml,text/csv,application/json,application/xml,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        disabled={!canWrite("imports")}
                         hidden
                         onChange={(event) => {
                             selectFile(
@@ -426,14 +435,14 @@ function ImportsPage() {
 
                 <div className="upload-actions">
                     <span className="upload-hint">
-                        Поддерживаемый формат: CSV
+                        Поддерживаемые форматы: CSV, XLSX, JSON, XML
                     </span>
 
                     <button
                         type="button"
                         className="primary-button"
                         disabled={
-                            !selectedFile ||
+                            !canWrite("imports") || !selectedFile ||
                             uploading
                         }
                         onClick={() =>
@@ -449,14 +458,14 @@ function ImportsPage() {
                 </div>
 
                 {message && (
-                    <div className="notice success">
+                    <div className="notice success" role="status">
                         <CheckCircle2 size={18} />
                         {message}
                     </div>
                 )}
 
                 {error && (
-                    <div className="notice error">
+                    <div className="notice error" role="alert">
                         <TriangleAlert size={18} />
                         {error}
                     </div>
@@ -476,7 +485,7 @@ function ImportsPage() {
                 </div>
 
                 {loading ? (
-                    <div className="history-empty">
+                    <div className="history-empty" role="status">
                         Загрузка истории...
                     </div>
                 ) : imports.length === 0 ? (
@@ -492,7 +501,7 @@ function ImportsPage() {
                                     <th>Тип</th>
                                     <th>Статус</th>
                                     <th>Строк</th>
-                                    <th>Добавлено</th>
+                                    <th>Добавлено / обновлено</th>
                                     <th>Размер</th>
                                     <th>Дата</th>
                                 </tr>

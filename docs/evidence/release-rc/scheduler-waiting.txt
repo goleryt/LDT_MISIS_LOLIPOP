@@ -1,0 +1,2 @@
+predictions 1
+[{'name': 'ml_scheduler', 'state': 'waiting_for_marker', 'last_seen': datetime.datetime(2026, 10, 16, 20, 14, 44, 70943, tzinfo=datetime.timezone.utc), 'last_success': None, 'error_code': None}, {'name': 'integrations', 'state': 'idle', 'last_seen': datetime.datetime(2026, 10, 16, 20, 16, 18, 44027, tzinfo=datetime.timezone.utc), 'last_success': datetime.datetime(2026, 10, 16, 20, 16, 18, 44027, tzinfo=datetime.timezone.utc), 'error_code': None}]

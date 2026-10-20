@@ -2,6 +2,13 @@
     box-sizing: border-box;
 }
 
+:root {
+    --font-body: 16px;
+    --font-row: 15px;
+    --font-control: 15px;
+    --font-metadata: 13px;
+}
+
 html,
 body,
 #root {
@@ -16,6 +23,8 @@ html {
 }
 
 body {
+    font-size: var(--font-body);
+    line-height: 1.45;
     min-width: 320px;
     min-height: 100vh;
     overflow: hidden;

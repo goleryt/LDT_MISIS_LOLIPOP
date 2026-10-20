@@ -1,0 +1,22 @@
+{
+  "status": "EXTERNAL DEPENDENCY",
+  "observed_at": "2026-10-20T17:55:26.687265+00:00",
+  "provider_status": "New builds are temporarily paused for all workspaces",
+  "provider_status_url": "https://status.railway.com/",
+  "provider_latest_update": "2026-10-20T17:18:00Z",
+  "new_rc": "0f8d287014680b631603bc8c066fb9aa5739b320",
+  "actual_running_commit": "ccd06206b5b0411983293ea0361a4b237da40dd5",
+  "old_deployment": "214fc396-d9d9-4b6c-9fa1-52f6012b9482",
+  "failed_deployment": "93b6686e-7549-46fa-8b0b-9f1937f64627",
+  "failure_before_build": "Failed to create code snapshot",
+  "single_retry": "UPLOAD_FAILED: Deploys have been paused temporarily",
+  "app_commit_variable_restored_to_actual_code": true,
+  "new_public_inference": true,
+  "old_service_health": {
+    "/": 200,
+    "/health": 200,
+    "/ready": 200
+  },
+  "new_web_deployment": false,
+  "note": "The existing finite scenario job was restarted without rebuilding; current web remains the old successful deployment. Official build pause rechecked 20 Oct after local map validation."
+}

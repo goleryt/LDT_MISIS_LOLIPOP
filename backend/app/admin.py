@@ -41,6 +41,7 @@ def main():
                                 csrf_token=secrets.token_urlsafe(32),
                                 expires_at=datetime.now(timezone.utc) + timedelta(hours=24)))
         db.add(AuditEntry(request_id=secrets.token_hex(16), actor="offline-administrator",
+                          role="admin", entity_type="user", entity_id=name,
                           action=args.action, target=name, outcome=200))
     print(token if token else "Done")
 

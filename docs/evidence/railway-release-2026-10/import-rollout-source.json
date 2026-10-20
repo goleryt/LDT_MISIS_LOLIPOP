@@ -1,0 +1,17 @@
+{
+  "commit": "237ff93d01fdcbfae7b58538946d0f02c267a369",
+  "archive_sha256": "4daa45a797d489960ba4fa31b99ecd0daf36c72547fe2cd8dc67c8e17e0b5580",
+  "source": "tracked git archive only",
+  "import_config": {
+    "IMPORT_MAX_CONCURRENT": "2",
+    "IMPORT_RETRY_AFTER_SECONDS": "3",
+    "IMPORT_TIMEOUT_SECONDS": "240",
+    "MAX_XLSX_UNCOMPRESSED_BYTES": "67108864"
+  },
+  "ci_run": 39338321060,
+  "local_import_gate": "PASS including 12 final per-container CPU cases",
+  "database_revision_before": "d01901",
+  "secrets_changed": false,
+  "database_reset": false,
+  "railway_stress": false
+}

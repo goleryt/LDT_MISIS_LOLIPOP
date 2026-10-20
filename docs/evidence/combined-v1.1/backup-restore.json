@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "source": "isolated synthetic QA database",
+  "restored_into_new_database": "ldt_combined_restore_173726",
+  "sha256": "daa63b93003d1939dee3858e5fdeb4c1c8b4d5888b21a6209c65cc0ebab35f08",
+  "source_counts": {
+    "events": 20941,
+    "scenario_runs": 1,
+    "scenario_forecasts": 3,
+    "requests": 5,
+    "revision": "d01901"
+  },
+  "restored_counts": {
+    "events": 20941,
+    "scenario_runs": 1,
+    "scenario_forecasts": 3,
+    "requests": 5,
+    "revision": "d01901"
+  },
+  "production_modified": false,
+  "full_archive_RTO_established": false,
+  "restored_api_smoke": "PASS: readiness, auth and three scenario forecasts"
+}

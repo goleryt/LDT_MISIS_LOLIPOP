@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import AppErrorBoundary from "./components/AppErrorBoundary";
 const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 import SessionGate from "./components/SessionGate";
 const PredictionsPage = lazy(() => import("./pages/PredictionsPage"));
@@ -22,7 +23,7 @@ const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 
 function App() {
     return (
-        <SessionGate><Suspense fallback={<div className="operations-page">Загрузка раздела…</div>}><Routes>
+        <AppErrorBoundary><SessionGate><Suspense fallback={<div className="operations-page">Загрузка раздела…</div>}><Routes>
             <Route element={<AppLayout />}>
                 <Route path="/predictions" element={<PredictionsPage />} />
                 <Route path="/reports" element={<ReportsPage />} />
@@ -71,7 +72,7 @@ function App() {
                     }
                 />
             </Route>
-        </Routes></Suspense></SessionGate>
+        </Routes></Suspense></SessionGate></AppErrorBoundary>
     );
 }
 

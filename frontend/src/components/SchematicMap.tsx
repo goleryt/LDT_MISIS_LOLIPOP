@@ -12,7 +12,6 @@ import {
 
 import type {
     PointerEvent as ReactPointerEvent,
-    WheelEvent as ReactWheelEvent,
 } from "react";
 
 import type {
@@ -25,6 +24,7 @@ import MoscowBaseMap from "./MoscowBaseMap";
 interface SchematicMapProps {
     objects: MapObject[];
     selectedObject: MapObject | null;
+    forecastMarkers?: Record<number, string>;
 
     onSelectObject: (
         object: MapObject,
@@ -238,6 +238,7 @@ function SchematicMap({
     objects,
     selectedObject,
     onSelectObject,
+    forecastMarkers,
 }: SchematicMapProps) {
     const [zoom, setZoom] =
         useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches ? 1.8 : MIN_ZOOM);
@@ -256,6 +257,8 @@ function SchematicMap({
 
     const svgRef =
         useRef<SVGSVGElement | null>(null);
+    const viewRef = useRef({ zoom, focusX, focusY });
+    viewRef.current = { zoom, focusX, focusY };
 
     const dragStateRef =
         useRef<DragState>({
@@ -524,118 +527,122 @@ function SchematicMap({
     }
 
 
-    function handleWheel(
-        event:
-            ReactWheelEvent<SVGSVGElement>,
-    ) {
-        event.preventDefault();
+    useEffect(() => {
+        const element = svgRef.current;
+        if (!element) return;
+        const svg: SVGSVGElement = element;
+        // React's delegated wheel listener is passive: a native non-passive
+        // listener is necessary to consume trackpad pinch inside the map.
+        function handleWheel(event: WheelEvent) {
+            if (event.cancelable) event.preventDefault();
+            if (![event.deltaY, event.clientX, event.clientY].every(Number.isFinite)) return;
+            const { zoom, focusX, focusY } = viewRef.current;
 
-        const svg = svgRef.current;
+            const rect =
+                svg.getBoundingClientRect();
 
-        if (!svg) {
-            return;
+            if (
+                rect.width === 0 ||
+                rect.height === 0
+            ) {
+                return;
+            }
+
+            const currentView =
+                getViewSize(zoom);
+
+            const currentViewX =
+                clamp(
+                    focusX -
+                        currentView.width / 2,
+                    0,
+                    SVG_WIDTH -
+                        currentView.width,
+                );
+
+            const currentViewY =
+                clamp(
+                    focusY -
+                        currentView.height / 2,
+                    0,
+                    SVG_HEIGHT -
+                        currentView.height,
+                );
+
+            const cursorRatioX =
+                clamp(
+                    (
+                        event.clientX -
+                        rect.left
+                    ) / rect.width,
+                    0,
+                    1,
+                );
+
+            const cursorRatioY =
+                clamp(
+                    (
+                        event.clientY -
+                        rect.top
+                    ) / rect.height,
+                    0,
+                    1,
+                );
+
+            const anchorX =
+                currentViewX +
+                cursorRatioX *
+                currentView.width;
+
+            const anchorY =
+                currentViewY +
+                cursorRatioY *
+                currentView.height;
+
+            const pixels = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? rect.height : 1);
+            if (!pixels || !Number.isFinite(pixels)) return;
+            const sensitivity = event.ctrlKey || event.metaKey ? .01 : .0015;
+            const zoomFactor = Math.exp(clamp(-pixels * sensitivity, -.4, .4));
+
+            const nextZoom =
+                clamp(
+                    zoom * zoomFactor,
+                    MIN_ZOOM,
+                    MAX_ZOOM,
+                );
+
+            if (
+                Math.abs(
+                    nextZoom - zoom,
+                ) < 0.001
+            ) {
+                return;
+            }
+
+            const nextView =
+                getViewSize(nextZoom);
+
+            const nextFocus =
+                clampFocus(
+                    anchorX -
+                        (cursorRatioX - 0.5) *
+                        nextView.width,
+                    anchorY -
+                        (cursorRatioY - 0.5) *
+                        nextView.height,
+                    nextZoom,
+                );
+
+            // Update synchronously so a burst of wheel events never reuses stale state.
+            viewRef.current = { zoom: nextZoom, focusX: nextFocus.x, focusY: nextFocus.y };
+            setZoom(nextZoom);
+            setFocusX(nextFocus.x);
+            setFocusY(nextFocus.y);
+            setHoveredObject(null);
         }
-
-        const rect =
-            svg.getBoundingClientRect();
-
-        if (
-            rect.width === 0 ||
-            rect.height === 0
-        ) {
-            return;
-        }
-
-        const currentView =
-            getViewSize(zoom);
-
-        const currentViewX =
-            clamp(
-                focusX -
-                    currentView.width / 2,
-                0,
-                SVG_WIDTH -
-                    currentView.width,
-            );
-
-        const currentViewY =
-            clamp(
-                focusY -
-                    currentView.height / 2,
-                0,
-                SVG_HEIGHT -
-                    currentView.height,
-            );
-
-        const cursorRatioX =
-            clamp(
-                (
-                    event.clientX -
-                    rect.left
-                ) / rect.width,
-                0,
-                1,
-            );
-
-        const cursorRatioY =
-            clamp(
-                (
-                    event.clientY -
-                    rect.top
-                ) / rect.height,
-                0,
-                1,
-            );
-
-        const anchorX =
-            currentViewX +
-            cursorRatioX *
-            currentView.width;
-
-        const anchorY =
-            currentViewY +
-            cursorRatioY *
-            currentView.height;
-
-        const zoomFactor =
-            event.deltaY < 0
-                ? 1.18
-                : 1 / 1.18;
-
-        const nextZoom =
-            clamp(
-                zoom * zoomFactor,
-                MIN_ZOOM,
-                MAX_ZOOM,
-            );
-
-        if (
-            Math.abs(
-                nextZoom - zoom,
-            ) < 0.001
-        ) {
-            return;
-        }
-
-        const nextView =
-            getViewSize(nextZoom);
-
-        const nextFocus =
-            clampFocus(
-                anchorX -
-                    (cursorRatioX - 0.5) *
-                    nextView.width,
-                anchorY -
-                    (cursorRatioY - 0.5) *
-                    nextView.height,
-                nextZoom,
-            );
-
-        setZoom(nextZoom);
-        setFocusX(nextFocus.x);
-        setFocusY(nextFocus.y);
-        setHoveredObject(null);
-    }
+        svg.addEventListener("wheel", handleWheel, { passive: false });
+        return () => svg.removeEventListener("wheel", handleWheel);
+    }, []);
 
 
     const viewWidth =
@@ -731,7 +738,6 @@ function SchematicMap({
                 onPointerCancel={
                     finishDragging
                 }
-                onWheel={handleWheel}
             >
                 <defs>
                     <filter
@@ -783,7 +789,7 @@ function SchematicMap({
                                     }
                                 }}
                             >
-                                <title>{`${clusterLabels(group.length).points} · приблизить`}</title>
+                                <title>{`${clusterLabels(group.length).points} · приблизить${forecastMarkers ? ' · ' + [...new Set(group.flatMap(p => (forecastMarkers[p.object.object_id] ?? '').split('/')))].join('/') : ''}`}</title>
                                 <circle r={21 / zoom} className="schematic-cluster-point" strokeWidth={2 / zoom} />
                                 <text textAnchor="middle" dominantBaseline="central" fontSize={15 / zoom}>{group.length}</text>
                                 {alarmCount > 0 && (
@@ -885,6 +891,10 @@ function SchematicMap({
                                     }
                                     filter="url(#point-shadow)"
                                 />
+                                {forecastMarkers?.[object.object_id] && <g aria-label={`Модели: ${forecastMarkers[object.object_id]}`}>
+                                    <rect x={-25 / zoom} y={-31 / zoom} width={50 / zoom} height={19 / zoom} rx={5 / zoom} className="map-forecast-marker" strokeWidth={1 / zoom}/>
+                                    <text y={-18 / zoom} textAnchor="middle" fontSize={12 / zoom} className="map-forecast-marker-label">{forecastMarkers[object.object_id]}</text>
+                                </g>}
                             </g>
                         );
                     }

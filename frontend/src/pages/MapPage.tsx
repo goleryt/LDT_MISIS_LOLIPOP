@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useEffectEvent,
     useMemo,
     useState,
     useRef,
@@ -18,7 +19,9 @@ import {
     X,
     Activity,
     Search,
+    ChevronLeft,
 } from "lucide-react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 import { getMapObjects } from "../api/map";
 
@@ -28,6 +31,8 @@ import type {
 } from "../types/map";
 
 import SchematicMap from "../components/SchematicMap";
+import {MapForecastControls, ObjectForecasts} from "../components/MapForecasts";
+import {useMapForecasts, FORECAST_SYMBOLS} from "../api/mapForecasts";
 import SensorIcon from "../components/SensorIcon";
 import "../styles/moscow-map.css";
 
@@ -163,8 +168,29 @@ function sortSensorsForDisplay(
 
 function MapPage() {
     const navigate = useNavigate();
-    const [searchParams] =
+    const [searchParams, setSearchParams] =
         useSearchParams();
+    const compactPanels = useMediaQuery("(max-width: 900px)");
+    const forecastMode = searchParams.get('mapMode') === 'forecasts';
+    const forecastResult = useMapForecasts(forecastMode || searchParams.has('objectId'));
+    const forecastKind = searchParams.get('forecastType') ?? 'all';
+    const forecastAvailability = searchParams.get('forecastAvailability') ?? 'all';
+    const forecastWindow = searchParams.get('forecastWindow') ?? 'all';
+    const allForecasts = forecastResult.data?.forecasts ?? [];
+    const visibleForecasts = allForecasts.filter(row => {
+        const multiple = new Set(allForecasts.filter(r => r.bound && r.object_id === row.object_id).map(r => r.worker)).size > 1;
+        return (forecastKind === 'all' || forecastKind === row.worker || (forecastKind === 'multiple' && multiple))
+            && (forecastAvailability === 'all' || row.available === (forecastAvailability === 'available'))
+            && (forecastWindow === 'all' || row.window_start === forecastWindow);
+    });
+    const forecastMarkers = Object.fromEntries([...new Set(visibleForecasts.filter(r => r.bound).map(r => r.object_id))]
+        .map(id => [id, [...new Set(visibleForecasts.filter(r => r.bound && r.object_id === id).map(r => FORECAST_SYMBOLS[r.worker]))].join('/') ]));
+    function changeForecastFilter(key:string, value:string) {
+        setSearchParams(current => {const next = new URLSearchParams(current); next.set(key,value); return next;});
+    }
+    const objectDrawerRef = useRef<HTMLElement>(null);
+    const sensorPanelRef = useRef<HTMLElement>(null);
+    const previousSensorId = useRef<number | undefined>(undefined);
 
     const [objects, setObjects] =
         useState<MapObject[]>([]);
@@ -228,12 +254,33 @@ function MapPage() {
         useState<string | null>(null);
 
 
+    function updateMapUrl(objectId: number | null, channelId: number | null = null, replace = false) {
+        const next = new URLSearchParams(searchParams);
+        if (objectId === null) next.delete("objectId");
+        else next.set("objectId", String(objectId));
+        if (channelId === null) next.delete("channelId");
+        else next.set("channelId", String(channelId));
+        handledMapNavigationRef.current = objectId === null ? null : `${objectId}:${channelId ?? "-"}`;
+        if (next.toString() !== searchParams.toString()) setSearchParams(next, { replace });
+    }
+
+    function closeSensor() {
+        setSelectedSensor(null);
+        updateMapUrl(selectedObject?.object_id ?? null);
+    }
+
+    function selectSensor(sensor: ObjectSensor) {
+        setSelectedSensor(sensor);
+        updateMapUrl(selectedObject?.object_id ?? null, sensor.channel_id);
+    }
+
     function selectMapObject(
         object: MapObject,
         preferredSensorStatus:
             SensorStatus | null = null,
         preferredSensorChannelId:
             number | null = null,
+        updateUrl = true,
     ) {
         preferredSensorStatusRef.current =
             preferredSensorStatus;
@@ -245,7 +292,11 @@ function MapPage() {
         setSensorSearch("");
         setVisibleSensorCount(SENSOR_PAGE_SIZE);
         setSelectedObject(object);
+        if (updateUrl) updateMapUrl(object.object_id, preferredSensorChannelId);
     }
+
+    const syncAutomaticSensor = useEffectEvent((objectId: number, channelId: number) => updateMapUrl(objectId, channelId, true));
+    const selectFromUrl = useEffectEvent((object: MapObject, channelId: number | null) => selectMapObject(object, null, channelId, false));
 
     async function loadObjects() {
         try {
@@ -296,6 +347,12 @@ function MapPage() {
 
     const selectedObjectId = selectedObject?.object_id;
     const selectedSensorId = selectedSensor?.channel_id;
+
+    useEffect(() => {
+        if (compactPanels && selectedSensorId) sensorPanelRef.current?.focus({ preventScroll: true });
+        else if (compactPanels && previousSensorId.current) objectDrawerRef.current?.focus({ preventScroll: true });
+        previousSensorId.current = selectedSensorId;
+    }, [compactPanels, selectedSensorId]);
 
     useEffect(() => {
         let cancelled = false;
@@ -367,6 +424,7 @@ function MapPage() {
                     setSelectedSensor(
                         preferredSensor,
                     );
+                    if (preferredSensor) syncAutomaticSensor(objectId, preferredSensor.channel_id);
                 }
 
 
@@ -444,10 +502,13 @@ function MapPage() {
                 "channelId",
             );
 
-        if (
-            !objectIdRaw ||
-            objects.length === 0
-        ) {
+        if (!objectIdRaw) {
+            handledMapNavigationRef.current = null;
+            setSelectedObject(null);
+            setSelectedSensor(null);
+            return;
+        }
+        if (objects.length === 0) {
             return;
         }
 
@@ -479,9 +540,13 @@ function MapPage() {
         const navigationKey =
             `${objectId}:${channelId ?? "-"}`;
 
+        // A fast Back can restore the same URL before the intermediate route renders.
+        // Skip only when the actual selection also matches that URL.
         if (
             handledMapNavigationRef.current ===
-            navigationKey
+            navigationKey &&
+            selectedObjectId === objectId &&
+            (channelId === null ? selectedSensorId === undefined : selectedSensorId === channelId)
         ) {
             return;
         }
@@ -500,14 +565,19 @@ function MapPage() {
         handledMapNavigationRef.current =
             navigationKey;
 
-        selectMapObject(
-            object,
-            null,
-            channelId,
-        );
+        if (selectedObjectId === objectId) {
+            preferredSensorChannelIdRef.current = channelId;
+            setSelectedSensor(channelId === null ? null : sensors.find(sensor => sensor.channel_id === channelId) ?? null);
+            return;
+        }
+
+        selectFromUrl(object, channelId);
     }, [
         objects,
         searchParams,
+        selectedObjectId,
+        selectedSensorId,
+        sensors,
     ]);
 
     const statistics = useMemo(() => {
@@ -647,12 +717,19 @@ function MapPage() {
     }, [sensorHistory]);
 
     return (
-        <div className={selectedObject ? "map-page has-object-drawer" : "map-page"}>
+        <div className={`map-page${selectedObject ? ' has-object-drawer' : ''}${forecastMode ? ' forecast-mode' : ''}`}>
             <SchematicMap
-                objects={objects}
+                objects={forecastMode ? objects.filter(o => forecastMarkers[o.object_id]) : objects}
                 selectedObject={selectedObject}
                 onSelectObject={selectMapObject}
+                forecastMarkers={forecastMode ? forecastMarkers : undefined}
             />
+            <div className="map-mode-switch" role="group" aria-label="Режим карты">
+                <button aria-pressed={!forecastMode} onClick={() => changeForecastFilter('mapMode','actual')}>Фактическое состояние</button>
+                <button aria-pressed={forecastMode} onClick={() => changeForecastFilter('mapMode','forecasts')}>Прогнозы</button>
+            </div>
+            {forecastMode && <MapForecastControls {...forecastResult} kind={forecastKind} availability={forecastAvailability}
+                window={forecastWindow} change={changeForecastFilter} objects={objects} filtered={visibleForecasts} onSelect={selectMapObject}/>}
 
             <div className="map-place-card" aria-label="Схема Москвы">
                 <span className="map-place-eyebrow">Обзор инфраструктуры</span>
@@ -895,7 +972,7 @@ function MapPage() {
              
             <div className="map-legend">
                 <div className="legend-title">
-                    Состояние объектов
+                    Фактическое состояние
                 </div>
 
                 <div className="legend-item">
@@ -920,14 +997,19 @@ function MapPage() {
                 )}
             </div>
 
+            {!error && objects.length === 0 && <div className="map-state-notice" role="status">
+                {loading ? "Загрузка объектов…" : "Объектов пока нет. Загрузите справочник объектов в разделе «Импорт данных»."}
+            </div>}
             {error && (
-                <div className="map-error">
+                <div className="map-error" role="alert">
                     {error}
+                    <button onClick={() => { setLoading(true); void loadObjects(); }}>Повторить загрузку объектов</button>
                 </div>
             )}
 
             {selectedObject && (
-                <aside className="object-drawer">
+                <aside className="object-drawer" ref={objectDrawerRef} tabIndex={-1}
+                    hidden={compactPanels && !!selectedSensor} inert={compactPanels && !!selectedSensor}>
                     <div className="drawer-header">
                         <div>
                             <span className="drawer-eyebrow">
@@ -943,9 +1025,11 @@ function MapPage() {
                         <button
                             type="button"
                             className="drawer-close"
-                            onClick={() =>
-                                setSelectedObject(null)
-                            }
+                            onClick={() => {
+                                setSelectedObject(null);
+                                setSelectedSensor(null);
+                                updateMapUrl(null);
+                            }}
                             aria-label="Закрыть"
                         >
                             <X size={20} />
@@ -960,6 +1044,7 @@ function MapPage() {
                         </p>
                     )}
 
+                    <p className="map-object-state-label">Фактическое состояние</p>
                     <div
                         className={
                             `object-status object-status-${selectedObject.status}`
@@ -974,6 +1059,10 @@ function MapPage() {
                         }
                     </div>
 
+                    {forecastResult.loading && <p role="status">Загрузка прогнозов объекта…</p>}
+                    {forecastResult.error && <p role="alert">{forecastResult.error} <button onClick={forecastResult.retry}>Повторить</button></p>}
+                    {forecastResult.data && <ObjectForecasts rows={allForecasts.filter(row => row.object_id === selectedObject.object_id)
+                        .sort((a,b) => Number(b.worker === forecastKind) - Number(a.worker === forecastKind))}/>}
                     <div className="object-info-grid">
                         <div>
                             <span>Тип объекта</span>
@@ -1096,7 +1185,7 @@ function MapPage() {
                                                 : "sensor-row"
                                         }
                                         onClick={() =>
-                                            setSelectedSensor(sensor)
+                                            selectSensor(sensor)
                                         }
                                     >
                                         <span
@@ -1161,7 +1250,10 @@ function MapPage() {
                 </aside>
             )}
             {selectedSensor && (
-                <aside className="sensor-detail-panel">
+                <aside className="sensor-detail-panel" ref={sensorPanelRef} tabIndex={-1} aria-label="Подробности датчика">
+                    {compactPanels && <button type="button" className="sensor-back-button" onClick={closeSensor}>
+                        <ChevronLeft size={18} />Назад к объекту
+                    </button>}
                     <div className="sensor-detail-header">
                         <div>
                             <span className="drawer-eyebrow">
@@ -1177,9 +1269,8 @@ function MapPage() {
                         <button
                             type="button"
                             className="sensor-detail-close"
-                            onClick={() =>
-                                setSelectedSensor(null)
-                            }
+                            onClick={closeSensor}
+                            aria-label="Закрыть датчик"
                         >
                             <X size={17} />
                         </button>

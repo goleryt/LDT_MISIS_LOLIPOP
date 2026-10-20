@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "base": "ccd06206b5b0411983293ea0361a4b237da40dd5",
+  "head": "0f8d287014680b631603bc8c066fb9aa5739b320",
+  "unchanged_paths": [
+    "ml",
+    "ml_combined",
+    "models",
+    "backend/app/ml_job.py",
+    "backend/app/scenario_job.py"
+  ],
+  "new_inference_only_existing_frozen_runtime": true,
+  "no_training_no_threshold_changes": true
+}

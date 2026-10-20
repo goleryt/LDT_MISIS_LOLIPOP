@@ -51,6 +51,9 @@ services:
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
+      BACKUP_STATUS_DIR: /backup-status
+    volumes:
+      - backups:/backup-status:ro
     expose: ["8000"]
     depends_on:
       migrate:
@@ -95,6 +98,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     restart: unless-stopped
   integrations:
     profiles: ["integrations"]

@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "metrics": {
+    "cases": 8,
+    "api_requests": 1962,
+    "api_errors": 0,
+    "web_peak_mib": 408.51,
+    "pg_sampled_total_peak_mib": 1023.88,
+    "pg_working_set_peak_mib": 468.0,
+    "web_cpu_pct_one_core": 202.07,
+    "pg_cpu_pct_one_core": 102.81,
+    "connections_target_peak": 11,
+    "api_p95_max_ms": 528.09,
+    "map_iterations": 112
+  },
+  "post_load": {
+    "idle_in_transaction": 0,
+    "import_slots": 0,
+    "registry_processing": 0,
+    "audit_import_actors": 20,
+    "events_generated": 500000
+  },
+  "map_observer": "PASS after ready handshake; initial startup race retained separately",
+  "previous_atomic_fault_suite": "reused on identical backend/infra source"
+}

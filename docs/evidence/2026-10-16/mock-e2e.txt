@@ -1,0 +1,6 @@
+equipment|22
+ods|22
+telemetry|23
+weather|22
+work_status|22
+22

@@ -1,0 +1,13 @@
+
+Running 4 tests using 2 workers
+
+(node:13400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:164) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [chrome] › e2e\workflows.spec.ts:62:1 › failed prediction request has visible feedback and recovers (2.0s)
+  ok 1 [chrome] › e2e\ui-fixes.spec.ts:12:1 › fully filled request submits the visible values and records creation history (3.9s)
+  ok 3 [chrome] › e2e\workflows.spec.ts:75:1 › JSON import is visible in the registry and duplicate upload is identified (2.0s)
+  ok 4 [chrome] › e2e\ui-fixes.spec.ts:76:1 › list typography and opaque filters remain readable in both themes (7.3s)
+
+  4 passed (12.3s)

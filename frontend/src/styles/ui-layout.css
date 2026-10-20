@@ -1,0 +1,89 @@
+/* The workspace owns the viewport; panels and notifications never add another 100vh. */
+.app-workspace {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+    container-type: inline-size;
+}
+.app-workspace > :not(.notification-panel):not(.mobile-topbar) {
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    height: auto;
+}
+.app-workspace > .notification-panel {
+    flex: 0 0 44px;
+    height: 44px;
+    padding: 10px 20px;
+    z-index: 1200;
+    background: var(--ui-surface);
+    color: var(--ui-ink);
+    border-bottom: 1px solid var(--ui-border);
+}
+.notification-panel details[open] {
+    position: absolute;
+    inset: 0 0 auto;
+    padding: 10px 20px;
+    background: var(--ui-surface);
+    border-bottom: 1px solid var(--ui-border);
+    box-shadow: 0 8px 24px #0004;
+    max-height: min(50vh, 400px);
+}
+.notification-panel a { color: var(--page-accent); }
+.notification-panel summary { cursor: pointer; }
+.map-page {
+    --object-drawer-width: clamp(320px, 36cqw, 390px);
+    container-type: inline-size;
+    min-height: 0;
+}
+.map-page .map-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: min(680px, calc(100% - 340px));
+    max-width: none;
+    left: 16px;
+    top: 16px;
+    right: auto;
+    gap: 8px;
+}
+.map-page .summary-card {
+    min-width: 0;
+    min-height: 72px;
+    padding: 10px;
+    gap: 8px;
+}
+.map-page .summary-card span { white-space: normal; }
+.map-page .map-data-badge { top: 100px; left: 16px; max-width: calc(100% - 32px); }
+.map-page .map-error { top: 160px; }
+.map-page .object-drawer { max-height: 100%; overscroll-behavior: contain; }
+.map-page .drawer-header {
+    position: sticky;
+    top: -24px;
+    z-index: 2;
+    background: var(--design-surface);
+    padding-block: 8px;
+}
+.map-page .drawer-header h2 { overflow-wrap: anywhere; max-height: 6em; overflow: auto; }
+.map-page .sensor-detail-panel { max-height: calc(100% - 190px); }
+.map-page .schematic-map-controls { z-index: 850; bottom: 16px; }
+.map-page .schematic-reset-button { z-index: 850; bottom: 16px; top: auto; }
+.map-page .map-legend { bottom: 16px; left: 16px; }
+.map-page:has(.sensor-detail-panel) .map-place-card { display: none; }
+@container (max-width: 1100px) {
+    .map-page .map-place-card { display: none; }
+    .map-page .map-summary { width: calc(100% - 32px); }
+    .map-page.has-object-drawer :is(.map-summary,.map-data-badge,.map-legend) { display: none; }
+}
+@container (max-width: 800px) {
+    .map-page .summary-card { padding: 8px; gap: 6px; }
+    .map-page .sensor-detail-panel { width: calc(100% - var(--object-drawer-width) - 32px); right: calc(var(--object-drawer-width) + 16px); }
+}
+/* Keep the existing compact fallback below desktop widths, with working map controls. */
+@media (min-width: 901px) {
+    .has-object-drawer .schematic-map-controls { display: flex; right: calc(var(--object-drawer-width) + 16px); }
+    .has-object-drawer .schematic-reset-button { display: flex; right: calc(var(--object-drawer-width) + 70px); }
+}
+@media (max-width: 900px) {
+    .map-page { --object-drawer-width: min(390px, 100%); }
+}

@@ -16,6 +16,7 @@ from app.db.session import SessionLocal
 from app.ingestion.import_registry import (
     import_events_file,
 )
+from app.ingestion.limits import ImportBusy, ImportDeadlineExceeded
 
 
 router = APIRouter(
@@ -46,7 +47,11 @@ def serialize_import(
     }
 
 
-@router.post("/events")
+@router.post("/events",responses={
+    408:{'description':'Processing deadline/cancellation; transaction rolled back, retry a smaller file'},
+    409:{'description':'Identical file is processing; Retry-After, safe retry'},
+    429:{'description':'Import capacity busy; no queue, Retry-After, safe retry'},
+})
 def upload_events_file(
     file: UploadFile = File(...),
     kind: Literal["events_journal", "objects", "channels"] = "events_journal",
@@ -112,6 +117,13 @@ def upload_events_file(
 
     except HTTPException:
         raise
+
+    except ImportBusy as exc:
+        raise HTTPException(status_code=exc.status,detail={'code':exc.code,'message':str(exc)},
+            headers={'Retry-After':str(settings.import_retry_after_seconds)}) from None
+
+    except ImportDeadlineExceeded as exc:
+        raise HTTPException(status_code=408,detail=str(exc)) from None
 
     except ValueError as exc:
         raise HTTPException(

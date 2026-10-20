@@ -1,0 +1,11 @@
+{
+  "production_todo_fixme_console_log_debugger_file_hits": [],
+  "retained_tools": "ML research and useful operational scripts retained",
+  "date": "2026-10-16",
+  "removed_unused_files": [
+    "frontend/src/pages/OverviewPage.tsx",
+    "frontend/src/api/backend.ts"
+  ],
+  "limitations": "Heuristic scan; nine existing React effect lint warnings retained and documented",
+  "leaflet_osm_runtime_dependency_found": false
+}

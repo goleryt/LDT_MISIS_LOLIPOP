@@ -1,0 +1,79 @@
+# Explicit loopback QA deployment; never a production override.
+x-app: &app
+  image: ldt-cloud-qa
+  env_file: ../backend/.env
+  environment: &app-env
+    ENVIRONMENT: test
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: ldt_test
+    SECURE_COOKIES: "false"
+    ALLOW_MOCK_INGESTION: "true"
+    ALLOWED_HOSTS: localhost,127.0.0.1
+    CORS_ORIGINS: http://127.0.0.1:18091
+    APP_COMMIT: ${APP_COMMIT:-unknown}
+    WEB_CONCURRENCY: 4
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: ldt_test
+    volumes: ["cloud_qa_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U $$POSTGRES_USER -d ldt_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  migrate:
+    <<: *app
+    healthcheck: {disable: true}
+    command: ["alembic","upgrade","head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+  web:
+    <<: *app
+    ports: ["127.0.0.1:18091:8080"]
+    environment:
+      <<: *app-env
+      BACKUP_STATUS_DIR: /backup-status
+    volumes: ["cloud_qa_backups:/backup-status:ro"]
+    read_only: true
+    tmpfs: ["/tmp:size=256m"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+  mock-source:
+    <<: *app
+    healthcheck: {disable: true}
+    profiles: ["mocks"]
+    command: ["python","-m","scripts.mock_source"]
+    environment:
+      MOCK_REQUEST_ID: ${MOCK_REQUEST_ID:-0}
+  integrations:
+    <<: *app
+    healthcheck: {disable: true}
+    profiles: ["mocks"]
+    command: ["python","-m","app.integration_worker"]
+    environment:
+      <<: *app-env
+      INTEGRATION_SOURCES_FILE: /config/sources.json
+      INTEGRATION_POLL_SECONDS: 5
+    volumes: ["./sources.mock.json:/config/sources.json:ro"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      mock-source: {condition: service_started}
+  backup:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ldt_test
+    volumes: ["./scripts:/scripts:ro","cloud_qa_backups:/backups"]
+    entrypoint: ["sh","/scripts/backup-loop.sh"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+volumes:
+  cloud_qa_data:
+  cloud_qa_backups:

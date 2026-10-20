@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "backup_sha256": "73a3fc634d33cb5bc15a71db63a199cc029b520928fb973efcf14ada3336e5fd",
+  "backup_bytes": 10095982,
+  "new_database": true,
+  "revision": "d01901",
+  "schema_check": "PASS",
+  "api": {
+    "/health": 200,
+    "/ready": 200,
+    "/api/v1/map/objects": 200,
+    "/api/v1/predictions": 200,
+    "/api/v1/predictions/scenarios": 200,
+    "/api/v1/imports": 200
+  },
+  "gas_predictions": 3,
+  "scenario_forecasts": 3,
+  "events_restored": 173867
+}

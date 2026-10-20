@@ -1,0 +1,220 @@
+{
+  "project": "d4c500cc-fab0-4f7f-ad7e-a52db7a5585c",
+  "environment": "1dd4e231-b7ab-48b3-879e-b17389d1e911",
+  "services": [
+    {
+      "name": "ml-demo-job",
+      "id": "5dbc29ab-fc53-4845-92a9-2cbb2dbe40ca",
+      "deployment": "7a30a912-160e-4def-a75d-79bad20b8fe4",
+      "status": "SUCCESS",
+      "stopped": true,
+      "source": {
+        "image": null,
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "infra/Dockerfile.demo-ml",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": null,
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": null,
+          "restartPolicyType": "NEVER",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": []
+    },
+    {
+      "name": "Postgres",
+      "id": "7eee6a09-108b-4ea6-ad4a-efe3b5fc93ef",
+      "deployment": "d000dee4-553e-45b6-8694-e3afd6042463",
+      "status": "SUCCESS",
+      "stopped": false,
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:18",
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "RAILPACK",
+          "dockerfilePath": null,
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": null,
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": "/var/lib/postgresql/data",
+          "restartPolicyMaxRetries": 10,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": [
+        "/var/lib/postgresql/data"
+      ]
+    },
+    {
+      "name": "ldt-demo",
+      "id": "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f",
+      "deployment": "599da668-ccde-4eb0-ac65-6734444c8ee6",
+      "status": "SUCCESS",
+      "stopped": false,
+      "source": {
+        "image": null,
+        "repo": null
+      },
+      "manifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "infra/Dockerfile.cloud",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": "/ready",
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": 3,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumes": []
+    }
+  ],
+  "40ca29d5-bf32-4a43-bcd9-c03d05b27b9f": {
+    "keys": [
+      "ALLOW_MOCK_INGESTION",
+      "DEMO_JURY_PASSWORD",
+      "ENVIRONMENT",
+      "PORT",
+      "POSTGRES_DB",
+      "POSTGRES_HOST",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_PORT",
+      "POSTGRES_USER",
+      "RAILWAY_DOCKERFILE_PATH",
+      "RAILWAY_ENVIRONMENT",
+      "RAILWAY_ENVIRONMENT_ID",
+      "RAILWAY_ENVIRONMENT_NAME",
+      "RAILWAY_PRIVATE_DOMAIN",
+      "RAILWAY_PROJECT_ID",
+      "RAILWAY_PROJECT_NAME",
+      "RAILWAY_PUBLIC_DOMAIN",
+      "RAILWAY_SERVICE_ID",
+      "RAILWAY_SERVICE_LDT_DEMO_URL",
+      "RAILWAY_SERVICE_NAME",
+      "RAILWAY_STATIC_URL",
+      "SECURE_COOKIES"
+    ],
+    "safe_config": {
+      "ENVIRONMENT": "production",
+      "SECURE_COOKIES": "true",
+      "ALLOW_MOCK_INGESTION": "false",
+      "POSTGRES_DB": "railway",
+      "RAILWAY_DOCKERFILE_PATH": "infra/Dockerfile.cloud",
+      "PORT": "8080"
+    }
+  },
+  "7eee6a09-108b-4ea6-ad4a-efe3b5fc93ef": {
+    "keys": [
+      "DATABASE_URL",
+      "PGDATA",
+      "PGDATABASE",
+      "PGHOST",
+      "PGPASSWORD",
+      "PGPORT",
+      "PGUSER",
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER",
+      "RAILWAY_DEPLOYMENT_DRAINING_SECONDS",
+      "RAILWAY_ENVIRONMENT",
+      "RAILWAY_ENVIRONMENT_ID",
+      "RAILWAY_ENVIRONMENT_NAME",
+      "RAILWAY_PRIVATE_DOMAIN",
+      "RAILWAY_PROJECT_ID",
+      "RAILWAY_PROJECT_NAME",
+      "RAILWAY_SERVICE_ID",
+      "RAILWAY_SERVICE_LDT_DEMO_URL",
+      "RAILWAY_SERVICE_NAME",
+      "RAILWAY_VOLUME_ID",
+      "RAILWAY_VOLUME_MOUNT_PATH",
+      "RAILWAY_VOLUME_NAME",
+      "SSL_CERT_DAYS"
+    ],
+    "safe_config": {
+      "POSTGRES_DB": "railway"
+    }
+  }
+}

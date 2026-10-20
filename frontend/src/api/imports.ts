@@ -1,4 +1,4 @@
-import { apiFetch } from "./session";
+import { ApiError, apiFetch, responseError } from "./session";
 import {
     API_BASE_URL,
 } from "./config";
@@ -15,9 +15,7 @@ export async function getImports(): Promise<DataImport[]> {
     );
 
     if (!response.ok) {
-        throw new Error(
-            `Не удалось получить историю импортов: HTTP ${response.status}`,
-        );
+        throw responseError(response);
     }
 
     return response.json();
@@ -41,20 +39,10 @@ export async function uploadEventsFile(
     );
 
     if (!response.ok) {
-        let message =
-            `Ошибка загрузки: HTTP ${response.status}`;
-
-        try {
-            const body = await response.json();
-
-            if (body.detail) {
-                message = body.detail;
-            }
-        } catch {
-            // Оставляем стандартное сообщение.
-        }
-
-        throw new Error(message);
+        if (response.status === 429) throw new ApiError("Сервис импорта занят. Файл не принят в обработку. Подождите несколько секунд и нажмите «Начать импорт» снова.",429);
+        if (response.status === 409) throw new ApiError("Этот файл уже обрабатывается. Дождитесь завершения, обновите историю и повторите загрузку при необходимости.",409);
+        if (response.status === 408) throw new ApiError("Превышено время обработки. Данные файла не сохранены. Разделите файл на меньшие части и повторите загрузку.",408);
+        throw responseError(response);
     }
 
     return response.json();

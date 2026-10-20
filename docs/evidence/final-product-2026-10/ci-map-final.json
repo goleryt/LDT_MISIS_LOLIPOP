@@ -1,0 +1,464 @@
+[
+  {
+    "id": 39476724732,
+    "name": "Validate service",
+    "head_sha": "0f8d287014680b631603bc8c066fb9aa5739b320",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39476724732",
+    "jobs": [
+      {
+        "id": 118814489673,
+        "name": "combined-runtime",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39476724732/job/118814489673",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-20T18:39:57Z",
+            "completed_at": "2026-10-20T18:39:58Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-20T18:39:58Z",
+            "completed_at": "2026-10-20T18:40:03Z"
+          },
+          {
+            "name": "Build independent Python 3.12 scenario runtime",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-20T18:40:03Z",
+            "completed_at": "2026-10-20T18:41:04Z"
+          },
+          {
+            "name": "Frozen real inference and evidence validation (no network or secrets)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-20T18:41:04Z",
+            "completed_at": "2026-10-20T18:41:11Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-20T18:41:11Z",
+            "completed_at": "2026-10-20T18:41:12Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-20T18:41:12Z",
+            "completed_at": "2026-10-20T18:41:12Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-20T18:41:12Z",
+            "completed_at": "2026-10-20T18:41:12Z"
+          }
+        ]
+      },
+      {
+        "id": 118814489757,
+        "name": "backend",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39476724732/job/118814489757",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-20T18:39:57Z",
+            "completed_at": "2026-10-20T18:39:58Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-20T18:39:58Z",
+            "completed_at": "2026-10-20T18:40:14Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-20T18:40:14Z",
+            "completed_at": "2026-10-20T18:40:19Z"
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-20T18:40:19Z",
+            "completed_at": "2026-10-20T18:40:19Z"
+          },
+          {
+            "name": "Run pip install -r requirements-dev.txt",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-20T18:40:19Z",
+            "completed_at": "2026-10-20T18:40:36Z"
+          },
+          {
+            "name": "Run alembic upgrade head",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-20T18:40:36Z",
+            "completed_at": "2026-10-20T18:40:38Z"
+          },
+          {
+            "name": "Run alembic check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-20T18:40:38Z",
+            "completed_at": "2026-10-20T18:40:39Z"
+          },
+          {
+            "name": "Run pytest -q --junitxml=../test-results/backend.xml",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-20T18:40:39Z",
+            "completed_at": "2026-10-20T18:41:18Z"
+          },
+          {
+            "name": "Run alembic downgrade 7bb10cf49ac2 && alembic upgrade head && alembic check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-20T18:41:18Z",
+            "completed_at": "2026-10-20T18:41:20Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-20T18:41:20Z",
+            "completed_at": "2026-10-20T18:41:21Z"
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-20T18:41:21Z",
+            "completed_at": "2026-10-20T18:41:21Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-20T18:41:21Z",
+            "completed_at": "2026-10-20T18:41:21Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-20T18:41:21Z",
+            "completed_at": "2026-10-20T18:41:22Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-20T18:41:22Z",
+            "completed_at": "2026-10-20T18:41:22Z"
+          }
+        ]
+      },
+      {
+        "id": 118814489821,
+        "name": "containers",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39476724732/job/118814489821",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-20T18:39:57Z",
+            "completed_at": "2026-10-20T18:39:59Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-20T18:39:59Z",
+            "completed_at": "2026-10-20T18:40:04Z"
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-20T18:40:04Z",
+            "completed_at": "2026-10-20T18:40:04Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-20T18:40:04Z",
+            "completed_at": "2026-10-20T18:40:05Z"
+          },
+          {
+            "name": "Run cp backend/.env.example backend/.env",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-20T18:40:05Z",
+            "completed_at": "2026-10-20T18:41:03Z"
+          },
+          {
+            "name": "Run pip install httpx==0.28.1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-20T18:41:03Z",
+            "completed_at": "2026-10-20T18:41:05Z"
+          },
+          {
+            "name": "Build isolated ML runtime",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-20T18:41:05Z",
+            "completed_at": "2026-10-20T18:41:52Z"
+          },
+          {
+            "name": "Run python tests/smoke.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-20T18:41:52Z",
+            "completed_at": "2026-10-20T18:41:52Z"
+          },
+          {
+            "name": "Standalone cloud web packaging and readiness",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-20T18:41:52Z",
+            "completed_at": "2026-10-20T18:42:26Z"
+          },
+          {
+            "name": "Twenty paced dispatcher sessions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-20T18:42:26Z",
+            "completed_at": "2026-10-20T18:43:32Z"
+          },
+          {
+            "name": "Run cd frontend",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-20T18:43:32Z",
+            "completed_at": "2026-10-20T18:45:10Z"
+          },
+          {
+            "name": "Check telemetry delivery without ML",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-20T18:45:10Z",
+            "completed_at": "2026-10-20T18:45:12Z"
+          },
+          {
+            "name": "Real frozen gas runtime contract on labelled synthetic inputs",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-20T18:45:12Z",
+            "completed_at": "2026-10-20T18:45:15Z"
+          },
+          {
+            "name": "Prediction decision to editable request draft",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-20T18:45:15Z",
+            "completed_at": "2026-10-20T18:45:20Z"
+          },
+          {
+            "name": "Check backup and restore",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-20T18:45:20Z",
+            "completed_at": "2026-10-20T18:45:21Z"
+          },
+          {
+            "name": "Save logs",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-10-20T18:45:21Z",
+            "completed_at": "2026-10-20T18:45:21Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-20T18:45:21Z",
+            "completed_at": "2026-10-20T18:45:22Z"
+          },
+          {
+            "name": "Run docker rm -f ldt-cloud-ci || true",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-20T18:45:22Z",
+            "completed_at": "2026-10-20T18:45:33Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 34,
+            "started_at": "2026-10-20T18:45:33Z",
+            "completed_at": "2026-10-20T18:45:33Z"
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 35,
+            "started_at": "2026-10-20T18:45:33Z",
+            "completed_at": "2026-10-20T18:45:33Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 36,
+            "started_at": "2026-10-20T18:45:33Z",
+            "completed_at": "2026-10-20T18:45:33Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 37,
+            "started_at": "2026-10-20T18:45:33Z",
+            "completed_at": "2026-10-20T18:45:33Z"
+          }
+        ]
+      },
+      {
+        "id": 118814489913,
+        "name": "frontend",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39476724732/job/118814489913",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-20T18:39:57Z",
+            "completed_at": "2026-10-20T18:39:58Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-20T18:39:58Z",
+            "completed_at": "2026-10-20T18:40:03Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-20T18:40:03Z",
+            "completed_at": "2026-10-20T18:40:04Z"
+          },
+          {
+            "name": "Run npm ci",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-20T18:40:04Z",
+            "completed_at": "2026-10-20T18:40:08Z"
+          },
+          {
+            "name": "Run npm run lint",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-20T18:40:08Z",
+            "completed_at": "2026-10-20T18:40:08Z"
+          },
+          {
+            "name": "Run npm run build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-20T18:40:08Z",
+            "completed_at": "2026-10-20T18:40:12Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-20T18:40:12Z",
+            "completed_at": "2026-10-20T18:40:12Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-20T18:40:12Z",
+            "completed_at": "2026-10-20T18:40:12Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-20T18:40:12Z",
+            "completed_at": "2026-10-20T18:40:12Z"
+          }
+        ]
+      }
+    ]
+  }
+]

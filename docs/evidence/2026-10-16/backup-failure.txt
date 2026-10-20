@@ -1,0 +1,1 @@
+pg_dump: error: connection to server at "postgres" (172.21.0.2), port 5432 failed: FATAL:  database "ldt_missing_backup_test" does not exist

@@ -1,0 +1,36 @@
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 2490 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                 0.60 kB │ gzip:   0.39 kB
+dist/assets/Nunito-Cyrillic-CTI5J-Gh.woff2     20.78 kB
+dist/assets/Nunito-Latin-CjueodBP.woff2        39.15 kB
+dist/assets/SettingsPage-sM3oPCog.css           2.56 kB │ gzip:   0.90 kB
+dist/assets/index-CAF0R4FC.css                 66.37 kB │ gzip:  12.82 kB
+dist/assets/clock-3-Cl3RJYv9.js                 0.19 kB │ gzip:   0.18 kB
+dist/assets/search-BpTberQw.js                  0.20 kB │ gzip:   0.18 kB
+dist/assets/map-B-swGjLy.js                     0.21 kB │ gzip:   0.22 kB
+dist/assets/objects-0TW5bxgy.js                 0.24 kB │ gzip:   0.24 kB
+dist/assets/circle-question-mark-hW5KQkUJ.js    0.31 kB │ gzip:   0.24 kB
+dist/assets/refresh-cw-BfO9PhB6.js              0.35 kB │ gzip:   0.24 kB
+dist/assets/building-complex-BxsPJ0pu.js        0.44 kB │ gzip:   0.27 kB
+dist/assets/shield-check-C6kLXKlK.js            0.58 kB │ gzip:   0.37 kB
+dist/assets/SettingsPage-RZSKLxHC.js            1.94 kB │ gzip:   0.98 kB
+dist/assets/ReportsPage-Dj4sEenY.js             2.20 kB │ gzip:   1.13 kB
+dist/assets/SensorIcon-GFcISNpX.js              5.19 kB │ gzip:   2.46 kB
+dist/assets/ObjectsPage-CbJ2zNfZ.js             6.00 kB │ gzip:   2.06 kB
+dist/assets/AlarmsPage-5yUGTV1A.js              6.54 kB │ gzip:   2.22 kB
+dist/assets/PredictionsPage-Btsea8YK.js         7.06 kB │ gzip:   2.73 kB
+dist/assets/ImportsPage-RLCLbXZU.js             9.19 kB │ gzip:   3.14 kB
+dist/assets/EventJournalPage-uf8yH7B7.js       11.11 kB │ gzip:   3.81 kB
+dist/assets/session-CaK5B-Wp.js                11.13 kB │ gzip:   4.52 kB
+dist/assets/RequestsPage-xeoPqlSc.js           14.52 kB │ gzip:   4.55 kB
+dist/assets/index-DP9hzGoQ.js                 267.66 kB │ gzip:  85.65 kB
+dist/assets/MapPage-C22P_0HG.js               382.55 kB │ gzip: 112.35 kB
+
+✓ built in 725ms

@@ -1,0 +1,6 @@
+{
+  "compileall": "passed",
+  "import": "app.main:app",
+  "python": "3.14.6",
+  "routes": 34
+}

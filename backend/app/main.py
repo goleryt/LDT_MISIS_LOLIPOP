@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from sqlalchemy import text
-from app.api.v1 import alarms, events, imports, map, objects, requests, sensors, auth, platform, integrations, predictions, geo
+from app.api.v1 import alarms, events, imports, map, objects, requests, sensors, auth, platform, integrations, predictions, scenarios, geo
 from app.core.config import get_settings
 from app.core.middleware import SecurityMiddleware
 from app.db.session import engine
@@ -14,7 +14,7 @@ from app.api.v1 import reports
 
 settings = get_settings()
 app = FastAPI(title=settings.app_name, version=settings.app_version)
-for module in (map, objects, sensors, alarms, events, requests, imports, auth, platform, integrations, predictions, geo):
+for module in (map, objects, sensors, alarms, events, requests, imports, auth, platform, integrations, scenarios, predictions, geo):
     app.include_router(module.router, prefix="/api/v1")
 app.include_router(reports.router, prefix="/api/v1")
 app.add_middleware(SecurityMiddleware)

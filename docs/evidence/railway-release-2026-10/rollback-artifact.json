@@ -1,0 +1,11 @@
+{
+  "label": "old14aad86 application plus additive d01901 migration script",
+  "original_git_commit": "14aad86414826c59857cbc2766d10f48a0b43ba4",
+  "archive_sha256": "65d2f097509e74510eb52219ae154043aa449017f19438d09cdfa4494a101b3c",
+  "extra_file": "backend/alembic/versions/d01901_scenario_ledger.py",
+  "extra_file_sha256": "869602563f8d977c16272608774866e028f82c06156437253297807a49ed370a",
+  "APP_COMMIT": "unknown (derived artifact, not a Git commit)",
+  "tested_against_revision": "d01901",
+  "readiness_login_old_gas_api": "PASS",
+  "database_downgrade_required": false
+}

@@ -1,0 +1,56 @@
+
+Running 1 test using 1 worker
+
+(node:33784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation (31.6s)
+
+
+  1) [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.hover: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('svg.schematic-map-svg').locator('.schematic-object.selected')
+        - locator resolved to <g tabindex="0" role="button" aria-label="Тестовый объект" class="schematic-object alarm selected" transform="translate(523.4547064828935 338.0634050878451)">…</g>
+      - attempting hover action
+        2 × waiting for element to be visible and stable
+          - element is not stable
+        - retrying hover action
+        - waiting 20ms
+        2 × waiting for element to be visible and stable
+          - element is not stable
+        - retrying hover action
+          - waiting 100ms
+        55 × waiting for element to be visible and stable
+           - element is not stable
+         - retrying hover action
+           - waiting 500ms
+
+
+      150 |   await page.goto("/?objectId=1");
+      151 |   const marker=map.locator('.schematic-object.selected');
+    > 152 |   await marker.hover();
+          |                ^
+      153 |   await expect(page.locator('.map-object-tooltip')).toBeVisible();
+      154 |   await marker.click();
+      155 |   await expect(page.locator('.map-data-badge')).toContainText(/Условное|Демо/);
+        at C:\Users\mydre\.codex\.chatgpt-projects\g-p-6aa96e6b53908191b7eee7fc64011b95\integration-20260926\final-hardening\frontend\e2e\workflows.spec.ts:152:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\workflows-map-zoom-pan-too-d4fe4-lick-and-compact-navigation-chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chrome] › e2e\workflows.spec.ts:130:1 › map zoom, pan, tooltip, object click and compact navigation

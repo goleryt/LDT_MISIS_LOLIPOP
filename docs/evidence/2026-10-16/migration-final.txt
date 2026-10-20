@@ -1,0 +1,78 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> b174b31449db, baseline existing schema
+INFO  [alembic.runtime.migration] Running upgrade b174b31449db -> b8f3e33c10fb, canonicalize events journal
+INFO  [alembic.runtime.migration] Running upgrade b8f3e33c10fb -> e4aa4444977d, add object id to channel catalogue
+INFO  [alembic.runtime.migration] Running upgrade e4aa4444977d -> 393827181fa5, add data imports registry
+INFO  [alembic.runtime.migration] Running upgrade 393827181fa5 -> 6f8d2ab42c31, add preventive requests
+INFO  [alembic.runtime.migration] Running upgrade 6f8d2ab42c31 -> 7bb10cf49ac2, add event query indexes
+INFO  [alembic.runtime.migration] Running upgrade 7bb10cf49ac2 -> 28199ee15ad1, add security prediction integration domains
+INFO  [alembic.runtime.migration] Running upgrade 28199ee15ad1 -> 5e192ace0042, Logical operational, archive and analytical read models; no source rows are deleted.
+INFO  [alembic.runtime.migration] Running upgrade 5e192ace0042 -> a7c41d09e3b2, Store the daily ML batch output (ml_scores).
+INFO  [alembic.runtime.migration] Running upgrade a7c41d09e3b2 -> c92601, Immutable ML run revisions and prediction provenance.
+INFO  [alembic.runtime.migration] Running upgrade c92601 -> d01601, Request history and explicit draft workflow; existing requests keep their status.
+INFO  [alembic.runtime.migration] Running upgrade d01601 -> d01602, Audit attribution and worker heartbeat; historical records remain explicitly nullable.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+d01602 (head)
+d01602 (head)
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.schemas
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.tables
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.types
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.constraints
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.defaults
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.comments
+INFO  [alembic.ddl.postgresql] Detected sequence named 'audit_entries_id_seq' as owned by integer column 'audit_entries(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'integration_records_id_seq' as owned by integer column 'integration_records(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'notifications_id_seq' as owned by integer column 'notifications(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'data_imports_id_seq' as owned by integer column 'data_imports(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'channel_catalogue_ид_канала_данных_seq' as owned by integer column 'channel_catalogue(ид_канала_данных)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'prediction_decisions_id_seq' as owned by integer column 'prediction_decisions(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'ml_scores_id_seq' as owned by integer column 'ml_scores(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'events_journal_id_seq' as owned by integer column 'events_journal(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'predictions_id_seq' as owned by integer column 'predictions(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'preventive_requests_id_seq' as owned by integer column 'preventive_requests(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'object_catalogue_ид_объект_seq' as owned by integer column 'object_catalogue(ид_объект)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'ml_runs_id_seq' as owned by integer column 'ml_runs(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'request_changes_id_seq' as owned by integer column 'request_changes(id)', assuming SERIAL and omitting
+No new upgrade operations detected.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade d01602 -> d01601, Audit attribution and worker heartbeat; historical records remain explicitly nullable.
+INFO  [alembic.runtime.migration] Running downgrade d01601 -> c92601, Request history and explicit draft workflow; existing requests keep their status.
+INFO  [alembic.runtime.migration] Running downgrade c92601 -> a7c41d09e3b2, Immutable ML run revisions and prediction provenance.
+INFO  [alembic.runtime.migration] Running downgrade a7c41d09e3b2 -> 5e192ace0042, Store the daily ML batch output (ml_scores).
+INFO  [alembic.runtime.migration] Running downgrade 5e192ace0042 -> 28199ee15ad1, Logical operational, archive and analytical read models; no source rows are deleted.
+INFO  [alembic.runtime.migration] Running downgrade 28199ee15ad1 -> 7bb10cf49ac2, add security prediction integration domains
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 7bb10cf49ac2 -> 28199ee15ad1, add security prediction integration domains
+INFO  [alembic.runtime.migration] Running upgrade 28199ee15ad1 -> 5e192ace0042, Logical operational, archive and analytical read models; no source rows are deleted.
+INFO  [alembic.runtime.migration] Running upgrade 5e192ace0042 -> a7c41d09e3b2, Store the daily ML batch output (ml_scores).
+INFO  [alembic.runtime.migration] Running upgrade a7c41d09e3b2 -> c92601, Immutable ML run revisions and prediction provenance.
+INFO  [alembic.runtime.migration] Running upgrade c92601 -> d01601, Request history and explicit draft workflow; existing requests keep their status.
+INFO  [alembic.runtime.migration] Running upgrade d01601 -> d01602, Audit attribution and worker heartbeat; historical records remain explicitly nullable.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.schemas
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.tables
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.types
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.constraints
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.defaults
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.comments
+INFO  [alembic.ddl.postgresql] Detected sequence named 'channel_catalogue_ид_канала_данных_seq' as owned by integer column 'channel_catalogue(ид_канала_данных)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'data_imports_id_seq' as owned by integer column 'data_imports(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'integration_records_id_seq' as owned by integer column 'integration_records(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'audit_entries_id_seq' as owned by integer column 'audit_entries(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'events_journal_id_seq' as owned by integer column 'events_journal(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'request_changes_id_seq' as owned by integer column 'request_changes(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'object_catalogue_ид_объект_seq' as owned by integer column 'object_catalogue(ид_объект)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'notifications_id_seq' as owned by integer column 'notifications(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'predictions_id_seq' as owned by integer column 'predictions(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'ml_runs_id_seq' as owned by integer column 'ml_runs(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'prediction_decisions_id_seq' as owned by integer column 'prediction_decisions(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'ml_scores_id_seq' as owned by integer column 'ml_scores(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'preventive_requests_id_seq' as owned by integer column 'preventive_requests(id)', assuming SERIAL and omitting
+No new upgrade operations detected.

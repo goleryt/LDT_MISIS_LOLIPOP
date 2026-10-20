@@ -9,7 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from app.core.config import get_settings
 from app.db.models import ChannelCatalogue, EventsJournal, ObjectCatalogue, PreventiveRequest
-from app.db.platform import IntegrationRecord, Notification, ObjectLocation
+from app.db.platform import IntegrationRecord, Notification, ObjectLocation, RequestChange
 from app.ingestion.csv_loader import parse_event_row
 
 class Record(BaseModel):
@@ -104,9 +104,14 @@ def ingest(db, kind: str, source: str, records: list[Record]):
             target = db.scalar(select(PreventiveRequest).where(PreventiveRequest.id == item.request_id).with_for_update())
             if not target or item.status is None:
                 raise ValueError("Work status requires known request_id and status")
+            if target.status == "draft":
+                raise ValueError("A draft requires dispatcher confirmation before external work statuses")
             if target.status in {"completed", "cancelled"} and target.status != item.status:
                 raise ValueError("A closed request cannot be reopened by an integration")
+            previous_status = target.status
             target.status = item.status
+            db.add(RequestChange(request_id=target.id, actor=source, role="integrator",
+                                 from_status=previous_status, to_status=item.status, changed_fields=["status"]))
             target.updated_at = datetime.now(timezone.utc)
             if item.status == "completed" and target.completed_at is None:
                 target.completed_at = datetime.now(timezone.utc)

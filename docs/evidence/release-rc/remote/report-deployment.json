@@ -1,0 +1,10 @@
+{
+  "deployment_id": "dd1043ea-e5c1-4439-a7c9-286ff18269e9",
+  "status": "SUCCESS",
+  "commit": "d4f3e091560b8a1030062ccffaf22bf0d330f80f",
+  "image_digest": "sha256:5e5fd38c18a6d735a116f8ea20cf1267331c4c29eb2358854d3c4859d7fcf8d0",
+  "pre_deploy": "alembic upgrade head",
+  "schema": "d01602",
+  "report_remote": "report-calendar-regression.json",
+  "following_commit_is_test_only": "6ca2a4421daeea253e12aeb69d8dea5e5116e5ea"
+}

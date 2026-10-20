@@ -3,6 +3,29 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  combined-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build independent Python 3.12 scenario runtime
+        # Same official image bytes as the ECR mirror; avoid its repeated anonymous HTTP429.
+        # Keep the accepted digest fixed; no model, dependency or numerical changes.
+        run: >-
+          docker build -f ml_combined/Dockerfile -t ldt-combined-ci
+          --build-arg PYTHON_IMAGE=docker.io/library/python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 .
+      - name: Frozen real inference and evidence validation (no network or secrets)
+        run: |
+          mkdir -p test-results/combined
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --user "$(id -u):$(id -g)" --memory 1536m --cpus 2 \
+            --tmpfs /work:mode=1777,size=256m --tmpfs /tmp:mode=1777,size=256m \
+            --mount "type=bind,src=$PWD/test-results/combined,dst=/qa" \
+            ldt-combined-ci python /opt/combined/acceptance.py /qa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: combined-runtime-results
+          path: test-results/combined/runtime-acceptance.json
   backend:
     runs-on: ubuntu-latest
     services:
@@ -79,6 +102,18 @@ jobs:
       - name: Build isolated ML runtime
         run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci --profile ml build ml
       - run: python tests/smoke.py
+      - name: Standalone cloud web packaging and readiness
+        run: |
+          docker build -f infra/Dockerfile.cloud --build-arg APP_COMMIT="$GITHUB_SHA" -t ldt-cloud-ci .
+          docker run -d --name ldt-cloud-ci --network ldt-ci_default --env-file backend/.env -e POSTGRES_HOST=postgres -e ENVIRONMENT=test -e SECURE_COOKIES=false -e CORS_ORIGINS=http://localhost:8081 -p 127.0.0.1:8081:8080 ldt-cloud-ci
+          for attempt in $(seq 1 60); do
+            state=$(docker inspect --format '{{.State.Health.Status}}' ldt-cloud-ci)
+            if [ "$state" = healthy ]; then break; fi
+            if [ "$state" = unhealthy ]; then exit 1; fi
+            sleep 2
+          done
+          test "$state" = healthy
+          BASE_URL=http://localhost:8081 python tests/smoke.py
       - name: Twenty paced dispatcher sessions
         run: python tests/load.py
         env:
@@ -91,20 +126,32 @@ jobs:
           npx playwright test
       - name: Check telemetry delivery without ML
         run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T -e TEST_USERNAME -e TEST_PASSWORD backend python -m scripts.check_stream
+      - name: Real frozen gas runtime contract on labelled synthetic inputs
+        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci run --rm ml python -m scripts.check_ml_bundle
+      - name: Prediction decision to editable request draft
+        working-directory: frontend
+        run: npx playwright test --grep 'real gas bundle'
+        env:
+          RUN_ML_E2E: "true"
       - name: Check backup and restore
         run: |
           docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/backup.sh
           docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci exec -T backup sh /scripts/verify-restore.sh ldt_restore_check
       - name: Save logs
         if: always()
-        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci logs --no-color > container-logs.txt
+        run: |
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci logs --no-color > container-logs.txt
+          docker logs ldt-cloud-ci > cloud-logs.txt 2>&1 || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: container-results
           path: |
             container-logs.txt
+            cloud-logs.txt
             frontend/test-results/
             test-results/
       - if: always()
-        run: docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci down
+        run: |
+          docker rm -f ldt-cloud-ci || true
+          docker compose --env-file backend/.env -f infra/compose.yaml -p ldt-ci down

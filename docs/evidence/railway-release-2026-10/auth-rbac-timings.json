@@ -1,0 +1,81 @@
+{
+  "roles": {
+    "admin": {
+      "login": "PASS",
+      "secure_httponly_samesite": "PASS",
+      "csrf": 403,
+      "admin_status": 200,
+      "role_boundary": "PASS",
+      "notifications_before": 0,
+      "notification_read": "NOT TESTED: no unread notification",
+      "logout_invalidation": 401
+    },
+    "dispatcher": {
+      "login": "PASS",
+      "secure_httponly_samesite": "PASS",
+      "csrf": 403,
+      "admin_status": 403,
+      "role_boundary": "PASS",
+      "notifications_before": 0,
+      "notification_read": "NOT TESTED: no unread notification",
+      "logout_invalidation": 401
+    },
+    "technician": {
+      "login": "PASS",
+      "secure_httponly_samesite": "PASS",
+      "csrf": 403,
+      "admin_status": 403,
+      "role_boundary": "PASS",
+      "notifications_before": 1,
+      "notification_read": "read persists/idempotent PASS",
+      "logout_invalidation": 401
+    },
+    "manager": {
+      "login": "PASS",
+      "secure_httponly_samesite": "PASS",
+      "csrf": 403,
+      "admin_status": 403,
+      "role_boundary": "PASS",
+      "notifications_before": 0,
+      "notification_read": "NOT TESTED: no unread notification",
+      "logout_invalidation": 401
+    },
+    "analyst": {
+      "login": "PASS",
+      "secure_httponly_samesite": "PASS",
+      "csrf": 403,
+      "admin_status": 403,
+      "role_boundary": "PASS",
+      "notifications_before": 1,
+      "notification_read": "read persists/idempotent PASS",
+      "logout_invalidation": 401
+    }
+  },
+  "anonymous": 401,
+  "timings_ms": {
+    "/api/v1/map/objects": {
+      "samples": 3,
+      "min": 263.8,
+      "median": 350.8,
+      "max": 460.6
+    },
+    "/api/v1/predictions": {
+      "samples": 3,
+      "min": 264.4,
+      "median": 269.2,
+      "max": 271.6
+    },
+    "/api/v1/imports": {
+      "samples": 3,
+      "min": 265.0,
+      "median": 272.3,
+      "max": 274.5
+    },
+    "/api/v1/predictions/scenarios": {
+      "samples": 3,
+      "min": 264.3,
+      "median": 266.7,
+      "max": 289.1
+    }
+  }
+}

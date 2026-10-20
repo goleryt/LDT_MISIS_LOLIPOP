@@ -1,0 +1,2 @@
+nginx_exit_causes_container_exit=1
+sigterm_container_exit=137

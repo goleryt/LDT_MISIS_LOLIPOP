@@ -80,7 +80,7 @@
        from the bottom, then straight to flat darkness — nothing else. */
     --page-bg:
         radial-gradient(
-            220px 620px at 50% -6%,
+            286px 620px at 50% -6%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
@@ -88,7 +88,7 @@
             transparent 74%
         ),
         radial-gradient(
-            220px 620px at 50% 106%,
+            286px 620px at 50% 106%,
             rgb(170 215 255 / 98%) 0%,
             rgb(110 175 255 / 85%) 17%,
             rgb(74 138 255 / 50%) 36%,
@@ -151,22 +151,25 @@ html[data-theme="light"] {
         #3d4132 100%
     );
 
+    /* A beam should read as light falling on the page, so every stop
+       stays lighter than --page-base (#ece1ca) — never a darker/more
+       saturated tint blended in, only brightness fading out via alpha. */
     --page-bg:
         radial-gradient(
             220px 620px at 50% -6%,
-            rgb(255 254 249 / 98%) 0%,
-            rgb(255 248 230 / 85%) 17%,
-            rgb(247 233 199 / 52%) 36%,
-            rgb(234 214 172 / 22%) 55%,
-            transparent 74%
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
+            transparent 78%
         ),
         radial-gradient(
             220px 620px at 50% 106%,
-            rgb(255 254 249 / 98%) 0%,
-            rgb(255 248 230 / 85%) 17%,
-            rgb(247 233 199 / 52%) 36%,
-            rgb(234 214 172 / 22%) 55%,
-            transparent 74%
+            rgb(255 255 253 / 100%) 0%,
+            rgb(255 248 224 / 90%) 17%,
+            rgb(255 241 200 / 58%) 36%,
+            rgb(255 236 185 / 28%) 55%,
+            transparent 78%
         ),
         var(--page-base);
 
@@ -203,11 +206,22 @@ body {
 
 /* App-wide chrome goes dark + vivid glow, matching the reference sites.
    The Карта page (.map-page, below) is deliberately left out of this and
-   keeps the original light Figma palette — it is not touched. */
-.app-shell,
-.app-workspace {
+   keeps the original light Figma palette — it is not touched.
+
+   The beam gradient lives on .app-shell ONLY: that box is always
+   100vw (see App.css), so its 50% centre never moves. .app-workspace's
+   own width shrinks/grows with the sidebar, so painting the same
+   gradient there too made the beam re-centre on its narrower box and
+   drift sideways whenever the sidebar was expanded/collapsed. Leaving
+   it transparent lets the shell's beam show through, always centred
+   on the full viewport. */
+.app-shell {
     background: var(--page-bg);
     background-attachment: fixed;
+}
+
+.app-workspace {
+    background: transparent;
 }
 
 .sidebar {
@@ -306,7 +320,7 @@ body {
 
 .city-parks text {
     fill: #8ba58d;
-    font-size: 11px;
+    font-size: var(--font-metadata);
     font-weight: 550;
     letter-spacing: .025em;
 }
@@ -365,14 +379,14 @@ body {
 
 .city-river-label {
     fill: #4e9ac1;
-    font-size: 11px;
+    font-size: var(--font-metadata);
     font-weight: 650;
     letter-spacing: .16em;
 }
 
 .city-area-labels text {
     fill: #93939b;
-    font-size: 13px;
+    font-size: var(--font-metadata);
     font-weight: 600;
     letter-spacing: .16em;
 }
@@ -385,7 +399,7 @@ body {
 
 .city-landmarks text {
     fill: #53586a;
-    font-size: 12px;
+    font-size: var(--font-metadata);
     font-weight: 650;
     paint-order: stroke;
     stroke: #fff;
@@ -430,7 +444,7 @@ body {
 
 .map-place-eyebrow {
     color: var(--design-blue);
-    font-size: 10px;
+    font-size: var(--font-metadata);
     font-weight: 700;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -444,7 +458,7 @@ body {
 
 .map-place-card > span:last-child {
     color: var(--design-muted);
-    font-size: 10px;
+    font-size: var(--font-metadata);
     line-height: 1.4;
 }
 
@@ -491,7 +505,7 @@ body {
     padding: 9px 12px;
     border-radius: 9px;
     color: #595d69;
-    font-size: 10px;
+    font-size: var(--font-metadata);
 }
 
 .map-data-badge svg {
@@ -567,12 +581,12 @@ body {
 
 .map-page .legend-title {
     color: var(--design-ink);
-    font-size: 12px;
+    font-size: var(--font-metadata);
 }
 
 .map-page .legend-item {
     color: #52525b;
-    font-size: 10px;
+    font-size: var(--font-metadata);
     line-height: 1.5;
 }
 
@@ -615,7 +629,7 @@ body {
     background: var(--design-gradient-primary);
     box-shadow: 0 8px 20px var(--design-glow);
     color: white;
-    font-size: 11px;
+    font-size: var(--font-metadata);
     font-weight: 650;
     transition: box-shadow 150ms ease, transform 150ms ease;
 }
@@ -644,13 +658,13 @@ body {
 }
 
 .map-object-tooltip-header strong {
-    font-size: 11px;
+    font-size: var(--font-metadata);
 }
 
 .map-object-tooltip-status,
 .map-object-tooltip small {
     color: var(--design-muted);
-    font-size: 9px;
+    font-size: var(--font-metadata);
 }
 
 .map-object-tooltip.alarm .map-object-tooltip-status {
@@ -740,7 +754,7 @@ body {
     border-radius: 8px;
     background: var(--design-surface);
     color: var(--design-blue);
-    font-size: 11px;
+    font-size: var(--font-metadata);
     font-weight: 650;
     cursor: pointer;
 }

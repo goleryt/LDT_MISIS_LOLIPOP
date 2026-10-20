@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "fresh version edit",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "stale version edit",
+      "actual": 409,
+      "expected": 409,
+      "status": "PASS"
+    },
+    {
+      "name": "existing draft link repeated",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "same linked request",
+      "actual": 3,
+      "expected": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "existing draft link repeated",
+      "actual": 200,
+      "expected": 200,
+      "status": "PASS"
+    },
+    {
+      "name": "same linked request",
+      "actual": 3,
+      "expected": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "no duplicate requests",
+      "actual": 4,
+      "expected": 4,
+      "status": "PASS"
+    },
+    {
+      "name": "completed request cannot reopen",
+      "actual": 409,
+      "expected": 409,
+      "status": "PASS"
+    },
+    {
+      "name": "ML outputs after browser unchanged",
+      "actual": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+      "expected": "f2e31f5fda90259a5b9c29070cee138defa72e1ec6171839654714f9d1f5d3e2",
+      "status": "PASS"
+    },
+    {
+      "name": "manager forbidden import REST",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "technician forbidden import REST",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    },
+    {
+      "name": "analyst forbidden import REST",
+      "actual": 403,
+      "expected": 403,
+      "status": "PASS"
+    }
+  ],
+  "prediction_id": 1,
+  "request_id": 3,
+  "manual_request_id": 4
+}

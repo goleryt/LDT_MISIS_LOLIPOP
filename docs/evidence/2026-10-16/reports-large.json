@@ -1,0 +1,17 @@
+{
+  "scenario": "5050_synthetic_requests_exported_with_5000_limit",
+  "rows": 5000,
+  "truncated": true,
+  "cyrillic_and_metadata_checked": true,
+  "exports": {
+    "xlsx": {
+      "seconds": 0.392,
+      "bytes": 119074
+    },
+    "pdf": {
+      "seconds": 15.064,
+      "bytes": 516137,
+      "pages": 295
+    }
+  }
+}

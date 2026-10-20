@@ -1,0 +1,224 @@
+ Image ldt-oct-final-ml Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.53kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.ml
+#2 transferring dockerfile: 534B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for public.ecr.aws/docker/library/python:3.12-slim
+#3 DONE 0.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 88B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM public.ecr.aws/docker/library/python:3.12-slim@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f
+#5 resolve public.ecr.aws/docker/library/python:3.12-slim@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 10.38kB 0.0s done
+#6 DONE 0.0s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [4/7] COPY requirements.txt requirements-ml.txt ./
+#9 DONE 0.0s
+
+#10 [5/7] RUN pip install --no-cache-dir -r requirements-ml.txt && useradd --uid 10001 --create-home app
+#10 2.290 Collecting alembic==1.20.0 (from -r /app/requirements.txt (line 1))
+#10 2.888   Downloading alembic-1.20.0-py3-none-any.whl.metadata (7.3 kB)
+#10 3.057 Collecting annotated-doc==0.0.5 (from -r /app/requirements.txt (line 2))
+#10 3.182   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#10 3.311 Collecting annotated-types==0.8.0 (from -r /app/requirements.txt (line 3))
+#10 3.474   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#10 3.645 Collecting anyio==4.15.1 (from -r /app/requirements.txt (line 4))
+#10 3.759   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#10 3.986 Collecting click==8.5.0 (from -r /app/requirements.txt (line 5))
+#10 4.100   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#10 4.427 Collecting fastapi==0.141.1 (from -r /app/requirements.txt (line 6))
+#10 4.540   Downloading fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+#10 5.471 Collecting greenlet==3.5.6 (from -r /app/requirements.txt (line 7))
+#10 5.592   Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+#10 5.712 Collecting h11==0.16.0 (from -r /app/requirements.txt (line 8))
+#10 5.831   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#10 6.068 Collecting httptools==0.8.0 (from -r /app/requirements.txt (line 9))
+#10 6.184   Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#10 6.322 Collecting idna==3.19 (from -r /app/requirements.txt (line 10))
+#10 6.443   Downloading idna-3.19-py3-none-any.whl.metadata (9.2 kB)
+#10 6.608 Collecting Mako==1.4.1 (from -r /app/requirements.txt (line 11))
+#10 6.742   Downloading mako-1.4.1-py3-none-any.whl.metadata (2.9 kB)
+#10 7.082 Collecting MarkupSafe==3.0.3 (from -r /app/requirements.txt (line 12))
+#10 7.199   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#10 7.364 Collecting psycopg==3.3.5 (from -r /app/requirements.txt (line 13))
+#10 7.540   Downloading psycopg-3.3.5-py3-none-any.whl.metadata (4.3 kB)
+#10 8.722 Collecting psycopg-binary==3.3.5 (from -r /app/requirements.txt (line 14))
+#10 8.849   Downloading psycopg_binary-3.3.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+#10 10.17 Collecting pydantic==2.13.5 (from -r /app/requirements.txt (line 15))
+#10 10.28   Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+#10 11.18 Collecting pydantic-settings==2.15.0 (from -r /app/requirements.txt (line 16))
+#10 11.30   Downloading pydantic_settings-2.15.0-py3-none-any.whl.metadata (3.9 kB)
+#10 18.59 Collecting pydantic_core==2.46.5 (from -r /app/requirements.txt (line 17))
+#10 18.71   Downloading pydantic_core-2.46.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#10 18.85 Collecting python-dotenv==1.2.3 (from -r /app/requirements.txt (line 18))
+#10 19.00   Downloading python_dotenv-1.2.3-py3-none-any.whl.metadata (29 kB)
+#10 19.14 Collecting python-multipart==0.0.32 (from -r /app/requirements.txt (line 19))
+#10 19.26   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#10 19.48 Collecting PyYAML==6.0.3 (from -r /app/requirements.txt (line 20))
+#10 19.62   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#10 21.06 Collecting SQLAlchemy==2.0.53 (from -r /app/requirements.txt (line 21))
+#10 21.33   Downloading sqlalchemy-2.0.53-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.7 kB)
+#10 21.52 Collecting starlette==1.6.0 (from -r /app/requirements.txt (line 22))
+#10 21.71   Downloading starlette-1.6.0-py3-none-any.whl.metadata (6.4 kB)
+#10 22.04 Collecting typing-inspection==0.4.4 (from -r /app/requirements.txt (line 23))
+#10 22.19   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#10 22.37 Collecting typing_extensions==4.16.0 (from -r /app/requirements.txt (line 24))
+#10 22.51   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#10 22.67 Collecting tzdata==2026.4 (from -r /app/requirements.txt (line 25))
+#10 22.83   Downloading tzdata-2026.4-py2.py3-none-any.whl.metadata (1.4 kB)
+#10 23.02 Collecting uvicorn==0.53.0 (from -r /app/requirements.txt (line 26))
+#10 23.23   Downloading uvicorn-0.53.0-py3-none-any.whl.metadata (6.6 kB)
+#10 23.65 Collecting watchfiles==1.2.0 (from -r /app/requirements.txt (line 27))
+#10 23.77   Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#10 24.18 Collecting websockets==17.1 (from -r /app/requirements.txt (line 28))
+#10 24.35   Downloading websockets-17.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.3 kB)
+#10 24.52 Collecting openpyxl==3.1.5 (from -r /app/requirements.txt (line 29))
+#10 24.66   Downloading openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+#10 24.83 Collecting defusedxml==0.7.1 (from -r /app/requirements.txt (line 30))
+#10 24.98   Downloading defusedxml-0.7.1-py2.py3-none-any.whl.metadata (32 kB)
+#10 25.64 Collecting ldap3==2.9.1 (from -r /app/requirements.txt (line 31))
+#10 25.87   Downloading ldap3-2.9.1-py2.py3-none-any.whl.metadata (5.4 kB)
+#10 26.14 Collecting httpx==0.28.1 (from -r /app/requirements.txt (line 32))
+#10 26.34   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#10 27.06 Collecting reportlab==5.0.1 (from -r /app/requirements.txt (line 33))
+#10 27.34   Downloading reportlab-5.0.1-py3-none-any.whl.metadata (1.6 kB)
+#10 29.49 Collecting numpy==2.0.2 (from -r requirements-ml.txt (line 6))
+#10 29.62   Downloading numpy-2.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+#10 31.39 Collecting pandas==2.3.3 (from -r requirements-ml.txt (line 7))
+#10 31.54   Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)
+#10 32.03 Collecting lightgbm==4.6.0 (from -r requirements-ml.txt (line 8))
+#10 32.17   Downloading lightgbm-4.6.0-py3-none-manylinux_2_28_x86_64.whl.metadata (17 kB)
+#10 34.22 Collecting polars==1.35.2 (from -r requirements-ml.txt (line 9))
+#10 34.35   Downloading polars-1.35.2-py3-none-any.whl.metadata (10 kB)
+#10 36.23 Collecting pyarrow==25.0.1 (from -r requirements-ml.txt (line 10))
+#10 36.37   Downloading pyarrow-25.0.1-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+#10 36.59 Collecting et-xmlfile (from openpyxl==3.1.5->-r /app/requirements.txt (line 29))
+#10 36.88   Downloading et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+#10 37.40 Collecting pyasn1>=0.4.6 (from ldap3==2.9.1->-r /app/requirements.txt (line 31))
+#10 37.53   Downloading pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+#10 37.87 Collecting certifi (from httpx==0.28.1->-r /app/requirements.txt (line 32))
+#10 38.08   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+#10 38.59 Collecting httpcore==1.* (from httpx==0.28.1->-r /app/requirements.txt (line 32))
+#10 38.76   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#10 41.81 Collecting pillow>=9.0.0 (from reportlab==5.0.1->-r /app/requirements.txt (line 33))
+#10 41.92   Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#10 43.52 Collecting charset-normalizer (from reportlab==5.0.1->-r /app/requirements.txt (line 33))
+#10 43.66   Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+#10 44.04 Collecting python-dateutil>=2.8.2 (from pandas==2.3.3->-r requirements-ml.txt (line 7))
+#10 44.17   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#10 44.70 Collecting pytz>=2020.1 (from pandas==2.3.3->-r requirements-ml.txt (line 7))
+#10 44.96   Downloading pytz-2026.5-py2.py3-none-any.whl.metadata (22 kB)
+#10 46.53 Collecting scipy (from lightgbm==4.6.0->-r requirements-ml.txt (line 8))
+#10 46.67   Downloading scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+#10 47.18 Collecting polars-runtime-32==1.35.2 (from polars==1.35.2->-r requirements-ml.txt (line 9))
+#10 47.30   Downloading polars_runtime_32-1.35.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
+#10 47.45 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.3.3->-r requirements-ml.txt (line 7))
+#10 47.56   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#10 47.72 Downloading alembic-1.20.0-py3-none-any.whl (268 kB)
+#10 48.87 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#10 49.03 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#10 49.21 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#10 49.93 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#10 50.58 Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+#10 51.30 Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (621 kB)
+#10 56.05    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 621.4/621.4 kB 149.3 kB/s eta 0:00:00
+#10 56.18 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#10 56.50 Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (523 kB)
+#10 59.01 Downloading idna-3.19-py3-none-any.whl (68 kB)
+#10 59.42 Downloading mako-1.4.1-py3-none-any.whl (80 kB)
+#10 59.88 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#10 60.50 Downloading psycopg-3.3.5-py3-none-any.whl (213 kB)
+#10 61.99 Downloading psycopg_binary-3.3.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+#10 88.12    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 206.0 kB/s eta 0:00:00
+#10 88.26 Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+#10 90.27 Downloading pydantic_settings-2.15.0-py3-none-any.whl (69 kB)
+#10 90.82 Downloading pydantic_core-2.46.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#10 102.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 175.2 kB/s eta 0:00:00
+#10 102.6 Downloading python_dotenv-1.2.3-py3-none-any.whl (22 kB)
+#10 102.9 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#10 103.5 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+#10 109.4    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 177.1 kB/s eta 0:00:00
+#10 109.5 Downloading sqlalchemy-2.0.53-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.5 MB)
+#10 122.0    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.5/3.5 MB 327.0 kB/s eta 0:00:00
+#10 122.1 Downloading starlette-1.6.0-py3-none-any.whl (75 kB)
+#10 122.5 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#10 122.7 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#10 123.1 Downloading tzdata-2026.4-py2.py3-none-any.whl (347 kB)
+#10 124.3 Downloading uvicorn-0.53.0-py3-none-any.whl (87 kB)
+#10 124.6 Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (456 kB)
+#10 125.9 Downloading websockets-17.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (224 kB)
+#10 126.7 Downloading openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+#10 127.5 Downloading defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+#10 127.9 Downloading ldap3-2.9.1-py2.py3-none-any.whl (432 kB)
+#10 129.2 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#10 129.6 Downloading reportlab-5.0.1-py3-none-any.whl (2.0 MB)
+#10 139.6    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 180.8 kB/s eta 0:00:00
+#10 139.9 Downloading numpy-2.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (19.2 MB)
+#10 183.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.2/19.2 MB 537.7 kB/s eta 0:00:00
+#10 183.6 Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)
+#10 214.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 397.4 kB/s eta 0:00:00
+#10 214.5 Downloading lightgbm-4.6.0-py3-none-manylinux_2_28_x86_64.whl (3.6 MB)
+#10 220.7    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 583.2 kB/s eta 0:00:00
+#10 220.9 Downloading polars-1.35.2-py3-none-any.whl (783 kB)
+#10 221.9    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 783.6/783.6 kB 744.5 kB/s eta 0:00:00
+#10 222.1 Downloading pyarrow-25.0.1-cp312-cp312-manylinux_2_28_x86_64.whl (50.1 MB)
+#10 392.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 50.1/50.1 MB 439.6 kB/s eta 0:00:00
+#10 392.4 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#10 392.8 Downloading polars_runtime_32-1.35.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (41.3 MB)
+#10 474.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.3/41.3 MB 279.4 kB/s eta 0:00:00
+#10 474.7 Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+#10 508.8    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 203.4 kB/s eta 0:00:00
+#10 509.0 Downloading pyasn1-0.6.4-py3-none-any.whl (84 kB)
+#10 509.5 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+#10 510.6 Downloading pytz-2026.5-py2.py3-none-any.whl (506 kB)
+#10 512.5 Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#10 513.0 Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+#10 513.9 Downloading et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+#10 514.0 Downloading scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+#10 629.4    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 341.7 kB/s eta 0:00:00
+#10 629.6 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#10 629.9 Installing collected packages: pytz, websockets, tzdata, typing_extensions, six, PyYAML, python-multipart, python-dotenv, pyasn1, pyarrow, psycopg-binary, polars-runtime-32, pillow, numpy, MarkupSafe, idna, httptools, h11, greenlet, et-xmlfile, defusedxml, click, charset-normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, scipy, reportlab, python-dateutil, pydantic_core, psycopg, polars, openpyxl, Mako, ldap3, httpcore, anyio, watchfiles, starlette, pydantic, pandas, lightgbm, httpx, alembic, pydantic-settings, fastapi
+#10 643.6 Successfully installed Mako-1.4.1 MarkupSafe-3.0.3 PyYAML-6.0.3 SQLAlchemy-2.0.53 alembic-1.20.0 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset-normalizer-3.5.2 click-8.5.0 defusedxml-0.7.1 et-xmlfile-2.0.0 fastapi-0.141.1 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.28.1 idna-3.19 ldap3-2.9.1 lightgbm-4.6.0 numpy-2.0.2 openpyxl-3.1.5 pandas-2.3.3 pillow-12.3.0 polars-1.35.2 polars-runtime-32-1.35.2 psycopg-3.3.5 psycopg-binary-3.3.5 pyarrow-25.0.1 pyasn1-0.6.4 pydantic-2.13.5 pydantic-settings-2.15.0 pydantic_core-2.46.5 python-dateutil-2.9.0.post0 python-dotenv-1.2.3 python-multipart-0.0.32 pytz-2026.5 reportlab-5.0.1 scipy-1.18.1 six-1.17.0 starlette-1.6.0 typing-inspection-0.4.4 typing_extensions-4.16.0 tzdata-2026.4 uvicorn-0.53.0 watchfiles-1.2.0 websockets-17.1
+#10 643.6 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#10 644.4
+#10 644.4 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#10 644.4 [notice] To update, run: pip install --upgrade pip
+#10 DONE 645.0s
+
+#11 [6/7] COPY . .
+#11 DONE 0.1s
+
+#12 [7/7] RUN install -d -o app -g app -m 0700 /work
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 18.0s done
+#13 exporting manifest sha256:e795aad024868cb1c722325e1443f35584ecf51c70035815c18b0db47324d272 0.0s done
+#13 exporting config sha256:cc5be7edabfb14298ae549fdee1d828174c5d5cd449081d7493796ee2a6cc1cc done
+#13 exporting attestation manifest sha256:45ad61c1ff460606415983a51de1216153730d106428e455f5b680dcfba86c3d 0.0s done
+#13 exporting manifest list sha256:8a25e985e1379e8e4f0bfbf4d8997d675346824c2fd046b111b5763e31c031ca done
+#13 naming to docker.io/library/ldt-oct-final-ml:latest done
+#13 unpacking to docker.io/library/ldt-oct-final-ml:latest
+#13 unpacking to docker.io/library/ldt-oct-final-ml:latest 3.6s done
+#13 DONE 21.7s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image ldt-oct-final-ml Built

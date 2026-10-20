@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "scope": "recorded real model outputs; mock API transport; dark/light; four desktop sizes; resize/ctrl-wheel/filter/Back/recovery",
+  "stats": {
+    "startTime": "2026-10-20T15:50:38.281Z",
+    "duration": 19179.984,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

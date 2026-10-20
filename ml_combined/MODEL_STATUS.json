@@ -1,0 +1,57 @@
+{
+  "release": "COMBINED_EVIDENCE_V1_1",
+  "evidence_version": "evidence-combination-v1",
+  "gas": "unchanged_existing_proxy_forecast",
+  "sensor_failure": "accepted_technical_package_synthetic_quality_only",
+  "fire": "v4_enabled_experimental_manual_review",
+  "disabled": [
+    "flood",
+    "intrusion",
+    "system_failure"
+  ],
+  "ensemble": "rejected_development_threshold",
+  "registry": {
+    "schema_version": "evidence-combination-v1",
+    "workers": {
+      "gas": {
+        "model_versions": [
+          "gas-cross-g2-v3-refit_2025h1-0312ff1f436e"
+        ],
+        "start_offset_days": 2,
+        "history_days": 400,
+        "feature_contract_versions": [
+          "event-panel-v3.0+tax-c95e75ea+g2-5cc9a364"
+        ]
+      },
+      "sensor_failure": {
+        "model_versions": [
+          "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5"
+        ],
+        "start_offset_days": 3,
+        "history_days": 33,
+        "feature_versions": [
+          "incident-rescue-causal-counts-v2"
+        ],
+        "thresholds": {
+          "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5": 0.4000457538758844
+        }
+      },
+      "fire": {
+        "model_versions": [
+          "607e63fbc297117c149124913bb51cb8bb5f0e0c247550afdc83873ae830c29e"
+        ],
+        "start_offset_days": 3,
+        "history_days": 33,
+        "feature_versions": [
+          "incident-rescue-causal-counts-v2"
+        ],
+        "thresholds": {
+          "607e63fbc297117c149124913bb51cb8bb5f0e0c247550afdc83873ae830c29e": 0.08862727960116473
+        }
+      }
+    }
+  },
+  "automated_action_allowed": false,
+  "combined_incident_probability": null,
+  "deploy_performed": false
+}

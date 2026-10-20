@@ -1,0 +1,276 @@
+{
+  "measurements": [
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/objects",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/alarms",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/events",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/requests",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/imports",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/predictions",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/reports",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/settings",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "path": "/?objectId=1&channelId=1",
+      "viewport": 1280,
+      "document": 1280,
+      "main": 1040
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/objects",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/alarms",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/events",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/requests",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/imports",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/predictions",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/reports",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/settings",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "path": "/?objectId=1&channelId=1",
+      "viewport": 1440,
+      "document": 1440,
+      "main": 1200
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/objects",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/alarms",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/events",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/requests",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/imports",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/predictions",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/reports",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/settings",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "path": "/?objectId=1&channelId=1",
+      "viewport": 1920,
+      "document": 1920,
+      "main": 1680
+    }
+  ],
+  "runtime_errors": [],
+  "long_name_overflow": false
+}

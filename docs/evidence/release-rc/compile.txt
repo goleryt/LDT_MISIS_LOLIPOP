@@ -1,0 +1,1 @@
+compileall backend/app backend/scripts PASS; app import covered by 108 pytest tests.

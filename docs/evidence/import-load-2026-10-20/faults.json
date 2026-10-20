@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scope": "only new local synthetic QA database; fault windows excluded from normal-load availability",
+  "checks": [
+    {
+      "name": "invalid final row rolls back earlier batches csv",
+      "status": "PASS",
+      "rows": 5000,
+      "http": 400,
+      "committed": 0
+    },
+    {
+      "name": "invalid final row rolls back earlier batches xlsx",
+      "status": "PASS",
+      "rows": 5000,
+      "http": 400,
+      "committed": 0
+    },
+    {
+      "name": "opposite row order, distinct file hashes and duplicate rows are safe",
+      "status": "PASS",
+      "initial_statuses": [
+        200,
+        200
+      ],
+      "committed": 8000,
+      "postgres_deadlocks_recovered": 1
+    },
+    {
+      "name": "cancelled PostgreSQL transaction returns 408, rolls back and retries",
+      "status": "PASS",
+      "http": 408,
+      "committed_after_retry": 10000
+    },
+    {
+      "name": "process loss after uncommitted INSERT preserves atomicity and releases locks",
+      "status": "PASS",
+      "before_retry": "processing",
+      "after_retry": "completed",
+      "committed_after_retry": 20000
+    },
+    {
+      "name": "aborted multipart upload creates no registry row or observations",
+      "status": "PASS"
+    },
+    {
+      "name": "64MiB uncompressed workbook limit rejects compressed bomb before decode",
+      "status": "PASS",
+      "compressed_bytes": 65349,
+      "uncompressed_bytes": 67108865,
+      "http": 400
+    }
+  ]
+}

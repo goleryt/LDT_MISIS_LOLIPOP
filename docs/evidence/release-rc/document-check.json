@@ -1,0 +1,7 @@
+{
+  "checked_local_links": 87,
+  "missing_links": [],
+  "changed_files_in_inventory_for_signature_scan": 106,
+  "signature_findings_paths_only": [],
+  "limitation": "Signature scan is not proof of absence of all secret types; fixtures are synthetic."
+}

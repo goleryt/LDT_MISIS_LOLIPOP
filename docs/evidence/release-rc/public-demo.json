@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-10-16T20:24:47.960829+00:00",
+  "url": "https://ldt-demo-production.up.railway.app",
+  "version_note": "Existing September deployment only; RC not deployed",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "https": true
+    },
+    {
+      "path": "/health",
+      "status": 200,
+      "https": true
+    },
+    {
+      "path": "/ready",
+      "status": 200,
+      "https": true
+    },
+    {
+      "path": "/api/v1/auth/me",
+      "status": 401,
+      "https": true
+    }
+  ]
+}

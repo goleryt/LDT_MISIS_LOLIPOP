@@ -1,0 +1,20 @@
+
+Running 11 tests using 2 workers
+
+(node:22192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  2 [chrome] › e2e\workflows.spec.ts:2:1 › login, map, objects, alarms, events, requests, model unavailable, logout (8.9s)
+  ok  3 [chrome] › e2e\workflows.spec.ts:32:1 › real gas bundle result, advisory and dispatcher decision (4.2s)
+  ok  4 [chrome] › e2e\workflows.spec.ts:62:1 › failed prediction request has visible feedback and recovers (3.0s)
+  ok  5 [chrome] › e2e\workflows.spec.ts:75:1 › JSON import is visible in the registry and duplicate upload is identified (3.7s)
+  ok  6 [chrome] › e2e\workflows.spec.ts:93:1 › mock alarm opens the exact sensor and can be marked read (3.6s)
+  ok  7 [chrome] › e2e\workflows.spec.ts:109:1 › sensor history and preventive request from the map (7.6s)
+  ok  8 [chrome] › e2e\workflows.spec.ts:133:1 › map zoom, pan, tooltip, object click and compact navigation (6.8s)
+  ok  9 [chrome] › e2e\workflows.spec.ts:171:1 › map loading and empty state, recovery and report progress (4.6s)
+  ok  1 [chrome] › e2e\release.spec.ts:12:1 › notification read survives an older poll response and recovers from failure (48.3s)
+  ok 10 [chrome] › e2e\release.spec.ts:43:1 › stored prediction supports URL, refresh, close and browser Back (4.4s)
+  ok 11 [chrome] › e2e\release.spec.ts:61:1 › desktop visual matrix with actual data and long Russian object names (42.8s)
+
+  11 passed (1.7m)

@@ -13,9 +13,15 @@ from app.db.session import SessionLocal
 logger = logging.getLogger(__name__)
 
 def begin_audit(request, request_id):
+    parts = request.url.path.strip("/").split("/")
+    entity = parts[2] if len(parts) > 2 else "system"
+    entity_id = parts[3] if len(parts) > 3 and parts[3].isdigit() else None
+    request.state.audit_entity_type, request.state.audit_entity_id = entity, entity_id
     with SessionLocal.begin() as db:
         record = AuditEntry(request_id=request_id, actor=getattr(request.state, "actor", None),
-                            action=request.method, target=request.url.path[:500], outcome=None)
+                            action=request.method, target=request.url.path[:500], outcome=None,
+                            role=getattr(getattr(request.state, "principal", None), "role", None),
+                            entity_type=entity, entity_id=entity_id)
         db.add(record)
         db.flush()
         return record.id
@@ -23,7 +29,10 @@ def begin_audit(request, request_id):
 def end_audit(record_id, request, status):
     with SessionLocal.begin() as db:
         db.execute(update(AuditEntry).where(AuditEntry.id == record_id).values(
-            actor=getattr(request.state, "actor", None), outcome=status))
+            actor=getattr(request.state, "actor", None), outcome=status,
+            role=getattr(getattr(request.state, "principal", None), "role", getattr(request.state, "audit_role", None)),
+            entity_type=getattr(request.state, "audit_entity_type", None),
+            entity_id=getattr(request.state, "audit_entity_id", None)))
 
 class SecurityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):

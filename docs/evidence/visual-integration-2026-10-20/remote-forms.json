@@ -1,0 +1,39 @@
+{
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "status": "PASS",
+      "request_submitted": false,
+      "visible_validation": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "status": "PASS",
+      "request_submitted": false,
+      "visible_validation": true
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "status": "PASS",
+      "request_submitted": false,
+      "visible_validation": true
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "status": "PASS",
+      "request_submitted": false,
+      "visible_validation": true
+    }
+  ],
+  "page_errors": [],
+  "status": "PASS"
+}

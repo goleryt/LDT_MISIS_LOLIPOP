@@ -1,0 +1,29 @@
+{
+  "run_id": 39173000415,
+  "head": "ee16251a78a00dd496f848e64d9cce9ef12651e9",
+  "jobs": [
+    {
+      "name": "containers",
+      "conclusion": "success",
+      "test_summaries": [
+        "7 skipped",
+        "12 passed (49.1s)",
+        "1 passed (2.7s)"
+      ]
+    },
+    {
+      "name": "backend",
+      "conclusion": "success",
+      "test_summaries": [
+        "109 passed, 4 warnings in 19.95s"
+      ]
+    },
+    {
+      "name": "frontend",
+      "conclusion": "success",
+      "test_summaries": [
+        "Found 10 warnings and 0 errors."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+(node:17720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chrome] › e2e\workflows.spec.ts:71:1 › JSON import is visible in the registry and duplicate upload is identified (1.9s)
+  ok 2 [chrome] › e2e\workflows.spec.ts:89:1 › mock alarm opens the exact sensor and can be marked read (1.5s)
+
+  2 passed (4.3s)

@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import csv
 import math
 import re
@@ -15,6 +16,7 @@ from app.db.models import (
 
 from app.db.session import SessionLocal
 from app.ingestion.validators import validate_required_columns
+from app.ingestion.limits import apply_import_budget
 
 import hashlib
 import json
@@ -53,6 +55,7 @@ EVENT_REQUIRED_COLUMNS = set(EVENT_COLUMNS)
 EVENT_BATCH_SIZE = 2000
 
 CHANNEL_BATCH_SIZE = 1000
+OBJECT_BATCH_SIZE = 1000
 
 
 def empty_to_none(value: str | None) -> str | None:
@@ -157,6 +160,9 @@ def _upsert_channel_batch(
     if not rows:
         return
 
+    apply_import_budget(session)
+
+    rows=list({row["ид_канала_данных"]:row for row in rows}.values())
     statement = insert(ChannelCatalogue).values(rows)
 
     statement = statement.on_conflict_do_update(
@@ -189,6 +195,9 @@ def _upsert_object_batch(
     if not rows:
         return
 
+    apply_import_budget(session)
+
+    rows=list({row["ид_объект"]:row for row in rows}.values())
     statement = insert(ObjectCatalogue).values(rows)
 
     statement = statement.on_conflict_do_update(
@@ -210,7 +219,8 @@ def _upsert_object_batch(
 
 def load_channel_catalogue(
     file_path: str | Path,
-) -> int:
+    *, db: Session | None = None, return_stats: bool = False,
+) -> int | dict:
     path = Path(file_path)
 
     if not path.is_file():
@@ -219,9 +229,10 @@ def load_channel_catalogue(
         )
 
     processed_rows = 0
+    seen_ids = set() if return_stats else None
     batch: list[dict] = []
 
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
             with path.open(
                 "r",
@@ -263,6 +274,7 @@ def load_channel_catalogue(
                             f"{raw_channel_id!r}"
                         ) from exc
 
+                    if seen_ids is not None:seen_ids.add(channel_id)
                     tag = empty_to_none(
                         row["тег_инженерной_системы"]
                     )
@@ -319,109 +331,56 @@ def load_channel_catalogue(
 
                     processed_rows += len(batch)
 
-            session.commit()
+            if db is None: session.commit()
 
         except Exception:
-            session.rollback()
+            if db is None: session.rollback()
             raise
 
+    if return_stats:
+        return {"processed_rows":processed_rows,"inserted_rows":len(seen_ids),
+            "repeated_headers":0,"skipped_duplicates":processed_rows-len(seen_ids)}
     return processed_rows
 
 
 def load_object_catalogue(
     file_path: str | Path,
-) -> int:
-    path = Path(file_path)
-
-    if not path.is_file():
-        raise FileNotFoundError(
-            f"CSV file not found: {path}"
-        )
-
-    rows: list[dict] = []
-
-    with path.open(
-        "r",
-        encoding="utf-8-sig",
-        newline="",
-    ) as file:
-        reader = csv.DictReader(file)
-
-        if reader.fieldnames is None:
-            raise ValueError(
-                "CSV file does not contain a header"
-            )
-
-        validate_required_columns(
-            reader.fieldnames,
-            OBJECT_REQUIRED_COLUMNS,
-        )
-
-        for row_number, row in enumerate(
-            reader,
-            start=2,
-        ):
-            raw_object_id = row["ид_объект"].strip()
-
-            if not raw_object_id:
-                raise ValueError(
-                    f"Empty ид_объект at row {row_number}"
-                )
-
-            try:
-                object_id = int(raw_object_id)
-            except ValueError as exc:
-                raise ValueError(
-                    f"Invalid ид_объект at row "
-                    f"{row_number}: {raw_object_id!r}"
-                ) from exc
-
-            rows.append(
-                {
-                    "ид_объект":
-                        object_id,
-                    "иерархия_уровень":
-                        optional_int(
-                            row["иерархия_уровень"],
-                            field_name="иерархия_уровень",
-                            row_number=row_number,
-                        ),
-                    "родитель":
-                        optional_int(
-                            row["родитель"],
-                            field_name="родитель",
-                            row_number=row_number,
-                        ),
-                    "вид_объекта":
-                        empty_to_none(
-                            row["вид_объекта"]
-                        ),
-                    "диспетчерское_название_объекта":
-                        empty_to_none(
-                            row[
-                                "диспетчерское_название_объекта"
-                            ]
-                        ),
-                }
-            )
-
-    if not rows:
-        return 0
-
-    with SessionLocal() as session:
+    *, db: Session | None = None, return_stats: bool = False,
+) -> int | dict:
+    path=Path(file_path)
+    if not path.is_file():raise FileNotFoundError(f"File not found: {path}")
+    processed_rows=0;seen_ids=set() if return_stats else None
+    # Keep the complete file atomic while bounding Python memory and SQL parameters.
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
-            _upsert_object_batch(
-                session,
-                rows,
-            )
-
-            session.commit()
-
+            with path.open(encoding="utf-8-sig",newline="") as stream:
+                reader=csv.DictReader(stream)
+                if not reader.fieldnames:raise ValueError("CSV file does not contain a header")
+                validate_required_columns(reader.fieldnames,OBJECT_REQUIRED_COLUMNS)
+                batch=[]
+                for row_number,row in enumerate(reader,start=2):
+                    raw_object_id=row["ид_объект"].strip()
+                    if not raw_object_id:raise ValueError(f"Empty ид_объект at row {row_number}")
+                    try:object_id=int(raw_object_id)
+                    except ValueError as exc:raise ValueError(f"Invalid ид_объект at row {row_number}: {raw_object_id!r}") from exc
+                    if seen_ids is not None:seen_ids.add(object_id)
+                    batch.append({"ид_объект":object_id,
+                        "иерархия_уровень":optional_int(row["иерархия_уровень"],field_name="иерархия_уровень",row_number=row_number),
+                        "родитель":optional_int(row["родитель"],field_name="родитель",row_number=row_number),
+                        "вид_объекта":empty_to_none(row["вид_объекта"]),
+                        "диспетчерское_название_объекта":empty_to_none(row["диспетчерское_название_объекта"])})
+                    if len(batch)>=OBJECT_BATCH_SIZE:
+                        _upsert_object_batch(session,batch);processed_rows+=len(batch);batch.clear()
+                if batch:_upsert_object_batch(session,batch);processed_rows+=len(batch)
+            if db is None:session.commit()
         except Exception:
-            session.rollback()
+            if db is None:session.rollback()
             raise
+    if return_stats:
+        return {"processed_rows":processed_rows,"inserted_rows":len(seen_ids),
+            "repeated_headers":0,"skipped_duplicates":processed_rows-len(seen_ids)}
+    return processed_rows
 
-    return len(rows)
 
 def parse_event_date(
     value: str | None,
@@ -671,6 +630,8 @@ def _insert_event_batch(
     if not rows:
         return 0
 
+    apply_import_budget(session)
+
     statement = insert(
         EventsJournal
     ).values(rows)
@@ -690,6 +651,7 @@ def _insert_event_batch(
 
 def load_events_journal(
     file_path: str | Path,
+    *, db: Session | None = None,
 ) -> dict[str, int]:
     path = Path(file_path)
 
@@ -705,7 +667,7 @@ def load_events_journal(
 
     batch: list[dict] = []
 
-    with SessionLocal() as session:
+    with (nullcontext(db) if db is not None else SessionLocal()) as session:
         try:
             with path.open(
                 "r",
@@ -767,10 +729,10 @@ def load_events_journal(
                         len(batch) - inserted
                     )
 
-            session.commit()
+            if db is None: session.commit()
 
         except Exception:
-            session.rollback()
+            if db is None: session.rollback()
             raise
 
     return {

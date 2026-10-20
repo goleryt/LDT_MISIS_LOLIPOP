@@ -1,0 +1,1 @@
+failed_backup_preserves_last_success_exit=0; rotation_verified=true

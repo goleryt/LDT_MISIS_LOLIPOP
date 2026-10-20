@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "notification_id": 2,
+  "source": "existing historical observed alarm; labelled administrative validation notice",
+  "new_telemetry": false,
+  "new_prediction": false,
+  "admin_read_twice_idempotent": true,
+  "admin_read_persisted": true,
+  "technician_still_unread": true,
+  "browser_navigation": "browser.json"
+}

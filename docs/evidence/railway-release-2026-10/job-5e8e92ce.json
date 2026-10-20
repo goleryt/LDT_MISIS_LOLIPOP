@@ -1,0 +1,17 @@
+{
+  "deployment": "5e8e92ce-20fd-4424-8075-7b0cf85eb08b",
+  "logs": [
+    {
+      "timestamp": "2026-10-19T15:53:48.460235551Z",
+      "message": "Starting Container"
+    },
+    {
+      "timestamp": "2026-10-19T15:53:51.044802562Z",
+      "message": "",
+      "id": 1,
+      "state": "completed",
+      "reused": false,
+      "source": "supplier synthetic raw fixture; no operational events written"
+    }
+  ]
+}

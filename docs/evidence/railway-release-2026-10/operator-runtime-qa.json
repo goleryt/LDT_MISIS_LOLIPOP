@@ -1,0 +1,13 @@
+{
+  "revision": "d01901",
+  "events": 173864,
+  "gas_predictions": 3,
+  "gas_runs": 1,
+  "scenario_runs": 1,
+  "scenario_forecasts": 3,
+  "real_frozen_inference": "PASS",
+  "repeat": "reused=true, same run id",
+  "synthetic_observations_written_to_operational_journal": false,
+  "child_peak_rss_mib": 216.13,
+  "container_limit_mib": 1024
+}

@@ -1,4 +1,5 @@
 import { canWrite } from "../api/session";
+import RequestReview from "../components/RequestReview";
 import {
     useEffect,
     useMemo,
@@ -62,11 +63,14 @@ const STATUS_LABELS: Record<
     RequestStatus,
     string
 > = {
+    draft: "Черновик",
     new: "Новая",
     in_progress: "В работе",
     completed: "Выполнена",
     cancelled: "Отменена",
 };
+
+const TRANSITIONS: Record<RequestStatus, RequestStatus[]> = { draft: ["draft"], new: ["new", "in_progress", "cancelled"], in_progress: ["in_progress", "completed", "cancelled"], completed: ["completed"], cancelled: ["cancelled"] };
 
 
 function formatDateTime(
@@ -89,6 +93,9 @@ function RequestsPage() {
 
     const [requests, setRequests] =
         useState<PreventiveRequest[]>([]);
+    const [reviewId, setReviewId] = useState<number | null>(Number(searchParams.get("requestId")) || null);
+    const [feedback, setFeedback] = useState("");
+    const [updatingId, setUpdatingId] = useState<number | null>(null);
 
     const [objects, setObjects] =
         useState<MapObject[]>([]);
@@ -130,6 +137,12 @@ function RequestsPage() {
         useState<RequestPriority>(
             "medium",
         );
+
+    const creationBlocked = !canWrite("requests")
+        ? "Ваша роль разрешает только просмотр заявок. Для создания войдите как диспетчер, техник или администратор."
+        : objectId === null ? "Выберите объект — это обязательное поле."
+        : !title.trim() ? "Заполните тему заявки — это обязательное поле."
+        : null;
 
 
     async function loadData(
@@ -231,7 +244,7 @@ function RequestsPage() {
                 setSensors(data.sensors);
                 setChannelId(current => current !== null && !data.sensors.some(sensor => sensor.channel_id === current) ? null : current);
             } catch {
-                if (!cancelled) setSensors([]);
+                if (!cancelled) { setSensors([]); setError("Не удалось загрузить датчики. Обновите страницу перед созданием заявки."); }
             }
         }
 
@@ -311,10 +324,11 @@ function RequestsPage() {
 
 
     async function submitRequest() {
+        if (saving) return;
         if (
-            objectId === null ||
-            !title.trim()
+            creationBlocked || objectId === null
         ) {
+            setError(creationBlocked);
             return;
         }
 
@@ -339,6 +353,7 @@ function RequestsPage() {
             ]);
 
             setShowCreate(false);
+            setFeedback("Заявка создана");
             resetForm();
         } catch (error) {
             setError(
@@ -357,10 +372,11 @@ function RequestsPage() {
         status: RequestStatus,
     ) {
         try {
+            setUpdatingId(request.id); setError(null);
             const updated =
                 await updateRequest(
                     request.id,
-                    { status },
+                    { status, ...(request.updated_at ? { expected_updated_at: request.updated_at } : {}) },
                 );
 
             setRequests((current) =>
@@ -370,13 +386,14 @@ function RequestsPage() {
                         : item,
                 ),
             );
+            setFeedback("Статус заявки сохранён");
         } catch (error) {
             setError(
                 error instanceof Error
                     ? error.message
                     : "Не удалось обновить заявку",
             );
-        }
+        } finally { setUpdatingId(null); }
     }
 
 
@@ -482,8 +499,7 @@ function RequestsPage() {
                                     Новая профилактическая заявка
                                 </h2>
                                 <span>
-                                    ML-риск будет подключён позднее;
-                                    сейчас заявка создаётся по фактическим данным.
+                                    Обязательны объект и тема. Датчик и описание можно не указывать.
                                 </span>
                             </div>
                         </div>
@@ -502,6 +518,7 @@ function RequestsPage() {
                         <label>
                             <span>Объект</span>
                             <select
+                                required
                                 value={
                                     objectId ?? ""
                                 }
@@ -600,6 +617,7 @@ function RequestsPage() {
                         <label className="request-title-field">
                             <span>Тема</span>
                             <input
+                                required
                                 value={title}
                                 maxLength={200}
                                 placeholder="Например: Проверить датчик доступа"
@@ -628,14 +646,15 @@ function RequestsPage() {
                     </div>
 
                     <div className="request-form-actions">
+                        {creationBlocked && <p id="request-create-validation" role="status">{creationBlocked}</p>}
+                        {error && <p role="alert">{error}</p>}
                         <button
                             type="button"
                             className="requests-primary-button"
                             disabled={
-                                !canWrite("requests") || saving ||
-                                objectId === null ||
-                                !title.trim()
+                                saving || !!creationBlocked
                             }
+                            aria-describedby={creationBlocked ? "request-create-validation" : undefined}
                             onClick={() =>
                                 void submitRequest()
                             }
@@ -648,6 +667,9 @@ function RequestsPage() {
                 </section>
             )}
 
+            {feedback && <p role="status" className="requests-feedback">{feedback}</p>}
+            {requests.find(item => item.id === reviewId) && <RequestReview key={`${reviewId}:${requests.find(item => item.id === reviewId)?.updated_at}`} item={requests.find(item => item.id === reviewId)!}
+                onClose={() => setReviewId(null)} onSaved={updated => { setRequests(current => current.map(item => item.id === updated.id ? updated : item)); setFeedback(updated.status === "new" ? "Черновик подтверждён: заявка создана" : "Черновик сохранён"); }} />}
             <section className="requests-panel">
                 <div className="requests-toolbar">
                     <div className="requests-search">
@@ -667,7 +689,7 @@ function RequestsPage() {
                     </span>
                 </div>
 
-                {error && (
+            {error && !showCreate && (
                     <div className="requests-error">
                         {error}
                     </div>
@@ -679,7 +701,7 @@ function RequestsPage() {
                     </div>
                 ) : filteredRequests.length === 0 ? (
                     <div className="requests-message">
-                        Заявок пока нет
+                        {error ? "Список заявок недоступен. Повторите загрузку." : "Заявок пока нет"}
                     </div>
                 ) : (
                     <div className="requests-table-wrap">
@@ -747,7 +769,8 @@ function RequestsPage() {
                                                         `request-status-select ${request.status}`
                                                     }
                                                     value={request.status}
-                                                    disabled={!canWrite("requests")}
+                                                    aria-label={`Статус заявки ${request.id}`}
+                                                    disabled={!canWrite("requests") || request.status === "draft" || ["completed", "cancelled"].includes(request.status) || updatingId === request.id}
                                                     onChange={(event) =>
                                                         void changeStatus(
                                                             request,
@@ -757,7 +780,7 @@ function RequestsPage() {
                                                 >
                                                     {Object.entries(
                                                         STATUS_LABELS,
-                                                    ).map(([
+                                                    ).filter(([value]) => TRANSITIONS[request.status].includes(value as RequestStatus)).map(([
                                                         value,
                                                         label,
                                                     ]) => (
@@ -776,6 +799,7 @@ function RequestsPage() {
                                                 )}
                                             </td>
                                             <td>
+                                                <button className="requests-secondary-button" onClick={() => setReviewId(request.id)}>{request.status === "draft" ? "Проверить черновик" : "История"}</button>
                                                 <button
                                                     type="button"
                                                     className="request-map-button"

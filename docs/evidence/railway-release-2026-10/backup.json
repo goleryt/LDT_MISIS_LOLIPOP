@@ -1,0 +1,13 @@
+{
+  "server_version": "18.6",
+  "created_at": "2026-10-19T15:35:52.818153+00:00",
+  "size_bytes": 9990957,
+  "sha256": "c8da06d77a52b5e4c97b805fc7039306e5f8ba7dd18a46c779d1cac799cd7205",
+  "remote_dump": "temporary copy in existing PostgreSQL container",
+  "durable_copy": "downloaded outside Git on operator workstation; independent of deployment container",
+  "download_checksum_verified": true,
+  "restore_verified": true,
+  "restore_target": "NEW isolated local PostgreSQL18 database release_restore",
+  "migration": "d01602 to d01901 PASS; alembic check PASS",
+  "rollback": "old14aad86 application plus d01901 migration script: readiness/login/predictions PASS; APP_COMMIT=unknown for derived artifact"
+}

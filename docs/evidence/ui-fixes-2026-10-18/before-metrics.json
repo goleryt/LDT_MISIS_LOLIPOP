@@ -1,0 +1,39 @@
+[
+  {
+    "theme": "dark",
+    "path": "/alarms",
+    "font": "10px",
+    "scroll": 1280,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "path": "/imports",
+    "font": "12px",
+    "scroll": 1280,
+    "width": 1280
+  },
+  {
+    "theme": "light",
+    "path": "/predictions?predictionId=1",
+    "font": "16px",
+    "scroll": 1280,
+    "width": 1280
+  },
+  {
+    "theme": "dark",
+    "path": "/settings",
+    "font": "16px",
+    "scroll": 1280,
+    "width": 1280
+  },
+  {
+    "mapHeight": 800,
+    "viewport": 800,
+    "top": 42,
+    "bottom": 842
+  },
+  {
+    "pinchPrevented": false
+  }
+]

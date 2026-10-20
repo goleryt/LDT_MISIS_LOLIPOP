@@ -1,0 +1,54 @@
+{
+  "url": "http://127.0.0.1:18097",
+  "date": "2026-10-20T10:18:28.338Z",
+  "checks": [
+    {
+      "name": "validated simultaneous SF and Fire API with availability flags and no automatic action",
+      "status": "PASS",
+      "run_id": 1,
+      "forecasts": 3
+    },
+    {
+      "name": "real local restored QA scenario cards both themes and three desktop widths",
+      "status": "PASS"
+    },
+    {
+      "name": "separate manual review draft confirmation history and idempotency",
+      "status": "PASS"
+    },
+    {
+      "name": "actual local restored QA import history user-wheel bottom access without transport mocks",
+      "status": "PASS"
+    }
+  ],
+  "page_errors": [],
+  "browser": "155.0.8059.85",
+  "requests": [
+    {
+      "worker": "sensor_failure",
+      "forecast_id": 2,
+      "request_id": 11,
+      "created_now": true,
+      "confirmed_now": true,
+      "history": [
+        "draft",
+        "draft",
+        "new"
+      ]
+    },
+    {
+      "worker": "fire",
+      "forecast_id": 3,
+      "request_id": 9,
+      "created_now": false,
+      "confirmed_now": false,
+      "history": [
+        "draft",
+        "draft",
+        "new"
+      ]
+    }
+  ],
+  "status": "PASS",
+  "scope": "local restored QA HTTP, actual frozen persisted results; no production data reset"
+}
