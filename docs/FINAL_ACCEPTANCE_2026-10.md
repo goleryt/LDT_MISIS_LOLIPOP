@@ -1,5 +1,42 @@
 # Финальная приёмка RC — актуальное дополнение 20.10.2026
 
+## Свежая приёмка командного UI и действующего demo — 20.10.2026
+
+Функциональный SHA `18af8fa339c8da54db5337fb6592cb0a87a0dcad`, deployment `b1bd6fee-0e94-46b9-8d76-11b555c8e06f`. [Полная Railway приёмка](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
+Датированные прежние результаты ниже не заменяют эту приёмку. Финальный documentation-only
+commit проходит свой CI/deploy; изменение только evidence не является новой версией ML/UI.
+
+| Requirement | Status | Implementation | Verification / command | Actual result | Evidence | Known limitation |
+|---|---|---|---|---|---|---|
+| Team branch integration | PASS | net diffaec7953 от merge-baseae43e33, ручная адаптация | git log/diff всех11 commits | source credit сохранён, main/team untouched | [review](VISUAL_BRANCH_INTEGRATION_2026-10.md) | Отменённый glass не возвращён |
+| Backend/security/import regression | PASS | backend byte-identical к проверенному237ff93 | dedicated ldt_test: pytest -q |151 passed /4 dependency warnings | [pytest](evidence/visual-integration-2026-10-20/backend.xml) | Не fixtures против public DB |
+| Frontend | PASS |6 frontend source files, existing components/tokens | npm run build; npm run lint | TypeScript/Vite PASS,0 errors/10 existing warnings | [build](evidence/visual-integration-2026-10-20/frontend-build.txt), [lint](evidence/visual-integration-2026-10-20/frontend-lint.txt) | Глобального redesign нет |
+| Chrome regression | PASS scoped | request/map/role/notification/import/report tests | Playwright Chrome suite |33 PASS /8 optional skips; actual-data flows отдельно | [cases](evidence/visual-integration-2026-10-20/chrome.json) | Не native Yandex |
+| White panels / reports / desktop | PASS | local theme tokens, native scheme, focus, dates feedback | visual_branch_review.cjs + team-visual.spec.ts |136 final local +136 remote screenshots,2 themes/4 sizes; forms4 cases | [local matrix](evidence/visual-integration-2026-10-20/visual-final-local.json), [remote](evidence/visual-integration-2026-10-20/visual-remote.json) | Native125/150% NOT TESTED |
+| Fast browser Back | PASS | selection-aware guard + selectedSensorId dependency | designer-navigation + remote browser | fast close/Back×3, URL/sensor restored | [browser](evidence/visual-integration-2026-10-20/remote-browser.json) | Physical touchpad отдельный |
+| Prediction→draft→new | PASS scoped | существующий stored forecast, manual review | remote scenarios.cjs | новый SF request12, draft/draft/new; Fire existing history/idempotency | [flow](evidence/visual-integration-2026-10-20/remote-scenarios.json) | Не новый inference / не внешний work order |
+| Audit | PASS scoped | действующий middleware/history | pytest + read-only audit query | dispatcher/entity12/action/outcome/timestamp присутствуют | [audit](evidence/visual-integration-2026-10-20/remote-request-audit.json) | Credentials/bodies не публикуются |
+| Concurrent import gate | PASS scoped | existing2 DB-wide slots,429/409 retry | import_load.py; import_map_watch.cjs |8 cases;500k rows;1962 API /0 errors;20 audit actors;0 leaked transactions/slots | [gate](evidence/visual-integration-2026-10-20/imports/gate.json) | Не20 maximum-size files; не public load |
+| CSV/XLSX/JSON/XML atomicity/faults | PASS reused + fresh regression | source unchanged, format tests |151 pytest + previous fault gate | malformed among valid19 completed/1 failed,19000 rows; no partial rows | [supplement](IMPORT_VISUAL_SUPPLEMENT_2026-10-20.md) | Kill/cancel suite reused by exact source identity |
+| Docker / clean startup / migration | PASS | fresh isolated PG18 DB + production image | build; alembic upgrade/check; ready; CI compose | schema d01901; local and CI clean startup PASS | [local](evidence/visual-integration-2026-10-20/local-gate.json), [CI](evidence/visual-integration-2026-10-20/ci-functional.json) | No destructive public downgrade |
+| Backup/restore | PASS scoped | manual safety dump, checksum, NEW restore DB | PG18 pg_dump/pg_restore + schema/API |173867 restored events; checksum verified | [restore](evidence/visual-integration-2026-10-20/backup-restore.json) | Не RTO12-летнего архива |
+| Actual remote CI | PASS on functional SHA | existing4 jobs; exact-image registry fix | GitHub Actions39408268560 |4/4 success, attempt1 | [CI](evidence/visual-integration-2026-10-20/ci-functional.json) | Earlier ECR429 resolved, tests retained |
+| Actual remote deployment | PASS on functional SHA | same Railway service/PG/volume | CLI archive + operations + assets + HTTPS | app0.2.0/18af8fa, new JS/CSS, health/ready200,HTTP301,TLS verified | [identity](evidence/visual-integration-2026-10-20/remote-build-identity.json) | Documentation tip separately verified |
+| Remote auth/RBAC | PASS smoke |5 actual roles, server enforcement | direct HTTPS API + browser |401/403/allowed success/CSRF/Secure cookie/logout | [API](evidence/visual-integration-2026-10-20/remote-api.json) | TTL expiration is covered locally, not accelerated remotely |
+| Reports | PASS scoped | existing factual PDF/XLSX | real browser download + parsing | Cyrillic PDF, readable XLSX; date validation feedback | [exports](evidence/visual-integration-2026-10-20/remote-report-validation.json) |Не история внешних фактических ремонтов |
+| ML freeze / three circuits | PASS technical | unchanged providers, bundles, inference semantics | source diff + persisted payload hashes + frozen CI contract | gas3 + SF2/Fire1, identical output hashes, no automatic actions | [identity](evidence/visual-integration-2026-10-20/remote-build-identity.json) | Quality on real incidents not established |
+| Notifications | PARTIAL | personal read/polling/navigation retained | local real notification + Chrome poll regression | local entity/read PASS; public empty list, remote entity NOT TESTED | [local](evidence/visual-integration-2026-10-20/restored-data-flow.json), [public](evidence/visual-integration-2026-10-20/remote-browser.json) | No notice fabricated for PASS |
+| Continuous worker/scheduler/backup | EXTERNAL DEPENDENCY | existing adapters/runtime status | remote operations | integration/gas scheduler not_observed; scenario completed; auto backup not_configured | [operations](evidence/visual-integration-2026-10-20/remote-api.json) | Customer hosting/schedule/storage required |
+| Customer AD / real external integrations / full archive / real geometry | EXTERNAL DEPENDENCY | existing LDAP/mock/adapters/Point+GeoJSON/WKT | fresh local regression; deployment config | No new industrial connection or invented coordinates | [scope](RAILWAY_RELEASE_ACCEPTANCE_2026-10.md) | Customer infrastructure/data unavailable |
+| Native Yandex | NOT TESTED | checklist retained | binary not found in accessible install paths | no native run | [checklist](BROWSER_ACCEPTANCE_RC.md) | MANUAL ACTION REQUIRED |
+| Physical touchpad / native browser zoom125/150 | NOT TESTED native | synthetic clamp/resize tests PASS | real WheelEvent +4 desktop viewports | automated PASS, physical input unavailable | [manual](VISUAL_BRANCH_INTEGRATION_2026-10.md) | No full manual PASS claim |
+| Final tag / main merge | NOT APPLICABLE | user explicitly prohibits | git history/status | none created/performed | Git log | Separate permission needed for merge |
+| Presentation / accompanying DOCX/PDF | EXTERNAL DEPENDENCY | inventory only | repository artifact search | MISSING FINAL ARTIFACT | [inventory](FINAL_ARTIFACTS_RC.md) | Official TZ/report samples are not final materials |
+
+## Исторические результаты до этого обновления
+
+Предыдущие разделы сохраняются как датированная история. Текущее состояние описано выше.
+
 ## Текущий проверенный объём
 
 Ветка `release/final-rc`; main не объединялся. Полные фактические public ID,

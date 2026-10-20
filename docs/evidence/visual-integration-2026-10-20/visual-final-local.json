@@ -1,0 +1,2469 @@
+{
+  "phase": "after",
+  "base": "http://127.0.0.1:18097",
+  "date": "2026-10-20T10:30:11.933Z",
+  "screens": [
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "login",
+      "file": "after-dark-1024-login.png",
+      "geometry": {
+        "x": 292,
+        "y": 184.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "settings",
+      "file": "after-dark-1024-settings.png",
+      "geometry": {
+        "x": 372,
+        "y": 183.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "journal",
+      "file": "after-dark-1024-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 211,
+        "width": 756,
+        "height": 4424.34375,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "reports",
+      "file": "after-dark-1024-reports.png",
+      "geometry": {
+        "x": 272,
+        "y": 216.453125,
+        "width": 720,
+        "height": 299.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 299,
+        "clientHeight": 299
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "imports",
+      "file": "after-dark-1024-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 57.15625,
+        "width": 716,
+        "height": 642.390625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "dashboard",
+      "file": "after-dark-1024-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 784,
+        "height": 724,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 724,
+        "clientHeight": 724
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "objects",
+      "file": "after-dark-1024-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 363.421875,
+        "width": 728,
+        "height": 6064.078125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 6062,
+        "clientHeight": 6062
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "alarms",
+      "file": "after-dark-1024-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 728,
+        "height": 553.046875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 551,
+        "clientHeight": 551
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "object",
+      "file": "after-dark-1024-object.png",
+      "geometry": {
+        "x": 704,
+        "y": 44,
+        "width": 320,
+        "height": 724,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 965,
+        "clientHeight": 724
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "sensor-history",
+      "file": "after-dark-1024-sensor-history.png",
+      "geometry": {
+        "x": 256,
+        "y": 62,
+        "width": 432,
+        "height": 534,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 947,
+        "clientHeight": 532
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "predictions",
+      "file": "after-dark-1024-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 738.515625,
+        "width": 728,
+        "height": 1571.6875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1571,
+        "clientHeight": 1571
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-0",
+      "file": "after-dark-1024-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 127.640625,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-1",
+      "file": "after-dark-1024-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -362.359375,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-2",
+      "file": "after-dark-1024-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.640625,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "gas-detail",
+      "file": "after-dark-1024-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 730.515625,
+        "width": 728,
+        "height": 1444.046875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1444,
+        "clientHeight": 1444
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "requests",
+      "file": "after-dark-1024-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 389.125,
+        "width": 728,
+        "height": 1181.3125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 768,
+      "name": "notifications",
+      "file": "after-dark-1024-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 784,
+        "height": 44,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "login",
+      "file": "after-dark-1280-login.png",
+      "geometry": {
+        "x": 420,
+        "y": 200.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "settings",
+      "file": "after-dark-1280-settings.png",
+      "geometry": {
+        "x": 500,
+        "y": 199.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "journal",
+      "file": "after-dark-1280-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1012,
+        "height": 4424.34375,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "reports",
+      "file": "after-dark-1280-reports.png",
+      "geometry": {
+        "x": 400,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "imports",
+      "file": "after-dark-1280-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 89.859375,
+        "width": 972,
+        "height": 642.390625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "dashboard",
+      "file": "after-dark-1280-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1040,
+        "height": 756,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 756,
+        "clientHeight": 756
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "objects",
+      "file": "after-dark-1280-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 984,
+        "height": 6064.078125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 6062,
+        "clientHeight": 6062
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "alarms",
+      "file": "after-dark-1280-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 984,
+        "height": 553.046875,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 551,
+        "clientHeight": 551
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "object",
+      "file": "after-dark-1280-object.png",
+      "geometry": {
+        "x": 905.609375,
+        "y": 44,
+        "width": 374.390625,
+        "height": 756,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 877,
+        "clientHeight": 756
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "sensor-history",
+      "file": "after-dark-1280-sensor-history.png",
+      "geometry": {
+        "x": 529.609375,
+        "y": 62,
+        "width": 360,
+        "height": 566,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 564
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "predictions",
+      "file": "after-dark-1280-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 584.828125,
+        "width": 984,
+        "height": 1347.53125,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1347,
+        "clientHeight": 1347
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-0",
+      "file": "after-dark-1280-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 193.765625,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-1",
+      "file": "after-dark-1280-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -129.234375,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-2",
+      "file": "after-dark-1280-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.765625,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "gas-detail",
+      "file": "after-dark-1280-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 576.828125,
+        "width": 984,
+        "height": 1377.109375,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1377,
+        "clientHeight": 1377
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "requests",
+      "file": "after-dark-1280-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 984,
+        "height": 1181.3125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "name": "notifications",
+      "file": "after-dark-1280-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1040,
+        "height": 44,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "login",
+      "file": "after-dark-1440-login.png",
+      "geometry": {
+        "x": 500,
+        "y": 250.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "settings",
+      "file": "after-dark-1440-settings.png",
+      "geometry": {
+        "x": 580,
+        "y": 249.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "journal",
+      "file": "after-dark-1440-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1172,
+        "height": 3840.75,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "reports",
+      "file": "after-dark-1440-reports.png",
+      "geometry": {
+        "x": 480,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "imports",
+      "file": "after-dark-1440-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 189.859375,
+        "width": 1132,
+        "height": 642.390625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "dashboard",
+      "file": "after-dark-1440-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1200,
+        "height": 856,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 856,
+        "clientHeight": 856
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "objects",
+      "file": "after-dark-1440-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 1144,
+        "height": 5678.4375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 5676,
+        "clientHeight": 5676
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "alarms",
+      "file": "after-dark-1440-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 1144,
+        "height": 471.859375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 470,
+        "clientHeight": 470
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "object",
+      "file": "after-dark-1440-object.png",
+      "geometry": {
+        "x": 1050,
+        "y": 44,
+        "width": 390,
+        "height": 856,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 877,
+        "clientHeight": 856
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "sensor-history",
+      "file": "after-dark-1440-sensor-history.png",
+      "geometry": {
+        "x": 674,
+        "y": 62,
+        "width": 360,
+        "height": 666,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 664
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "predictions",
+      "file": "after-dark-1440-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 584.828125,
+        "width": 1144,
+        "height": 1347.53125,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1347,
+        "clientHeight": 1347
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-0",
+      "file": "after-dark-1440-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 243.765625,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-1",
+      "file": "after-dark-1440-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -29.234375,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-2",
+      "file": "after-dark-1440-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.765625,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "gas-detail",
+      "file": "after-dark-1440-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 576.828125,
+        "width": 1144,
+        "height": 1377.109375,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1377,
+        "clientHeight": 1377
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "requests",
+      "file": "after-dark-1440-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 1144,
+        "height": 1181.3125,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 900,
+      "name": "notifications",
+      "file": "after-dark-1440-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1200,
+        "height": 44,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "login",
+      "file": "after-dark-1920-login.png",
+      "geometry": {
+        "x": 740,
+        "y": 340.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "settings",
+      "file": "after-dark-1920-settings.png",
+      "geometry": {
+        "x": 820,
+        "y": 339.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "journal",
+      "file": "after-dark-1920-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1652,
+        "height": 3840.75,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "reports",
+      "file": "after-dark-1920-reports.png",
+      "geometry": {
+        "x": 720,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "imports",
+      "file": "after-dark-1920-imports.png",
+      "geometry": {
+        "x": 330,
+        "y": 369.5625,
+        "width": 1500,
+        "height": 642.390625,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "dashboard",
+      "file": "after-dark-1920-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1680,
+        "height": 1036,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1036,
+        "clientHeight": 1036
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "objects",
+      "file": "after-dark-1920-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 1624,
+        "height": 5597.25,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 5595,
+        "clientHeight": 5595
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "alarms",
+      "file": "after-dark-1920-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 1624,
+        "height": 471.859375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 470,
+        "clientHeight": 470
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "object",
+      "file": "after-dark-1920-object.png",
+      "geometry": {
+        "x": 1530,
+        "y": 44,
+        "width": 390,
+        "height": 1036,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1036,
+        "clientHeight": 1036
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "sensor-history",
+      "file": "after-dark-1920-sensor-history.png",
+      "geometry": {
+        "x": 1154,
+        "y": 62,
+        "width": 360,
+        "height": 846,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 844
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "predictions",
+      "file": "after-dark-1920-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 528.640625,
+        "width": 1624,
+        "height": 1225.15625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1224,
+        "clientHeight": 1224
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-0",
+      "file": "after-dark-1920-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 672.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-1",
+      "file": "after-dark-1920-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": 142.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-2",
+      "file": "after-dark-1920-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 142.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "gas-detail",
+      "file": "after-dark-1920-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 520.640625,
+        "width": 1624,
+        "height": 1276.625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 245, 252)",
+        "font": "16px",
+        "scrollHeight": 1277,
+        "clientHeight": 1277
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "requests",
+      "file": "after-dark-1920-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 1624,
+        "height": 1132.75,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 1131,
+        "clientHeight": 1131
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1920,
+      "height": 1080,
+      "name": "notifications",
+      "file": "after-dark-1920-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1680,
+        "height": 44,
+        "background": "rgb(20, 34, 56)",
+        "color": "rgb(240, 244, 251)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "login",
+      "file": "after-light-1024-login.png",
+      "geometry": {
+        "x": 292,
+        "y": 184.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "settings",
+      "file": "after-light-1024-settings.png",
+      "geometry": {
+        "x": 372,
+        "y": 183.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "journal",
+      "file": "after-light-1024-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 211,
+        "width": 756,
+        "height": 4424.34375,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "reports",
+      "file": "after-light-1024-reports.png",
+      "geometry": {
+        "x": 272,
+        "y": 216.453125,
+        "width": 720,
+        "height": 299.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 299,
+        "clientHeight": 299
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "imports",
+      "file": "after-light-1024-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 57.15625,
+        "width": 716,
+        "height": 642.390625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "dashboard",
+      "file": "after-light-1024-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 784,
+        "height": 724,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 724,
+        "clientHeight": 724
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "objects",
+      "file": "after-light-1024-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 363.421875,
+        "width": 728,
+        "height": 6064.078125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 6062,
+        "clientHeight": 6062
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "alarms",
+      "file": "after-light-1024-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 728,
+        "height": 553.046875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 551,
+        "clientHeight": 551
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "object",
+      "file": "after-light-1024-object.png",
+      "geometry": {
+        "x": 704,
+        "y": 44,
+        "width": 320,
+        "height": 724,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 965,
+        "clientHeight": 724
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "sensor-history",
+      "file": "after-light-1024-sensor-history.png",
+      "geometry": {
+        "x": 256,
+        "y": 62,
+        "width": 432,
+        "height": 534,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 947,
+        "clientHeight": 532
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "predictions",
+      "file": "after-light-1024-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 738.515625,
+        "width": 728,
+        "height": 1571.6875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1571,
+        "clientHeight": 1571
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-0",
+      "file": "after-light-1024-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 127.640625,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-1",
+      "file": "after-light-1024-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -362.359375,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "scenario-2",
+      "file": "after-light-1024-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.640625,
+        "width": 354,
+        "height": 557.1875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 555,
+        "clientHeight": 555
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "gas-detail",
+      "file": "after-light-1024-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 730.515625,
+        "width": 728,
+        "height": 1444.046875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1444,
+        "clientHeight": 1444
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "requests",
+      "file": "after-light-1024-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 389.125,
+        "width": 728,
+        "height": 1181.3125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 768,
+      "name": "notifications",
+      "file": "after-light-1024-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 784,
+        "height": 44,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "login",
+      "file": "after-light-1280-login.png",
+      "geometry": {
+        "x": 420,
+        "y": 200.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "settings",
+      "file": "after-light-1280-settings.png",
+      "geometry": {
+        "x": 500,
+        "y": 199.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "journal",
+      "file": "after-light-1280-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1012,
+        "height": 4424.34375,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 4422,
+        "clientHeight": 4422
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "reports",
+      "file": "after-light-1280-reports.png",
+      "geometry": {
+        "x": 400,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "imports",
+      "file": "after-light-1280-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 89.859375,
+        "width": 972,
+        "height": 642.390625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "dashboard",
+      "file": "after-light-1280-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1040,
+        "height": 756,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 756,
+        "clientHeight": 756
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "objects",
+      "file": "after-light-1280-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 984,
+        "height": 6064.078125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 6062,
+        "clientHeight": 6062
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "alarms",
+      "file": "after-light-1280-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 984,
+        "height": 553.046875,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 551,
+        "clientHeight": 551
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "object",
+      "file": "after-light-1280-object.png",
+      "geometry": {
+        "x": 905.609375,
+        "y": 44,
+        "width": 374.390625,
+        "height": 756,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 877,
+        "clientHeight": 756
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "sensor-history",
+      "file": "after-light-1280-sensor-history.png",
+      "geometry": {
+        "x": 529.609375,
+        "y": 62,
+        "width": 360,
+        "height": 566,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 564
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "predictions",
+      "file": "after-light-1280-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 584.828125,
+        "width": 984,
+        "height": 1347.53125,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1347,
+        "clientHeight": 1347
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-0",
+      "file": "after-light-1280-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 193.765625,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-1",
+      "file": "after-light-1280-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -129.234375,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "scenario-2",
+      "file": "after-light-1280-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.765625,
+        "width": 482,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "gas-detail",
+      "file": "after-light-1280-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 576.828125,
+        "width": 984,
+        "height": 1377.109375,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1377,
+        "clientHeight": 1377
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "requests",
+      "file": "after-light-1280-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 984,
+        "height": 1181.3125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "name": "notifications",
+      "file": "after-light-1280-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1040,
+        "height": 44,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "login",
+      "file": "after-light-1440-login.png",
+      "geometry": {
+        "x": 500,
+        "y": 250.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "settings",
+      "file": "after-light-1440-settings.png",
+      "geometry": {
+        "x": 580,
+        "y": 249.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "journal",
+      "file": "after-light-1440-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1172,
+        "height": 3840.75,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "reports",
+      "file": "after-light-1440-reports.png",
+      "geometry": {
+        "x": 480,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "imports",
+      "file": "after-light-1440-imports.png",
+      "geometry": {
+        "x": 274,
+        "y": 189.859375,
+        "width": 1132,
+        "height": 642.390625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "dashboard",
+      "file": "after-light-1440-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1200,
+        "height": 856,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 856,
+        "clientHeight": 856
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "objects",
+      "file": "after-light-1440-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 1144,
+        "height": 5678.4375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 5676,
+        "clientHeight": 5676
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "alarms",
+      "file": "after-light-1440-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 1144,
+        "height": 471.859375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 470,
+        "clientHeight": 470
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "object",
+      "file": "after-light-1440-object.png",
+      "geometry": {
+        "x": 1050,
+        "y": 44,
+        "width": 390,
+        "height": 856,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 877,
+        "clientHeight": 856
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "sensor-history",
+      "file": "after-light-1440-sensor-history.png",
+      "geometry": {
+        "x": 674,
+        "y": 62,
+        "width": 360,
+        "height": 666,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 664
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "predictions",
+      "file": "after-light-1440-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 584.828125,
+        "width": 1144,
+        "height": 1347.53125,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1347,
+        "clientHeight": 1347
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-0",
+      "file": "after-light-1440-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 243.765625,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-1",
+      "file": "after-light-1440-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": -29.234375,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "scenario-2",
+      "file": "after-light-1440-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 43.765625,
+        "width": 562,
+        "height": 456.703125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 455,
+        "clientHeight": 455
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "gas-detail",
+      "file": "after-light-1440-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 576.828125,
+        "width": 1144,
+        "height": 1377.109375,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1377,
+        "clientHeight": 1377
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "requests",
+      "file": "after-light-1440-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 1144,
+        "height": 1181.3125,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1179,
+        "clientHeight": 1179
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 900,
+      "name": "notifications",
+      "file": "after-light-1440-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1200,
+        "height": 44,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "login",
+      "file": "after-light-1920-login.png",
+      "geometry": {
+        "x": 740,
+        "y": 340.21875,
+        "width": 440,
+        "height": 399.5625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 400,
+        "clientHeight": 400
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "settings",
+      "file": "after-light-1920-settings.png",
+      "geometry": {
+        "x": 820,
+        "y": 339.484375,
+        "width": 520,
+        "height": 445.015625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 445,
+        "clientHeight": 445
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "journal",
+      "file": "after-light-1920-journal.png",
+      "geometry": {
+        "x": 254,
+        "y": 134,
+        "width": 1652,
+        "height": 3840.75,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 3839,
+        "clientHeight": 3839
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "reports",
+      "file": "after-light-1920-reports.png",
+      "geometry": {
+        "x": 720,
+        "y": 216.453125,
+        "width": 720,
+        "height": 311.21875,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 311,
+        "clientHeight": 311
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "imports",
+      "file": "after-light-1920-imports.png",
+      "geometry": {
+        "x": 330,
+        "y": 369.5625,
+        "width": 1500,
+        "height": 642.390625,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 640,
+        "clientHeight": 640
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "dashboard",
+      "file": "after-light-1920-dashboard.png",
+      "geometry": {
+        "x": 240,
+        "y": 44,
+        "width": 1680,
+        "height": 1036,
+        "background": "rgb(247, 247, 245)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1036,
+        "clientHeight": 1036
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "objects",
+      "file": "after-light-1920-objects.png",
+      "geometry": {
+        "x": 268,
+        "y": 272.03125,
+        "width": 1624,
+        "height": 5597.25,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 5595,
+        "clientHeight": 5595
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "alarms",
+      "file": "after-light-1920-alarms.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.640625,
+        "width": 1624,
+        "height": 471.859375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 470,
+        "clientHeight": 470
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "object",
+      "file": "after-light-1920-object.png",
+      "geometry": {
+        "x": 1530,
+        "y": 44,
+        "width": 390,
+        "height": 1036,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1036,
+        "clientHeight": 1036
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "sensor-history",
+      "file": "after-light-1920-sensor-history.png",
+      "geometry": {
+        "x": 1154,
+        "y": 62,
+        "width": 360,
+        "height": 846,
+        "background": "rgb(248, 251, 255)",
+        "color": "rgb(24, 24, 27)",
+        "font": "16px",
+        "scrollHeight": 1003,
+        "clientHeight": 844
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "predictions",
+      "file": "after-light-1920-predictions.png",
+      "geometry": {
+        "x": 268,
+        "y": 528.640625,
+        "width": 1624,
+        "height": 1225.15625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1224,
+        "clientHeight": 1224
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-0",
+      "file": "after-light-1920-scenario-0.png",
+      "geometry": {
+        "x": 268,
+        "y": 672.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-1",
+      "file": "after-light-1920-scenario-1.png",
+      "geometry": {
+        "x": 268,
+        "y": 142.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "scenario-2",
+      "file": "after-light-1920-scenario-2.png",
+      "geometry": {
+        "x": 268,
+        "y": 142.390625,
+        "width": 802,
+        "height": 407.109375,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 405,
+        "clientHeight": 405
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "gas-detail",
+      "file": "after-light-1920-gas-detail.png",
+      "geometry": {
+        "x": 268,
+        "y": 520.640625,
+        "width": 1624,
+        "height": 1276.625,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1277,
+        "clientHeight": 1277
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "requests",
+      "file": "after-light-1920-requests.png",
+      "geometry": {
+        "x": 268,
+        "y": 274.484375,
+        "width": 1624,
+        "height": 1132.75,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 1131,
+        "clientHeight": 1131
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1920,
+      "height": 1080,
+      "name": "notifications",
+      "file": "after-light-1920-notifications.png",
+      "geometry": {
+        "x": 240,
+        "y": 0,
+        "width": 1680,
+        "height": 44,
+        "background": "rgb(255, 252, 245)",
+        "color": "rgb(46, 38, 24)",
+        "font": "16px",
+        "scrollHeight": 100,
+        "clientHeight": 43
+      }
+    }
+  ],
+  "page_errors": [],
+  "checks": [
+    {
+      "name": "real data desktop matrix without page overflow or runtime errors",
+      "status": "PASS"
+    }
+  ],
+  "browser": "155.0.8059.85",
+  "math_sha256": "c5b559bb5951f52528a01a3085f4415340d532e24484139772119805287fb361",
+  "model_counts": {
+    "gas": 3,
+    "scenario": 3
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,99 @@
+{
+  "base_url": "https://ldt-demo-production.up.railway.app",
+  "date": "2026-10-20T10:41:21.212Z",
+  "checks": [
+    {
+      "name": "HTTPS browser login",
+      "status": "PASS"
+    },
+    {
+      "name": "map to object to exact sensor and history",
+      "status": "PASS",
+      "events": 200
+    },
+    {
+      "name": "object sensor deep link refresh",
+      "status": "PASS"
+    },
+    {
+      "name": "fast browser Back restores the exact sensor three times",
+      "status": "PASS"
+    },
+    {
+      "name": "map resize wheel synthetic pinch extreme scale and drawer",
+      "status": "PASS"
+    },
+    {
+      "name": "alarm to exact object and sensor",
+      "status": "PASS"
+    },
+    {
+      "name": "notification entity navigation",
+      "status": "NOT TESTED",
+      "reason": "No existing unread notification; no fabricated prediction notice"
+    },
+    {
+      "name": "existing prediction request link",
+      "status": "PASS",
+      "request_id": 3
+    },
+    {
+      "name": "fully filled request creation",
+      "status": "PASS",
+      "request_id": 11
+    },
+    {
+      "name": "safe labelled demo import registry and duplicate",
+      "status": "PASS"
+    },
+    {
+      "name": "browser PDF and XLSX exports",
+      "status": "PASS"
+    },
+    {
+      "name": "both themes typography journal prediction settings and drawer screenshots",
+      "status": "PASS"
+    },
+    {
+      "name": "sidebar logo and toggle",
+      "status": "PASS"
+    },
+    {
+      "name": "browser logout invalidates session",
+      "status": "PASS"
+    },
+    {
+      "name": "different role UI restriction",
+      "status": "PASS"
+    }
+  ],
+  "screenshots": [
+    "map-1440.png",
+    "map-1280.png",
+    "map-1024.png",
+    "map-large-zoom.png",
+    "request-create-filled.png",
+    "dark-alerts.png",
+    "dark-imports.png",
+    "dark-journal.png",
+    "dark-prediction.png",
+    "dark-settings.png",
+    "dark-map.png",
+    "light-alerts.png",
+    "light-imports.png",
+    "light-journal.png",
+    "light-prediction.png",
+    "light-settings.png",
+    "light-map.png",
+    "sidebar-collapsed.png",
+    "sidebar-expanded.png"
+  ],
+  "page_errors": [],
+  "unexpected_server_errors": [],
+  "browser": "155.0.8059.85",
+  "prediction_id": 1,
+  "object_id": 900000001,
+  "channel_id": 900000002,
+  "manual_request_id": 11,
+  "status": "PASS"
+}

@@ -1,5 +1,76 @@
 # Публичное обновление Railway — план и фактическая приёмка
 
+## Обновление командного UI — 20.10.2026
+
+**PASS в проверенном демонстрационном объёме.** Функциональный release `18af8fa339c8da54db5337fb6592cb0a87a0dcad`,
+ветка `release/final-rc`, [CI39408268560](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39408268560) — все4 jobs, attempt1.
+Предыдущий runtime5f27421 / deployment8006b5a4-ae40-442b-8c23-5b122ad4b91a;
+новый deployment **b1bd6fee-0e94-46b9-8d76-11b555c8e06f**, SUCCESS. Версия приложения0.2.0.
+
+Использованы прежние project/environment/web/PostgreSQL и volume. Источник deployment:
+точный tracked Git archive из release/final-rc, CLI upload; автоматическая GitHub branch
+metadata у этого способа отсутствует. APP_COMMIT, source archive SHA и фактические JS/CSS
+подтверждены [identity](evidence/visual-integration-2026-10-20/remote-build-identity.json), [deployment](evidence/visual-integration-2026-10-20/deployment.json).
+Текущий documentation-only tip проверяется отдельно после публикации; код runtime должен
+побайтно совпадать с этой функциональной версией, final tag и merge main не создаются.
+
+| Проверка | Статус | Фактическое доказательство |
+|---|---|---|
+| Gate до rollout | PASS | Backend151, Chrome33/8 optional skips; новый Docker/clean startup; local visual matrix; [local](evidence/visual-integration-2026-10-20/local-gate.json) |
+| Concurrent imports | PASS | 8 изолированных кейсов,5/10/20 разных авторизованных пользователей; CSV/XLSX1000/25000 строк;1962 обычных API /0 ошибок; [дополнение](IMPORT_VISUAL_SUPPLEMENT_2026-10-20.md) |
+| Backup | PASS | PG18 dump10095982 bytes, SHA256 `73a3fc634d33cb5bc15a71db63a199cc029b520928fb973efcf14ada3336e5fd`; копия вне Git и исходного контейнера |
+| Restore / compatibility | PASS | Новая отдельная DB,173867 событий, schema check/API/login; [restore](evidence/visual-integration-2026-10-20/backup-restore.json). Не RTO полного архива |
+| Migration | PASS | d01901→d01901, upgrade head без новых миграций; фактический `alembic current`: d01901(head). Никаких downgrade/drop/очисток |
+| HTTPS / routing | PASS | TLSv1.3, проверены цепочка и hostname; HTTP301→HTTPS; root/health/ready200. SPA refresh/deep links работают |
+| Auth / RBAC | PASS в smoke scope | admin/dispatcher/manager/technician/analyst: login/read, wrong-role403, CSRF403, Secure/HttpOnly/SameSite cookies, logout→401; [API](evidence/visual-integration-2026-10-20/remote-api.json) |
+| Remote user flows | PASS с отдельной оговоркой уведомлений | Map/object/sensor/history, fast Back×3, alarm, manual request, import+duplicate, PDF/XLSX, themes/sidebar;14 PASS и1 NOT TESTED; [browser](evidence/visual-integration-2026-10-20/remote-browser.json) |
+| Scenario workflow | PASS | Сохранённый SF forecast2→новый draft request12→редактирование→new; audit/history/idempotency. Fire request9 проверен повторно, новый Fire draft не создавался; [scenarios](evidence/visual-integration-2026-10-20/remote-scenarios.json), [audit](evidence/visual-integration-2026-10-20/remote-request-audit.json) |
+| Visual QA | PASS в desktop scope | Remote136 кадров, обе темы1024×768/1280×800/1440×900/1920×1080,0 page errors; формы/ошибочный период ещё4 сочетания; [matrix](evidence/visual-integration-2026-10-20/visual-remote.json), [forms](evidence/visual-integration-2026-10-20/remote-forms.json) |
+| Export | PASS в проверенном периоде | PDF открывается, кириллица извлекается; XLSX читается итерацией строк, без предположения о worksheet dimensions; [exports](evidence/visual-integration-2026-10-20/remote-report-validation.json) |
+| Default source data | PASS | Исходный журнал169993 строк сохранён. Всего173868 событий после одного помеченного нормального JSON demo observation;97 объектов/11490 каналов |
+| ML invariance | PASS технической интеграции | 1 gas run/3 scores/3 predictions;1 scenario run/2 SF+1 Fire. Gas records SHA `aee92bc6…a127d`, immutable scenario SHA `3320a2be…8993d` совпали до/после. Нового public inference не было |
+| Notifications | PARTIAL | На публичном dispatcher нет unread; переход к сущности NOT TESTED. На восстановленной локальной копии переход по существующей фактической тревоге и read PASS; [local flow](evidence/visual-integration-2026-10-20/restored-data-flow.json) |
+
+### Экспериментальные контуры и эксплуатационные ограничения
+
+SCENARIO_ENABLED / ALLOW_PRODUCTION / SENSOR / FIRE=true сохранены; остальные головы
+выключены. operational_ready=false, automated_action_allowed=false. Gas остаётся
+shadow/proxy, SF/Fire — E4 synthetic scenario_score. Не вероятность реальной аварии,
+не подтверждённые инциденты. Модельные файлы, зависимости, thresholds/calibration,
+feature engineering и scheduler semantics не изменены.
+
+CI1bdb8f2 дважды остановился ДО inference на ECR HTTP429. Исправление18af8fa меняет
+только registry override в CI: официальный Python3.12 image **того же OCI SHA256** через
+Docker Hub. Frozen numeric parity в read-only/network-none runtime PASS; [proof](evidence/visual-integration-2026-10-20/ci-registry-resolution.json),
+[acceptance](evidence/visual-integration-2026-10-20/same-base-runtime-acceptance.json). Полезные tests не отключались.
+
+Web memory.max999997440 bytes (~953.67 MiB), CPU2 vCPU. QA limit1 GiB/2 vCPU;
+это разные среды, результаты локального load не выдаются за public benchmark.
+Persistent integration worker и gas scheduler — not_observed; scenario worker —
+completed19.10, последний конечный batch не перезапускался. Automatic backup service —
+not_configured. Ручная safety copy есть; непрерывная промышленная эксплуатация не заявляется.
+Новые платные ресурсы, тариф и production secrets не менялись.
+
+### Откат приложения
+
+Предыдущий стабильный5f274217cc566ee34b1eac26017041966452643e остаётся в истории и
+совместим с d01901: baseline image/ready/API проверены на отдельной восстановленной DB.
+Для возврата создать новый `git archive` этого SHA, выставить только APP_COMMIT этого
+же SHA через `railway variables set --skip-deploys` для прежнего web/environment и
+загрузить архив через прежний `railway up --path-as-root --service ... --environment ... --project ...`.
+Project/web/environment IDs перечислены в deployment evidence. Это обычный новый application
+rollout; БД, volume, новые заявки и события сохраняются. Не восстанавливать dump поверх
+действующей DB и не выполнять downgrade. Отдельное восстановление допустимо только в НОВУЮ DB.
+При необходимости можно отключить master experimental flag без удаления ledger/history;
+в текущем обновлении flags не менялись.
+
+Native Yandex, физический touchpad и native Chrome Zoom125/150% остаются ручными
+проверками. Viewport/DPR и synthetic WheelEvent не подменяют такие результаты.
+
+## Исторические результаты до этого обновления
+
+Предыдущие разделы сохраняются как датированная история. Текущее состояние описано выше.
+
 Дата 19–20.10.2026, ветка release/final-rc. План ниже сохранён для проверки
 последовательности; фактические результаты и ограничения перечислены отдельно.
 

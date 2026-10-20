@@ -87,3 +87,16 @@ Evidence: [local gate](evidence/visual-integration-2026-10-20/local-gate.json),
 3. Chrome native menu Zoom125%/150% на desktop: Login→Map→drawer→Journal filter→
    Reports→Settings; controls и close доступны, нет горизонтального scroll страницы.
    Затем вернуть100%. Эмуляция viewport/DPR не считается этой проверкой.
+
+## Фактический публичный результат
+
+Release18af8fa / deploymentb1bd6fee-0e94-46b9-8d76-11b555c8e06f: HTTPS136 screenshots, primary14 PASS +
+notification entity NOT TESTED (empty unread list), scenarios4 PASS, forms4 PASS;
+0 runtime/server errors. Новый SF draft12 подтверждён вручную; Fire9 проверен по
+сохранённой истории и idempotency. Исходные169993 события CSV сохранены, model hashes
+совпадают. [Remote matrix](evidence/visual-integration-2026-10-20/visual-remote.json), [browser](evidence/visual-integration-2026-10-20/remote-browser.json),
+[forms](evidence/visual-integration-2026-10-20/remote-forms.json), [identity](evidence/visual-integration-2026-10-20/remote-build-identity.json).
+
+CI39406555181 до нового tip остановился дважды на ECR429 до inference; CI18af8fa
+использует официальный Docker Hub image с тем же immutable digest, без изменения ML.
+Локальный numeric contract и CI39408268560 всех4 jobs PASS. [Resolution](evidence/visual-integration-2026-10-20/ci-registry-resolution.json).

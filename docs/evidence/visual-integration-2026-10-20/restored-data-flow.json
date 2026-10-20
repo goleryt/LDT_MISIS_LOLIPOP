@@ -1,0 +1,77 @@
+{
+  "base_url": "http://127.0.0.1:18097",
+  "date": "2026-10-20T10:15:45.614Z",
+  "checks": [
+    {
+      "name": "loopback HTTP browser login (not public TLS proof)",
+      "status": "PASS"
+    },
+    {
+      "name": "map to object to exact sensor and history",
+      "status": "PASS",
+      "events": 200
+    },
+    {
+      "name": "object sensor deep link refresh",
+      "status": "PASS"
+    },
+    {
+      "name": "fast browser Back restores the exact sensor three times",
+      "status": "PASS"
+    },
+    {
+      "name": "map resize wheel synthetic pinch extreme scale and drawer",
+      "status": "PASS"
+    },
+    {
+      "name": "alarm to exact object and sensor",
+      "status": "PASS"
+    },
+    {
+      "name": "notification navigation and mark read",
+      "status": "PASS"
+    },
+    {
+      "name": "existing prediction request link",
+      "status": "PASS",
+      "request_id": 3
+    },
+    {
+      "name": "fully filled request creation",
+      "status": "PASS",
+      "request_id": 10
+    },
+    {
+      "name": "safe labelled demo import registry and duplicate",
+      "status": "PASS"
+    },
+    {
+      "name": "browser PDF and XLSX exports",
+      "status": "PASS"
+    },
+    {
+      "name": "both themes typography journal prediction settings and drawer screenshots",
+      "status": "PASS"
+    },
+    {
+      "name": "sidebar logo and toggle",
+      "status": "PASS"
+    },
+    {
+      "name": "browser logout invalidates session",
+      "status": "PASS"
+    },
+    {
+      "name": "different role UI restriction",
+      "status": "PASS"
+    }
+  ],
+  "page_errors": [],
+  "unexpected_server_errors": [],
+  "browser": "155.0.8059.85",
+  "prediction_id": 1,
+  "object_id": 900000001,
+  "channel_id": 900000002,
+  "manual_request_id": 10,
+  "status": "PASS"
+}

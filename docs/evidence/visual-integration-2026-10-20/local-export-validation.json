@@ -1,0 +1,7 @@
+{
+  "scope": "local restored QA, actual browser downloads; not public HTTPS evidence",
+  "xlsx_rows": 4,
+  "pdf_header_valid": true,
+  "pdf_pages": 1,
+  "cyrillic_extracted": true
+}

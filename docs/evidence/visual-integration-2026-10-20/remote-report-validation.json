@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "scope": "actual HTTPS browser PDF/XLSX downloads on 18af8fa",
+  "pdf_pages": 1,
+  "pdf_magic_valid": true,
+  "cyrillic_extracted": true,
+  "xlsx_total_rows_including_headers": 5,
+  "source": "factual observations; not model scores",
+  "binary_reports_published": false
+}

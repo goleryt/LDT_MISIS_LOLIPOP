@@ -1,0 +1,62 @@
+{
+  "commit": "18af8fa339c8da54db5337fb6592cb0a87a0dcad",
+  "revision": "d01901",
+  "postgres_version": "18.6 (Debian 18.6-1.pgdg13+2)",
+  "events_journal": 173868,
+  "object_catalogue": 97,
+  "channel_catalogue": 11490,
+  "ml_runs": 1,
+  "ml_scores": 3,
+  "predictions": 3,
+  "scenario_runs": 1,
+  "scenario_forecasts": 3,
+  "preventive_requests": 12,
+  "immutable_scenario_sha256": "3320a2be8daa82607cc2c32de6c3767b252e14f3fc3d83c28020fc050238993d",
+  "gas_records_sha256": "aee92bc6dd826d83850d553ef6fcdeab78bb3a2777a20d17c0e50f00ea4a127d",
+  "active_import_slots": 0,
+  "source_example_import_rows": 169993,
+  "limits": {
+    "memory.max": "999997440",
+    "cpu.max": "200000 100000"
+  },
+  "assets": [
+    {
+      "path": "/assets/index-DHdIM7ua.js",
+      "bytes": 270521,
+      "sha256": "2da11b0b89d0ec7155b74c95f0c88a5073c5373e526943f8e00276fd476598c9"
+    },
+    {
+      "path": "/assets/session-CaK5B-Wp.js",
+      "bytes": 11139,
+      "sha256": "f6a83781a4eaa02fe76b13a84b00c4ac842ce7b5cf24017c809e1dd0ed616440"
+    },
+    {
+      "path": "/assets/index-BJNVsfm1.css",
+      "bytes": 88101,
+      "sha256": "c49e05f6dff5c42a21c5ff89adb473cecd475afa9cef0b7dfd55c5b17c4668d2"
+    },
+    {
+      "path": "/assets/MapPage-DSwBac8T.js",
+      "bytes": 384511,
+      "sha256": "e1df1c9847e4325c9564dcc0634d201563478f3375c3b6fbba0823a084c83de5"
+    },
+    {
+      "path": "/assets/ReportsPage-CkDpaUf9.js",
+      "bytes": 2823,
+      "sha256": "ede11a377574308724fac89562487dcba0befb290ebd10ecd212caaf303af869"
+    }
+  ],
+  "assets_match_running_container": true,
+  "new_entry_assets": true,
+  "alembic_current": "d01901 (head)",
+  "tls": {
+    "verified_chain_and_hostname": true,
+    "protocol": "TLSv1.3",
+    "certificate_not_after": "Dec 26 03:01:42 2026 GMT"
+  },
+  "http": {
+    "status": 301,
+    "location": "https://ldt-demo-production.up.railway.app/health"
+  },
+  "status": "PASS"
+}

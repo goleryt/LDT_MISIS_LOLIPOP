@@ -4,13 +4,17 @@
 Свежая удалённая проверка и ограничения: [приёмка Railway 19–20.10.2026](docs/RAILWAY_RELEASE_ACCEPTANCE_2026-10.md).
 Ветка `release/final-rc` опубликована. Точечные UI-исправления 18.10.2026 и их проверки:
 [UI bug-fix acceptance](docs/UI_BUGFIX_ACCEPTANCE_2026-10-18.md).
-Функциональный RC `237ff93` опубликован на Railway, схема d01901.
+Функциональный UI RC `18af8fa` опубликован на существующем Railway, схема d01901.
+Командный дизайн и найденная гонка быстрого Back интегрированы без изменения ML:
+[review](docs/VISUAL_BRANCH_INTEGRATION_2026-10.md),
+[итоги](docs/DELIVERY_VISUAL_2026-10-20.md). Последующий documentation-only tip сохраняет этот runtime-код.
 Изменения команды/UI и COMBINED_EVIDENCE_V1_1 прошли отдельную приёмку:
 [интеграция](docs/ML_COMBINED_INTEGRATION_RU.md),
 [приёмка](docs/ML_COMBINED_ACCEPTANCE_RU.md). В публичном demo явно включены SF/Fire;
 результаты настоящего batch на помеченной синтетике отделены от фактических событий.
 Ограничение импорта прошло [локальный load gate](docs/IMPORT_LOAD_ACCEPTANCE_2026-10-20.md)
-и [GitHub CI39338321060](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39338321060).
+и [актуальный GitHub CI39408268560](https://github.com/goleryt/LDT_MISIS_LOLIPOP/actions/runs/39408268560).
+Дополнительные5/10/20-user проверки: [8 кейсов /1962 обычных API /0 ошибок](docs/IMPORT_VISUAL_SUPPLEMENT_2026-10-20.md).
 На публичной БД проверен только последовательный demo import одной строки и его
 CSV/XLSX дубликаты; нагрузочные тесты выполнялись исключительно локально.
 Точный активный commit (включая последующие documentation-only tips) доступен
