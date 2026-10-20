@@ -88,13 +88,13 @@ const record=(name,details={})=>{result.checks.push({name,status:'PASS',...detai
   await page.reload();await expect(page.getByRole('heading',{name:`Прогноз №${target.id}`,exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Закрыть прогноз',exact:true}).click();await page.goBack();await expect(page.locator('.prediction-detail')).toBeVisible();
   if(!target.request_id || pendingDraft){
-   await page.getByLabel('Комментарий',{exact:true}).fill('REMOTE RC VALIDATION: контроль обработки существующего demo-прогноза, без нового inference.');
+   await page.getByLabel('Комментарий',{exact:true}).fill('Демонстрация ручной проверки существующего результата; новый расчёт не запускается.');
    await page.getByRole('button',{name:'Сохранить решение',exact:true}).click();
    await expect(page.getByText(`Решение по прогнозу №${target.id} сохранено`,{exact:true})).toBeVisible();
    if(!target.request_id)await page.getByRole('button',{name:'Создать черновик заявки',exact:true}).click();
    await page.getByRole('link',{name:/Открыть заявку · №/}).click();
    await expect(page.getByRole('heading',{name:/Черновик заявки №/})).toBeVisible();
-   await page.getByLabel('Тема черновика',{exact:true}).fill('REMOTE RC DEMO — проверка рекомендации диспетчером');
+   await page.getByLabel('Тема черновика',{exact:true}).fill('ДЕМО — проверка рекомендации диспетчером');
    await page.getByRole('textbox',{name:'Описание черновика',exact:true}).fill('Тестовый workflow существующего синтетического demo-объекта. Во внешнюю ИС не передаётся.');
    await page.getByRole('combobox',{name:'Приоритет черновика',exact:true}).selectOption('high');
    await save('request-draft-filled');
@@ -118,14 +118,14 @@ const record=(name,details={})=>{result.checks.push({name,status:'PASS',...detai
   await expect(page.getByText('Выберите объект — это обязательное поле.')).toBeVisible();
   await page.getByRole('combobox',{name:'Объект',exact:true}).selectOption(String(target.object_id));
   await page.getByRole('combobox',{name:'Датчик',exact:true}).selectOption(String(target.channel_id));
-  await page.getByLabel('Тема',{exact:true}).fill('REMOTE RC DEMO — ручная проверка заполненной формы');
+  await page.getByLabel('Тема',{exact:true}).fill('ДЕМО — ручная проверка объекта');
   await page.getByLabel('Описание',{exact:true}).fill('Без изменения ML и без внешнего выезда.');
   await page.getByRole('combobox',{name:'Приоритет',exact:true}).selectOption('medium');
   await expect(page.getByRole('button',{name:'Создать заявку',exact:true})).toBeEnabled();await save('request-create-filled');
   const created=page.waitForResponse(r=>r.request().method()==='POST' && r.url().endsWith('/api/v1/requests'));
   await page.getByRole('button',{name:'Создать заявку',exact:true}).click();const row=await(await created).json();result.manual_request_id=row.id;
   await expect(page.locator('.requests-feedback')).toHaveText('Заявка создана');record('fully filled request creation',{request_id:row.id});
-  await page.goto(base+'/imports');const name='remote-rc-demo-'+Date.now()+'.json';
+  await page.goto(base+'/imports');const name='demo-observation-'+Date.now()+'.json';
   const content=JSON.stringify([{ид_события:String(980000000000+Math.floor(Date.now()/1000)),ид_канала_данных:String(target.channel_id),дата:'2026-10-18',время:'22:00:00',тревожное:'false',значение_датчика:'0.310'}]);
   const file={name,mimeType:'application/json',buffer:Buffer.from(content)};
   await page.locator('input[type=file]').setInputFiles(file);await page.getByRole('button',{name:'Начать импорт',exact:true}).click();

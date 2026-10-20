@@ -41,7 +41,7 @@ const pass=(name,data={})=>{result.checks.push({name,status:'PASS',...data});con
    const row=data.forecasts.find(f=>f.worker===worker&&!f.request_id)??data.forecasts.find(f=>f.worker===worker);await page.goto(`/predictions?scenarioRun=${data.run.id}&scenarioId=${row.id}`);
    const card=section.locator(`article[aria-label$="№${row.id}"]`);
    await expect(card.getByText(/Версия модели:/)).toContainText(row.payload.model_version);
-   await card.getByLabel('Комментарий проверки',{exact:true}).fill('REMOTE DEMO: ручная техническая проверка синтетического сценария; не реальный инцидент.');
+   await card.getByLabel('Комментарий проверки',{exact:true}).fill('Демонстрационная ручная проверка синтетического сценария; не реальный инцидент.');
    await card.getByRole('combobox',{name:'Решение',exact:true}).selectOption('reviewed');
    await card.getByRole('button',{name:'Сохранить ручную проверку',exact:true}).click();await expect(card.getByText('Решение сохранено',{exact:true})).toBeVisible();
    if(!row.request_id){await card.getByRole('button',{name:'Создать отдельный черновик заявки',exact:true}).click();}
@@ -49,7 +49,7 @@ const pass=(name,data={})=>{result.checks.push({name,status:'PASS',...data});con
    const href=await link.getAttribute('href');const id=Number(new URL(href,base).searchParams.get('requestId'));await link.click();
    const req=await (await page.request.get('/api/v1/requests')).json();const current=req.find(r=>r.id===id);
    if(current.status==='draft'){
-    await page.getByLabel('Тема черновика',{exact:true}).fill(`REMOTE SYNTHETIC DEMO — ${worker} — ручная проверка`);
+    await page.getByLabel('Тема черновика',{exact:true}).fill(`ДЕМО — ${worker==='fire'?'проверка пожарных признаков':'проверка канала по сценарию отказа'}`);
     await page.getByRole('textbox',{name:'Описание черновика',exact:true}).fill('Демонстрационный сценарий поставки. Не реальное происшествие, без внешнего выезда.');
     await page.getByRole('button',{name:'Сохранить черновик',exact:true}).click();await expect(page.locator('.requests-feedback')).toHaveText('Черновик сохранён');
     await page.getByRole('button',{name:'Подтвердить заявку',exact:true}).click();await expect(page.locator('.requests-feedback')).toContainText('Черновик подтверждён');
