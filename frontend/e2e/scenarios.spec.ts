@@ -63,6 +63,13 @@ test('unavailable scenarios never use rejected raw scores and recover independen
   await expect(region).toContainText('Неподдерживаемая версия модели');
   await expect(region).not.toContainText(/private-internal-error|0%|0,000/);
   await expect(region.getByText('Экспериментально · синтетическая проверка',{exact:true})).toBeVisible();
+  await page.unroute('**/api/v1/predictions/scenarios**');
+  await page.route('**/api/v1/predictions/scenarios**',r=>r.fulfill({json:fixture()}));
+  await page.goto('/predictions?scenarioId=3');
+  const readOnlyCard=page.getByRole('article',{name:/Экспериментальный сценарный прогноз пожара №3/});
+  await expect(readOnlyCard).toContainText('Режим только чтения');
+  await expect(readOnlyCard.getByRole('button',{name:'Создать отдельный черновик заявки'})).toHaveCount(0);
+  await expect(readOnlyCard.getByRole('link',{name:/Объект №1/})).toHaveAttribute('href',/mapMode=forecasts&objectId=1/);
 });
 
 test('real scenario API review creates a separate draft and confirms through existing workflow',async({page})=>{

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "scope": "map, gas marker, SF/Fire cards, readonly explanation, forecast map links, availability/recovery",
+  "stats": {
+    "startTime": "2026-10-20T16:27:49.346Z",
+    "duration": 40852.784,
+    "expected": 5,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

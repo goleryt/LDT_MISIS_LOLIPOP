@@ -106,7 +106,7 @@ function ScenarioCard({row,run,now,refresh}:{row:Forecast;run:Run|null;now:numbe
   }
   return <article className="scenario-forecast-card" ref={panel} tabIndex={-1} aria-label={`${LABELS[row.worker]} №${row.id}`}>
     <h4>{LABELS[row.worker]}</h4><span className="scenario-badge">{row.worker==='fire'?'Экспериментально · синтетическая проверка':'Синтетическая оценка'}</span>
-    <p>{row.object_id?<Link to={`/?objectId=${row.object_id}${row.channel_id?`&channelId=${row.channel_id}`:''}`}>Объект №{row.object_id}{row.channel_id?` · канал №${row.channel_id}`:''}</Link>:'Привязка к объекту/каналу не подтверждена'}</p>
+    <p>{row.object_id?<Link to={`/?mapMode=forecasts&objectId=${row.object_id}${row.channel_id?`&channelId=${row.channel_id}`:''}`}>Объект №{row.object_id}{row.channel_id?` · канал №${row.channel_id}`:''}</Link>:'Привязка к объекту/каналу не подтверждена'}</p>
     <p className="scenario-score">Сценарная оценка: {available?p.score!.toLocaleString('ru-RU',{minimumFractionDigits:3,maximumFractionDigits:3}):'—'}</p>
     <p>{!available?'Прогноз недоступен':p.warning?'Рекомендуется ручная проверка':'Порог сценарного предупреждения не превышен'}</p>
     <p>Обработка: {DECISIONS[row.status]??row.status}{p.warning&&!row.attention?' · Повтор в пределах трёхдневного периода внимания; результат сохранён.':''}</p>
@@ -133,6 +133,8 @@ function ScenarioCard({row,run,now,refresh}:{row:Forecast;run:Run|null;now:numbe
           <button disabled={!available||busy||row.status==='dismissed'} onClick={()=>void act('request')}>Создать отдельный черновик заявки</button>}
         {!available&&<p>Черновик недоступен: нет пригодного результата с подтверждённой привязкой.</p>}
       </fieldset>}
+      {!canWrite('predictions')&&<p>Режим только чтения. Ручная проверка и создание черновика доступны диспетчеру, аналитику или администратору.</p>}
+      {!canWrite('predictions')&&row.request_id&&<Link to={`/requests?requestId=${row.request_id}`}>Открыть связанную заявку №{row.request_id}</Link>}
     </details>
     {error&&<p role="alert">{error}</p>}{feedback&&<p role="status">{feedback}</p>}
   </article>;

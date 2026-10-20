@@ -1,0 +1,167 @@
+{
+  "dataset_version": "final-demo-2026-10-v1",
+  "mode": "read_only_inventory",
+  "deletion_performed": false,
+  "operational_events_written": false,
+  "new_inference_performed": false,
+  "objects": [
+    {
+      "id": 900000001,
+      "name": "СИНТЕТИЧЕСКИЙ DEMO — газовые датчики",
+      "synthetic": true
+    },
+    {
+      "id": 91000000001,
+      "name": "ДЕМО — синтетическая проверка моделей, не реальный объект",
+      "synthetic": true
+    }
+  ],
+  "bindings": [
+    {
+      "channel_id": 900000001,
+      "object_id": 900000001,
+      "type": "Газовый датчик"
+    },
+    {
+      "channel_id": 900000002,
+      "object_id": 900000001,
+      "type": "Газовый датчик"
+    },
+    {
+      "channel_id": 900000003,
+      "object_id": 900000001,
+      "type": "Газовый датчик"
+    },
+    {
+      "channel_id": 91000000100,
+      "object_id": 91000000001,
+      "type": "Газовый датчик"
+    },
+    {
+      "channel_id": 91000000101,
+      "object_id": 91000000001,
+      "type": "Датчик дыма"
+    }
+  ],
+  "gas": [
+    {
+      "id": 1,
+      "run_id": "daily-2026-09-28:r1",
+      "as_of_date": "2026-09-28",
+      "object_id": 900000001,
+      "channel_id": 900000003,
+      "score": 0.00830046623911187,
+      "score_kind": "proxy_score",
+      "window_start": "2026-09-30",
+      "window_end_exclusive": "2026-10-01",
+      "model_version": "gas-cross-g2-v3-refit_2025h1-0312ff1f436e",
+      "immutable_payload_sha256": "e00f6c32c91c21aaa6034821343d40d2f346d677a85e50047b7e4684dc4078f1"
+    },
+    {
+      "id": 2,
+      "run_id": "daily-2026-09-28:r1",
+      "as_of_date": "2026-09-28",
+      "object_id": 900000001,
+      "channel_id": 900000001,
+      "score": 0.016557687546322534,
+      "score_kind": "proxy_score",
+      "window_start": "2026-09-30",
+      "window_end_exclusive": "2026-10-01",
+      "model_version": "gas-cross-g2-v3-refit_2025h1-0312ff1f436e",
+      "immutable_payload_sha256": "72b23583bf430e0add252d90fe6cf34332ef15e93bc80c5b7a3a4f5f215a7a1a"
+    },
+    {
+      "id": 3,
+      "run_id": "daily-2026-09-28:r1",
+      "as_of_date": "2026-09-28",
+      "object_id": 900000001,
+      "channel_id": 900000002,
+      "score": 0.07682674749011556,
+      "score_kind": "proxy_score",
+      "window_start": "2026-09-30",
+      "window_end_exclusive": "2026-10-01",
+      "model_version": "gas-cross-g2-v3-refit_2025h1-0312ff1f436e",
+      "immutable_payload_sha256": "5c4b425fc2312aa8f7f306b4f80c320bb7a2a11dabcddbc8cebbcdadc1d99a5d"
+    }
+  ],
+  "gas_source_event_count": 3870,
+  "gas_source_events_sha256": "0965835da5a7c2c272ca739640fdf8ae8e7f103af694333d3f7c1e76c8af02db",
+  "scenarios": [
+    {
+      "id": 1,
+      "as_of_date": "2026-10-19",
+      "snapshot_version": "public-synthetic-v1-94736f34695699c3",
+      "input_fingerprint": "b0132e74b79ca874046b9ae887bd12347efa29456e8d1df5fd8ee6c6058fdde0",
+      "snapshot_sha256": "bce8dc07fa10bb81e9bb78b996330452b5d9339eb52e2b82da93010d8f917ba1",
+      "versions": {
+        "package": "1afb9615c2526b21f7aa5e9dd0147b82a74777c86b7c5064b6134dcd0366573b",
+        "registry": "be80003f75a85a5d3b32a4a3c7f6f56dd62982a26aa9579d799cc0c0963cf021",
+        "adapter": "public-synthetic-demo-v1",
+        "compute_sha256": "96f5ce0445e0efb475da8f60d7c2dd1f806aab93fbfdef9fdaf1c499c8182d00",
+        "enabled": {
+          "enabled": true,
+          "sensor_failure": true,
+          "fire": true,
+          "flood": false,
+          "intrusion": false,
+          "system_failure": false,
+          "operational_ready": false,
+          "automated_action_allowed": false
+        }
+      },
+      "state": "completed",
+      "provenance": {
+        "kind": "supplier_synthetic_demo",
+        "package_sha256": "1afb9615c2526b21f7aa5e9dd0147b82a74777c86b7c5064b6134dcd0366573b",
+        "fixture_sha256": "94736f34695699c38a46a5b86a439de0139435a8eb6ad3a6880253751c606f80",
+        "date_translation_days": 430,
+        "operational_observations_written": false,
+        "actual_gas_queue_changed": false
+      },
+      "output_sha256": "25dfb7138c50eedba1eca427803e1ca0066f8c029ecef83370f27c603a3ad2af",
+      "forecast_ids": [
+        1,
+        2,
+        3
+      ],
+      "scores": [
+        {
+          "worker": "sensor_failure",
+          "object_id": 91000000001,
+          "channel_id": 91000000101,
+          "score": 0.002341049925894857,
+          "eligible": true,
+          "window_start": "2026-10-22T00:00:00+03:00",
+          "window_end_exclusive": "2026-10-23T00:00:00+03:00",
+          "model_version": "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5"
+        },
+        {
+          "worker": "sensor_failure",
+          "object_id": 91000000001,
+          "channel_id": 91000000100,
+          "score": 0.002341049925894857,
+          "eligible": true,
+          "window_start": "2026-10-22T00:00:00+03:00",
+          "window_end_exclusive": "2026-10-23T00:00:00+03:00",
+          "model_version": "7b3cdb7d09b810841f1ca0553251ef08ef6b5eda3e69bcfbc6de0f25ac7af1c5"
+        },
+        {
+          "worker": "fire",
+          "object_id": 91000000001,
+          "channel_id": null,
+          "score": 0.002992514760574736,
+          "eligible": true,
+          "window_start": "2026-10-22T00:00:00+03:00",
+          "window_end_exclusive": "2026-10-23T00:00:00+03:00",
+          "model_version": "607e63fbc297117c149124913bb51cb8bb5f0e0c247550afdc83873ae830c29e"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Gas is a saved historical shadow/proxy result, not a new current-day calculation.",
+    "SF/Fire are real frozen inference on supplier synthetic observations.",
+    "No shared incident probability, no automatic critical actions, schematic locations only.",
+    "Unknown-origin QA records and all operational history/audit are retained."
+  ]
+}

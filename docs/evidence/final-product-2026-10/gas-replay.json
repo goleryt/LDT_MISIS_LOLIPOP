@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "network": "none",
+  "synthetic": true,
+  "input_manifest": {
+    "dataset_version": "gas-synthetic-demo-20260928-v1",
+    "synthetic": true,
+    "as_of_date": "2026-09-28",
+    "object_id": 900000001,
+    "channel_ids": [
+      900000001,
+      900000002,
+      900000003
+    ],
+    "observed_days": 430,
+    "rows": 3870,
+    "coverage_start": "2025-07-26",
+    "coverage_end_inclusive": "2026-09-28",
+    "source": "Original deterministic synthetic demo inputs of 29 September; unchanged generator",
+    "files": {
+      "synthetic-demo-catalogue.csv": "40095f23d8e5b3d5d3a266453fe1c03932e9fe3c8d78d43235a3855a78c010c3",
+      "synthetic-demo-journal-20260928.csv": "7cf74d01dbdc6d41d0edfcf945f00ca7ec7f758110d47c0482a8886376f511ea"
+    },
+    "new_inference_performed": false,
+    "scores_generated": false
+  },
+  "actual_scores": [
+    0.00830046623911187,
+    0.016557687546322534,
+    0.07682674749011556
+  ],
+  "saved_public_scores_identical": true,
+  "model_bundle_sha256": "1747b09c0a289f8509b1ef066442936f315c4f7958d1815825a7f90296503e20",
+  "resources": {
+    "seconds": 4.5675288239999645,
+    "peak_rss_mib": 193.43359375,
+    "gas_rows": 3
+  },
+  "raw_output_sha256": "99396725eb776e423c7dcd734fe7caf632554efd865b2035e65514039d558edc",
+  "mathematics_changed": false,
+  "production_inference": false
+}

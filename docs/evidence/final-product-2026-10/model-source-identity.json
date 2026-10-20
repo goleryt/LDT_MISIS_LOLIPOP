@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "baseline": "ccd06206b5b0411983293ea0361a4b237da40dd5",
+  "frozen_model_math_sources_unchanged": true,
+  "public_inference_started": false,
+  "full_backend_before_final_seed_guard": "160 PASS",
+  "subsequent_affected_backend": "17 PASS",
+  "fresh_real_gas_replay": "3 identical saved scores",
+  "fresh_real_scenario_replay": "2 SF + 1 Fire, supplier parity",
+  "new_database_seed_idempotent": true
+}

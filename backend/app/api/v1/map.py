@@ -301,7 +301,7 @@ def get_map_forecasts():
                 'warning': None, 'queue_selected': g.selected, 'reason': g.reason_codes,
                 'cutoff': str(g.as_of_date), 'issued_at': g.created_at,
                 'window_start': g.window_start, 'window_end_exclusive': g.window_end_exclusive,
-                'model_version': g.model_version, 'source': 'Сохранённый газовый shadow-расчёт; источник указан в снимке',
+                'model_version': g.model_version, 'source': ('Демонстрационные данные · ' if p and (p.ml_metadata or {}).get('data_origin') == 'synthetic_demo' else '') + 'Сохранённый газовый shadow-расчёт; источник указан в снимке',
                 'snapshot_version': g.run_id, 'detail_url': f'/predictions?predictionId={p.id}' if p else '/predictions',
                 'recommendations': [(g.payload.get('recommendation') or {}).get('text_ru')] if (g.payload.get('recommendation') or {}).get('text_ru') else []})
         run = db.scalar(select(ScenarioRun).order_by(ScenarioRun.id.desc()).limit(1))

@@ -6,7 +6,7 @@ import ScenarioForecasts from "../components/ScenarioForecasts";
 type Prediction = { id: number; object_id: number; channel_id?: number | null; incident_type: string; probability: number;
   horizon_hours: number; calculated_at: string; model_version: string; recommendation: string | null;
   ml_metadata?: { window_start: string; window_end_exclusive: string; as_of_date: string; reference_at: string;
-    maintenance_context: string; evidence_level: string; decision_status: string; target_code: string; revision: number } | null;
+    maintenance_context: string; evidence_level: string; decision_status: string; target_code: string; revision: number; data_origin?:string } | null;
   status: string; revision: number; actual_outcome: string | null; request_id: number | null };
 type Decision = { actor: string; decision: string; reason: string; notes: string | null; actual_outcome: string | null; created_at: string };
 // Тип из ответа ML-пакета — наблюдаемое событие в журнале, а не пожар.
@@ -144,12 +144,14 @@ export default function PredictionsPage() {
       }}>Закрыть прогноз</button>
       </header>
       <section className="prediction-card" aria-label="Сводка прогноза"><h3>Сохранённая оценка</h3><dl className="prediction-summary">
-        <div><dt>Объект</dt><dd>№{selected.object_id}</dd></div>
+        <div><dt>Объект</dt><dd><Link to={`/?mapMode=forecasts&objectId=${selected.object_id}`}>№{selected.object_id} на карте прогнозов</Link></dd></div>
+        {selected.channel_id!=null&&<div><dt>Канал</dt><dd><Link to={`/?mapMode=forecasts&objectId=${selected.object_id}&channelId=${selected.channel_id}`}>Открыть канал №{selected.channel_id}</Link></dd></div>}
         <div><dt>Оценка (proxy)</dt><dd>{scoreLabel(selected.probability)}</dd></div>
         <div><dt>Горизонт</dt><dd>{selected.horizon_hours} ч</dd></div>
         <div><dt>Тип</dt><dd>{TYPE_LABELS[selected.incident_type] ?? selected.incident_type}</dd></div>
       </dl><p>Shadow/proxy оценка не является подтверждённой вероятностью реального инцидента.</p></section>
       <section className="prediction-card"><h3>Контекст расчёта</h3>
+      {selected.ml_metadata?.data_origin==='synthetic_demo'&&<p>Демонстрационные данные: настоящий gas runtime на искусственной истории. Это не оценка реального объекта.</p>}
       <p>Модель: {selected.model_version} · Расчёт: {moscowTime(selected.calculated_at)}</p>
       {selected.ml_metadata && <p>Данные на {selected.ml_metadata.as_of_date} · ревизия {selected.ml_metadata.revision} · {selected.ml_metadata.evidence_level}. Контекст: {selected.ml_metadata.maintenance_context === "possible_recent_silence" ? "Возможно, после ТО/поверки; требуется проверка журнала работ" : selected.ml_metadata.maintenance_context === "verified_schedule" ? "Подтверждённое окно ППР" : "Сведения о ТО отсутствуют"}. Горизонт {selected.horizon_hours} ч отсчитывается от завершения суток данных. Автоматические действия отключены.</p>}
       </section><section className="prediction-card"><h3>Рекомендация для проверки</h3>

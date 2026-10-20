@@ -81,11 +81,13 @@ def ensure_catalogue(db, snapshot):
     db.flush()
 
 
-def publish(*, root=Path('/opt/combined/vendor/examples'), settings=None):
+def publish(*, root=Path('/opt/combined/vendor/examples'), settings=None, as_of_date=None):
     settings = settings or get_settings()
     require_opt_in(settings)
     issued = datetime.now(TZ)
-    day = issued.date()-timedelta(days=1)
+    day = as_of_date or issued.date()-timedelta(days=1)
+    if not isinstance(day, date) or day >= issued.date():
+        raise ScenarioError('DEMO_REQUIRES_CLOSED_DAY')
     snapshot = build_snapshot(root,day)
     script = Path(settings.scenario_compute_script)
     versions = {'package':PACKAGE_SHA,'registry':digest(REGISTRY),'adapter':'public-synthetic-demo-v1',
